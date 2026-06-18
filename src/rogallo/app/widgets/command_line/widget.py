@@ -26,10 +26,15 @@ from textual_enhanced.commands import Quit
 # Local imports.
 from ...data import CommandLineHistory
 from .base_command import InputCommand
+from .general import HelpCommand, QuitCommand
 from .open_gemini_uri import OpenGeminiURICommand
 
 ##############################################################################
-COMMANDS: Final[tuple[type[InputCommand], ...]] = (OpenGeminiURICommand,)
+COMMANDS: Final[tuple[type[InputCommand], ...]] = (
+    OpenGeminiURICommand,
+    HelpCommand,
+    QuitCommand,
+)
 """The commands used for the input."""
 
 
@@ -77,6 +82,24 @@ class CommandLine(Vertical):
         }
     }
     """
+
+    HELP = """
+    ## Command Line
+
+    Use this command line to enter filenames, directories, URLs or commands. Entering
+    a filename or a URL will open that file for viewing; entering a
+    directory will open a file opening dialog starting at that location.
+
+    | Command | Aliases | Arguments | Description |
+    | --      | --      | --        | --          |
+    {cli_commands}
+
+    ### Special keys
+
+    Special keys while in the command line:
+    """.format(
+        cli_commands="\n    ".join(sorted(command.help_text() for command in COMMANDS)),
+    )
 
     BINDINGS = [
         ("escape", "request_exit"),

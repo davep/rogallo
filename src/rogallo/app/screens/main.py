@@ -146,5 +146,10 @@ class Main(EnhancedScreen[None]):
         """Quit the application."""
         self.app.exit()
 
+    @on(Help)
+    async def _show_help(self) -> None:
+        """Handle the help action."""
+        await self.run_action("help_command")
+
 
 ### main.py ends here
