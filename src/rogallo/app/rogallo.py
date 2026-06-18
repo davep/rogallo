@@ -1,12 +1,17 @@
 """The main application class."""
 
 ##############################################################################
+# Textual imports.
+from textual.screen import Screen
+
+##############################################################################
 # Textual enhanced imports.
 from textual_enhanced.app import EnhancedApp
 
 ##############################################################################
 # Local imports.
 from .. import __version__
+from .screens import Main
 
 
 ##############################################################################
@@ -37,6 +42,9 @@ class Rogallo(EnhancedApp[None]):
     """
 
     COMMANDS = set()
+
+    def get_default_screen(self) -> Screen:
+        return Main()
 
 
 ### rogallo.py ends here
