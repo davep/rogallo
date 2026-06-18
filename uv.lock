@@ -792,6 +792,7 @@ version = "0.0.1"
 source = { editable = "." }
 dependencies = [
     { name = "textual" },
+    { name = "textual-enhanced" },
 ]
 
 [package.dev-dependencies]
@@ -801,7 +802,10 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "textual", specifier = ">=8.2.7" }]
+requires-dist = [
+    { name = "textual", specifier = ">=8.2.7" },
+    { name = "textual-enhanced", specifier = ">=1.5.0" },
+]
 
 [package.metadata.requires-dev]
 dev = [
@@ -841,6 +845,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/38/fd/fd5ad9527b536c306a5a860a33a45e13983a59804b48b91ea52b42ba030a/textual_dev-1.8.0.tar.gz", hash = "sha256:7e56867b0341405a95e938cac0647e6d2763d38d0df08710469ad6b6a8db76df", size = 25026, upload-time = "2025-10-11T09:47:01.824Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/45/c6/1dc08ceee6d0bdf219c500cb2fbd605b681b63507c4ff27a6477f12f8245/textual_dev-1.8.0-py3-none-any.whl", hash = "sha256:227b6d24a485fbbc77e302aa21f4fdf3083beb57eb45cd95bae082c81cbeddeb", size = 27541, upload-time = "2025-10-11T09:47:00.531Z" },
+]
+
+[[package]]
+name = "textual-enhanced"
+version = "1.5.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "textual" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/90/5f/01369681adf4e33e2d393e94093e25b8d0d6ce2791b204b67ddbb7cdecbd/textual_enhanced-1.5.0.tar.gz", hash = "sha256:acd77b29f78e213f0ca1a677baf99d5ed834e9d065aba7dd07ab7b31692db993", size = 15446, upload-time = "2026-05-22T18:21:29.683Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4f/72/55d82f77fa02d2bb445ec949156e4616e6e18beb817c3b25ebff931b3350/textual_enhanced-1.5.0-py3-none-any.whl", hash = "sha256:48c5ff1b8e35b290c2b829dcb1d2e0f238616f99347064ce3c9e6fd68ff22435", size = 23625, upload-time = "2026-05-22T18:21:27.966Z" },
 ]
 
 [[package]]
