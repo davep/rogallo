@@ -71,7 +71,7 @@ class Rogallo(EnhancedApp[None]):
         with update_configuration() as config:
             config.theme = self.theme
 
-    def get_default_screen(self) -> Screen:
+    def get_default_screen(self) -> Screen[None]:
         return Main()
 
 
