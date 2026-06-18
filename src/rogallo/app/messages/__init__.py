@@ -2,12 +2,13 @@
 
 ##############################################################################
 # Local imports.
-from .opening import OpenLocation
+from .opening import OpenLocation, OpenText
 
 ##############################################################################
 # Exports.
 __all__ = [
     "OpenLocation",
+    "OpenText",
 ]
 
 

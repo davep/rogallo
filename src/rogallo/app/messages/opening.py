@@ -22,4 +22,15 @@ class OpenLocation(Message):
     """The location to open."""
 
 
+##############################################################################
+@dataclass
+class OpenText(Message):
+    """Open the given text for viewing."""
+
+    text: str
+    """The text to open."""
+    originally_from: GeminiLocation | None = None
+    """The location the text was originally from, if any."""
+
+
 ### opening.py ends here
