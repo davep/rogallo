@@ -170,7 +170,7 @@ class CommandLine(Vertical):
             return
         for candidate in COMMANDS:
             if candidate.handle(command, self):
-                if command != list(self.history)[-1]:
+                if (not self.history) or (command != list(self.history)[-1]):
                     self.history.add(command)
                 self.post_message(self.HistoryUpdated(self))
                 self.query_one(Input).value = ""
