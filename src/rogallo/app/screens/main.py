@@ -18,7 +18,7 @@ from wasat import Client, ConnectionError, GeminiURI, SecurityError
 ##############################################################################
 # Local imports.
 from ... import __version__
-from ..messages import OpenLocation
+from ..messages import OpenLocation, OpenText
 from ..widgets import CommandLine, Viewer
 
 
@@ -50,6 +50,15 @@ class Main(EnhancedScreen[None]):
         yield CommandLine()
         yield Footer()
 
+    @on(OpenText)
+    def open_text(self, message: OpenText) -> None:
+        """Open text in the viewer.
+
+        Args:
+            message: The message containing the text to open.
+        """
+        self._viewer.document = message.text
+
     @work
     async def _load_from_capsule(self, uri: GeminiURI) -> None:
         """Load a document from a Gemini URI.
@@ -60,7 +69,7 @@ class Main(EnhancedScreen[None]):
         try:
             # TODO: Configure where the trust store is located.
             async with await Client(verify_mode="tofu").request(uri) as response:
-                self._viewer.document = await response.text()
+                self.post_message(OpenText(await response.text(), uri))
         except ConnectionError as error:
             self.notify(
                 f"Error loading {uri}:\n\n{error}",
@@ -83,7 +92,6 @@ class Main(EnhancedScreen[None]):
         """
         if isinstance(message.to_open, GeminiURI):
             self._load_from_capsule(message.to_open)
-        self.notify(f"Opening {message.to_open}...")
 
 
 ### main.py ends here
