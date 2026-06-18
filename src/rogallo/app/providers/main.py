@@ -10,6 +10,10 @@ from textual_enhanced.commands import (
     Quit,
 )
 
+##############################################################################
+# Local imports.
+from ..commands import ChangeCommandLineLocation
+
 
 ##############################################################################
 class MainCommands(CommandsProvider):
@@ -21,6 +25,7 @@ class MainCommands(CommandsProvider):
         Yields:
             The commands for the command palette.
         """
+        yield ChangeCommandLineLocation()
         yield ChangeTheme()
         yield Help()
         yield Quit()

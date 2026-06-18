@@ -16,10 +16,13 @@ from textual_enhanced.screen import EnhancedScreen
 # Wasat imports.
 from wasat import Client, ConnectionError, GeminiURI, SecurityError
 
+from rogallo.app.data.config import load_configuration
+
 ##############################################################################
 # Local imports.
 from ... import __version__
-from ..data import trust_file
+from ..commands import ChangeCommandLineLocation
+from ..data import trust_file, update_configuration
 from ..messages import OpenLocation, OpenText
 from ..providers import MainCommands
 from ..widgets import CommandLine, Viewer
@@ -50,6 +53,7 @@ class Main(EnhancedScreen[None]):
         Quit,
         # Everything else.
         ChangeTheme,
+        ChangeCommandLineLocation,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -58,6 +62,8 @@ class Main(EnhancedScreen[None]):
 
     _viewer = query_one(Viewer)
     """The viewer widget."""
+    _command_line = query_one(CommandLine)
+    """The command line widget."""
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
@@ -65,6 +71,11 @@ class Main(EnhancedScreen[None]):
         yield Viewer()
         yield CommandLine()
         yield Footer()
+
+    def on_mount(self) -> None:
+        """Called when the screen is mounted."""
+        config = load_configuration()
+        self._command_line.dock_top = config.command_line_on_top
 
     @on(OpenText)
     def open_text(self, message: OpenText) -> None:
@@ -109,6 +120,12 @@ class Main(EnhancedScreen[None]):
         """
         if isinstance(message.to_open, GeminiURI):
             self._load_from_capsule(message.to_open)
+
+    def action_change_command_line_location_command(self) -> None:
+        """Change the location of the command line."""
+        self._command_line.dock_top = not self._command_line.dock_top
+        with update_configuration() as config:
+            config.command_line_on_top = self._command_line.dock_top
 
 
 ### main.py ends here

@@ -25,6 +25,9 @@ class Configuration:
     bindings: dict[str, str] = field(default_factory=dict)
     """Command keyboard binding overrides."""
 
+    command_line_on_top: bool = False
+    """Should the command line live at the top of the screen?"""
+
 
 ##############################################################################
 def configuration_file() -> Path:
