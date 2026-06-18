@@ -16,9 +16,9 @@ from .base_command import InputCommand
 
 ##############################################################################
 class OpenGeminiURICommand(InputCommand):
-    """View the file at `<gemini_uri>`"""
+    """View the document at `<uri>`"""
 
-    COMMAND = "`<gemini_uri>`"
+    COMMAND = "`<uri>`"
 
     @classmethod
     def handle(cls, text: str, for_widget: Widget) -> bool:
