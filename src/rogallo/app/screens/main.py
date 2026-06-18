@@ -16,13 +16,17 @@ from textual_enhanced.screen import EnhancedScreen
 # Wasat imports.
 from wasat import Client, ConnectionError, GeminiURI, SecurityError
 
-from rogallo.app.data.config import load_configuration
-
 ##############################################################################
 # Local imports.
 from ... import __version__
 from ..commands import ChangeCommandLineLocation
-from ..data import trust_file, update_configuration
+from ..data import (
+    load_command_history,
+    load_configuration,
+    save_command_history,
+    trust_file,
+    update_configuration,
+)
 from ..messages import OpenLocation, OpenText
 from ..providers import MainCommands
 from ..widgets import CommandLine, Viewer
@@ -76,6 +80,7 @@ class Main(EnhancedScreen[None]):
         """Called when the screen is mounted."""
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
+        self._command_line.history = load_command_history()
 
     @on(OpenText)
     def open_text(self, message: OpenText) -> None:
@@ -126,6 +131,20 @@ class Main(EnhancedScreen[None]):
         self._command_line.dock_top = not self._command_line.dock_top
         with update_configuration() as config:
             config.command_line_on_top = self._command_line.dock_top
+
+    @on(CommandLine.HistoryUpdated)
+    def _save_command_line_history(self, message: CommandLine.HistoryUpdated) -> None:
+        """Save the command line history when it is updated.
+
+        Args:
+            message: The message containing the command line whose history was updated.
+        """
+        save_command_history(message.command_line.history)
+
+    @on(Quit)
+    def action_quit_command(self) -> None:
+        """Quit the application."""
+        self.app.exit()
 
 
 ### main.py ends here

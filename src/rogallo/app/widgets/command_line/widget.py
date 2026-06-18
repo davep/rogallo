@@ -2,6 +2,8 @@
 
 ##############################################################################
 # Python imports.
+from dataclasses import dataclass
+from itertools import chain
 from typing import Final
 
 ##############################################################################
@@ -9,11 +11,20 @@ from typing import Final
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
+from textual.message import Message
 from textual.reactive import var
+from textual.suggester import SuggestFromList
 from textual.widgets import Input, Label, Rule
+from textual.widgets.input import Selection
+
+##############################################################################
+# Textual enhanced imports.
+from textual_enhanced.binding import HelpfulBinding
+from textual_enhanced.commands import Quit
 
 ##############################################################################
 # Local imports.
+from ...data import CommandLineHistory
 from .base_command import InputCommand
 from .open_gemini_uri import OpenGeminiURICommand
 
@@ -67,8 +78,44 @@ class CommandLine(Vertical):
     }
     """
 
+    BINDINGS = [
+        ("escape", "request_exit"),
+        HelpfulBinding(
+            "up",
+            "history_previous",
+            tooltip="Navigate backwards through the command history",
+        ),
+        HelpfulBinding(
+            "down",
+            "history_next",
+            tooltip="Navigate forward through the command history",
+        ),
+    ]
+
     dock_top: var[bool] = var(False, toggle_class="--top", init=True)
     """Should the input dock to the top of the screen?"""
+
+    history: CommandLineHistory = CommandLineHistory()
+    """The history for the command line."""
+
+    @property
+    def _history_suggester(self) -> SuggestFromList:
+        """A suggester for the history of input.
+
+        If there us no history yet then a list of commands and aliases will
+        be used.
+        """
+        return SuggestFromList(
+            [
+                # Start off with the history, with the most recently-used
+                # commands first so suggestions come from the thing
+                # most-recently done.
+                *reversed(list(self.history)),
+                # Tack known commands on the end; this means that the user
+                # will get prompted for commands they've not used yet.
+                *chain(*(command.suggestions() for command in COMMANDS)),
+            ]
+        )
 
     def compose(self) -> ComposeResult:
         """Compose the content of the widget."""
@@ -78,6 +125,13 @@ class CommandLine(Vertical):
                 placeholder="Enter a URI, file, or command",
             )
         yield Rule(line_style="heavy")
+
+    @dataclass
+    class HistoryUpdated(Message):
+        """Message posted when the command history is updated."""
+
+        command_line: CommandLine
+        """The command line whose history was updated."""
 
     def handle_input(self, command: str) -> None:
         """Handle input from the user.
@@ -89,7 +143,11 @@ class CommandLine(Vertical):
             return
         for candidate in COMMANDS:
             if candidate.handle(command, self):
+                if command != list(self.history)[-1]:
+                    self.history.add(command)
+                self.post_message(self.HistoryUpdated(self))
                 self.query_one(Input).value = ""
+                self.query_one(Input).suggester = self._history_suggester
                 return
         self.notify("Unable to handle that input", title="Error", severity="error")
 
@@ -102,6 +160,34 @@ class CommandLine(Vertical):
         """
         message.stop()
         self.handle_input(message.value)
+
+    def _watch_history(self) -> None:
+        """React to history being updated."""
+        if self.is_mounted:
+            self.query_one(Input).suggester = self._history_suggester
+
+    def action_request_exit(self) -> None:
+        """Request that the application quits."""
+        if self.query_one(Input).value:
+            self.query_one(Input).value = ""
+            self.history.goto_end()
+        else:
+            self.post_message(Quit())
+
+    def action_history_previous(self) -> None:
+        """Move backwards through the command line history."""
+        if value := self.history.current_item:
+            self.query_one(Input).value = value
+            self.query_one(Input).selection = Selection(0, len(value))
+            self.history.backward()
+
+    def action_history_next(self) -> None:
+        """Move forwards through the command line history."""
+        if self.history.forward() and (value := self.history.current_item) is not None:
+            self.query_one(Input).value = value
+            self.query_one(Input).selection = Selection(0, len(value))
+        else:
+            self.query_one(Input).value = ""
 
 
 ### command_line.py ends here

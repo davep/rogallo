@@ -2,6 +2,11 @@
 
 ##############################################################################
 # Local imports.
+from .command_history import (
+    CommandLineHistory,
+    load_command_history,
+    save_command_history,
+)
 from .config import (
     Configuration,
     load_configuration,
@@ -13,8 +18,11 @@ from .trust import trust_file
 ##############################################################################
 # Exports.
 __all__ = [
+    "CommandLineHistory",
     "Configuration",
+    "load_command_history",
     "load_configuration",
+    "save_command_history",
     "save_configuration",
     "trust_file",
     "update_configuration",
