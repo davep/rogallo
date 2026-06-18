@@ -793,6 +793,7 @@ source = { editable = "." }
 dependencies = [
     { name = "textual" },
     { name = "textual-enhanced" },
+    { name = "wasat" },
 ]
 
 [package.dev-dependencies]
@@ -805,6 +806,7 @@ dev = [
 requires-dist = [
     { name = "textual", specifier = ">=8.2.7" },
     { name = "textual-enhanced", specifier = ">=1.5.0" },
+    { name = "wasat", specifier = ">=0.0.1" },
 ]
 
 [package.metadata.requires-dev]
@@ -906,6 +908,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/f1/a5/81f987504738e6defeed61ec1c47e2aefab3c35d8eeb87e1b3f38cf28254/virtualenv-21.5.1.tar.gz", hash = "sha256:dca3bf98275a59c652b69d68e73433e597d977c2da9198882479d1a7188009c8", size = 4578798, upload-time = "2026-06-16T16:23:58.603Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/2c/02/3623e6169bed617ed1e2d372f7c69f92ec28d54c4dfc997055c8578ec148/virtualenv-21.5.1-py3-none-any.whl", hash = "sha256:55aa670b67bbfb991b03fda39bd3276d92c419d702376e98c5df1c9989a26783", size = 4558820, upload-time = "2026-06-16T16:23:56.963Z" },
+]
+
+[[package]]
+name = "wasat"
+version = "0.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/7e/63/c39a8225706bb14f251ab5b6747575c6b6a0720e4ac733f81a9d4d336cd6/wasat-0.0.1.tar.gz", hash = "sha256:2da8445742cb2c4a6a7ccc8ab9b3c6ae269e0bc3ba83c724b7fdbf60940ef1b5", size = 12726, upload-time = "2026-06-17T18:26:01.29Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/06/e6/f2f8955c431dfb0c58b38abcac1826e87cb4eedd8e4a340f354705fa20d4/wasat-0.0.1-py3-none-any.whl", hash = "sha256:fe45bc8918db1e0f11c4c0feac2747d76dd56b8210a07b5bb5dd11ecbccc4390", size = 15858, upload-time = "2026-06-17T18:26:02.54Z" },
 ]
 
 [[package]]
