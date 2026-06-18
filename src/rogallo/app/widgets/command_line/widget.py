@@ -1,6 +1,10 @@
 """Provides the command line for the application."""
 
 ##############################################################################
+# Python future imports.
+from __future__ import annotations
+
+##############################################################################
 # Python imports.
 from dataclasses import dataclass
 from itertools import chain
