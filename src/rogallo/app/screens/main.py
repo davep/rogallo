@@ -9,6 +9,7 @@ from textual.widgets import Footer, Header
 
 ##############################################################################
 # Textual enhanced imports.
+from textual_enhanced.commands import ChangeTheme, Command, Help, Quit
 from textual_enhanced.screen import EnhancedScreen
 
 ##############################################################################
@@ -20,6 +21,7 @@ from wasat import Client, ConnectionError, GeminiURI, SecurityError
 from ... import __version__
 from ..data import trust_file
 from ..messages import OpenLocation, OpenText
+from ..providers import MainCommands
 from ..widgets import CommandLine, Viewer
 
 
@@ -40,6 +42,19 @@ class Main(EnhancedScreen[None]):
         hatch: right $surface;
     }
     """
+
+    COMMAND_MESSAGES = [
+        # Keep these together as they're bound to function keys and destined
+        # for the footer.
+        Help,
+        Quit,
+        # Everything else.
+        ChangeTheme,
+    ]
+
+    BINDINGS = Command.bindings(*COMMAND_MESSAGES)
+
+    COMMANDS = {MainCommands}
 
     _viewer = query_one(Viewer)
     """The viewer widget."""
