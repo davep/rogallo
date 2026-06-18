@@ -7,7 +7,9 @@ authors = [
     { name = "Dave Pearson", email = "davep@davep.org" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "textual>=8.2.7",
+]
 
 [project.scripts]
 rogallo = "rogallo.__main__:main"
@@ -53,4 +55,5 @@ max-line-length = 120
 [dependency-groups]
 dev = [
     "pre-commit>=4.6.0",
+    "textual-dev>=1.8.0",
 ]
