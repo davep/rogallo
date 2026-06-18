@@ -66,6 +66,11 @@ class Rogallo(EnhancedApp[None]):
         except ScreenStackError:  # https://github.com/Textualize/textual/issues/5742
             pass
 
+    def watch_theme(self) -> None:
+        """Save the application's theme when it's changed."""
+        with update_configuration() as config:
+            config.theme = self.theme
+
     def get_default_screen(self) -> Screen:
         return Main()
 
