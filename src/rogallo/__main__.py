@@ -1,10 +1,14 @@
 """Provides the main entry point for the application."""
 
+##############################################################################
+# Local imports.
+from .app import Rogallo
+
 
 ##############################################################################
 def main() -> None:
     """Main entry point for the rogallo application."""
-    print("Hello from rogallo!")
+    Rogallo().run()
 
 
 ##############################################################################
