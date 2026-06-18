@@ -18,6 +18,7 @@ from wasat import Client, ConnectionError, GeminiURI, SecurityError
 ##############################################################################
 # Local imports.
 from ... import __version__
+from ..data import trust_file
 from ..messages import OpenLocation, OpenText
 from ..widgets import CommandLine, Viewer
 
@@ -67,8 +68,9 @@ class Main(EnhancedScreen[None]):
             uri: The Gemini URI to load the document from.
         """
         try:
-            # TODO: Configure where the trust store is located.
-            async with await Client(verify_mode="tofu").request(uri) as response:
+            async with await Client(
+                verify_mode="tofu", trust_store_path=trust_file()
+            ).request(uri) as response:
                 self.post_message(OpenText(await response.text(), uri))
         except ConnectionError as error:
             self.notify(

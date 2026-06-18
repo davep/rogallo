@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Textual imports.
+from textual.app import InvalidThemeError, ScreenStackError
 from textual.screen import Screen
 
 ##############################################################################
@@ -11,6 +12,10 @@ from textual_enhanced.app import EnhancedApp
 ##############################################################################
 # Local imports.
 from .. import __version__
+from .data import (
+    load_configuration,
+    update_configuration,
+)
 from .screens import Main
 
 
@@ -42,6 +47,24 @@ class Rogallo(EnhancedApp[None]):
     """
 
     COMMANDS = set()
+
+    def __init__(self) -> None:
+        """Initialise the application.
+
+        Args:
+            The command line arguments passed to the application.
+        """
+        super().__init__()
+        configuration = load_configuration()
+        if configuration.theme is not None:
+            try:
+                self.theme = configuration.theme
+            except InvalidThemeError:
+                pass
+        try:
+            self.update_keymap(configuration.bindings)
+        except ScreenStackError:  # https://github.com/Textualize/textual/issues/5742
+            pass
 
     def get_default_screen(self) -> Screen:
         return Main()
