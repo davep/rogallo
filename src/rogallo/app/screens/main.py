@@ -2,13 +2,18 @@
 
 ##############################################################################
 # Textual imports.
-from textual import on
+from textual import on, work
 from textual.app import ComposeResult
+from textual.getters import query_one
 from textual.widgets import Footer, Header
 
 ##############################################################################
 # Textual enhanced imports.
 from textual_enhanced.screen import EnhancedScreen
+
+##############################################################################
+# Wasat imports.
+from wasat import Client, ConnectionError, GeminiURI, SecurityError
 
 ##############################################################################
 # Local imports.
@@ -35,12 +40,39 @@ class Main(EnhancedScreen[None]):
     }
     """
 
+    _viewer = query_one(Viewer)
+    """The viewer widget."""
+
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
         yield Header()
         yield Viewer()
         yield CommandLine()
         yield Footer()
+
+    @work
+    async def _load_from_capsule(self, uri: GeminiURI) -> None:
+        """Load a document from a Gemini URI.
+
+        Args:
+            uri: The Gemini URI to load the document from.
+        """
+        try:
+            # TODO: Configure where the trust store is located.
+            async with await Client(verify_mode="tofu").request(uri) as response:
+                self._viewer.document = await response.text()
+        except ConnectionError as error:
+            self.notify(
+                f"Error loading {uri}:\n\n{error}",
+                severity="error",
+                title="Connection Error",
+            )
+        except SecurityError as error:
+            self.notify(
+                f"Error loading {uri}:\n\n{error}",
+                severity="error",
+                title="Security Error",
+            )
 
     @on(OpenLocation)
     def open_location(self, message: OpenLocation) -> None:
@@ -49,6 +81,8 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the location to open.
         """
+        if isinstance(message.to_open, GeminiURI):
+            self._load_from_capsule(message.to_open)
         self.notify(f"Opening {message.to_open}...")
 
 
