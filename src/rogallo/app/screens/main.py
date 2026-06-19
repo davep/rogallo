@@ -112,8 +112,8 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the text to open.
         """
-        self._viewer.document = message.text
         self._viewer.location = message.originally_from
+        self._viewer.document = message.text
 
     @on(OpenURI)
     def open_uri(self, message: OpenURI) -> None:
