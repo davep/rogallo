@@ -1,6 +1,10 @@
 """The viewer widget for Rogallo."""
 
 ##############################################################################
+# Python imports.
+from typing import Final
+
+##############################################################################
 # Textual imports.
 from textual.app import ComposeResult
 from textual.containers import Horizontal, VerticalScroll
@@ -177,9 +181,11 @@ class Viewer(VerticalScroll):
     document: var[str] = var("", toggle_class="--has-document")
     """The document to display in the viewer."""
 
-    _BLOCKS: dict[
-        type[Line],
-        type[GemtextText | GemtextLink | GemtextListItem | GemtextPreformatted],
+    _BLOCKS: Final[
+        dict[
+            type[Line],
+            type[GemtextText | GemtextLink | GemtextListItem | GemtextPreformatted],
+        ]
     ] = {
         Paragraph: GemtextText,
         ListItem: GemtextListItem,
