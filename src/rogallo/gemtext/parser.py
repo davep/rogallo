@@ -137,7 +137,7 @@ class Gemtext:
             elif line.startswith(("# ", "## ", "### ")):
                 marker, _, heading_text = line.partition(" ")
                 yield Heading(heading_text.strip(), len(marker.strip()))
-            elif line.startswith("*"):
+            elif line.startswith("* "):
                 _, _, list_item_text = line.partition(" ")
                 yield ListItem(list_item_text.strip())
             elif line.rstrip() == "```":
