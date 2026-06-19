@@ -4,6 +4,7 @@
 # Textual imports.
 from textual import on, work
 from textual.app import ComposeResult
+from textual.containers import VerticalGroup
 from textual.getters import query_one
 from textual.widgets import Footer, Header
 
@@ -47,6 +48,22 @@ class Main(EnhancedScreen[None]):
     DEFAULT_CSS = """
     Main {
         hatch: right $surface;
+        .panel {
+            background: $surface;
+            &:focus-within {
+                background: $panel 80%;
+            }
+            * {
+                scrollbar-background: $surface;
+                scrollbar-background-hover: $surface;
+                scrollbar-background-active: $surface;
+            }
+            &:focus-within * {
+                scrollbar-background: $panel;
+                scrollbar-background-hover: $panel;
+                scrollbar-background-active: $panel;
+            }
+        }
     }
     """
 
@@ -72,8 +89,9 @@ class Main(EnhancedScreen[None]):
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
         yield Header()
-        yield Viewer()
-        yield CommandLine()
+        with VerticalGroup():
+            yield Viewer(classes="panel")
+            yield CommandLine()
         yield Footer()
 
     def on_mount(self) -> None:
