@@ -143,7 +143,7 @@ class Gemtext:
             elif line.startswith("```"):
                 pre_formatted = not pre_formatted
             else:
-                yield (PreFormatted if pre_formatted else Paragraph)(line.strip())
+                yield (PreFormatted if pre_formatted else Paragraph)(line)
 
     @cached_property
     def content(self) -> tuple[Line, ...]:
