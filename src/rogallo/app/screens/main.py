@@ -124,12 +124,11 @@ class Main(EnhancedScreen[None]):
         """
 
         # Does it look like a Gemini URI?
-        if message.to_open.startswith("gemini://"):
-            try:
-                self.post_message(OpenLocation(GeminiURI(message.to_open)))
-                return
-            except:
-                pass
+        try:
+            self.post_message(OpenLocation(GeminiURI(message.to_open)))
+            return
+        except:
+            pass
 
         # Perhaps it's relative to the current location?
         if (not urlparse(message.to_open).scheme) and isinstance(
