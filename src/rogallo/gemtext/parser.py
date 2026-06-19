@@ -19,6 +19,10 @@ class Line:
         self._content = content
         """The content of the line."""
 
+    def __str__(self) -> str:
+        """Return the content of the line as a string."""
+        return self._content
+
     def __repr__(self) -> str:
         """Return a string representation of the line."""
         return f"{self.__class__.__name__}(content={self._content!r})"
@@ -56,7 +60,7 @@ class Heading(Line):
             level: The level of the heading (1-3).
         """
         super().__init__(content)
-        self._level = max(level, 3)
+        self._level = level
         """The level of the heading."""
 
     @property
@@ -127,10 +131,10 @@ class Gemtext:
             if line.startswith("=>"):
                 uri, _, description = line.removeprefix("=>").strip().partition(" ")
                 yield Link(uri, description)
-            elif line.startswith(">"):
+            elif line.startswith("> "):
                 _, _, quote_text = line.partition(" ")
                 yield Quote(quote_text.strip())
-            elif line.startswith("#"):
+            elif line.startswith(("# ", "## ", "### ")):
                 marker, _, heading_text = line.partition(" ")
                 yield Heading(heading_text.strip(), len(marker.strip()))
             elif line.startswith("*"):
