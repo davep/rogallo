@@ -128,8 +128,8 @@ class Gemtext:
         """
         pre_formatted = False
         for line in self.text.splitlines():
-            if line.startswith("=>"):
-                uri, _, description = line.removeprefix("=> ").strip().partition(" ")
+            if line.startswith("=> "):
+                uri, _, description = line.removeprefix("=>").strip().partition(" ")
                 yield Link(uri, description)
             elif line.startswith("> "):
                 _, _, quote_text = line.partition(" ")
