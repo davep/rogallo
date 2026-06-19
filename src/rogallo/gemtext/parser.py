@@ -109,12 +109,15 @@ class Gemtext:
         Yields:
             Line objects representing each parsed line.
         """
-        pre_formatted = False
+        in_preformat = False
+        preformat_content: list[str] = []
         for line in self._text.splitlines():
             if line.startswith("```"):
-                pre_formatted = not pre_formatted
-            elif pre_formatted:
-                yield PreFormatted(line)
+                if not (in_preformat := not in_preformat):
+                    yield PreFormatted("\n".join(preformat_content))
+                    preformat_content = []
+            elif in_preformat:
+                preformat_content.append(line)
             elif line.startswith("=> "):
                 uri, _, description = line.removeprefix("=>").strip().partition(" ")
                 yield Link(uri, description)
@@ -129,6 +132,8 @@ class Gemtext:
                 yield ListItem(list_item_text.strip())
             else:
                 yield Paragraph(line)
+        if in_preformat:
+            yield PreFormatted("\n".join(preformat_content))
 
     @cached_property
     def content(self) -> tuple[Line, ...]:
