@@ -118,7 +118,11 @@ class Gemtext:
         """
         pre_formatted = False
         for line in self.text.splitlines():
-            if line.startswith("=> "):
+            if line.startswith("```"):
+                pre_formatted = not pre_formatted
+            elif pre_formatted:
+                yield PreFormatted(line)
+            elif line.startswith("=> "):
                 uri, _, description = line.removeprefix("=>").strip().partition(" ")
                 yield Link(uri, description)
             elif line.startswith("> "):
@@ -130,10 +134,8 @@ class Gemtext:
             elif line.startswith("* "):
                 _, _, list_item_text = line.partition(" ")
                 yield ListItem(list_item_text.strip())
-            elif line.startswith("```"):
-                pre_formatted = not pre_formatted
             else:
-                yield (PreFormatted if pre_formatted else Paragraph)(line)
+                yield Paragraph(line)
 
     @cached_property
     def content(self) -> tuple[Line, ...]:
