@@ -58,8 +58,28 @@ max-line-length = 120
 [dependency-groups]
 dev = [
     "codespell>=2.4.2",
+    "coverage>=7.14.1",
     "mypy>=2.1.0",
     "pre-commit>=4.6.0",
+    "pytest>=9.1.0",
+    "pytest-cov>=7.1.0",
     "ruff>=0.15.17",
     "textual-dev>=1.8.0",
+]
+
+[tool.coverage.run]
+omit = [
+     "tests/*"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
 ]

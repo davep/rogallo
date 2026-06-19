@@ -1,17 +1,21 @@
-app     := rogallo
-src     := src/
-docs    := docs/
-run     := uv run
-sync    := uv sync
-build   := uv build
-publish := uv publish --username=__token__ --keyring-provider=subprocess
-python  := $(run) python
-ruff    := $(run) ruff
-lint    := $(ruff) check
-fmt     := $(ruff) format
-mypy    := $(run) mypy
-spell   := $(run) codespell
-mkdocs  := $(run) mkdocs
+app      := rogallo
+src      := src/
+tests    := tests/
+docs     := docs/
+run      := uv run
+sync     := uv sync
+build    := uv build
+publish  := uv publish --username=__token__ --keyring-provider=subprocess
+reports  := .reports
+test     := $(run) pytest --verbose --cov
+coverage := $(test) --cov-report html:$(reports)
+python   := $(run) python
+ruff     := $(run) ruff
+lint     := $(ruff) check
+fmt      := $(ruff) format
+mypy     := $(run) mypy
+spell    := $(run) codespell
+mkdocs   := $(run) mkdocs
 
 ##############################################################################
 # Local "interactive testing" of the code.
@@ -53,23 +57,32 @@ resetup: realclean		# Recreate the virtual environment from scratch
 # Checking/testing/linting/etc.
 .PHONY: lint
 lint:				# Check the code for linting issues
-	$(lint) $(src)
+	$(lint) $(src) $(tests)
 
 .PHONY: codestyle
 codestyle:			# Is the code formatted correctly?
-	$(fmt) --check $(src)
+	$(fmt) --check $(src) $(tests)
 
 .PHONY: typecheck
 typecheck:			# Perform static type checks with mypy
-	$(mypy) --scripts-are-modules $(src)
+	$(mypy) --scripts-are-modules $(src) $(tests)
 
 .PHONY: stricttypecheck
 stricttypecheck:	        # Perform a strict static type checks with mypy
-	$(mypy) --scripts-are-modules --strict $(src)
+	$(mypy) --scripts-are-modules --strict $(src) $(tests)
+
+.PHONY: test
+test:				# Run the unit tests
+	$(test) -v
+
+.PHONY: coverage
+coverage:			# Produce a test coverage report
+	$(coverage)
+	open $(reports)/index.html
 
 .PHONY: spellcheck
 spellcheck:			# Spell check the code
-	$(spell) *.md $(src) $(docs)
+	$(spell) *.md $(src) $(docs) $(tests)
 
 .PHONY: checkall
 checkall: spellcheck codestyle lint stricttypecheck # Check all the things
