@@ -193,8 +193,9 @@ class Viewer(VerticalScroll):
     async def _watch_document(self) -> None:
         """Watch for changes to the document and update the viewer."""
         await self.remove_children()
-        for line in Gemtext(self.document).content:
-            await self.mount(self._BLOCKS[type(line)](line))
+        await self.mount_all(
+            self._BLOCKS[type(line)](line) for line in Gemtext(self.document).content
+        )
 
 
 ### viewer.py ends here
