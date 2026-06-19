@@ -81,10 +81,8 @@ class Link(Line):
             description: The description of the link.
         """
         self._uri = uri.strip()
-        """The URI of the link."""
-        self._description = description.strip()
         """The description of the link."""
-        super().__init__(self._description or self._uri)
+        super().__init__(description.strip() or self._uri)
 
     @property
     def uri(self) -> str:
