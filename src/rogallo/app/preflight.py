@@ -25,10 +25,8 @@ def is_likely_capsule(uri: str) -> bool:
         _ = GeminiURI(uri)
         return True
     except URIError:
-        pass
-
-    # If it has a scheme at this point, it's not a capsule.
-    return not urlparse(uri).scheme
+        # If it has a scheme at this point, it's not a capsule.
+        return not urlparse(uri).scheme
 
 
 ### location_tests.py ends here

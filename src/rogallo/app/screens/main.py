@@ -20,7 +20,7 @@ from textual_enhanced.screen import EnhancedScreen
 
 ##############################################################################
 # Wasat imports.
-from wasat import Client, ConnectionError, GeminiURI, SecurityError
+from wasat import Client, ConnectionError, GeminiURI, SecurityError, URIError
 
 ##############################################################################
 # Local imports.
@@ -127,7 +127,7 @@ class Main(EnhancedScreen[None]):
         try:
             self.post_message(OpenLocation(GeminiURI(message.to_open)))
             return
-        except:
+        except URIError:
             pass
 
         # Perhaps it's relative to the current location?
@@ -139,7 +139,7 @@ class Main(EnhancedScreen[None]):
                     OpenLocation(self._viewer.location.resolve(message.to_open))
                 )
                 return
-            except:
+            except URIError:
                 pass
 
         # TODO: Handle gmi files in the filesystem.
