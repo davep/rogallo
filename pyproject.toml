@@ -68,8 +68,9 @@ dev = [
 ]
 
 [tool.coverage.run]
-omit = [
-     "tests/*"
+include = [
+    "src/rogallo/gemtext/*",
+    "src/rogallo/app/preflight.py"
 ]
 
 [tool.coverage.report]
