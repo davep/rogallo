@@ -80,26 +80,16 @@ class Link(Line):
             uri: The URI of the link.
             description: The description of the link.
         """
-        super().__init__(description or uri)
         self._uri = uri.strip()
         """The URI of the link."""
         self._description = description.strip()
         """The description of the link."""
+        super().__init__(self._description or self._uri)
 
     @property
     def uri(self) -> str:
         """The URL of the link."""
         return self._uri
-
-    @property
-    def description(self) -> str:
-        """The description of the link."""
-        return self._description
-
-    @property
-    def has_description(self) -> bool:
-        """Return True if the link has a description, False otherwise."""
-        return bool(self._description)
 
 
 ##############################################################################
