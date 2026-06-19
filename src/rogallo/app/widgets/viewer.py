@@ -6,8 +6,10 @@ from typing import Final
 
 ##############################################################################
 # Textual imports.
+from textual import on
 from textual.app import ComposeResult
 from textual.containers import Horizontal, VerticalScroll
+from textual.events import Click
 from textual.reactive import var
 from textual.widgets import Label, Static
 
@@ -147,6 +149,7 @@ class GemtextLink(Static, can_focus=True):
         self._uri = link.uri
         """The URI of the link."""
 
+    @on(Click)
     def _action_open_link(self) -> None:
         """Open the link."""
         self.post_message(OpenURI(self._uri))
