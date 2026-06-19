@@ -32,10 +32,12 @@ from ...data import CommandLineHistory
 from .base_command import InputCommand
 from .general import HelpCommand, QuitCommand
 from .open_gemini_uri import OpenGeminiURICommand
+from .open_other_uri import OpenOtherURICommand
 
 ##############################################################################
 COMMANDS: Final[tuple[type[InputCommand], ...]] = (
     OpenGeminiURICommand,
+    OpenOtherURICommand,
     HelpCommand,
     QuitCommand,
 )

@@ -1,22 +1,24 @@
-"""Provides a command for opening a Gemini URI."""
+"""Provides a command for opening a other URIs."""
+
+##############################################################################
+# Python imports.
+from urllib.parse import urlparse
 
 ##############################################################################
 # Textual imports.
 from textual.widget import Widget
 
-##############################################################################
-# Wasat imports.
-from wasat import GeminiURI, URIError
+from rogallo.app.messages.opening import OpenURI
 
 ##############################################################################
 # Local imports.
-from ...messages import OpenLocation
+from ...messages import OpenURI
 from .base_command import InputCommand
 
 
 ##############################################################################
-class OpenGeminiURICommand(InputCommand):
-    """View the document at a `gemini://` `<uri>`"""
+class OpenOtherURICommand(InputCommand):
+    """Open `<uri>` in your external browser"""
 
     COMMAND = "`<uri>`"
 
@@ -31,12 +33,10 @@ class OpenGeminiURICommand(InputCommand):
         Returns:
             `True` if the command was handled; `False` if not.
         """
-        try:
-            uri = GeminiURI(text)
-        except URIError:
-            return False
-        for_widget.post_message(OpenLocation(uri))
-        return True
+        if urlparse(text).scheme:
+            for_widget.post_message(OpenURI(text))
+            return True
+        return False
 
 
-### open_gemini_uri.py ends here
+### open_other_uri.py ends here
