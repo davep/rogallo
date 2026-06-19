@@ -28,6 +28,7 @@ from ...gemtext import (
     Quote,
 )
 from ..messages import OpenURI
+from ..preflight import is_likely_capsule
 from ..types import GeminiLocation
 
 
@@ -141,7 +142,8 @@ class GemtextLink(Static, can_focus=True):
             line: The Gemtext link to display.
         """
         assert isinstance(link, Link)
-        super().__init__(str(link))
+        icon = "🔗" if is_likely_capsule(link.uri) else "🌐"
+        super().__init__(f"{icon} {link}")
         self._uri = link.uri
         """The URI of the link."""
 
