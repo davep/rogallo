@@ -103,11 +103,6 @@ class Gemtext:
         self._text = text
         """The raw Gemtext content to be parsed."""
 
-    @property
-    def text(self) -> str:
-        """The raw Gemtext content."""
-        return self._text
-
     def _parse(self) -> Iterator[Line]:
         """Parse the Gemtext content into Line objects.
 
@@ -115,7 +110,7 @@ class Gemtext:
             Line objects representing each parsed line.
         """
         pre_formatted = False
-        for line in self.text.splitlines():
+        for line in self._text.splitlines():
             if line.startswith("```"):
                 pre_formatted = not pre_formatted
             elif pre_formatted:
@@ -139,6 +134,10 @@ class Gemtext:
     def content(self) -> tuple[Line, ...]:
         """The content of the Gemtext."""
         return tuple(self._parse())
+
+    def __str__(self) -> str:
+        """Return the Gemtext content as a string."""
+        return self._text
 
 
 ### parser.py ends here

@@ -24,6 +24,13 @@ def test_parse_empty_text() -> None:
 
 
 ##############################################################################
+def test_str_gemtext() -> None:
+    """Test the string representation of a Gemtext object."""
+    text = "This is a paragraph.\n# Header 1\n* List item\n> Quote\n=> https://example.com Link\n"
+    assert str(Gemtext(text)) == text
+
+
+##############################################################################
 @mark.parametrize(
     "gemtext, expected_text",
     [
