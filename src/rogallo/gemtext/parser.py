@@ -119,8 +119,8 @@ class Gemtext:
             elif in_preformat:
                 preformat_content.append(line)
             elif line.startswith("=> "):
-                uri, _, description = line.removeprefix("=>").strip().partition(" ")
-                yield Link(uri, description)
+                parts = line.removeprefix("=>").strip().split(maxsplit=1)
+                yield Link(parts[0], parts[1] if len(parts) > 1 else "")
             elif line.startswith("> "):
                 _, _, quote_text = line.partition(" ")
                 yield Quote(quote_text.strip())
