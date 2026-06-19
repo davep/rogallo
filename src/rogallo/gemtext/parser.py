@@ -2,8 +2,8 @@
 
 ##############################################################################
 # Python imports.
-from functools import cache
-from typing import Iterator
+from collections.abc import Iterator
+from functools import cached_property
 
 
 ##############################################################################
@@ -30,6 +30,21 @@ class Paragraph(Line):
 
 
 ##############################################################################
+class ListItem(Line):
+    """A list item line in Gemtext."""
+
+
+##############################################################################
+class Quote(Line):
+    """A quote line in Gemtext."""
+
+
+##############################################################################
+class PreFormatted(Line):
+    """A preformatted text line in Gemtext."""
+
+
+##############################################################################
 class Heading(Line):
     """A heading line in Gemtext."""
 
@@ -48,45 +63,6 @@ class Heading(Line):
     def level(self) -> int:
         """The level of the heading."""
         return self._level
-
-
-##############################################################################
-class ListItem(Line):
-    """A list item line in Gemtext."""
-
-    def __init__(self, content: str) -> None:
-        """Initialize a list item line.
-
-        Args:
-            content: The content of the list item.
-        """
-        super().__init__(content)
-
-
-##############################################################################
-class Quote(Line):
-    """A quote line in Gemtext."""
-
-    def __init__(self, content: str) -> None:
-        """Initialize a quote line.
-
-        Args:
-            content: The content of the quote.
-        """
-        super().__init__(content)
-
-
-##############################################################################
-class PreFormatted(Line):
-    """A preformatted text line in Gemtext."""
-
-    def __init__(self, content: str) -> None:
-        """Initialize a preformatted text line.
-
-        Args:
-            content: The content of the preformatted text.
-        """
-        super().__init__(content)
 
 
 ##############################################################################
@@ -151,6 +127,9 @@ class Gemtext:
             if line.startswith("=>"):
                 uri, _, description = line.removeprefix("=>").strip().partition(" ")
                 yield Link(uri, description)
+            elif line.startswith(">"):
+                _, _, quote_text = line.partition(" ")
+                yield Quote(quote_text.strip())
             elif line.startswith("#"):
                 marker, _, heading_text = line.partition(" ")
                 yield Heading(heading_text.strip(), len(marker.strip()))
@@ -162,14 +141,10 @@ class Gemtext:
             else:
                 yield (PreFormatted if pre_formatted else Paragraph)(line.strip())
 
-    @cache
-    def parse(self) -> list[Line]:
-        """Parse the Gemtext content.
-
-        Returns:
-            A list of `Line` objects representing the parsed Gemtext content.
-        """
-        return list(self._parse())
+    @cached_property
+    def content(self) -> tuple[Line, ...]:
+        """The content of the Gemtext."""
+        return tuple(self._parse())
 
 
 ### parser.py ends here
