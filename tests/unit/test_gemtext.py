@@ -184,4 +184,12 @@ def test_parse_preformatted(
     assert str(preformatted) == expected_text
 
 
+##############################################################################
+def test_unclosed_preformatted() -> None:
+    """Test parsing unclosed preformatted text."""
+    preformatted = Gemtext("```\nUnclosed preformatted text").content[0]
+    assert isinstance(preformatted, PreFormatted)
+    assert str(preformatted) == "Unclosed preformatted text"
+
+
 ### test_gemtext.py ends here
