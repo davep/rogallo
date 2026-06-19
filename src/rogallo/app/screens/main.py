@@ -142,6 +142,8 @@ class Main(EnhancedScreen[None]):
             except:
                 pass
 
+        # TODO: Handle gmi files in the filesystem.
+
         # Otherwise, try to open it in the system browser.
         open_in_browser(message.to_open)
 
