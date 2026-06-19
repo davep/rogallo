@@ -137,7 +137,6 @@ class GemtextLink(Static, can_focus=True):
         width: auto;
         height: auto;
         min-height: 1;
-        text-style: underline;
         padding: 0 2 0 0;
         &:hover {
             background: $block-hover-background;
@@ -159,8 +158,8 @@ class GemtextLink(Static, can_focus=True):
             line: The Gemtext link to display.
         """
         assert isinstance(link, Link)
-        icon = "🔗" if is_likely_capsule(link.uri) else "🌐"
-        super().__init__(f"{icon} {link}")
+        icon = "⪢" if is_likely_capsule(link.uri) else "↗"
+        super().__init__(f"[$text-primary]{icon}[/] [u]{link}[/]")
         self._uri = link.uri
         """The URI of the link."""
 
