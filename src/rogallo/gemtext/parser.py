@@ -86,7 +86,7 @@ class Link(Line):
 
     @property
     def uri(self) -> str:
-        """The URL of the link."""
+        """The URI of the link."""
         return self._uri
 
 
