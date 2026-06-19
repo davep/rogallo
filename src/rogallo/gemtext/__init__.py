@@ -3,6 +3,7 @@
 ##############################################################################
 # Local imports.
 from .parser import (
+    Gemtext,
     Heading,
     Line,
     Link,
@@ -15,6 +16,7 @@ from .parser import (
 ##############################################################################
 # Exports.
 __all__ = [
+    "Gemtext",
     "Heading",
     "Line",
     "Link",
