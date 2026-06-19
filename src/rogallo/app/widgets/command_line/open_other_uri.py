@@ -8,8 +8,6 @@ from urllib.parse import urlparse
 # Textual imports.
 from textual.widget import Widget
 
-from rogallo.app.messages.opening import OpenURI
-
 ##############################################################################
 # Local imports.
 from ...messages import OpenURI
