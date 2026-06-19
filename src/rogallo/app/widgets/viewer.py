@@ -137,7 +137,7 @@ class GemtextLink(Static, can_focus=True):
         width: auto;
         height: auto;
         min-height: 1;
-        padding: 0 2 0 0;
+        padding: 0;
         &:hover {
             background: $block-hover-background;
         }
