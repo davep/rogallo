@@ -122,14 +122,12 @@ class Gemtext:
                 parts = line.removeprefix("=>").strip().split(maxsplit=1)
                 yield Link(parts[0], parts[1] if len(parts) > 1 else "")
             elif line.startswith("> "):
-                _, _, quote_text = line.partition(" ")
-                yield Quote(quote_text.strip())
+                yield Quote(line.removeprefix("> ").strip())
             elif line.startswith(("# ", "## ", "### ")):
                 marker, _, heading_text = line.partition(" ")
                 yield Heading(heading_text.strip(), len(marker.strip()))
             elif line.startswith("* "):
-                _, _, list_item_text = line.partition(" ")
-                yield ListItem(list_item_text.strip())
+                yield ListItem(line.removeprefix("* ").strip())
             else:
                 yield Paragraph(line)
         if in_preformat:
