@@ -140,7 +140,7 @@ class Gemtext:
             elif line.startswith("* "):
                 _, _, list_item_text = line.partition(" ")
                 yield ListItem(list_item_text.strip())
-            elif line.rstrip() == "```":
+            elif line.startswith("```"):
                 pre_formatted = not pre_formatted
             else:
                 yield (PreFormatted if pre_formatted else Paragraph)(line.strip())
