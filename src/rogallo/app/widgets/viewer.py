@@ -50,6 +50,7 @@ class GemtextHeading(GemtextText):
             color: $markdown-h1-color;
             background: $markdown-h1-background;
             text-style: $markdown-h1-text-style;
+            text-align: center;
         }
         &.--heading-2 {
             color: $markdown-h2-color;
