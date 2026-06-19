@@ -48,6 +48,17 @@ class GemtextText(Static):
 
 
 ##############################################################################
+class GemtextParagraph(GemtextText):
+    """A widget for displaying a Gemtext paragraph."""
+
+    DEFAULT_CSS = """
+    GemtextParagraph {
+        padding: 0 2 0 2;
+    }
+    """
+
+
+##############################################################################
 class GemtextHeading(GemtextText):
     """A widget for displaying a Gemtext heading."""
 
@@ -89,11 +100,14 @@ class GemtextListItem(Horizontal):
     """A widget for displaying a Gemtext list item."""
 
     DEFAULT_CSS = """
-    GemtextListItem Label.--bullet {
-        color: $text-primary;
-        margin-right: 1;
-        &:light {
-            color: $text-secondary;
+    GemtextListItem {
+        padding: 0 2 0 0;
+        Label.--bullet {
+            color: $text-primary;
+            margin-right: 1;
+            &:light {
+                color: $text-secondary;
+            }
         }
     }
     """
@@ -124,6 +138,7 @@ class GemtextLink(Static, can_focus=True):
         height: auto;
         min-height: 1;
         text-style: underline;
+        padding: 0 2 0 0;
         &:hover {
             background: $block-hover-background;
         }
@@ -225,7 +240,7 @@ class Viewer(VerticalScroll):
             type[GemtextText | GemtextLink | GemtextListItem | GemtextPreformatted],
         ]
     ] = {
-        Paragraph: GemtextText,
+        Paragraph: GemtextParagraph,
         ListItem: GemtextListItem,
         Quote: GemtextQuote,
         PreFormatted: GemtextPreformatted,
