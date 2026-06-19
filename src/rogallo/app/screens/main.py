@@ -1,6 +1,11 @@
 """Provides the main screen."""
 
 ##############################################################################
+# Python imports.
+from urllib.parse import urlparse
+from webbrowser import open as open_in_browser
+
+##############################################################################
 # Textual imports.
 from textual import on, work
 from textual.app import ComposeResult
@@ -28,7 +33,7 @@ from ..data import (
     trust_file,
     update_configuration,
 )
-from ..messages import OpenLocation, OpenText
+from ..messages import OpenLocation, OpenText, OpenURI
 from ..providers import MainCommands
 from ..widgets import CommandLine, Viewer
 
@@ -108,6 +113,38 @@ class Main(EnhancedScreen[None]):
             message: The message containing the text to open.
         """
         self._viewer.document = message.text
+        self._viewer.location = message.originally_from
+
+    @on(OpenURI)
+    def open_uri(self, message: OpenURI) -> None:
+        """Open a URI in the viewer.
+
+        Args:
+            message: The message containing the URI to open.
+        """
+
+        # Does it look like a Gemini URI?
+        if message.to_open.startswith("gemini://"):
+            try:
+                self.post_message(OpenLocation(GeminiURI(message.to_open)))
+                return
+            except:
+                pass
+
+        # Perhaps it's relative to the current location?
+        if (not urlparse(message.to_open).scheme) and isinstance(
+            self._viewer.location, GeminiURI
+        ):
+            try:
+                self.post_message(
+                    OpenLocation(self._viewer.location.resolve(message.to_open))
+                )
+                return
+            except:
+                pass
+
+        # Otherwise, try to open it in the system browser.
+        open_in_browser(message.to_open)
 
     @work
     async def _load_from_capsule(self, uri: GeminiURI) -> None:
@@ -120,7 +157,14 @@ class Main(EnhancedScreen[None]):
             async with await Client(
                 verify_mode="tofu", trust_store_path=trust_file()
             ).request(uri) as response:
-                self.post_message(OpenText(await response.text(), uri))
+                if response.status.is_success:
+                    self.post_message(OpenText(await response.text(), uri))
+                else:
+                    self.notify(
+                        f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
+                        severity="error",
+                        title="Request Error",
+                    )
         except ConnectionError as error:
             self.notify(
                 f"Error loading {uri}:\n\n{error}",

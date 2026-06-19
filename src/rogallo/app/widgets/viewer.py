@@ -10,7 +10,10 @@ from textual.app import ComposeResult
 from textual.containers import Horizontal, VerticalScroll
 from textual.reactive import var
 from textual.widgets import Label, Static
-from textual.widgets import Link as TextualLink
+
+##############################################################################
+# Textual enhanced imports.
+from textual_enhanced.binding import HelpfulBinding
 
 ##############################################################################
 # Local imports.
@@ -24,6 +27,8 @@ from ...gemtext import (
     PreFormatted,
     Quote,
 )
+from ..messages import OpenURI
+from ..types import GeminiLocation
 
 
 ##############################################################################
@@ -107,8 +112,27 @@ class GemtextListItem(Horizontal):
 
 
 ##############################################################################
-class GemtextLink(TextualLink):
+class GemtextLink(Static, can_focus=True):
     """A widget for displaying a Gemtext link."""
+
+    DEFAULT_CSS = """
+    GemtextLink {
+        width: auto;
+        height: auto;
+        min-height: 1;
+        text-style: underline;
+        &:hover {
+            background: $block-hover-background;
+        }
+        &:focus {
+            color: $foreground;
+            background: $block-cursor-blurred-background;
+        }
+        pointer: pointer;
+    }
+    """
+
+    BINDINGS = [HelpfulBinding("enter", "open_link", "Open link", show=False)]
 
     def __init__(self, link: Line) -> None:
         """Initialize a Gemtext link widget.
@@ -117,7 +141,13 @@ class GemtextLink(TextualLink):
             line: The Gemtext link to display.
         """
         assert isinstance(link, Link)
-        super().__init__(str(link), url=link.uri)
+        super().__init__(str(link))
+        self._uri = link.uri
+        """The URI of the link."""
+
+    def _action_open_link(self) -> None:
+        """Open the link."""
+        self.post_message(OpenURI(self._uri))
 
 
 ##############################################################################
@@ -181,6 +211,8 @@ class Viewer(VerticalScroll):
 
     document: var[str] = var("", toggle_class="--has-document")
     """The document to display in the viewer."""
+    location: var[GeminiLocation | None] = var(None)
+    """The location of the document on display in the viewer."""
 
     _BLOCKS: Final[
         dict[

@@ -15,6 +15,15 @@ from ..types import GeminiLocation
 
 ##############################################################################
 @dataclass
+class OpenURI(Message):
+    """Open a given URI for viewing."""
+
+    to_open: str
+    """The URI to open."""
+
+
+##############################################################################
+@dataclass
 class OpenLocation(Message):
     """Open a given location for viewing."""
 
