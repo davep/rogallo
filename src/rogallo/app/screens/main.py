@@ -2,7 +2,6 @@
 
 ##############################################################################
 # Python imports.
-from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
 
 ##############################################################################
@@ -114,8 +113,7 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the text to open.
         """
-        self._viewer.location = message.originally_from
-        self._viewer.document = message.text
+        self._viewer.document = Viewer.Document(message.originally_from, message.text)
 
     @on(OpenURI)
     def open_uri(self, message: OpenURI) -> None:
@@ -131,18 +129,6 @@ class Main(EnhancedScreen[None]):
             return
         except URIError:
             pass
-
-        # Perhaps it's relative to the current location?
-        if (not urlparse(message.to_open).scheme) and isinstance(
-            self._viewer.location, GeminiURI
-        ):
-            try:
-                self.post_message(
-                    OpenLocation(self._viewer.location.resolve(message.to_open))
-                )
-                return
-            except URIError:
-                pass
 
         # TODO: Handle gmi files in the filesystem.
 

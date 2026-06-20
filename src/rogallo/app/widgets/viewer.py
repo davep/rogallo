@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Python imports.
-from typing import Final
+from typing import Final, NamedTuple
 
 ##############################################################################
 # Textual imports.
@@ -16,6 +16,10 @@ from textual.widgets import Label, Static
 ##############################################################################
 # Textual enhanced imports.
 from textual_enhanced.binding import HelpfulBinding
+
+##############################################################################
+# Wasat imports.
+from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
@@ -163,6 +167,17 @@ class GemtextLink(Static, can_focus=True):
         self._uri = link.uri
         """The URI of the link."""
 
+    def normalise_uri(self, base_uri: GeminiLocation | None) -> None:
+        """Normalise the URI of the link against a base URI.
+
+        Args:
+            base_uri: The base URI to normalise against.
+        """
+        if base_uri is None:
+            return
+        if isinstance(base_uri, GeminiURI):
+            self._uri = str(base_uri.resolve(self._uri))
+
     @on(Click)
     def _action_open_link(self) -> None:
         """Open the link."""
@@ -222,15 +237,30 @@ class Viewer(VerticalScroll):
         width: 1fr;
         visibility: hidden;
 
-        &.--has-document {
+        &.--has-content {
             visibility: visible;
         }
     }
     """
 
-    document: var[str] = var("", toggle_class="--has-document")
-    """The document to display in the viewer."""
-    location: var[GeminiLocation | None] = var(None)
+    class Document(NamedTuple):
+        """A named tuple representing details of the document."""
+
+        location: GeminiLocation | None
+        """The source of the document."""
+        content: str
+        """The content of the document."""
+
+        def __bool__(self) -> bool:
+            """Return True if the document has content, False otherwise."""
+            return bool(self.content)
+
+    document: var[Document] = var(Document(None, ""))
+    """The details of the document to show in the viewer."""
+
+    _content: var[str] = var("", toggle_class="--has-content")
+    """The content to display in the viewer."""
+    _location: var[GeminiLocation | None] = var(None)
     """The location of the document on display in the viewer."""
 
     _BLOCKS: Final[
@@ -250,10 +280,18 @@ class Viewer(VerticalScroll):
 
     async def _watch_document(self) -> None:
         """Watch for changes to the document and update the viewer."""
+        self._location = self.document.location
+        self._content = self.document.content
         await self.remove_children()
-        await self.mount_all(
-            self._BLOCKS[type(line)](line) for line in Gemtext(self.document).content
-        )
+        for widget in (
+            blocks := [
+                self._BLOCKS[type(line)](line)
+                for line in Gemtext(self._content).content
+            ]
+        ):
+            if isinstance(widget, GemtextLink):
+                widget.normalise_uri(self._location)
+        await self.mount_all(blocks)
 
 
 ### viewer.py ends here
