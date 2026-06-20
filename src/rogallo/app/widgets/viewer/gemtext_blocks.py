@@ -208,8 +208,12 @@ class GemtextPreformatted(Static):
 
     DEFAULT_CSS = """
     GemtextPreformatted {
-        background: $boost;
+        background: black 35%;
+        &:light {
+            background: white 35%;
+        }
         overflow: auto;
+        margin: 0 2;
     }
     """
 
