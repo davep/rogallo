@@ -132,19 +132,22 @@ class GemtextListItem(Horizontal):
 
 
 ##############################################################################
-class GemtextLink(Static, can_focus=True):
+class GemtextLink(Horizontal, can_focus=True):
     """A widget for displaying a Gemtext link."""
 
     DEFAULT_CSS = """
     GemtextLink {
-        width: auto;
+        padding: 0 2 0 0;
         height: auto;
-        min-height: 1;
-        padding: 0;
-        &:hover {
+        .--icon {
+            color: $text-primary;
+            margin-right: 1;
+            height: auto;
+        }
+        &:hover .--uri, .--uri:hover {
             background: $block-hover-background;
         }
-        &:focus {
+        &:focus .--uri {
             color: $foreground;
             background: $block-cursor-blurred-background;
         }
@@ -160,11 +163,14 @@ class GemtextLink(Static, can_focus=True):
         Args:
             line: The Gemtext link to display.
         """
+        super().__init__()
         assert isinstance(link, Link)
-        icon = "⪢" if is_likely_capsule(link.uri) else "↗"
-        super().__init__(f"[$text-primary]{icon}[/] [u]{link}[/]")
-        self._uri = link.uri
-        """The URI of the link."""
+        self._icon = "⪢" if is_likely_capsule(link.uri) else "↗"
+        """The icon to display for the link."""
+        self._link = link
+        """The link data."""
+        self._noramised_uri = link.uri
+        """The normalised URI to use when opening the link."""
 
     def normalise_uri(self, base_uri: GeminiLocation | None) -> None:
         """Normalise the URI of the link against a base URI.
@@ -174,15 +180,20 @@ class GemtextLink(Static, can_focus=True):
         """
         if base_uri is None:
             return
-        if urlparse(self._uri).scheme:
+        if urlparse(self._normalised_uri).scheme:
             return
         if isinstance(base_uri, GeminiURI):
-            self._uri = str(base_uri.resolve(self._uri))
+            self._normalised_uri = str(base_uri.resolve(self._link.uri))
+
+    def compose(self) -> ComposeResult:
+        """Compose the Gemtext link widget."""
+        yield Label(self._icon, classes="--icon")
+        yield Label(str(self._link), classes="--uri", markup=False, shrink=True)
 
     @on(Click)
     def _action_open_link(self) -> None:
         """Open the link."""
-        self.post_message(OpenURI(self._uri))
+        self.post_message(OpenURI(self._normalised_uri))
 
 
 ##############################################################################
