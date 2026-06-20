@@ -61,10 +61,7 @@ class Rogallo(EnhancedApp[None]):
                 self.theme = configuration.theme
             except InvalidThemeError:
                 pass
-        try:
-            self.update_keymap(configuration.bindings)
-        except ScreenStackError:  # https://github.com/Textualize/textual/issues/5742
-            pass
+        self.update_keymap(configuration.bindings)
 
     def watch_theme(self) -> None:
         """Save the application's theme when it's changed."""
