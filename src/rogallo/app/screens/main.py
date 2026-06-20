@@ -277,7 +277,7 @@ class Main(EnhancedScreen[None]):
     def action_jump_to_document_command(self) -> None:
         """Jump to the document."""
         if self._viewer.document:
-            self._viewer.focus()
+            self._viewer.take_control()
 
     def action_backward_command(self) -> None:
         """Go backward in the location history."""

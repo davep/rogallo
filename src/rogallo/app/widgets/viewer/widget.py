@@ -75,5 +75,9 @@ class Viewer(Vertical, can_focus=False):
                 widget.normalise_uri(self.document.location)
         await self._view.mount_all(blocks)
 
+    def take_control(self) -> None:
+        """Take control of the UI."""
+        self._view.focus()
+
 
 ### widget.py ends here
