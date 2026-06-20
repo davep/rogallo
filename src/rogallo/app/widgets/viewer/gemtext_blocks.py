@@ -1,17 +1,16 @@
-"""The viewer widget for Rogallo."""
+"""Provides widgets for showing Gemtext content."""
 
 ##############################################################################
 # Python imports.
-from typing import Final, NamedTuple
+from typing import Final
 from urllib.parse import urlparse
 
 ##############################################################################
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
-from textual.containers import Horizontal, VerticalScroll
+from textual.containers import Horizontal
 from textual.events import Click
-from textual.reactive import var
 from textual.widgets import Label, Static
 
 ##############################################################################
@@ -24,8 +23,7 @@ from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
-from ...gemtext import (
-    Gemtext,
+from ....gemtext import (
     Heading,
     Line,
     Link,
@@ -34,9 +32,9 @@ from ...gemtext import (
     PreFormatted,
     Quote,
 )
-from ..messages import OpenURI
-from ..preflight import is_likely_capsule
-from ..types import GeminiLocation
+from ...messages import OpenURI
+from ...preflight import is_likely_capsule
+from ...types import GeminiLocation
 
 
 ##############################################################################
@@ -231,64 +229,37 @@ class GemtextPreformatted(Static):
 
 
 ##############################################################################
-class Viewer(VerticalScroll):
-    """The viewer widget for Rogallo."""
+type GemtextWidget = GemtextText | GemtextLink | GemtextListItem | GemtextPreformatted
+"""Type of a widget for displaying Gemtext."""
 
-    DEFAULT_CSS = """
-    Viewer {
-        height: 1fr;
-        width: 1fr;
-        visibility: hidden;
+##############################################################################
+_BLOCKS: Final[
+    dict[
+        type[Line],
+        type[GemtextWidget],
+    ]
+] = {
+    Paragraph: GemtextParagraph,
+    ListItem: GemtextListItem,
+    Quote: GemtextQuote,
+    PreFormatted: GemtextPreformatted,
+    Heading: GemtextHeading,
+    Link: GemtextLink,
+}
+"""Mapping of Gemtext line types to viewer block types."""
 
-        &.--has-content {
-            visibility: visible;
-        }
-    }
+
+##############################################################################
+def get_block_widget(line: Line) -> GemtextWidget:
+    """Get the widget class for a given Gemtext line.
+
+    Args:
+        line: The Gemtext line to get the widget class for.
+
+    Returns:
+        The widget class for the given Gemtext line.
     """
-
-    class Document(NamedTuple):
-        """A named tuple representing details of the document."""
-
-        location: GeminiLocation | None
-        """The source of the document."""
-        content: str
-        """The content of the document."""
-
-        def __bool__(self) -> bool:
-            """Return True if the document has content, False otherwise."""
-            return bool(self.content)
-
-    document: var[Document] = var(Document(None, ""), toggle_class="--has-content")
-    """The details of the document to show in the viewer."""
-
-    _BLOCKS: Final[
-        dict[
-            type[Line],
-            type[GemtextText | GemtextLink | GemtextListItem | GemtextPreformatted],
-        ]
-    ] = {
-        Paragraph: GemtextParagraph,
-        ListItem: GemtextListItem,
-        Quote: GemtextQuote,
-        PreFormatted: GemtextPreformatted,
-        Heading: GemtextHeading,
-        Link: GemtextLink,
-    }
-    """Mapping of Gemtext line types to viewer block types."""
-
-    async def _watch_document(self) -> None:
-        """Watch for changes to the document and update the viewer."""
-        self._location, self._content = self.document
-        await self.remove_children()
-        for widget in (
-            blocks := [
-                self._BLOCKS[type(line)](line)
-                for line in Gemtext(self.document.content).content
-            ]
-        ):
-            if isinstance(widget, GemtextLink):
-                widget.normalise_uri(self.document.location)
-        await self.mount_all(blocks)
+    return _BLOCKS[type(line)](line)
 
 
-### viewer.py ends here
+### gemtext_blocks.py ends here
