@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from typing import Final, NamedTuple
+from urllib.parse import urlparse
 
 ##############################################################################
 # Textual imports.
@@ -174,6 +175,8 @@ class GemtextLink(Static, can_focus=True):
             base_uri: The base URI to normalise against.
         """
         if base_uri is None:
+            return
+        if urlparse(self._uri).scheme:
             return
         if isinstance(base_uri, GeminiURI):
             self._uri = str(base_uri.resolve(self._uri))
