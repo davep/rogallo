@@ -57,6 +57,10 @@ class CommandLine(Vertical):
             color: $text-muted;
         }
 
+        Label {
+            padding-right: 1;
+        }
+
         &:focus-within {
             Label, Input {
                 color: $text;
@@ -153,7 +157,7 @@ class CommandLine(Vertical):
     def compose(self) -> ComposeResult:
         """Compose the content of the widget."""
         with Horizontal():
-            yield Label("> ")
+            yield Label(">")
             yield Input(
                 placeholder="Enter a URI, file, or command",
             )
