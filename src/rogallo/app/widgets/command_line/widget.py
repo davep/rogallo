@@ -7,7 +7,7 @@ from __future__ import annotations
 ##############################################################################
 # Python imports.
 from dataclasses import dataclass
-from itertools import chain
+from itertools import chain, cycle
 from typing import Final
 
 ##############################################################################
@@ -19,6 +19,7 @@ from textual.getters import query_one
 from textual.message import Message
 from textual.reactive import var
 from textual.suggester import SuggestFromList
+from textual.timer import Timer
 from textual.widgets import Input, Label, Rule
 from textual.widgets.input import Selection
 
@@ -43,6 +44,14 @@ COMMANDS: Final[tuple[type[InputCommand], ...]] = (
     QuitCommand,
 )
 """The commands used for the input."""
+
+##############################################################################
+_PROMPT: Final[str] = ">"
+"""The prompt for the command line."""
+
+##############################################################################
+_BUSY_CELLS: Final[cycle] = cycle("⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏")
+"""The cells used for the busy indicator."""
 
 
 ##############################################################################
@@ -129,11 +138,17 @@ class CommandLine(Vertical):
     dock_top: var[bool] = var(False, toggle_class="--top", init=True)
     """Should the input dock to the top of the screen?"""
 
+    working: var[bool] = var(False)
+    """Is the command line currently working on something?"""
+
     history: CommandLineHistory = CommandLineHistory()
     """The history for the command line."""
 
     _input = query_one(Input)
     """The input widget for the command line."""
+
+    _busy_timer: var[Timer | None] = var(None)
+    """The timer for the busy indicator."""
 
     @property
     def _history_suggester(self) -> SuggestFromList:
@@ -157,7 +172,7 @@ class CommandLine(Vertical):
     def compose(self) -> ComposeResult:
         """Compose the content of the widget."""
         with Horizontal():
-            yield Label(">")
+            yield Label(_PROMPT)
             yield Input(
                 placeholder="Enter a URI, file, or command",
             )
@@ -207,6 +222,19 @@ class CommandLine(Vertical):
         """React to history being updated."""
         if self.is_mounted:
             self._input.suggester = self._history_suggester
+
+    def _watch_working(self) -> None:
+        """React to the working state being updated."""
+        if self.working:
+            self._busy_timer = self.set_interval(
+                0.1,
+                lambda: self.query_one(Label).update(next(_BUSY_CELLS)),
+                name="busy_indicator",
+            )
+        elif self._busy_timer:
+            self._busy_timer.stop()
+            self._busy_timer = None
+            self.query_one(Label).update(_PROMPT)
 
     def action_request_exit(self) -> None:
         """Request that the application quits."""

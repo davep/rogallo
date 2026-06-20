@@ -184,6 +184,7 @@ class Main(EnhancedScreen[None]):
             uri: The Gemini URI to load the document from.
         """
         try:
+            self._command_line.working = True
             async with await Client(
                 verify_mode="tofu", trust_store_path=trust_file()
             ).request(uri) as response:
@@ -200,6 +201,8 @@ class Main(EnhancedScreen[None]):
                 severity="error",
                 title="Security Error",
             )
+        finally:
+            self._command_line.working = False
 
     @on(OpenText)
     def open_text(self, message: OpenText) -> None:
