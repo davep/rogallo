@@ -24,7 +24,7 @@ from wasat import Client, ConnectionError, GeminiURI, Response, SecurityError, U
 ##############################################################################
 # Local imports.
 from ... import __version__
-from ..commands import ChangeCommandLineLocation
+from ..commands import ChangeCommandLineLocation, JumpToCommandLine, JumpToDocument
 from ..data import (
     load_command_history,
     load_configuration,
@@ -81,11 +81,13 @@ class Main(EnhancedScreen[None]):
         # Everything else.
         ChangeTheme,
         ChangeCommandLineLocation,
+        JumpToCommandLine,
+        JumpToDocument,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
-
     COMMANDS = {MainCommands}
+    AUTO_FOCUS = "CommandLine Input"
 
     _viewer = query_one(Viewer)
     """The viewer widget."""
@@ -105,6 +107,24 @@ class Main(EnhancedScreen[None]):
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
         self._command_line.history = load_command_history()
+
+    def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
+        """Check if an action is possible to perform right now.
+
+        Args:
+            action: The action to perform.
+            parameters: The parameters of the action.
+
+        Returns:
+            `True` if it can perform, `False` or `None` if not.
+        """
+        if not self.is_mounted:
+            return True
+        if action == JumpToDocument.action_name():
+            return bool(self._viewer.document)
+        if action == JumpToCommandLine.action_name():
+            return not self._command_line.has_control
+        return True
 
     @on(OpenText)
     def open_text(self, message: OpenText) -> None:
@@ -217,6 +237,16 @@ class Main(EnhancedScreen[None]):
     async def _show_help(self) -> None:
         """Handle the help action."""
         await self.run_action("help_command")
+
+    def action_jump_to_command_line_command(self) -> None:
+        """Jump to the command line."""
+        assert self.AUTO_FOCUS is not None
+        self.query_one(self.AUTO_FOCUS).focus()
+
+    def action_jump_to_document_command(self) -> None:
+        """Jump to the document."""
+        if self._viewer.document:
+            self._viewer.focus()
 
 
 ### main.py ends here

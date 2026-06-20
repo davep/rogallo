@@ -159,6 +159,11 @@ class CommandLine(Vertical):
             )
         yield Rule(line_style="heavy")
 
+    @property
+    def has_control(self) -> bool:
+        """Does the command line have control of the input?"""
+        return self._input.has_focus
+
     @dataclass
     class HistoryUpdated(Message):
         """Message posted when the command history is updated."""

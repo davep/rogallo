@@ -2,12 +2,14 @@
 
 ##############################################################################
 # Local imports.
-from .main import ChangeCommandLineLocation
+from .main import ChangeCommandLineLocation, JumpToCommandLine, JumpToDocument
 
 ##############################################################################
 # Exports.
 __all__ = [
     "ChangeCommandLineLocation",
+    "JumpToCommandLine",
+    "JumpToDocument",
 ]
 
 

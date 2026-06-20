@@ -12,7 +12,7 @@ from textual_enhanced.commands import (
 
 ##############################################################################
 # Local imports.
-from ..commands import ChangeCommandLineLocation
+from ..commands import ChangeCommandLineLocation, JumpToCommandLine, JumpToDocument
 
 
 ##############################################################################
@@ -29,6 +29,8 @@ class MainCommands(CommandsProvider):
         yield ChangeTheme()
         yield Help()
         yield Quit()
+        yield from self.maybe(JumpToCommandLine)
+        yield from self.maybe(JumpToDocument)
 
 
 ### main.py ends here
