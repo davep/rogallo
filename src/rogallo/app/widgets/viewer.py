@@ -258,10 +258,10 @@ class Viewer(VerticalScroll):
             """Return True if the document has content, False otherwise."""
             return bool(self.content)
 
-    document: var[Document] = var(Document(None, ""))
+    document: var[Document] = var(Document(None, ""), toggle_class="--has-content")
     """The details of the document to show in the viewer."""
 
-    _content: var[str] = var("", toggle_class="--has-content")
+    _content: var[str] = var("")
     """The content to display in the viewer."""
     _location: var[GeminiLocation | None] = var(None)
     """The location of the document on display in the viewer."""
