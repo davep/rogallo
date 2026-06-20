@@ -169,7 +169,7 @@ class GemtextLink(Horizontal, can_focus=True):
         """The icon to display for the link."""
         self._link = link
         """The link data."""
-        self._noramised_uri = link.uri
+        self._normalised_uri = link.uri
         """The normalised URI to use when opening the link."""
 
     def normalise_uri(self, base_uri: GeminiLocation | None) -> None:
@@ -180,7 +180,7 @@ class GemtextLink(Horizontal, can_focus=True):
         """
         if base_uri is None:
             return
-        if urlparse(self._noramised_uri).scheme:
+        if urlparse(self._normalised_uri).scheme:
             return
         if isinstance(base_uri, GeminiURI):
             self._normalised_uri = str(base_uri.resolve(self._link.uri))
