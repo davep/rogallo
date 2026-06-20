@@ -153,35 +153,6 @@ class Main(EnhancedScreen[None]):
             return self._history.can_go_forward or None
         return True
 
-    @on(OpenText)
-    def open_text(self, message: OpenText) -> None:
-        """Open text in the viewer.
-
-        Args:
-            message: The message containing the text to open.
-        """
-        self._viewer.document = Viewer.Document(message.originally_from, message.text)
-
-    @on(OpenURI)
-    def open_uri(self, message: OpenURI) -> None:
-        """Open a URI in the viewer.
-
-        Args:
-            message: The message containing the URI to open.
-        """
-
-        # Does it look like a Gemini URI?
-        try:
-            self.post_message(OpenLocation(GeminiURI(message.to_open)))
-            return
-        except URIError:
-            pass
-
-        # TODO: Handle gmi files in the filesystem.
-
-        # Otherwise, try to open it in the system browser.
-        open_in_browser(message.to_open)
-
     async def _handle_response(self, response: Response, uri: GeminiURI) -> None:
         """Handle a response from a Gemini request.
 
@@ -230,6 +201,15 @@ class Main(EnhancedScreen[None]):
                 title="Security Error",
             )
 
+    @on(OpenText)
+    def open_text(self, message: OpenText) -> None:
+        """Open text in the viewer.
+
+        Args:
+            message: The message containing the text to open.
+        """
+        self._viewer.document = Viewer.Document(message.originally_from, message.text)
+
     @on(OpenLocation)
     def open_location(self, message: OpenLocation) -> None:
         """Open a location in the viewer.
@@ -244,11 +224,25 @@ class Main(EnhancedScreen[None]):
         if isinstance(message.to_open, GeminiURI):
             self._load_from_capsule(message.to_open)
 
-    def action_change_command_line_location_command(self) -> None:
-        """Change the location of the command line."""
-        self._command_line.dock_top = not self._command_line.dock_top
-        with update_configuration() as config:
-            config.command_line_on_top = self._command_line.dock_top
+    @on(OpenURI)
+    def open_uri(self, message: OpenURI) -> None:
+        """Open a URI in the viewer.
+
+        Args:
+            message: The message containing the URI to open.
+        """
+
+        # Does it look like a Gemini URI?
+        try:
+            self.post_message(OpenLocation(GeminiURI(message.to_open)))
+            return
+        except URIError:
+            pass
+
+        # TODO: Handle gmi files in the filesystem.
+
+        # Otherwise, try to open it in the system browser.
+        open_in_browser(message.to_open)
 
     @on(CommandLine.HistoryUpdated)
     def _save_command_line_history(self, message: CommandLine.HistoryUpdated) -> None:
@@ -268,6 +262,12 @@ class Main(EnhancedScreen[None]):
     async def _show_help(self) -> None:
         """Handle the help action."""
         await self.run_action("help_command")
+
+    def action_change_command_line_location_command(self) -> None:
+        """Change the location of the command line."""
+        self._command_line.dock_top = not self._command_line.dock_top
+        with update_configuration() as config:
+            config.command_line_on_top = self._command_line.dock_top
 
     def action_jump_to_command_line_command(self) -> None:
         """Jump to the command line."""
