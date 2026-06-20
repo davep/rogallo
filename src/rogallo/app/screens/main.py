@@ -169,7 +169,7 @@ class Main(EnhancedScreen[None]):
                 title="Request Error",
             )
             return
-        if not response.mime_type.startswith("text/"):
+        if not response.content_type in load_configuration().displayable_content_types:
             self.notify(
                 f"Error loading {uri}:\n\nUnsupported MIME type: {response.mime_type}",
                 severity="error",
