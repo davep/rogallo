@@ -12,27 +12,12 @@ from textual.getters import query_one
 from textual.reactive import var
 
 ##############################################################################
-# Textual enhanced imports.
-from textual_enhanced.containers import EnhancedVerticalScroll
-
-##############################################################################
 # Local imports.
 from ....gemtext import Gemtext
 from ...types import GeminiLocation
+from .document_view import DocumentView
 from .gemtext_blocks import GemtextLink, get_block_widget
 from .title import ViewerTitle
-
-
-##############################################################################
-class DocumentView(EnhancedVerticalScroll):
-    """The scrolling container for the document."""
-
-    HELP = """
-    ## Movement
-
-    As well as using the common set of cursor and page keys, the following
-    keys are available for movement within the markdown document:
-    """
 
 
 ##############################################################################
