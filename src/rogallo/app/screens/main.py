@@ -20,7 +20,7 @@ from textual_enhanced.screen import EnhancedScreen
 
 ##############################################################################
 # Wasat imports.
-from wasat import Client, ConnectionError, GeminiURI, SecurityError, URIError
+from wasat import Client, ConnectionError, GeminiURI, Response, SecurityError, URIError
 
 ##############################################################################
 # Local imports.
@@ -147,6 +147,29 @@ class Main(EnhancedScreen[None]):
         # Otherwise, try to open it in the system browser.
         open_in_browser(message.to_open)
 
+    async def _handle_response(self, response: Response, uri: GeminiURI) -> None:
+        """Handle a response from a Gemini request.
+
+        Args:
+            response: The response to handle.
+            uri: The URI the response was received from.
+        """
+        if not response.status.is_success:
+            self.notify(
+                f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
+                severity="error",
+                title="Request Error",
+            )
+            return
+        if not response.mime_type.startswith("text/"):
+            self.notify(
+                f"Error loading {uri}:\n\nUnsupported MIME type: {response.mime_type}",
+                severity="error",
+                title="Request Error",
+            )
+            return
+        self.post_message(OpenText(await response.text(), uri))
+
     @work
     async def _load_from_capsule(self, uri: GeminiURI) -> None:
         """Load a document from a Gemini URI.
@@ -158,14 +181,7 @@ class Main(EnhancedScreen[None]):
             async with await Client(
                 verify_mode="tofu", trust_store_path=trust_file()
             ).request(uri) as response:
-                if response.status.is_success:
-                    self.post_message(OpenText(await response.text(), uri))
-                else:
-                    self.notify(
-                        f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
-                        severity="error",
-                        title="Request Error",
-                    )
+                await self._handle_response(response, uri)
         except ConnectionError as error:
             self.notify(
                 f"Error loading {uri}:\n\n{error}",
