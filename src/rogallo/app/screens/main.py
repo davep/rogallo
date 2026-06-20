@@ -125,6 +125,11 @@ class Main(EnhancedScreen[None]):
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
         self._command_line.history = load_command_history()
+        # If the history isn't empty, let's visit the last location there.
+        if self._history.current_item:
+            self.post_message(
+                OpenLocation(self._history.current_item, from_history=True)
+            )
 
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
         """Check if an action is possible to perform right now.
