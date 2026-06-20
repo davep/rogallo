@@ -261,11 +261,6 @@ class Viewer(VerticalScroll):
     document: var[Document] = var(Document(None, ""), toggle_class="--has-content")
     """The details of the document to show in the viewer."""
 
-    _content: var[str] = var("")
-    """The content to display in the viewer."""
-    _location: var[GeminiLocation | None] = var(None)
-    """The location of the document on display in the viewer."""
-
     _BLOCKS: Final[
         dict[
             type[Line],
@@ -283,17 +278,16 @@ class Viewer(VerticalScroll):
 
     async def _watch_document(self) -> None:
         """Watch for changes to the document and update the viewer."""
-        self._location = self.document.location
-        self._content = self.document.content
+        self._location, self._content = self.document
         await self.remove_children()
         for widget in (
             blocks := [
                 self._BLOCKS[type(line)](line)
-                for line in Gemtext(self._content).content
+                for line in Gemtext(self.document.content).content
             ]
         ):
             if isinstance(widget, GemtextLink):
-                widget.normalise_uri(self._location)
+                widget.normalise_uri(self.document.location)
         await self.mount_all(blocks)
 
 
