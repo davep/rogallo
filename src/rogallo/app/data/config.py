@@ -28,6 +28,15 @@ class Configuration:
     command_line_on_top: bool = False
     """Should the command line live at the top of the screen?"""
 
+    displayable_content_types: list[str] = field(
+        default_factory=lambda: [
+            "text/gemini",
+            "text/plain",
+            "application/octet-stream",
+        ]
+    )
+    """The content types that can be displayed in the viewer."""
+
 
 ##############################################################################
 def configuration_file() -> Path:
