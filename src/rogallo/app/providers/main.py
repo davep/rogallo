@@ -12,7 +12,13 @@ from textual_enhanced.commands import (
 
 ##############################################################################
 # Local imports.
-from ..commands import ChangeCommandLineLocation, JumpToCommandLine, JumpToDocument
+from ..commands import (
+    Backward,
+    ChangeCommandLineLocation,
+    Forward,
+    JumpToCommandLine,
+    JumpToDocument,
+)
 
 
 ##############################################################################
@@ -31,6 +37,8 @@ class MainCommands(CommandsProvider):
         yield Quit()
         yield from self.maybe(JumpToCommandLine)
         yield from self.maybe(JumpToDocument)
+        yield from self.maybe(Backward)
+        yield from self.maybe(Forward)
 
 
 ### main.py ends here

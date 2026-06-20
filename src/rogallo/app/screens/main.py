@@ -24,11 +24,20 @@ from wasat import Client, ConnectionError, GeminiURI, Response, SecurityError, U
 ##############################################################################
 # Local imports.
 from ... import __version__
-from ..commands import ChangeCommandLineLocation, JumpToCommandLine, JumpToDocument
+from ..commands import (
+    Backward,
+    ChangeCommandLineLocation,
+    Forward,
+    JumpToCommandLine,
+    JumpToDocument,
+)
 from ..data import (
+    LocationHistory,
     load_command_history,
     load_configuration,
+    load_location_history,
     save_command_history,
+    save_location_history,
     trust_file,
     update_configuration,
 )
@@ -78,6 +87,8 @@ class Main(EnhancedScreen[None]):
         # for the footer.
         Help,
         Quit,
+        Backward,
+        Forward,
         # Everything else.
         ChangeTheme,
         ChangeCommandLineLocation,
@@ -94,6 +105,12 @@ class Main(EnhancedScreen[None]):
     _command_line = query_one(CommandLine)
     """The command line widget."""
 
+    def __init__(self) -> None:
+        """Initialize the main screen."""
+        super().__init__()
+        self._history = LocationHistory()
+        """The location history."""
+
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
         yield Header()
@@ -104,6 +121,7 @@ class Main(EnhancedScreen[None]):
 
     def on_mount(self) -> None:
         """Called when the screen is mounted."""
+        self._history = load_location_history()
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
         self._command_line.history = load_command_history()
@@ -124,6 +142,10 @@ class Main(EnhancedScreen[None]):
             return bool(self._viewer.document)
         if action == JumpToCommandLine.action_name():
             return not self._command_line.has_control
+        if action == Backward.action_name():
+            return self._history.can_go_backward or None
+        if action == Forward.action_name():
+            return self._history.can_go_forward or None
         return True
 
     @on(OpenText)
@@ -210,6 +232,10 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the location to open.
         """
+        if not message.from_history:
+            self._history.add(message.to_open)
+            save_location_history(self._history)
+        self.refresh_bindings()
         if isinstance(message.to_open, GeminiURI):
             self._load_from_capsule(message.to_open)
 
@@ -247,6 +273,20 @@ class Main(EnhancedScreen[None]):
         """Jump to the document."""
         if self._viewer.document:
             self._viewer.focus()
+
+    def action_backward_command(self) -> None:
+        """Go backward in the location history."""
+        if self._history.backward() and self._history.current_item:
+            self.post_message(
+                OpenLocation(self._history.current_item, from_history=True)
+            )
+
+    def action_forward_command(self) -> None:
+        """Go forward in the location history."""
+        if self._history.forward() and self._history.current_item:
+            self.post_message(
+                OpenLocation(self._history.current_item, from_history=True)
+            )
 
 
 ### main.py ends here

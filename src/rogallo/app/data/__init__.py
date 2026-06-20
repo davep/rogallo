@@ -13,6 +13,11 @@ from .config import (
     save_configuration,
     update_configuration,
 )
+from .location_history import (
+    LocationHistory,
+    load_location_history,
+    save_location_history,
+)
 from .trust import trust_file
 
 ##############################################################################
@@ -22,8 +27,11 @@ __all__ = [
     "Configuration",
     "load_command_history",
     "load_configuration",
+    "load_location_history",
+    "LocationHistory",
     "save_command_history",
     "save_configuration",
+    "save_location_history",
     "trust_file",
     "update_configuration",
 ]

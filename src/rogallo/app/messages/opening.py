@@ -29,6 +29,8 @@ class OpenLocation(Message):
 
     to_open: GeminiLocation
     """The location to open."""
+    from_history: bool = False
+    """Whether the location is being opened from history."""
 
 
 ##############################################################################
