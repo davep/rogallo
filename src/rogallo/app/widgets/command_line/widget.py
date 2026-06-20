@@ -15,6 +15,7 @@ from typing import Final
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
+from textual.getters import query_one
 from textual.message import Message
 from textual.reactive import var
 from textual.suggester import SuggestFromList
@@ -127,6 +128,9 @@ class CommandLine(Vertical):
     history: CommandLineHistory = CommandLineHistory()
     """The history for the command line."""
 
+    _input = query_one(Input)
+    """The input widget for the command line."""
+
     @property
     def _history_suggester(self) -> SuggestFromList:
         """A suggester for the history of input.
@@ -175,8 +179,8 @@ class CommandLine(Vertical):
                 if (not self.history) or (command != list(self.history)[-1]):
                     self.history.add(command)
                 self.post_message(self.HistoryUpdated(self))
-                self.query_one(Input).value = ""
-                self.query_one(Input).suggester = self._history_suggester
+                self._input.value = ""
+                self._input.suggester = self._history_suggester
                 return
         self.notify("Unable to handle that input", title="Error", severity="error")
 
@@ -193,12 +197,12 @@ class CommandLine(Vertical):
     def _watch_history(self) -> None:
         """React to history being updated."""
         if self.is_mounted:
-            self.query_one(Input).suggester = self._history_suggester
+            self._input.suggester = self._history_suggester
 
     def action_request_exit(self) -> None:
         """Request that the application quits."""
-        if self.query_one(Input).value:
-            self.query_one(Input).value = ""
+        if self._input.value:
+            self._input.value = ""
             self.history.goto_end()
         else:
             self.post_message(Quit())
@@ -206,17 +210,17 @@ class CommandLine(Vertical):
     def action_history_previous(self) -> None:
         """Move backwards through the command line history."""
         if value := self.history.current_item:
-            self.query_one(Input).value = value
-            self.query_one(Input).selection = Selection(0, len(value))
+            self._input.value = value
+            self._input.selection = Selection(0, len(value))
             self.history.backward()
 
     def action_history_next(self) -> None:
         """Move forwards through the command line history."""
         if self.history.forward() and (value := self.history.current_item) is not None:
-            self.query_one(Input).value = value
-            self.query_one(Input).selection = Selection(0, len(value))
+            self._input.value = value
+            self._input.selection = Selection(0, len(value))
         else:
-            self.query_one(Input).value = ""
+            self._input.value = ""
 
 
 ### command_line.py ends here
