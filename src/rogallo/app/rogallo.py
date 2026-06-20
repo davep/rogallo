@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Textual imports.
-from textual.app import InvalidThemeError, ScreenStackError
+from textual.app import InvalidThemeError
 from textual.screen import Screen
 
 ##############################################################################
