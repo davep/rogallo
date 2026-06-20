@@ -52,7 +52,9 @@ class Main(EnhancedScreen[None]):
 
     DEFAULT_CSS = """
     Main {
-        hatch: right $surface;
+        VerticalGroup {
+            hatch: right $surface;
+        }
         .panel {
             background: $surface;
             &:focus-within {
