@@ -180,7 +180,7 @@ class GemtextLink(Horizontal, can_focus=True):
         """
         if base_uri is None:
             return
-        if urlparse(self._normalised_uri).scheme:
+        if urlparse(self._noramised_uri).scheme:
             return
         if isinstance(base_uri, GeminiURI):
             self._normalised_uri = str(base_uri.resolve(self._link.uri))
