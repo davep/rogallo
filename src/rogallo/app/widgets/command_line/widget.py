@@ -50,7 +50,7 @@ _PROMPT: Final[str] = ">"
 """The prompt for the command line."""
 
 ##############################################################################
-_BUSY_CELLS: Final[cycle[str]] = cycle("⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏")
+_BUSY_CELLS: Final[cycle[str]] = cycle("⠁⠉⠘⠰⠤⠤⠆⠃⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏⠟⠿⠽⠾⠽⠿⠟⠯⠽⠾⠶⠦⠤⠤⠰⠘⠉⠁")
 """The cells used for the busy indicator."""
 
 
