@@ -45,10 +45,6 @@ class HistoryViewer(EnhancedOptionList):
         )
         self.highlighted = self.history.current_location
 
-    def update_from_history(self) -> None:
-        """Update the content of the history viewer."""
-        self.mutate_reactive(HistoryViewer.history)
-
     @on(EnhancedOptionList.OptionSelected)
     def _jump_to_history(self, event: EnhancedOptionList.OptionSelected) -> None:
         """Jump to the selected history location."""

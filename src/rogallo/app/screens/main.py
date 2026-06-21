@@ -188,7 +188,7 @@ class Main(EnhancedScreen[None]):
         """
         if not request.from_history:
             self.history.add(request.location)
-            self._history_viewer.update_from_history()
+            self.mutate_reactive(Main.history)
             save_location_history(self.history)
 
     async def _handle_response(self, response: Response, request: OpenLocation) -> None:
@@ -328,7 +328,7 @@ class Main(EnhancedScreen[None]):
             self.post_message(
                 OpenLocation(self.history.current_item, from_history=True)
             )
-            self._history_viewer.update_from_history()
+            self.mutate_reactive(Main.history)
 
     def action_forward_command(self) -> None:
         """Go forward in the location history."""
@@ -336,7 +336,7 @@ class Main(EnhancedScreen[None]):
             self.post_message(
                 OpenLocation(self.history.current_item, from_history=True)
             )
-            self._history_viewer.update_from_history()
+            self.mutate_reactive(Main.history)
 
     def action_toggle_history_command(self) -> None:
         """Toggle the visibility of the history panel."""
