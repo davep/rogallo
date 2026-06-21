@@ -47,7 +47,7 @@ class GemtextText(Static):
         Args:
             line: The Gemtext line to display.
         """
-        super().__init__(str(line))
+        super().__init__(str(line), markup=False)
 
 
 ##############################################################################
@@ -128,7 +128,7 @@ class GemtextListItem(Horizontal):
     def compose(self) -> ComposeResult:
         """Compose the Gemtext list item widget."""
         yield Label("•", classes="--bullet")
-        yield Label(str(self._list_item))
+        yield Label(str(self._list_item), markup=False)
 
 
 ##############################################################################
@@ -240,7 +240,7 @@ class GemtextPreformatted(Static):
 
     def compose(self) -> ComposeResult:
         """Compose the Gemtext preformatted text widget."""
-        yield Label(str(self._preformatted))
+        yield Label(str(self._preformatted), markup=False)
 
 
 ##############################################################################
