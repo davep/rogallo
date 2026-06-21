@@ -20,7 +20,7 @@ from textual.message import Message
 from textual.reactive import var
 from textual.suggester import SuggestFromList
 from textual.timer import Timer
-from textual.widgets import Input, Label, Rule
+from textual.widgets import Input, Label
 from textual.widgets.input import Selection
 
 ##############################################################################
@@ -79,13 +79,6 @@ class CommandLine(Vertical):
             }
         }
 
-        Rule {
-            height: 1;
-            margin: 0 !important;
-            color: $foreground 10%;
-            display: none;
-        }
-
         Input, Input:focus {
             border: none;
             padding: 0;
@@ -95,10 +88,6 @@ class CommandLine(Vertical):
 
         &.--top {
             dock: top;
-            height: 2;
-            Rule {
-                display: block;
-            }
         }
     }
     """
@@ -179,7 +168,6 @@ class CommandLine(Vertical):
                 placeholder="Enter a URI, file, or command",
                 suggester=self._history_suggester,
             )
-        yield Rule(line_style="heavy")
 
     @property
     def has_control(self) -> bool:
