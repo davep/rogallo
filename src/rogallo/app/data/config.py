@@ -40,6 +40,9 @@ class Configuration:
     handle_ansi_escape_sequences: bool = True
     """Should ANSI escape sequences be handled in text content?"""
 
+    history_visible: bool = False
+    """Should the history panel be visible by default?"""
+
 
 ##############################################################################
 def configuration_file() -> Path:

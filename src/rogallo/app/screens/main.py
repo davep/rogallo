@@ -149,6 +149,7 @@ class Main(EnhancedScreen[None]):
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
         self._command_line.history = load_command_history()
+        self._history_visible = config.history_visible
         # If the history isn't empty, let's visit the last location there.
         if self.history.current_item:
             self.post_message(
@@ -340,6 +341,8 @@ class Main(EnhancedScreen[None]):
     def action_toggle_history_command(self) -> None:
         """Toggle the visibility of the history panel."""
         self._history_visible = not self._history_visible
+        with update_configuration() as config:
+            config.history_visible = self._history_visible
         if self._history_visible:
             self._history_viewer.focus()
         else:
