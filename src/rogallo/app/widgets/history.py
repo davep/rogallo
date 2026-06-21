@@ -10,6 +10,10 @@ from textual.reactive import var
 from textual_enhanced.widgets import EnhancedOptionList
 
 ##############################################################################
+# Wasat imports.
+from wasat.uri import GEMINI_PREFIX
+
+##############################################################################
 # Local imports.
 from ..data import LocationHistory
 from ..messages import OpenLocation
@@ -36,7 +40,9 @@ class HistoryViewer(EnhancedOptionList):
 
     def _watch_history(self) -> None:
         """Update the history viewer when the history changes."""
-        self.clear_options().add_options(str(location) for location in self.history)
+        self.clear_options().add_options(
+            str(location).removeprefix(GEMINI_PREFIX) for location in self.history
+        )
         self.highlighted = self.history.current_location
 
     def update_from_history(self) -> None:
