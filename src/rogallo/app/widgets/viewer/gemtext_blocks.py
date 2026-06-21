@@ -2,8 +2,14 @@
 
 ##############################################################################
 # Python imports.
+from collections.abc import Callable
+from functools import cache
 from typing import Final
 from urllib.parse import urlparse
+
+##############################################################################
+# Rich imports.
+from rich.text import Text
 
 ##############################################################################
 # Textual imports.
@@ -32,9 +38,26 @@ from ....gemtext import (
     PreFormatted,
     Quote,
 )
+from ...data import load_configuration
 from ...messages import OpenURI
 from ...preflight import is_likely_capsule
 from ...types import GeminiLocation
+
+
+##############################################################################
+@cache
+def line_filter() -> Callable[[Line], str | Text]:
+    """Get a filter function for Gemtext lines.
+
+    Returns:
+        A function that takes a Gemtext line and returns a string or Text
+        object.
+    """
+    return (
+        (lambda line: Text.from_ansi(str(line)))
+        if load_configuration().handle_ansi_escape_sequences
+        else str
+    )
 
 
 ##############################################################################
@@ -47,7 +70,7 @@ class GemtextText(Static):
         Args:
             line: The Gemtext line to display.
         """
-        super().__init__(str(line), markup=False)
+        super().__init__(line_filter()(line), markup=False)
 
 
 ##############################################################################
@@ -128,7 +151,7 @@ class GemtextListItem(Horizontal):
     def compose(self) -> ComposeResult:
         """Compose the Gemtext list item widget."""
         yield Label("•", classes="--bullet")
-        yield Label(str(self._list_item), markup=False)
+        yield Label(line_filter()(self._list_item), markup=False)
 
 
 ##############################################################################
@@ -188,7 +211,9 @@ class GemtextLink(Horizontal, can_focus=True):
     def compose(self) -> ComposeResult:
         """Compose the Gemtext link widget."""
         yield Label(self._icon, classes="--icon")
-        yield Label(str(self._link), classes="--uri", markup=False, shrink=True)
+        yield Label(
+            line_filter()(self._link), classes="--uri", markup=False, shrink=True
+        )
 
     @on(Click)
     def _action_open_link(self) -> None:
@@ -240,7 +265,7 @@ class GemtextPreformatted(Static):
 
     def compose(self) -> ComposeResult:
         """Compose the Gemtext preformatted text widget."""
-        yield Label(str(self._preformatted), markup=False)
+        yield Label(line_filter()(self._preformatted), markup=False)
 
 
 ##############################################################################

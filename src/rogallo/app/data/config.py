@@ -37,6 +37,9 @@ class Configuration:
     )
     """The content types that can be displayed in the viewer."""
 
+    handle_ansi_escape_sequences: bool = True
+    """Should ANSI escape sequences be handled in text content?"""
+
 
 ##############################################################################
 def configuration_file() -> Path:
