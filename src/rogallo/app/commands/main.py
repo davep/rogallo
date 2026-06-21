@@ -26,4 +26,13 @@ class ChangeCommandLineLocation(Command):
     BINDING_KEY = "ctrl+up, ctrl+down"
 
 
+##############################################################################
+class ToggleHistory(Command):
+    """Toggle the display of the history viewer"""
+
+    BINDING_KEY = "f2"
+    SHOW_IN_FOOTER = True
+    FOOTER_TEXT = "History"
+
+
 ### main.py ends here

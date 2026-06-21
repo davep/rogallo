@@ -2,7 +2,12 @@
 
 ##############################################################################
 # Local imports.
-from .main import ChangeCommandLineLocation, JumpToCommandLine, JumpToDocument
+from .main import (
+    ChangeCommandLineLocation,
+    JumpToCommandLine,
+    JumpToDocument,
+    ToggleHistory,
+)
 from .navigation import Backward, Forward
 
 ##############################################################################
@@ -13,6 +18,7 @@ __all__ = [
     "Forward",
     "JumpToCommandLine",
     "JumpToDocument",
+    "ToggleHistory",
 ]
 
 

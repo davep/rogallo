@@ -8,8 +8,9 @@ from webbrowser import open as open_in_browser
 # Textual imports.
 from textual import on, work
 from textual.app import ComposeResult
-from textual.containers import VerticalGroup
+from textual.containers import HorizontalGroup, VerticalGroup
 from textual.getters import query_one
+from textual.reactive import var
 from textual.widgets import Footer, Header
 
 ##############################################################################
@@ -30,6 +31,7 @@ from ..commands import (
     Forward,
     JumpToCommandLine,
     JumpToDocument,
+    ToggleHistory,
 )
 from ..data import (
     LocationHistory,
@@ -43,7 +45,7 @@ from ..data import (
 )
 from ..messages import OpenLocation, OpenText, OpenURI
 from ..providers import MainCommands
-from ..widgets import CommandLine, Viewer
+from ..widgets import CommandLine, HistoryViewer, Viewer
 
 
 ##############################################################################
@@ -60,9 +62,17 @@ class Main(EnhancedScreen[None]):
 
     DEFAULT_CSS = """
     Main {
-        VerticalGroup {
+        #workspace {
             hatch: right $surface;
+            height: 1fr;
+            .panel {
+                border-left: solid $panel;
+                &:focus, &:focus-within {
+                    border-left: solid $border;
+                }
+            }
         }
+
         .panel {
             background: $surface;
             &:focus-within {
@@ -79,6 +89,15 @@ class Main(EnhancedScreen[None]):
                 scrollbar-background-active: $panel;
             }
         }
+
+        HistoryViewer {
+            width: 30%;
+            display: none;
+        }
+
+        &.--show-history HistoryViewer {
+            display: block;
+        }
     }
     """
 
@@ -86,6 +105,7 @@ class Main(EnhancedScreen[None]):
         # Keep these together as they're bound to function keys and destined
         # for the footer.
         Help,
+        ToggleHistory,
         Quit,
         Backward,
         Forward,
@@ -104,31 +124,35 @@ class Main(EnhancedScreen[None]):
     """The viewer widget."""
     _command_line = query_one(CommandLine)
     """The command line widget."""
+    _history_viewer = query_one(HistoryViewer)
+    """The history viewer widget."""
 
-    def __init__(self) -> None:
-        """Initialize the main screen."""
-        super().__init__()
-        self._history = LocationHistory()
-        """The location history."""
+    history: var[LocationHistory] = var(LocationHistory())
+    """The location history."""
+
+    _history_visible: var[bool] = var(False, toggle_class="--show-history")
+    """Is the history panel visible?"""
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
         yield Header()
         with VerticalGroup():
-            yield Viewer(classes="panel")
+            with HorizontalGroup(id="workspace"):
+                yield Viewer(classes="panel")
+                yield HistoryViewer(classes="panel").data_bind(Main.history)
             yield CommandLine()
         yield Footer()
 
     def on_mount(self) -> None:
         """Called when the screen is mounted."""
-        self._history = load_location_history()
+        self.history = load_location_history()
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
         self._command_line.history = load_command_history()
         # If the history isn't empty, let's visit the last location there.
-        if self._history.current_item:
+        if self.history.current_item:
             self.post_message(
-                OpenLocation(self._history.current_item, from_history=True)
+                OpenLocation(self.history.current_item, from_history=True)
             )
 
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
@@ -148,9 +172,11 @@ class Main(EnhancedScreen[None]):
         if action == JumpToCommandLine.action_name():
             return not self._command_line.has_control
         if action == Backward.action_name():
-            return self._history.can_go_backward or None
+            return self.history.can_go_backward or None
         if action == Forward.action_name():
-            return self._history.can_go_forward or None
+            return self.history.can_go_forward or None
+        if action == ToggleHistory.action_name():
+            return len(self.history) > 0 or None
         return True
 
     def _maybe_remember_location(self, request: OpenLocation) -> None:
@@ -160,8 +186,9 @@ class Main(EnhancedScreen[None]):
             location: The location to remember.
         """
         if not request.from_history:
-            self._history.add(request.location)
-            save_location_history(self._history)
+            self.history.add(request.location)
+            self._history_viewer.update_from_history()
+            save_location_history(self.history)
 
     async def _handle_response(self, response: Response, request: OpenLocation) -> None:
         """Handle a response from a Gemini request.
@@ -296,17 +323,27 @@ class Main(EnhancedScreen[None]):
 
     def action_backward_command(self) -> None:
         """Go backward in the location history."""
-        if self._history.backward() and self._history.current_item:
+        if self.history.backward() and self.history.current_item:
             self.post_message(
-                OpenLocation(self._history.current_item, from_history=True)
+                OpenLocation(self.history.current_item, from_history=True)
             )
+            self._history_viewer.update_from_history()
 
     def action_forward_command(self) -> None:
         """Go forward in the location history."""
-        if self._history.forward() and self._history.current_item:
+        if self.history.forward() and self.history.current_item:
             self.post_message(
-                OpenLocation(self._history.current_item, from_history=True)
+                OpenLocation(self.history.current_item, from_history=True)
             )
+            self._history_viewer.update_from_history()
+
+    def action_toggle_history_command(self) -> None:
+        """Toggle the visibility of the history panel."""
+        self._history_visible = not self._history_visible
+        if self._history_visible:
+            self._history_viewer.focus()
+        else:
+            self._viewer.take_control()
 
 
 ### main.py ends here
