@@ -85,7 +85,7 @@ spellcheck:			# Spell check the code
 	$(spell) *.md $(src) $(docs) $(tests)
 
 .PHONY: checkall
-checkall: spellcheck codestyle lint stricttypecheck # Check all the things
+checkall: spellcheck codestyle lint stricttypecheck test # Check all the things
 
 ##############################################################################
 # Documentation.
