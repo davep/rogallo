@@ -231,7 +231,6 @@ class CommandLine(Vertical):
             self._busy_timer = self.set_interval(
                 0.1,
                 lambda: self._prompt.update(next(_BUSY_CELLS)),
-                name="busy_indicator",
             )
         elif self._busy_timer:
             self._busy_timer.stop()
