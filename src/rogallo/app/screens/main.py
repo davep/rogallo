@@ -106,9 +106,9 @@ class Main(EnhancedScreen[None]):
         # for the footer.
         Help,
         ToggleHistory,
-        Quit,
         Backward,
         Forward,
+        Quit,
         # Everything else.
         ChangeTheme,
         ChangeCommandLineLocation,
