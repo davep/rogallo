@@ -153,13 +153,26 @@ class Main(EnhancedScreen[None]):
             return self._history.can_go_forward or None
         return True
 
-    async def _handle_response(self, response: Response, uri: GeminiURI) -> None:
+    def _maybe_remember_location(self, request: OpenLocation) -> None:
+        """Remember a location in the history.
+
+        Args:
+            location: The location to remember.
+        """
+        if not request.from_history:
+            self._history.add(request.location)
+            self.refresh_bindings()
+            save_location_history(self._history)
+
+    async def _handle_response(self, response: Response, request: OpenLocation) -> None:
         """Handle a response from a Gemini request.
 
         Args:
             response: The response to handle.
-            uri: The URI the response was received from.
+            request: The original request that generated the response.
         """
+        assert isinstance(request.location, GeminiURI)
+        uri = request.location
         if not response.status.is_success:
             self.notify(
                 f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
@@ -174,21 +187,24 @@ class Main(EnhancedScreen[None]):
                 title="Request Error",
             )
             return
+        self._maybe_remember_location(request)
         self.post_message(OpenText(await response.text(), uri))
 
     @work
-    async def _load_from_capsule(self, uri: GeminiURI) -> None:
+    async def _load_from_capsule(self, request: OpenLocation) -> None:
         """Load a document from a Gemini URI.
 
         Args:
             uri: The Gemini URI to load the document from.
         """
+        assert isinstance(request.location, GeminiURI)
+        uri = request.location
         try:
             self._command_line.working = True
             async with await Client(
                 verify_mode="tofu", trust_store_path=trust_file()
             ).request(uri) as response:
-                await self._handle_response(response, uri)
+                await self._handle_response(response, request)
         except ConnectionError as error:
             self.notify(
                 f"Error loading {uri}:\n\n{error}",
@@ -218,14 +234,10 @@ class Main(EnhancedScreen[None]):
         """Open a location in the viewer.
 
         Args:
-            message: The message containing the location to open.
+            message: The message the location open request.
         """
-        if not message.from_history:
-            self._history.add(message.to_open)
-            save_location_history(self._history)
-        self.refresh_bindings()
-        if isinstance(message.to_open, GeminiURI):
-            self._load_from_capsule(message.to_open)
+        if isinstance(message.location, GeminiURI):
+            self._load_from_capsule(message)
 
     @on(OpenURI)
     def open_uri(self, message: OpenURI) -> None:
@@ -237,7 +249,7 @@ class Main(EnhancedScreen[None]):
 
         # Does it look like a Gemini URI?
         try:
-            self.post_message(OpenLocation(GeminiURI(message.to_open)))
+            self.post_message(OpenLocation(GeminiURI(message.uri)))
             return
         except URIError:
             pass
@@ -245,7 +257,7 @@ class Main(EnhancedScreen[None]):
         # TODO: Handle gmi files in the filesystem.
 
         # Otherwise, try to open it in the system browser.
-        open_in_browser(message.to_open)
+        open_in_browser(message.uri)
 
     @on(CommandLine.HistoryUpdated)
     def _save_command_line_history(self, message: CommandLine.HistoryUpdated) -> None:

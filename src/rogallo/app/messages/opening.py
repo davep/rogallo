@@ -18,7 +18,7 @@ from ..types import GeminiLocation
 class OpenURI(Message):
     """Open a given URI for viewing."""
 
-    to_open: str
+    uri: str
     """The URI to open."""
 
 
@@ -27,7 +27,7 @@ class OpenURI(Message):
 class OpenLocation(Message):
     """Open a given location for viewing."""
 
-    to_open: GeminiLocation
+    location: GeminiLocation
     """The location to open."""
     from_history: bool = False
     """Whether the location is being opened from history."""
