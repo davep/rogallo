@@ -141,7 +141,7 @@ class CommandLine(Vertical):
     working: var[bool] = var(False)
     """Is the command line currently working on something?"""
 
-    history: CommandLineHistory = CommandLineHistory()
+    history: var[CommandLineHistory] = var(CommandLineHistory)
     """The history for the command line."""
 
     _input = query_one(Input)
@@ -177,6 +177,7 @@ class CommandLine(Vertical):
             yield Label(_PROMPT)
             yield Input(
                 placeholder="Enter a URI, file, or command",
+                suggester=self._history_suggester,
             )
         yield Rule(line_style="heavy")
 
