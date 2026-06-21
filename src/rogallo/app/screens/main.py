@@ -161,7 +161,6 @@ class Main(EnhancedScreen[None]):
         """
         if not request.from_history:
             self._history.add(request.location)
-            self.refresh_bindings()
             save_location_history(self._history)
 
     async def _handle_response(self, response: Response, request: OpenLocation) -> None:
@@ -228,6 +227,7 @@ class Main(EnhancedScreen[None]):
             message: The message containing the text to open.
         """
         self._viewer.document = Viewer.Document(message.originally_from, message.text)
+        self.refresh_bindings()
 
     @on(OpenLocation)
     def open_location(self, message: OpenLocation) -> None:
