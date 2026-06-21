@@ -146,6 +146,8 @@ class CommandLine(Vertical):
 
     _input = query_one(Input)
     """The input widget for the command line."""
+    _prompt = query_one(Label)
+    """The prompt widget for the command line."""
 
     _busy_timer: var[Timer | None] = var(None)
     """The timer for the busy indicator."""
@@ -228,13 +230,13 @@ class CommandLine(Vertical):
         if self.working:
             self._busy_timer = self.set_interval(
                 0.1,
-                lambda: self.query_one(Label).update(next(_BUSY_CELLS)),
+                lambda: self._prompt.update(next(_BUSY_CELLS)),
                 name="busy_indicator",
             )
         elif self._busy_timer:
             self._busy_timer.stop()
             self._busy_timer = None
-            self.query_one(Label).update(_PROMPT)
+            self._prompt.update(_PROMPT)
 
     def action_request_exit(self) -> None:
         """Request that the application quits."""
