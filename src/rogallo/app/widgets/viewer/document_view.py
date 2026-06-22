@@ -10,10 +10,10 @@ class DocumentView(EnhancedVerticalScroll):
     """The scrolling container for the document."""
 
     HELP = """
-    ## Movement
+    ## Viewer
 
     As well as using the common set of cursor and page keys, the following
-    keys are available for movement within the markdown document:
+    keys are available for movement within the document:
     """
 
 
