@@ -362,7 +362,10 @@ class Main(EnhancedScreen[None]):
 
     def action_toggle_history_command(self) -> None:
         """Toggle the visibility of the history panel."""
-        self._history_visible = not self._history_visible
+        if self._history_visible:
+            self._history_visible = not self._history_viewer.has_focus
+        else:
+            self._history_visible = True
         with update_configuration() as config:
             config.history_visible = self._history_visible
         if self._history_visible:
