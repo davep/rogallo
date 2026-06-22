@@ -9,14 +9,14 @@ from textual_enhanced.commands import Command
 class JumpToCommandLine(Command):
     """Jump to the command line"""
 
-    BINDING_KEY = "/"
+    BINDING_KEY = "/, ctrl+1"
 
 
 ##############################################################################
 class JumpToDocument(Command):
     """Jump to the markdown document"""
 
-    BINDING_KEY = "ctrl+slash, ctrl+g"
+    BINDING_KEY = "ctrl+slash, ctrl+g, ctrl+2"
 
 
 ##############################################################################
@@ -30,7 +30,7 @@ class ChangeCommandLineLocation(Command):
 class ToggleHistory(Command):
     """Toggle the display of the history viewer"""
 
-    BINDING_KEY = "f2"
+    BINDING_KEY = "f2, ctrl+3"
     SHOW_IN_FOOTER = True
     FOOTER_TEXT = "History"
 
