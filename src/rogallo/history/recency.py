@@ -7,11 +7,11 @@ from typing import Self
 
 ##############################################################################
 # Local imports.
-from .navigable import NavigableHistory
+from .simple import SimpleHistory
 
 
 ##############################################################################
-class RecencyHistory[T](NavigableHistory[T]):
+class RecencyHistory[T](SimpleHistory[T]):
     """A history that keeps track of the most recent items.
 
     The history attempts to stay unique, so if an item is added that already
@@ -35,16 +35,7 @@ class RecencyHistory[T](NavigableHistory[T]):
         """
         if item in self._history:
             self._history.remove(item)
-        self._history.append(item)
-        return self.goto_end()
-
-    def __len__(self) -> int:
-        """The length of the history."""
-        return len(self._history)
-
-    def __iter__(self) -> Iterator[T]:
-        """Support iterating through the history."""
-        return iter(self._history)
+        return super().add(item)
 
 
 ### recency.py ends here
