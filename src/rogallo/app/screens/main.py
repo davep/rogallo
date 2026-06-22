@@ -193,13 +193,13 @@ class Main(EnhancedScreen[None]):
         Args:
             location: The location to remember.
         """
+        self.history.add(request.location)
+        self.mutate_reactive(Main.history)
+        save_location_history(self.history)
         if not request.from_history:
             self._navigation_history.add(request.location)
             self.mutate_reactive(Main._navigation_history)
             save_naviagation_history(self._navigation_history)
-            self.history.add(request.location)
-            self.mutate_reactive(Main.history)
-            save_location_history(self.history)
 
     async def _handle_response(self, response: Response, request: OpenLocation) -> None:
         """Handle a response from a Gemini request.

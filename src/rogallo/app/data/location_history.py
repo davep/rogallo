@@ -6,21 +6,18 @@ from json import dumps, loads
 from pathlib import Path
 
 ##############################################################################
-# Textual enhanced imports.
-from textual_enhanced.tools import History
-
-##############################################################################
 # Wasat imports.
 from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
+from ...history import RecencyHistory
 from ..types import GeminiLocation
 from .locations import data_dir
 
 
 ##############################################################################
-class LocationHistory(History[GeminiLocation]):
+class LocationHistory(RecencyHistory[GeminiLocation]):
     """The location history."""
 
 

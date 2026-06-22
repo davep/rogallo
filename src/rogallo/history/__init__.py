@@ -3,9 +3,10 @@
 ##############################################################################
 # Local imports.
 from .navigable import NavigableHistory
+from .recency import RecencyHistory
 
 ##############################################################################
 # Exports.
-__all__ = ["NavigableHistory"]
+__all__ = ["NavigableHistory", "RecencyHistory"]
 
 ### __init__.py ends here
