@@ -58,6 +58,13 @@ class HistoryViewer(EnhancedOptionList):
     }
     """
 
+    HELP = """
+    ## Location history
+
+    This is your locations history. Here you can revisit locations you've
+    viewed, and also remove individual or all locations.
+    """
+
     history: var[LocationHistory] = var(LocationHistory())
     """The history of visited locations."""
 
