@@ -11,7 +11,7 @@ from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, VerticalGroup
 from textual.getters import query_one
 from textual.reactive import var
-from textual.widgets import Footer, Header
+from textual.widgets import Footer, Header, Label
 
 ##############################################################################
 # Textual enhanced imports.
@@ -94,12 +94,18 @@ class Main(EnhancedScreen[None]):
             }
         }
 
-        HistoryViewer {
+        #history {
             width: 30%;
             display: none;
+            Label {
+                padding: 0 1;
+                text-align: right;
+                background: $panel;
+                width: 1fr;
+            }
         }
 
-        &.--show-history HistoryViewer {
+        &.--show-history #history {
             display: block;
         }
     }
@@ -147,9 +153,9 @@ class Main(EnhancedScreen[None]):
         with VerticalGroup():
             with HorizontalGroup(id="workspace"):
                 yield Viewer(classes="panel")
-                yield HistoryViewer(classes="panel").data_bind(
-                    history=Main._location_history
-                )
+                with VerticalGroup(classes="panel", id="history"):
+                    yield Label("History")
+                    yield HistoryViewer().data_bind(history=Main._location_history)
             yield CommandLine().data_bind(history=Main._command_history)
         yield Footer()
 

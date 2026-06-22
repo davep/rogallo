@@ -53,6 +53,7 @@ class HistoryViewer(EnhancedOptionList):
         text-overflow: ellipsis;
         &:focus {
             border: none;
+            background: $panel;
         }
     }
     """
