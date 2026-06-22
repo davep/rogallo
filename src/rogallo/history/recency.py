@@ -2,8 +2,7 @@
 
 ##############################################################################
 # Python imports.
-from collections import deque
-from collections.abc import Iterator, Sequence
+from collections.abc import Iterator
 from typing import Self
 
 ##############################################################################
