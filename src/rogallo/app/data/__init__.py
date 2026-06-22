@@ -18,6 +18,11 @@ from .location_history import (
     load_location_history,
     save_location_history,
 )
+from .navigation_history import (
+    NavigationHistory,
+    load_navigation_history,
+    save_naviagation_history,
+)
 from .trust import trust_file
 
 ##############################################################################
@@ -28,10 +33,13 @@ __all__ = [
     "load_command_history",
     "load_configuration",
     "load_location_history",
+    "load_navigation_history",
     "LocationHistory",
+    "NavigationHistory",
     "save_command_history",
     "save_configuration",
     "save_location_history",
+    "save_naviagation_history",
     "trust_file",
     "update_configuration",
 ]

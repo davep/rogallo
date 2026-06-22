@@ -35,11 +35,14 @@ from ..commands import (
 )
 from ..data import (
     LocationHistory,
+    NavigationHistory,
     load_command_history,
     load_configuration,
     load_location_history,
+    load_navigation_history,
     save_command_history,
     save_location_history,
+    save_naviagation_history,
     trust_file,
     update_configuration,
 )
@@ -130,6 +133,9 @@ class Main(EnhancedScreen[None]):
     history: var[LocationHistory] = var(LocationHistory())
     """The location history."""
 
+    _navigation_history: var[NavigationHistory] = var(NavigationHistory())
+    """The navigation history."""
+
     _history_visible: var[bool] = var(False, toggle_class="--show-history")
     """Is the history panel visible?"""
 
@@ -146,14 +152,15 @@ class Main(EnhancedScreen[None]):
     def on_mount(self) -> None:
         """Called when the screen is mounted."""
         self.history = load_location_history()
+        self._navigation_history = load_navigation_history()
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
         self._command_line.history = load_command_history()
         self._history_visible = config.history_visible
-        # If the history isn't empty, let's visit the last location there.
-        if self.history.current_item:
+        # If the navigation history isn't empty, let's visit the last location there.
+        if self._navigation_history.current_item:
             self.post_message(
-                OpenLocation(self.history.current_item, from_history=True)
+                OpenLocation(self._navigation_history.current_item, from_history=True)
             )
 
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
@@ -173,9 +180,9 @@ class Main(EnhancedScreen[None]):
         if action == JumpToCommandLine.action_name():
             return not self._command_line.has_control
         if action == Backward.action_name():
-            return self.history.can_go_backward or None
+            return self._navigation_history.can_go_backward or None
         if action == Forward.action_name():
-            return self.history.can_go_forward or None
+            return self._navigation_history.can_go_forward or None
         if action == ToggleHistory.action_name():
             return len(self.history) > 0 or None
         return True
@@ -187,6 +194,9 @@ class Main(EnhancedScreen[None]):
             location: The location to remember.
         """
         if not request.from_history:
+            self._navigation_history.add(request.location)
+            self.mutate_reactive(Main._navigation_history)
+            save_naviagation_history(self._navigation_history)
             self.history.add(request.location)
             self.mutate_reactive(Main.history)
             save_location_history(self.history)
@@ -323,20 +333,23 @@ class Main(EnhancedScreen[None]):
             self._viewer.take_control()
 
     def action_backward_command(self) -> None:
-        """Go backward in the location history."""
-        if self.history.backward() and self.history.current_item:
+        """Go backward in the navigation history."""
+        if (
+            self._navigation_history.backward()
+            and self._navigation_history.current_item
+        ):
             self.post_message(
-                OpenLocation(self.history.current_item, from_history=True)
+                OpenLocation(self._navigation_history.current_item, from_history=True)
             )
-            self.mutate_reactive(Main.history)
+            self.mutate_reactive(Main._navigation_history)
 
     def action_forward_command(self) -> None:
-        """Go forward in the location history."""
-        if self.history.forward() and self.history.current_item:
+        """Go forward in the navigation history."""
+        if self._navigation_history.forward() and self._navigation_history.current_item:
             self.post_message(
-                OpenLocation(self.history.current_item, from_history=True)
+                OpenLocation(self._navigation_history.current_item, from_history=True)
             )
-            self.mutate_reactive(Main.history)
+            self.mutate_reactive(Main._navigation_history)
 
     def action_toggle_history_command(self) -> None:
         """Toggle the visibility of the history panel."""
