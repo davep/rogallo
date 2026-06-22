@@ -6,9 +6,13 @@ from collections import deque
 from collections.abc import Iterator, Sequence
 from typing import Self
 
+##############################################################################
+# Local imports.
+from .navigable import NavigableHistory
+
 
 ##############################################################################
-class RecencyHistory[T]:
+class RecencyHistory[T](NavigableHistory[T]):
     """A history that keeps track of the most recent items.
 
     The history attempts to stay unique, so if an item is added that already
@@ -16,20 +20,6 @@ class RecencyHistory[T]:
     existing is defined by an item that has equality to an item that already
     exists in the history.
     """
-
-    def __init__(
-        self, history: Sequence[T] | None = None, max_length: int = 500
-    ) -> None:
-        """Initialise the history object.
-
-        Args:
-            history: Set to the given history.
-            max_length: Optional maximum length for the history.
-        """
-        self._history: deque[T] = deque(history or [], maxlen=max_length)
-        """The history."""
-        self._current_index = max(len(self._history) - 1, 0)
-        """The current index in the history."""
 
     def add(self, item: T) -> Self:
         """Add an item to the history.
@@ -47,7 +37,7 @@ class RecencyHistory[T]:
         if item in self._history:
             self._history.remove(item)
         self._history.append(item)
-        return self
+        return self.goto_end()
 
     def __len__(self) -> int:
         """The length of the history."""
