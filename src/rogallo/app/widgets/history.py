@@ -1,6 +1,14 @@
 """Provides the history panel widget."""
 
 ##############################################################################
+# Python imports.
+from datetime import datetime
+
+##############################################################################
+# Rich imports.
+from rich.markup import escape
+
+##############################################################################
 # Textual imports.
 from textual import on
 from textual.reactive import var
@@ -16,24 +24,43 @@ from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
 # Local imports.
-from ..data import LocationHistory
+from ..data import LocationHistory, LocationVisit
 from ..messages import OpenLocation
 from ..types import GeminiLocation
+
+
+##############################################################################
+def _clean_time(timestamp: datetime) -> datetime:
+    """Clean a timestamp for display.
+
+    Args:
+        timestamp: The timestamp to clean.
+
+    Returns:
+        The cleaned timestamp.
+    """
+    return timestamp.replace(microsecond=0)
 
 
 ##############################################################################
 class HistoryOption(Option):
     """An option for the history viewer."""
 
-    def __init__(self, location: GeminiLocation) -> None:
-        """Initialize the history option.
+    def __init__(self, visit: LocationVisit) -> None:
+        """Initialise the history option.
 
         Args:
-            location: The location to display.
+            visit: The visit to display.
         """
-        self._location = location
+        self._location = visit.location
         """The location to display."""
-        super().__init__(str(location).removeprefix(GEMINI_PREFIX), id=str(location))
+        super().__init__(
+            (
+                f"{escape(str(visit.location).removeprefix(GEMINI_PREFIX))}\n"
+                f"[dim i]{_clean_time(visit.timestamp)}[/]"
+            ),
+            id=str(visit.location),
+        )
 
     @property
     def location(self) -> GeminiLocation:
@@ -71,7 +98,7 @@ class HistoryViewer(EnhancedOptionList):
     def _watch_history(self) -> None:
         """Update the history viewer when the history changes."""
         self.clear_options().add_options(
-            HistoryOption(location) for location in reversed(list(self.history))
+            HistoryOption(visit) for visit in reversed(list(self.history))
         )
         if self.option_count:
             self.highlighted = 0

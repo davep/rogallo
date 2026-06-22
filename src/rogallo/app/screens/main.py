@@ -36,6 +36,7 @@ from ..commands import (
 from ..data import (
     CommandLineHistory,
     LocationHistory,
+    LocationVisit,
     NavigationHistory,
     load_command_history,
     load_configuration,
@@ -169,7 +170,9 @@ class Main(EnhancedScreen[None]):
         self._history_visible = config.history_visible
         if self._location_history.current_item:
             self.post_message(
-                OpenLocation(self._location_history.current_item, from_history=True)
+                OpenLocation(
+                    self._location_history.current_item.location, from_history=True
+                )
             )
 
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
@@ -202,7 +205,7 @@ class Main(EnhancedScreen[None]):
         Args:
             location: The location to remember.
         """
-        self._location_history.add(request.location)
+        self._location_history.add(LocationVisit(request.location))
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
         if not request.from_history:

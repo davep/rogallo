@@ -15,6 +15,7 @@ from .config import (
 )
 from .location_history import (
     LocationHistory,
+    LocationVisit,
     load_location_history,
     save_location_history,
 )
@@ -42,6 +43,7 @@ __all__ = [
     "save_naviagation_history",
     "trust_file",
     "update_configuration",
+    "LocationVisit",
 ]
 
 ### __init__.py ends here
