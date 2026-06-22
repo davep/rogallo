@@ -79,7 +79,7 @@ class GemtextParagraph(GemtextText):
 
     DEFAULT_CSS = """
     GemtextParagraph {
-        padding: 0 2 0 2;
+        padding: 0 2;
     }
     """
 
