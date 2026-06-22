@@ -130,10 +130,10 @@ class Main(EnhancedScreen[None]):
     _history_viewer = query_one(HistoryViewer)
     """The history viewer widget."""
 
-    history: var[LocationHistory] = var(LocationHistory())
+    history: var[LocationHistory] = var(LocationHistory)
     """The location history."""
 
-    _navigation_history: var[NavigationHistory] = var(NavigationHistory())
+    _navigation_history: var[NavigationHistory] = var(NavigationHistory)
     """The navigation history."""
 
     _history_visible: var[bool] = var(False, toggle_class="--show-history")
