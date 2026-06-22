@@ -1,0 +1,27 @@
+# Contributing
+
+## Feedback and suggestions
+
+The best place for feedback and suggestions is [in
+discussions](https://github.com/davep/rogallo/discussions). If it seems
+like something that makes sense for Rogallo I'll turn it into an issue
+from there.
+
+Be sure to [have a look over the TODO
+issues](https://github.com/davep/rogallo/issues?q=is%3Aissue+is%3Aopen+label%3ATODO)
+before leaving a request, it might be I'm already planning on implementing
+whatever it is you're asking for.
+
+## Bugs
+
+Please report any bugs [as an
+issue](https://github.com/davep/rogallo/issues). When doing so, please
+provide as much detail as possible, include things like Rogallo version,
+operating system, some details of the environment, etc.
+
+## Pull requests
+
+I'm not accepting PRs at the moment. Rogallo is still in the very early
+stages of development.
+
+[//]: # (CONTRIBUTING.md ends here)
