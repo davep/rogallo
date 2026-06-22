@@ -127,11 +127,11 @@ repl:				# Start a Python REPL in the venv.
 
 .PHONY: delint
 delint:			# Fix linting issues.
-	$(lint) --fix  $(src)
+	$(lint) --fix  $(src) $(tests)
 
 .PHONY: pep8ify
 pep8ify:			# Reformat the code to be as PEP8 as possible.
-	$(fmt) $(src)
+	$(fmt) $(src) $(tests)
 
 .PHONY: tidy
 tidy: pep8ify delint		# Tidy up the code, fixing lint and format issues.
