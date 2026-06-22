@@ -131,9 +131,8 @@ class Main(EnhancedScreen[None]):
     _history_viewer = query_one(HistoryViewer)
     """The history viewer widget."""
 
-    history: var[LocationHistory] = var(LocationHistory)
+    _location_history: var[LocationHistory] = var(LocationHistory)
     """The location history."""
-
     _navigation_history: var[NavigationHistory] = var(NavigationHistory)
     """The navigation history."""
     _command_history: var[CommandLineHistory] = var(CommandLineHistory)
@@ -148,22 +147,23 @@ class Main(EnhancedScreen[None]):
         with VerticalGroup():
             with HorizontalGroup(id="workspace"):
                 yield Viewer(classes="panel")
-                yield HistoryViewer(classes="panel").data_bind(Main.history)
+                yield HistoryViewer(classes="panel").data_bind(
+                    history=Main._location_history
+                )
             yield CommandLine().data_bind(history=Main._command_history)
         yield Footer()
 
     def on_mount(self) -> None:
         """Called when the screen is mounted."""
-        self.history = load_location_history()
+        self._location_history = load_location_history()
         self._navigation_history = load_navigation_history()
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
         self._command_line.history = load_command_history()
         self._history_visible = config.history_visible
-        # If the navigation history isn't empty, let's visit the last location there.
-        if self._navigation_history.current_item:
+        if self._location_history.current_item:
             self.post_message(
-                OpenLocation(self._navigation_history.current_item, from_history=True)
+                OpenLocation(self._location_history.current_item, from_history=True)
             )
 
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
@@ -187,7 +187,7 @@ class Main(EnhancedScreen[None]):
         if action == Forward.action_name():
             return self._navigation_history.can_go_forward or None
         if action == ToggleHistory.action_name():
-            return len(self.history) > 0 or None
+            return len(self._location_history) > 0 or None
         return True
 
     def _maybe_remember_location(self, request: OpenLocation) -> None:
@@ -196,9 +196,9 @@ class Main(EnhancedScreen[None]):
         Args:
             location: The location to remember.
         """
-        self.history.add(request.location)
-        self.mutate_reactive(Main.history)
-        save_location_history(self.history)
+        self._location_history.add(request.location)
+        self.mutate_reactive(Main._location_history)
+        save_location_history(self._location_history)
         if not request.from_history:
             self._navigation_history.add(request.location)
             self.mutate_reactive(Main._navigation_history)
