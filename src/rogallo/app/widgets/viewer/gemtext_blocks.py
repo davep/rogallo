@@ -171,8 +171,8 @@ class GemtextLink(Horizontal, can_focus=True):
             background: $block-hover-background;
         }
         &:focus .--uri {
-            color: $foreground;
-            background: $block-cursor-blurred-background;
+            color: $block-cursor-foreground;
+            background: $block-cursor-background;
         }
         pointer: pointer;
     }
