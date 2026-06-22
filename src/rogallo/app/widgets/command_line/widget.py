@@ -175,11 +175,13 @@ class CommandLine(Vertical):
         return self._input.has_focus
 
     @dataclass
-    class HistoryUpdated(Message):
-        """Message posted when the command history is updated."""
+    class CommandExecuted(Message):
+        """Message posted when a command is executed."""
 
         command_line: CommandLine
         """The command line whose history was updated."""
+        command: str
+        """The command that was executed."""
 
     def handle_input(self, command: str) -> None:
         """Handle input from the user.
@@ -191,9 +193,8 @@ class CommandLine(Vertical):
             return
         for candidate in COMMANDS:
             if candidate.handle(command, self):
-                if (not self.history) or (command != list(self.history)[-1]):
-                    self.history.add(command)
-                self.post_message(self.HistoryUpdated(self))
+                self.history.add(command)
+                self.post_message(self.CommandExecuted(self, command))
                 self._input.value = ""
                 self._input.suggester = self._history_suggester
                 return

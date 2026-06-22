@@ -34,6 +34,7 @@ from ..commands import (
     ToggleHistory,
 )
 from ..data import (
+    CommandLineHistory,
     LocationHistory,
     NavigationHistory,
     load_command_history,
@@ -135,6 +136,8 @@ class Main(EnhancedScreen[None]):
 
     _navigation_history: var[NavigationHistory] = var(NavigationHistory)
     """The navigation history."""
+    _command_history: var[CommandLineHistory] = var(CommandLineHistory)
+    """The command line history."""
 
     _history_visible: var[bool] = var(False, toggle_class="--show-history")
     """Is the history panel visible?"""
@@ -146,7 +149,7 @@ class Main(EnhancedScreen[None]):
             with HorizontalGroup(id="workspace"):
                 yield Viewer(classes="panel")
                 yield HistoryViewer(classes="panel").data_bind(Main.history)
-            yield CommandLine()
+            yield CommandLine().data_bind(history=Main._command_history)
         yield Footer()
 
     def on_mount(self) -> None:
@@ -297,12 +300,12 @@ class Main(EnhancedScreen[None]):
         # Otherwise, try to open it in the system browser.
         open_in_browser(message.uri)
 
-    @on(CommandLine.HistoryUpdated)
-    def _save_command_line_history(self, message: CommandLine.HistoryUpdated) -> None:
-        """Save the command line history when it is updated.
+    @on(CommandLine.CommandExecuted)
+    def _save_command_line_history(self, message: CommandLine.CommandExecuted) -> None:
+        """Save the command line history when a command is executed.
 
         Args:
-            message: The message containing the command line whose history was updated.
+            message: The message containing the command that was executed.
         """
         save_command_history(message.command_line.history)
 

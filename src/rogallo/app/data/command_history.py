@@ -6,16 +6,13 @@ from json import dumps, loads
 from pathlib import Path
 
 ##############################################################################
-# Textual enhanced imports.
-from textual_enhanced.tools import History
-
-##############################################################################
 # Local imports.
+from ...history import RecencyHistory
 from .locations import data_dir
 
 
 ##############################################################################
-class CommandLineHistory(History[str]):
+class CommandLineHistory(RecencyHistory[str]):
     """The history for the command line."""
 
 
