@@ -6,8 +6,11 @@ from json import dumps, loads
 from pathlib import Path
 
 ##############################################################################
+# BogOfStuff imports.
+from bagofstuff.history import RecencyHistory
+
+##############################################################################
 # Local imports.
-from ...history import RecencyHistory
 from .locations import data_dir
 
 

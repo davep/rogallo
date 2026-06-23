@@ -9,12 +9,15 @@ from pathlib import Path
 from typing import Self
 
 ##############################################################################
+# BagOfStuff imports.
+from bagofstuff.history import RecencyHistory
+
+##############################################################################
 # Wasat imports.
 from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
-from ...history import RecencyHistory
 from ..types import GeminiLocation
 from .locations import data_dir
 

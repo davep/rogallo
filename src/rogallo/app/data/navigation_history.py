@@ -6,12 +6,15 @@ from json import dumps, loads
 from pathlib import Path
 
 ##############################################################################
+# BagOfStuff imports.
+from bagofstuff.history import NavigableHistory
+
+##############################################################################
 # Wasat imports.
 from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
-from ...history import NavigableHistory
 from ..types import GeminiLocation
 from .locations import data_dir
 

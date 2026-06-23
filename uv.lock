@@ -191,6 +191,15 @@ wheels = [
 ]
 
 [[package]]
+name = "bagofstuff"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/eb/57/da0c4db4cfffacccf973f90ca09ed767ef551935d0c144ffa81b40f284a5/bagofstuff-1.0.0.tar.gz", hash = "sha256:25f87ee8d1962ef1550deb3a4cf374bbe95fd073803a897c694b2c0a077a0b21", size = 5978, upload-time = "2026-06-23T14:57:07.332Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/71/29/1258924c29f4f9b2c2c207ee91f8e36993a21cc6b0a2b13909ec3445b86c/bagofstuff-1.0.0-py3-none-any.whl", hash = "sha256:ecfd8b5536ea24acfcfdfecf7ea7b6919143f5971e24b9ceb14a33a1be7d7e4c", size = 8901, upload-time = "2026-06-23T14:57:06.436Z" },
+]
+
+[[package]]
 name = "cfgv"
 version = "3.5.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1107,6 +1116,7 @@ name = "rogallo"
 version = "0.0.1"
 source = { editable = "." }
 dependencies = [
+    { name = "bagofstuff" },
     { name = "textual" },
     { name = "textual-enhanced" },
     { name = "wasat" },
@@ -1127,6 +1137,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "bagofstuff", specifier = ">=1.0.0" },
     { name = "textual", specifier = ">=8.2.7" },
     { name = "textual-enhanced", specifier = ">=1.5.0" },
     { name = "wasat", specifier = ">=0.0.1" },
