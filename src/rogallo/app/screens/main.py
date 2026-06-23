@@ -208,7 +208,10 @@ class Main(EnhancedScreen[None]):
         self._location_history.add(LocationVisit(request.location))
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
-        if not request.from_history:
+        if (
+            not request.from_history
+            and self._navigation_history.current_item != request.location
+        ):
             self._navigation_history.add(request.location)
             self.mutate_reactive(Main._navigation_history)
             save_naviagation_history(self._navigation_history)

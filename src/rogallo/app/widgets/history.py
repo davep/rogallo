@@ -108,7 +108,7 @@ class HistoryViewer(EnhancedOptionList):
         """Jump to the selected history location."""
         event.stop()
         assert isinstance(event.option, HistoryOption)
-        self.post_message(OpenLocation(event.option.location, from_history=True))
+        self.post_message(OpenLocation(event.option.location))
 
 
 ### history.py ends here
