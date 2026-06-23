@@ -21,6 +21,7 @@ class ViewerTitle(Label):
         content-align: right middle;
         width: 1fr;
         height: 1;
+        padding: 0 1;
     }
     """
 
