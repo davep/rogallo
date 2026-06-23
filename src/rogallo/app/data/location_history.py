@@ -38,6 +38,34 @@ class LocationVisit:
             return self.location == value.location
         return NotImplemented
 
+    @property
+    def as_json(self) -> dict[str, str]:
+        """Get the visit as a JSON-serialisable dictionary.
+
+        Returns:
+            The visit as a JSON-serialisable dictionary.
+        """
+        return {
+            "type": "uri" if isinstance(self.location, GeminiURI) else "path",
+            "location": str(self.location),
+            "timestamp": self.timestamp.isoformat(),
+        }
+
+    @classmethod
+    def from_json(cls, data: dict[str, str]) -> Self:
+        """Create a visit from a JSON-serialisable dictionary.
+
+        Args:
+            data: The JSON-serialisable dictionary.
+
+        Returns:
+            The visit.
+        """
+        return cls(
+            (GeminiURI if data["type"] == "uri" else Path)(data["location"]),
+            datetime.fromisoformat(data["timestamp"]),
+        )
+
 
 ##############################################################################
 class LocationHistory(RecencyHistory[LocationVisit]):
@@ -70,17 +98,7 @@ def save_location_history(history: LocationHistory) -> None:
         history: The location history to save.
     """
     location_history_file().write_text(
-        dumps(
-            [
-                {
-                    "type": "uri" if isinstance(entry.location, GeminiURI) else "path",
-                    "location": str(entry.location),
-                    "timestamp": entry.timestamp.isoformat(),
-                }
-                for entry in history
-            ],
-            indent=4,
-        ),
+        dumps([entry.as_json for entry in history], indent=4),
         encoding="utf-8",
     )
 
@@ -94,10 +112,7 @@ def load_location_history() -> LocationHistory:
     """
     return LocationHistory(
         [
-            LocationVisit(
-                (GeminiURI if entry["type"] == "uri" else Path)(entry["location"]),
-                datetime.fromisoformat(entry["timestamp"]),
-            )
+            LocationVisit.from_json(entry)
             for entry in loads(history.read_text(encoding="utf-8"))
         ]
         if (history := location_history_file()).exists()
