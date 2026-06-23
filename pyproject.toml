@@ -1,6 +1,6 @@
 [project]
 name = "rogallo"
-version = "0.0.1"
+version = "0.1.0"
 description = "Coming soon"
 readme = "README.md"
 authors = [
