@@ -44,7 +44,10 @@ def save_naviagation_history(history: NavigationHistory) -> None:
     navigation_history_file().write_text(
         dumps(
             [
-                ("uri" if isinstance(entry, GeminiURI) else "path", str(entry))
+                {
+                    "type": "uri" if isinstance(entry, GeminiURI) else "path",
+                    "location": str(entry),
+                }
                 for entry in history
             ],
             indent=4,
@@ -62,8 +65,8 @@ def load_navigation_history() -> NavigationHistory:
     """
     return NavigationHistory(
         [
-            (GeminiURI if entry_type == "uri" else Path)(entry)
-            for entry_type, entry in loads(history.read_text(encoding="utf-8"))
+            (GeminiURI if entry["type"] == "uri" else Path)(entry["location"])
+            for entry in loads(history.read_text(encoding="utf-8"))
         ]
         if (history := navigation_history_file()).exists()
         else []
