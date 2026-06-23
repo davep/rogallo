@@ -17,6 +17,7 @@ from textual import on
 from textual.app import ComposeResult
 from textual.containers import Horizontal
 from textual.events import Click
+from textual.reactive import var
 from textual.widgets import Label, Static
 
 ##############################################################################
@@ -187,6 +188,9 @@ class GemtextLink(Horizontal, can_focus=True):
 
     BINDINGS = [HelpfulBinding("enter", "open_link", "Open link", show=False)]
 
+    _normalised_uri: var[str] = var("")
+    """The normalised URI to use when opening the link."""
+
     def __init__(self, link: Line) -> None:
         """Initialize a Gemtext link widget.
 
@@ -214,6 +218,10 @@ class GemtextLink(Horizontal, can_focus=True):
             return
         if isinstance(base_uri, GeminiURI):
             self._normalised_uri = str(base_uri.resolve(self._link.uri))
+
+    def _watch__normalised_uri(self) -> None:
+        """Watch for changes to the normalised URI."""
+        self.tooltip = self._normalised_uri
 
     def compose(self) -> ComposeResult:
         """Compose the Gemtext link widget."""
