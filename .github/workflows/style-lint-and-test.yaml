@@ -1,0 +1,59 @@
+name: Code quality tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+
+  style-lint-and-test:
+
+    name: Style, lint, test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.13", "3.14", "3.15"]
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          allow-prereleases: true
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "latest"
+
+      - name: Install Dependencies
+        run: |
+          echo ${{ matrix.python-version }} > .python-version
+          touch .env
+          make setup
+
+      - name: Check for typos
+        run: make spellcheck
+
+      - name: Check the Code style
+        run: make codestyle
+
+      - name: Lint the code
+        run: make lint
+
+      - name: Type check the code
+        run: make stricttypecheck
+
+      - name: Run unit tests
+        run: make test
+
+### style-lint-and-test.yaml ends here
