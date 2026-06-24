@@ -102,6 +102,10 @@ _H3: Final[str] = "###"
 """Marker for a level 3 heading in Gemtext."""
 _QUOTE: Final[str] = ">"
 """Marker for a quote in Gemtext."""
+_PRE_FORMAT: Final[str] = "```"
+"""Marker for preformatted text in Gemtext."""
+_LIST_ITEM: Final[str] = "* "
+"""Marker for a list item in Gemtext."""
 
 
 ##############################################################################
@@ -126,7 +130,7 @@ class Gemtext:
         in_preformat = False
         preformat_content: list[str] = []
         for line in self._text.splitlines():
-            if line.startswith("```"):
+            if line.startswith(_PRE_FORMAT):
                 if not (in_preformat := not in_preformat):
                     yield PreFormatted("\n".join(preformat_content))
                     preformat_content = []
@@ -143,8 +147,8 @@ class Gemtext:
                 yield Heading(line.removeprefix(_H2).strip(), 2)
             elif line.startswith(_H1):
                 yield Heading(line.removeprefix(_H1).strip(), 1)
-            elif line.startswith("* "):
-                yield ListItem(line.removeprefix("* ").strip())
+            elif line.startswith(_LIST_ITEM):
+                yield ListItem(line.removeprefix(_LIST_ITEM).strip())
             else:
                 yield Paragraph(line)
         if in_preformat:
