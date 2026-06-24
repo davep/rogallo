@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v0.2.0
 
-**Released: WiP**
+**Released: 2026-06-24**
 
 - Added tooltips to links that show the URI when hovered over with the
   mouse. ([#23](https://github.com/davep/rogallo/pull/23))
