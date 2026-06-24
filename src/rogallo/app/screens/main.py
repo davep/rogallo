@@ -208,11 +208,14 @@ class Main(EnhancedScreen[None]):
             location: The location to remember.
             response: The response from the request, if any.
         """
-        location = (
-            (response.uri or response.requested_uri)
-            if response and response.uri
-            else request.location
-        )
+        if (
+            location := (
+                (response.uri or response.requested_uri)
+                if response and response.uri
+                else request.location
+            )
+        ) is None:
+            return
         self._location_history.add(LocationVisit(location))
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
