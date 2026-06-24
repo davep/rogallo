@@ -106,6 +106,8 @@ _PRE_FORMAT: Final[str] = "```"
 """Marker for preformatted text in Gemtext."""
 _LIST_ITEM: Final[str] = "* "
 """Marker for a list item in Gemtext."""
+_NON_CONFORMING_LIST_ITEM: Final[str] = "*\t"
+"""Marker for a non-conforming list item in Gemtext."""
 
 
 ##############################################################################
@@ -150,6 +152,8 @@ class Gemtext:
                 yield Heading(line.removeprefix(_H1).strip(), 1)
             elif is_a(_LIST_ITEM):
                 yield ListItem(line.removeprefix(_LIST_ITEM).strip())
+            elif is_a(_NON_CONFORMING_LIST_ITEM):
+                yield ListItem(line.removeprefix(_NON_CONFORMING_LIST_ITEM).strip())
             else:
                 yield Paragraph(line)
         if in_preformat:

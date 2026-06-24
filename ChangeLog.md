@@ -14,6 +14,8 @@
   ([#29](https://github.com/davep/rogallo/pull/29))
 - Improved the detection of quotes.
   ([#31](https://github.com/davep/rogallo/pull/31))
+- Allowed non-standard list items, that use a tab rather than a space after
+  the `*`. ([#33](https://github.com/davep/rogallo/pull/33))
 
 ## v0.1.0
 
