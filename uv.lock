@@ -1241,7 +1241,7 @@ requires-dist = [
     { name = "bagofstuff", specifier = ">=1.0.0" },
     { name = "textual", specifier = ">=8.2.7" },
     { name = "textual-enhanced", specifier = ">=1.5.0" },
-    { name = "wasat", specifier = ">=0.0.1" },
+    { name = "wasat", specifier = ">=0.1.0" },
     { name = "xdg-base-dirs", specifier = ">=6.0.2" },
 ]
 
