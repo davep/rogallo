@@ -6,6 +6,8 @@
 
 - Added tooltips to links that show the URI when hovered over with the
   mouse. ([#23](https://github.com/davep/rogallo/pull/23))
+- Improved the handling of redirected requests.
+  ([#24](https://github.com/davep/rogallo/pull/24))
 
 ## v0.1.0
 
