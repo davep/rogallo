@@ -199,20 +199,31 @@ class Main(EnhancedScreen[None]):
             return len(self._location_history) > 0 or None
         return True
 
-    def _maybe_remember_location(self, request: OpenLocation) -> None:
+    def _maybe_remember_location(
+        self, request: OpenLocation, response: Response | None = None
+    ) -> None:
         """Remember a location in the history.
 
         Args:
             location: The location to remember.
+            response: The response from the request, if any.
         """
-        self._location_history.add(LocationVisit(request.location))
+        if (
+            location := (
+                (response.uri or response.requested_uri)
+                if response and response.uri
+                else request.location
+            )
+        ) is None:
+            return
+        self._location_history.add(LocationVisit(location))
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
         if (
             not request.from_history
-            and self._navigation_history.current_item != request.location
+            and self._navigation_history.current_item != location
         ):
-            self._navigation_history.add(request.location)
+            self._navigation_history.add(location)
             self.mutate_reactive(Main._navigation_history)
             save_naviagation_history(self._navigation_history)
 
@@ -224,7 +235,7 @@ class Main(EnhancedScreen[None]):
             request: The original request that generated the response.
         """
         assert isinstance(request.location, GeminiURI)
-        uri = request.location
+        uri = response.uri or response.requested_uri or request.location
         if not response.status.is_success:
             self.notify(
                 f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
@@ -239,7 +250,7 @@ class Main(EnhancedScreen[None]):
                 title="Request Error",
             )
             return
-        self._maybe_remember_location(request)
+        self._maybe_remember_location(request, response)
         self.post_message(OpenText(await response.text(), uri))
 
     @work
