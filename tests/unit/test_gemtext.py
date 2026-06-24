@@ -39,8 +39,6 @@ def test_str_gemtext() -> None:
         ("\nSecond line.", ""),
         (" \nSecond line.", " "),
         (" > Not a quote", " > Not a quote"),
-        (">Not a quote", ">Not a quote"),
-        (">> Not a quote", ">> Not a quote"),
         (" # Not a header", " # Not a header"),
         ("*Not a list item", "*Not a list item"),
         ("** Not a list item", "** Not a list item"),
@@ -93,6 +91,7 @@ def test_parse_header(gemtext: str, expected_level: int, expected_content: str) 
     [
         ("> This is a quote.", "This is a quote."),
         (">  This is a quote.", "This is a quote."),
+        (">> This is a quote.", "> This is a quote."),
         ("> > This is a quote.", "> This is a quote."),
         ("> This is a quote.\n> Second line.", "This is a quote."),
         ("> \nSecond line.", ""),
