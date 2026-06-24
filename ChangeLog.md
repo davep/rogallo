@@ -12,6 +12,8 @@
   ([#26](https://github.com/davep/rogallo/pull/26))
 - Improved the detection of headings.
   ([#29](https://github.com/davep/rogallo/pull/29))
+- Improved the detection of quotes.
+  ([#31](https://github.com/davep/rogallo/pull/31))
 
 ## v0.1.0
 

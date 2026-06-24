@@ -100,6 +100,8 @@ _H2: Final[str] = "##"
 """Marker for a level 2 heading in Gemtext."""
 _H3: Final[str] = "###"
 """Marker for a level 3 heading in Gemtext."""
+_QUOTE: Final[str] = ">"
+"""Marker for a quote in Gemtext."""
 
 
 ##############################################################################
@@ -133,8 +135,8 @@ class Gemtext:
             elif line.startswith(_LINK):
                 parts = line.removeprefix(_LINK).strip().split(maxsplit=1)
                 yield Link(parts[0], parts[1] if len(parts) > 1 else "")
-            elif line.startswith("> "):
-                yield Quote(line.removeprefix("> ").strip())
+            elif line.startswith(_QUOTE):
+                yield Quote(line.removeprefix(_QUOTE).strip())
             elif line.startswith(_H3):
                 yield Heading(line.removeprefix(_H3).strip(), 3)
             elif line.startswith(_H2):
