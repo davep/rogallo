@@ -6,8 +6,10 @@ from typing import NamedTuple
 
 ##############################################################################
 # Textual imports.
+from textual import on
 from textual.app import ComposeResult
 from textual.containers import Vertical
+from textual.events import DescendantBlur, DescendantFocus
 from textual.getters import query_one
 from textual.reactive import var
 
@@ -17,6 +19,7 @@ from ....gemtext import Gemtext
 from ...types import GeminiLocation
 from .document_view import DocumentView
 from .gemtext_blocks import GemtextLink, get_block_widget
+from .status import ViewerStatus
 from .title import ViewerTitle
 
 
@@ -55,11 +58,14 @@ class Viewer(Vertical, can_focus=False):
     """The title widget."""
     _view = query_one(DocumentView)
     """The document view widget."""
+    _status = query_one(ViewerStatus)
+    """The status bar widget."""
 
     def compose(self) -> ComposeResult:
         """Compose the viewer widget."""
         yield ViewerTitle()
         yield DocumentView()
+        yield ViewerStatus()
 
     async def _watch_document(self) -> None:
         """Watch for changes to the document and update the viewer."""
@@ -78,6 +84,20 @@ class Viewer(Vertical, can_focus=False):
     def take_control(self) -> None:
         """Take control of the UI."""
         self._view.focus()
+
+    @on(DescendantFocus)
+    def _maybe_update_status(self, event: DescendantFocus) -> None:
+        """Update the status bar when a descendant widget is focused."""
+        if isinstance(event.widget, GemtextLink):
+            self._status.message = str(event.widget.normalised_uri)
+        else:
+            self._status.message = ""
+
+    @on(DescendantBlur)
+    def _maybe_clear_status(self) -> None:
+        """Clear the status bar when a descendant widget is blurred."""
+        if self.screen.focused and self not in self.screen.focused.ancestors:
+            self._status.message = ""
 
 
 ### widget.py ends here
