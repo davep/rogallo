@@ -16,6 +16,9 @@
   ([#31](https://github.com/davep/rogallo/pull/31))
 - Allowed non-standard list items, that use a tab rather than a space after
   the `*`. ([#33](https://github.com/davep/rogallo/pull/33))
+- Added a status bar to the viewer widget to show the URI of the
+  currently-selected link.
+  ([#35](https://github.com/davep/rogallo/pull/35))
 
 ## v0.1.0
 

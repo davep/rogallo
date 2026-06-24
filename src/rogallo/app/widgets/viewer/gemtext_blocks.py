@@ -206,6 +206,11 @@ class GemtextLink(Horizontal, can_focus=True):
         self._normalised_uri = link.uri
         """The normalised URI to use when opening the link."""
 
+    @property
+    def normalised_uri(self) -> str:
+        """The normalised URI to use when opening the link."""
+        return self._normalised_uri
+
     def normalise_uri(self, base_uri: GeminiLocation | None) -> None:
         """Normalise the URI of the link against a base URI.
 
