@@ -134,7 +134,7 @@ class Gemtext:
             if is_a(_PRE_FORMAT):
                 if not (in_preformat := not in_preformat):
                     yield PreFormatted("\n".join(preformat_content))
-                    preformat_content = []
+                    preformat_content.clear()
             elif in_preformat:
                 preformat_content.append(line)
             elif is_a(_LINK):
