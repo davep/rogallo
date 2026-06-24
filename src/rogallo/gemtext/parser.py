@@ -102,6 +102,10 @@ _H3: Final[str] = "###"
 """Marker for a level 3 heading in Gemtext."""
 _QUOTE: Final[str] = ">"
 """Marker for a quote in Gemtext."""
+_PRE_FORMAT: Final[str] = "```"
+"""Marker for preformatted text in Gemtext."""
+_LIST_ITEM: Final[str] = "* "
+"""Marker for a list item in Gemtext."""
 
 
 ##############################################################################
@@ -126,25 +130,26 @@ class Gemtext:
         in_preformat = False
         preformat_content: list[str] = []
         for line in self._text.splitlines():
-            if line.startswith("```"):
+            is_a = line.startswith
+            if is_a(_PRE_FORMAT):
                 if not (in_preformat := not in_preformat):
                     yield PreFormatted("\n".join(preformat_content))
-                    preformat_content = []
+                    preformat_content.clear()
             elif in_preformat:
                 preformat_content.append(line)
-            elif line.startswith(_LINK):
+            elif is_a(_LINK):
                 parts = line.removeprefix(_LINK).strip().split(maxsplit=1)
                 yield Link(parts[0], parts[1] if len(parts) > 1 else "")
-            elif line.startswith(_QUOTE):
+            elif is_a(_QUOTE):
                 yield Quote(line.removeprefix(_QUOTE).strip())
-            elif line.startswith(_H3):
+            elif is_a(_H3):
                 yield Heading(line.removeprefix(_H3).strip(), 3)
-            elif line.startswith(_H2):
+            elif is_a(_H2):
                 yield Heading(line.removeprefix(_H2).strip(), 2)
-            elif line.startswith(_H1):
+            elif is_a(_H1):
                 yield Heading(line.removeprefix(_H1).strip(), 1)
-            elif line.startswith("* "):
-                yield ListItem(line.removeprefix("* ").strip())
+            elif is_a(_LIST_ITEM):
+                yield ListItem(line.removeprefix(_LIST_ITEM).strip())
             else:
                 yield Paragraph(line)
         if in_preformat:
