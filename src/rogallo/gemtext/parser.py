@@ -4,6 +4,7 @@
 # Python imports.
 from collections.abc import Iterator
 from functools import cached_property
+from typing import Final
 
 
 ##############################################################################
@@ -91,6 +92,17 @@ class Link(Line):
 
 
 ##############################################################################
+_LINK: Final[str] = "=>"
+"""Marker for a link in Gemtext."""
+_H1: Final[str] = "#"
+"""Marker for a level 1 heading in Gemtext."""
+_H2: Final[str] = "##"
+"""Marker for a level 2 heading in Gemtext."""
+_H3: Final[str] = "###"
+"""Marker for a level 3 heading in Gemtext."""
+
+
+##############################################################################
 class Gemtext:
     """A Gemtext parser."""
 
@@ -118,14 +130,17 @@ class Gemtext:
                     preformat_content = []
             elif in_preformat:
                 preformat_content.append(line)
-            elif line.startswith("=>"):
-                parts = line.removeprefix("=>").strip().split(maxsplit=1)
+            elif line.startswith(_LINK):
+                parts = line.removeprefix(_LINK).strip().split(maxsplit=1)
                 yield Link(parts[0], parts[1] if len(parts) > 1 else "")
             elif line.startswith("> "):
                 yield Quote(line.removeprefix("> ").strip())
-            elif line.startswith(("# ", "## ", "### ")):
-                marker, _, heading_text = line.partition(" ")
-                yield Heading(heading_text.strip(), len(marker.strip()))
+            elif line.startswith(_H3):
+                yield Heading(line.removeprefix(_H3).strip(), 3)
+            elif line.startswith(_H2):
+                yield Heading(line.removeprefix(_H2).strip(), 2)
+            elif line.startswith(_H1):
+                yield Heading(line.removeprefix(_H1).strip(), 1)
             elif line.startswith("* "):
                 yield ListItem(line.removeprefix("* ").strip())
             else:
