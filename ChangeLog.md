@@ -10,6 +10,8 @@
   ([#24](https://github.com/davep/rogallo/pull/24))
 - Improved the detection of links.
   ([#26](https://github.com/davep/rogallo/pull/26))
+- Improved the detection of headings.
+  ([#29](https://github.com/davep/rogallo/pull/29))
 
 ## v0.1.0
 
