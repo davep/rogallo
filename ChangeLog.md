@@ -8,6 +8,8 @@
   mouse. ([#23](https://github.com/davep/rogallo/pull/23))
 - Improved the handling of redirected requests.
   ([#24](https://github.com/davep/rogallo/pull/24))
+- Improved the detection of links.
+  ([#26](https://github.com/davep/rogallo/pull/26))
 
 ## v0.1.0
 

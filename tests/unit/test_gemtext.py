@@ -49,7 +49,6 @@ def test_str_gemtext() -> None:
         ("*Not a list item", "*Not a list item"),
         ("** Not a list item", "** Not a list item"),
         (" * Not a list item", " * Not a list item"),
-        ("=>https://example.com Not a link", "=>https://example.com Not a link"),
         ("`", "`"),
         ("``", "``"),
     ],
@@ -139,6 +138,10 @@ def test_parse_list_item(gemtext: str, expected_item: str) -> None:
         ("=>  https://example.com Example", "https://example.com", "Example"),
         ("=>  https://example.com  Example", "https://example.com", "Example"),
         ("=> https://example.com\tExample", "https://example.com", "Example"),
+        ("=>https://example.com Example", "https://example.com", "Example"),
+        ("=>\thttps://example.com Example", "https://example.com", "Example"),
+        ("=> \thttps://example.com Example", "https://example.com", "Example"),
+        ("=> \t \t \thttps://example.com Example", "https://example.com", "Example"),
     ],
 )
 def test_parse_link(gemtext: str, expected_uri: str, expected_description: str) -> None:
