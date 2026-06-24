@@ -110,6 +110,10 @@ class Main(EnhancedScreen[None]):
             display: block;
         }
     }
+
+    Tooltip {
+        max-width: 90vw !important;
+    }
     """
 
     COMMAND_MESSAGES = [
