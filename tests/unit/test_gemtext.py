@@ -115,6 +115,10 @@ def test_parse_quote(gemtext: str, expected_quote: str) -> None:
         ("* This is a list item.\n* Second item.", "This is a list item."),
         ("* \nSecond item.", ""),
         ("*  This is a list item", "This is a list item"),
+        (
+            "*\tThis is a broken but allowed list item",
+            "This is a broken but allowed list item",
+        ),
     ],
 )
 def test_parse_list_item(gemtext: str, expected_item: str) -> None:
