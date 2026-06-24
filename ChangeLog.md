@@ -18,7 +18,7 @@
   the `*`. ([#33](https://github.com/davep/rogallo/pull/33))
 - Added a status bar to the viewer widget to show the URI of the
   currently-selected link.
-  (https://textual.textualize.io/events/descendant_blur/)
+  ([#35](https://github.com/davep/rogallo/pull/35))
 
 ## v0.1.0
 
