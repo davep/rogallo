@@ -118,7 +118,7 @@ class Gemtext:
                     preformat_content = []
             elif in_preformat:
                 preformat_content.append(line)
-            elif line.startswith("=> "):
+            elif line.startswith("=>"):
                 parts = line.removeprefix("=>").strip().split(maxsplit=1)
                 yield Link(parts[0], parts[1] if len(parts) > 1 else "")
             elif line.startswith("> "):
