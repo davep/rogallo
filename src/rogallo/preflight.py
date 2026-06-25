@@ -51,12 +51,15 @@ def path_from_uri(uri: str) -> Path:
 
     Returns:
         The path from the URI.
+
+    Raises:
+        ValueError: If the URI can't be turned into a [`Path`][pathlib.Path].
     """
 
-    if (parsed := urlparse(uri)).scheme == "file":
-        return Path(parsed.path)
+    if (parsed := urlparse(uri)).scheme.lower() == "file":
+        return Path(parsed.path).resolve()
     elif not parsed.scheme and not parsed.netloc:
-        return Path(uri)
+        return Path(uri).expanduser().resolve()
     raise ValueError(f"URI is not a local file: {uri}")
 
 
