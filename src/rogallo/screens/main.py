@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Python imports.
+from argparse import Namespace
 from webbrowser import open as open_in_browser
 
 ##############################################################################
@@ -152,6 +153,16 @@ class Main(EnhancedScreen[None]):
     _history_visible: var[bool] = var(False, toggle_class="--show-history")
     """Is the history panel visible?"""
 
+    def __init__(self, arguments: Namespace) -> None:
+        """Initialize the main screen.
+
+        Args:
+            arguments: The command line arguments.
+        """
+        super().__init__()
+        self._arguments = arguments
+        """The command line arguments."""
+
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
         yield Header()
@@ -172,7 +183,14 @@ class Main(EnhancedScreen[None]):
         self._command_line.dock_top = config.command_line_on_top
         self._command_line.history = load_command_history()
         self._history_visible = config.history_visible
-        if self._location_history.current_item:
+        if self._arguments.command == "open" and (
+            location := getattr(self._arguments, "location", None)
+        ):
+            # TODO: We could be being passed a filename, so remember to add
+            # a level of indirection to work out if we should make a
+            # GeminiURI or not.
+            self.post_message(OpenLocation(GeminiURI(location)))
+        elif self._location_history.current_item:
             self.post_message(
                 OpenLocation(
                     self._location_history.current_item.location, from_history=True

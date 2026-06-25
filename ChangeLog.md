@@ -21,6 +21,8 @@
   ([#45](https://github.com/davep/rogallo/pull/45))
 - Added a `--help` CLI switch to print out the command line help.
   ([#45](https://github.com/davep/rogallo/pull/45))
+- Added an `open` CLI command that allows a location to be opened from the
+  command line. ([#48](https://github.com/davep/rogallo/pull/48))
 
 ## v0.2.0
 

@@ -74,6 +74,15 @@ def get_args() -> Namespace:
         "themes", help="List the available themes that can be used with --theme"
     )
 
+    # Add the 'open' command.
+    sub_parser.add_parser(
+        "open",
+        help="Open a location",
+    ).add_argument(
+        "location",
+        help="The location to open",
+    )
+
     # Finally, parse the command line.
     return parser.parse_args()
 
