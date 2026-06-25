@@ -1,6 +1,10 @@
 """The main application class."""
 
 ##############################################################################
+# Python imports.
+from argparse import Namespace
+
+##############################################################################
 # Textual imports.
 from textual.app import InvalidThemeError
 from textual.screen import Screen
@@ -48,17 +52,19 @@ class Rogallo(EnhancedApp[None]):
 
     COMMANDS = set()
 
-    def __init__(self) -> None:
+    def __init__(self, arguments: Namespace) -> None:
         """Initialise the application.
 
         Args:
             The command line arguments passed to the application.
         """
+        self._arguments = arguments
+        """The command line arguments passed to the application."""
         super().__init__()
         configuration = load_configuration()
         if configuration.theme is not None:
             try:
-                self.theme = configuration.theme
+                self.theme = arguments.theme or configuration.theme
             except InvalidThemeError:
                 pass
         self.update_keymap(configuration.bindings)

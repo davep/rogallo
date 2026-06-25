@@ -6,6 +6,21 @@
 
 - Added a configuration option to turn off link tooltips.
   ([#44](https://github.com/davep/rogallo/pull/44))
+- Added a `directories` CLI command to print out the directories used by
+  Rogallo. ([#45](https://github.com/davep/rogallo/pull/45))
+- Added a `licnece` CLI command to print out the licence details for
+  Rogallo. ([#45](https://github.com/davep/rogallo/pull/45))
+- Added a `bindings` CLI command to print out the available commands for
+  binding to keys, and their default bindings.
+  ([#45](https://github.com/davep/rogallo/pull/45))
+- Added a `themes` CLI command to print out the available themes.
+  ([#45](https://github.com/davep/rogallo/pull/45))
+- Added a `--theme` CLI switch for setting the theme.
+  ([#45](https://github.com/davep/rogallo/pull/45))
+- Added a `--version` CLI switch to print out the version of Rogallo.
+  ([#45](https://github.com/davep/rogallo/pull/45))
+- Added a `--help` CLI switch to print out the command line help.
+  ([#45](https://github.com/davep/rogallo/pull/45))
 
 ## v0.2.0
 
