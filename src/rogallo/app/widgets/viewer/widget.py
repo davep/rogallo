@@ -5,6 +5,10 @@
 from typing import NamedTuple
 
 ##############################################################################
+# Gemtext imports.
+from gemtext import Gemtext
+
+##############################################################################
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
@@ -15,7 +19,6 @@ from textual.reactive import var
 
 ##############################################################################
 # Local imports.
-from ....gemtext import Gemtext
 from ...types import GeminiLocation
 from .document_view import DocumentView
 from .gemtext_blocks import GemtextLink, get_block_widget

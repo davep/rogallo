@@ -8,6 +8,18 @@ from typing import Final
 from urllib.parse import urlparse
 
 ##############################################################################
+# Gemtext imports.
+from gemtext import (
+    Heading,
+    Line,
+    Link,
+    ListItem,
+    Paragraph,
+    PreFormatted,
+    Quote,
+)
+
+##############################################################################
 # Rich imports.
 from rich.text import Text
 
@@ -30,15 +42,6 @@ from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
-from ....gemtext import (
-    Heading,
-    Line,
-    Link,
-    ListItem,
-    Paragraph,
-    PreFormatted,
-    Quote,
-)
 from ...data import load_configuration
 from ...messages import OpenURI
 from ...preflight import is_likely_capsule

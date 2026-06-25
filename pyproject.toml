@@ -9,6 +9,7 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "bagofstuff>=1.0.0",
+    "gemtext>=0.1.0",
     "textual>=8.2.7",
     "textual-enhanced>=1.5.0",
     "wasat>=0.1.0",

@@ -522,6 +522,15 @@ wheels = [
 ]
 
 [[package]]
+name = "gemtext"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f4/b6/54ce34d9cb2fdb1cd85e732e4a7f4564178fbd5299527e53ffdb19d119ef/gemtext-0.1.0.tar.gz", hash = "sha256:763657c45e5fe5c681011bac248c7b502ed2d5b961c1ffb27547905b2fba8509", size = 4081, upload-time = "2026-06-25T09:38:04.747Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ad/e3/ce14e923e5e181200738421df2fe84c0af04553aadc1332e0a37fdb729bc/gemtext-0.1.0-py3-none-any.whl", hash = "sha256:5d0965dad895216b4655a95b88e13fc672ee2a08497a3395348812ed26e4ae83", size = 5053, upload-time = "2026-06-25T09:38:03.731Z" },
+]
+
+[[package]]
 name = "identify"
 version = "2.6.19"
 source = { registry = "https://pypi.org/simple" }
@@ -1218,6 +1227,7 @@ version = "0.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "bagofstuff" },
+    { name = "gemtext" },
     { name = "textual" },
     { name = "textual-enhanced" },
     { name = "wasat" },
@@ -1239,6 +1249,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "bagofstuff", specifier = ">=1.0.0" },
+    { name = "gemtext", specifier = ">=0.1.0" },
     { name = "textual", specifier = ">=8.2.7" },
     { name = "textual-enhanced", specifier = ">=1.5.0" },
     { name = "wasat", specifier = ">=0.1.0" },
