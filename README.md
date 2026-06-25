@@ -1,6 +1,6 @@
 # Rogallo
 
-![Rogallo](https://raw.githubusercontent.com/davep/rogallo/refs/heads/main/docs/.images/rogallo-social-banner.webp)
+![Rogallo](https://raw.githubusercontent.com/davep/rogallo/refs/heads/main/.images/rogallo-social-banner.webp)
 
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/davep/rogallo/style-lint-and-test.yaml)](https://github.com/davep/rogallo/actions)
 [![GitHub commits since latest release](https://img.shields.io/github/commits-since/davep/rogallo/latest)](https://github.com/davep/rogallo/commits/main/)
