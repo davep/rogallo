@@ -103,9 +103,7 @@ dev = [
 
 [tool.coverage.run]
 include = [
-    "src/rogallo/gemtext/*",
-    "src/rogallo/history/*",
-    "src/rogallo/app/preflight.py"
+    "src/rogallo/preflight.py"
 ]
 
 [tool.coverage.report]

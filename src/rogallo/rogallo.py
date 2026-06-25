@@ -11,7 +11,7 @@ from textual_enhanced.app import EnhancedApp
 
 ##############################################################################
 # Local imports.
-from .. import __version__
+from . import __version__
 from .data import (
     load_configuration,
     update_configuration,
