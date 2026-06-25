@@ -75,7 +75,7 @@ class Rogallo(EnhancedApp[None]):
             config.theme = self.theme
 
     def get_default_screen(self) -> Screen[None]:
-        return Main()
+        return Main(self._arguments)
 
 
 ### rogallo.py ends here
