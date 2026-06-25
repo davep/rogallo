@@ -223,34 +223,6 @@ class Main(EnhancedScreen[None]):
             return len(self._location_history) > 0 or None
         return True
 
-    def _maybe_remember_location(
-        self, request: OpenLocation, response: Response | None = None
-    ) -> None:
-        """Remember a location in the history.
-
-        Args:
-            location: The location to remember.
-            response: The response from the request, if any.
-        """
-        if (
-            location := (
-                (response.uri or response.requested_uri)
-                if response and response.uri
-                else request.location
-            )
-        ) is None:
-            return
-        self._location_history.add(LocationVisit(location))
-        self.mutate_reactive(Main._location_history)
-        save_location_history(self._location_history)
-        if (
-            not request.from_history
-            and self._navigation_history.current_item != location
-        ):
-            self._navigation_history.add(location)
-            self.mutate_reactive(Main._navigation_history)
-            save_naviagation_history(self._navigation_history)
-
     async def _handle_response(self, response: Response, request: OpenLocation) -> None:
         """Handle a response from a Gemini request.
 
@@ -274,8 +246,36 @@ class Main(EnhancedScreen[None]):
                 title="Request Error",
             )
             return
-        self._maybe_remember_location(request, response)
-        self.post_message(OpenText(await response.text(), uri))
+        self.post_message(OpenText(await response.text(), request, uri))
+
+    def _maybe_remember_location(self, request: OpenText) -> None:
+        """Remember a location in the history.
+
+        Args:
+            request: The request to open text for. This is used to determine
+                the location to remember.
+        """
+        self._location_history.add(LocationVisit(request.originally_from))
+        self.mutate_reactive(Main._location_history)
+        save_location_history(self._location_history)
+        if (
+            not request.original_request.from_history
+            and self._navigation_history.current_item != request.originally_from
+        ):
+            self._navigation_history.add(request.originally_from)
+            self.mutate_reactive(Main._navigation_history)
+            save_naviagation_history(self._navigation_history)
+
+    @on(OpenText)
+    def open_text(self, message: OpenText) -> None:
+        """Open text in the viewer.
+
+        Args:
+            message: The message containing the text to open.
+        """
+        self._maybe_remember_location(message)
+        self._viewer.document = Viewer.Document(message.originally_from, message.text)
+        self.refresh_bindings()
 
     @work
     async def _load_from_capsule(self, request: OpenLocation) -> None:
@@ -317,26 +317,18 @@ class Main(EnhancedScreen[None]):
         assert isinstance(request.location, Path)
         try:
             self.post_message(
-                OpenText(request.location.read_text(encoding="utf-8"), request.location)
+                OpenText(
+                    request.location.read_text(encoding="utf-8"),
+                    request,
+                    request.location,
+                )
             )
-            # TODO: Remember in history.
         except OSError as error:
             self.notify(
                 f"Error loading {request.location}:\n\n{error}",
                 severity="error",
                 title="Filesystem Error",
             )
-            return
-
-    @on(OpenText)
-    def open_text(self, message: OpenText) -> None:
-        """Open text in the viewer.
-
-        Args:
-            message: The message containing the text to open.
-        """
-        self._viewer.document = Viewer.Document(message.originally_from, message.text)
-        self.refresh_bindings()
 
     @on(OpenLocation)
     def open_location(self, message: OpenLocation) -> None:
