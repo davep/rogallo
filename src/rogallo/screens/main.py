@@ -24,7 +24,7 @@ from wasat import Client, ConnectionError, GeminiURI, Response, SecurityError, U
 
 ##############################################################################
 # Local imports.
-from ... import __version__
+from .. import __version__
 from ..commands import (
     Backward,
     ChangeCommandLineLocation,

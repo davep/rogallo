@@ -6,7 +6,7 @@ from pytest import mark
 
 ##############################################################################
 # Local imports.
-from rogallo.app.preflight import is_likely_capsule, is_likely_page_relative
+from rogallo.preflight import is_likely_capsule, is_likely_page_relative
 
 
 ##############################################################################
