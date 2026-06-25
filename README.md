@@ -1,5 +1,7 @@
 # Rogallo
 
+![Rogallo](https://raw.githubusercontent.com/davep/rogallo/refs/heads/main/docs/.images/rogallo-social-banner.png)
+
 ## Introduction
 
 Rogallo is a terminal-based client for [the Gemini
