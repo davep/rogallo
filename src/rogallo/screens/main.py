@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from argparse import Namespace
+from pathlib import Path
 from webbrowser import open as open_in_browser
 
 ##############################################################################
@@ -50,6 +51,7 @@ from ..data import (
     update_configuration,
 )
 from ..messages import OpenLocation, OpenText, OpenURI
+from ..preflight import is_likely_local_file, path_from_uri
 from ..providers import MainCommands
 from ..widgets import CommandLine, HistoryViewer, Viewer
 
@@ -305,6 +307,27 @@ class Main(EnhancedScreen[None]):
         finally:
             self._command_line.working = False
 
+    @work(thread=True)
+    def _load_from_filesystem(self, request: OpenLocation) -> None:
+        """Load a document from the filesystem.
+
+        Args:
+            request: The request to load the document from.
+        """
+        assert isinstance(request.location, Path)
+        try:
+            self.post_message(
+                OpenText(request.location.read_text(encoding="utf-8"), request.location)
+            )
+            # TODO: Remember in history.
+        except IOError as error:
+            self.notify(
+                f"Error loading {request.location}:\n\n{error}",
+                severity="error",
+                title="Filesystem Error",
+            )
+            return
+
     @on(OpenText)
     def open_text(self, message: OpenText) -> None:
         """Open text in the viewer.
@@ -324,6 +347,8 @@ class Main(EnhancedScreen[None]):
         """
         if isinstance(message.location, GeminiURI):
             self._load_from_capsule(message)
+        else:
+            self._load_from_filesystem(message)
 
     @on(OpenURI)
     def open_uri(self, message: OpenURI) -> None:
@@ -340,7 +365,10 @@ class Main(EnhancedScreen[None]):
         except URIError:
             pass
 
-        # TODO: Handle gmi files in the filesystem.
+        # Perhaps it's a local file?
+        if is_likely_local_file(message.uri):
+            self.post_message(OpenLocation(path_from_uri(message.uri)))
+            return
 
         # Otherwise, try to open it in the system browser.
         open_in_browser(message.uri)

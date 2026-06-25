@@ -4,6 +4,7 @@
 # Python imports.
 from collections.abc import Callable
 from functools import cache
+from pathlib import Path
 from typing import Final
 from urllib.parse import urlparse
 
@@ -226,6 +227,8 @@ class GemtextLink(Horizontal, can_focus=True):
             return
         if isinstance(base_uri, GeminiURI):
             self._normalised_uri = str(base_uri.resolve(self._link.uri))
+        elif isinstance(base_uri, Path):
+            self._normalised_uri = (base_uri.parent / self._link.uri).resolve().as_uri()
 
     def _watch__normalised_uri(self) -> None:
         """Watch for changes to the normalised URI."""
