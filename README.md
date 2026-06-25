@@ -1,5 +1,15 @@
 # Rogallo
 
+![Rogallo](https://raw.githubusercontent.com/davep/rogallo/refs/heads/main/docs/.images/rogallo-social-banner.png)
+
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/davep/rogallo/style-and-lint.yaml)](https://github.com/davep/rogallo/actions)
+[![GitHub commits since latest release](https://img.shields.io/github/commits-since/davep/rogallo/latest)](https://github.com/davep/rogallo/commits/main/)
+[![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/davep/rogallo)](https://github.com/davep/rogallo/issues)
+[![GitHub Release Date](https://img.shields.io/github/release-date/davep/rogallo)](https://github.com/davep/rogallo/releases)
+[![PyPI - License](https://img.shields.io/pypi/l/rogallo)](https://github.com/davep/rogallo/blob/main/LICENSE)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/rogallo)](https://github.com/davep/rogallo/blob/main/pyproject.toml)
+[![PyPI - Version](https://img.shields.io/pypi/v/rogallo)](https://pypi.org/project/rogallo/)
+
 ## Introduction
 
 Rogallo is a terminal-based client for [the Gemini
