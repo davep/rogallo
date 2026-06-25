@@ -320,7 +320,7 @@ class Main(EnhancedScreen[None]):
                 OpenText(request.location.read_text(encoding="utf-8"), request.location)
             )
             # TODO: Remember in history.
-        except IOError as error:
+        except OSError as error:
             self.notify(
                 f"Error loading {request.location}:\n\n{error}",
                 severity="error",
