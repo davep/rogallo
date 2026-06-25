@@ -229,7 +229,8 @@ class GemtextLink(Horizontal, can_focus=True):
 
     def _watch__normalised_uri(self) -> None:
         """Watch for changes to the normalised URI."""
-        self.tooltip = self._normalised_uri
+        if load_configuration().show_link_tooltips:
+            self.tooltip = self._normalised_uri
 
     def compose(self) -> ComposeResult:
         """Compose the Gemtext link widget."""
