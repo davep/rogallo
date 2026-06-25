@@ -43,6 +43,9 @@ class Configuration:
     history_visible: bool = False
     """Should the history panel be visible by default?"""
 
+    show_link_tooltips: bool = True
+    """Should tooltips be shown for links?"""
+
 
 ##############################################################################
 def configuration_file() -> Path:
