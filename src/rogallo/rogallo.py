@@ -68,6 +68,8 @@ class Rogallo(EnhancedApp[None]):
             except InvalidThemeError:
                 pass
         self.update_keymap(configuration.bindings)
+        if configuration.disable_animations:
+            self.animation_level = "none"
 
     def watch_theme(self) -> None:
         """Save the application's theme when it's changed."""
