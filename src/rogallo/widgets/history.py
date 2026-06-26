@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from datetime import datetime
+from pathlib import Path
 
 ##############################################################################
 # Rich imports.
@@ -20,7 +21,7 @@ from textual_enhanced.widgets import EnhancedOptionList
 
 ##############################################################################
 # Wasat imports.
-from wasat.uri import GEMINI_PREFIX
+from wasat.uri import GEMINI_PREFIX, GeminiURI
 
 ##############################################################################
 # Local imports.
@@ -56,11 +57,25 @@ class HistoryOption(Option):
         """The location to display."""
         super().__init__(
             (
-                f"{escape(str(visit.location).removeprefix(GEMINI_PREFIX))}\n"
+                f"{escape(self._location_display)}\n"
                 f"[dim i]{_clean_time(visit.timestamp)}[/]"
             ),
             id=str(visit.location),
         )
+
+    @property
+    def _location_display(self) -> str:
+        """Get the display string for the location.
+
+        Returns:
+            The display string for the location.
+        """
+        if isinstance(self._location, GeminiURI):
+            return str(self._location).removeprefix(GEMINI_PREFIX)
+        try:
+            return (Path("~") / self._location.relative_to(Path.home())).as_posix()
+        except ValueError:
+            return self._location.as_posix()
 
     @property
     def location(self) -> GeminiLocation:

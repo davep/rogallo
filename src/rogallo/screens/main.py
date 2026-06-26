@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from argparse import Namespace
+from pathlib import Path
 from webbrowser import open as open_in_browser
 
 ##############################################################################
@@ -50,6 +51,7 @@ from ..data import (
     update_configuration,
 )
 from ..messages import OpenLocation, OpenText, OpenURI
+from ..preflight import is_likely_local_text_file, path_from_uri
 from ..providers import MainCommands
 from ..widgets import CommandLine, HistoryViewer, Viewer
 
@@ -186,10 +188,7 @@ class Main(EnhancedScreen[None]):
         if self._arguments.command == "open" and (
             location := getattr(self._arguments, "location", None)
         ):
-            # TODO: We could be being passed a filename, so remember to add
-            # a level of indirection to work out if we should make a
-            # GeminiURI or not.
-            self.post_message(OpenLocation(GeminiURI(location)))
+            self.post_message(OpenURI(location))
         elif self._location_history.current_item:
             self.post_message(
                 OpenLocation(
@@ -221,34 +220,6 @@ class Main(EnhancedScreen[None]):
             return len(self._location_history) > 0 or None
         return True
 
-    def _maybe_remember_location(
-        self, request: OpenLocation, response: Response | None = None
-    ) -> None:
-        """Remember a location in the history.
-
-        Args:
-            location: The location to remember.
-            response: The response from the request, if any.
-        """
-        if (
-            location := (
-                (response.uri or response.requested_uri)
-                if response and response.uri
-                else request.location
-            )
-        ) is None:
-            return
-        self._location_history.add(LocationVisit(location))
-        self.mutate_reactive(Main._location_history)
-        save_location_history(self._location_history)
-        if (
-            not request.from_history
-            and self._navigation_history.current_item != location
-        ):
-            self._navigation_history.add(location)
-            self.mutate_reactive(Main._navigation_history)
-            save_naviagation_history(self._navigation_history)
-
     async def _handle_response(self, response: Response, request: OpenLocation) -> None:
         """Handle a response from a Gemini request.
 
@@ -272,8 +243,36 @@ class Main(EnhancedScreen[None]):
                 title="Request Error",
             )
             return
-        self._maybe_remember_location(request, response)
-        self.post_message(OpenText(await response.text(), uri))
+        self.post_message(OpenText(await response.text(), request, uri))
+
+    def _maybe_remember_location(self, request: OpenText) -> None:
+        """Remember a location in the history.
+
+        Args:
+            request: The request to open text for. This is used to determine
+                the location to remember.
+        """
+        self._location_history.add(LocationVisit(request.originally_from))
+        self.mutate_reactive(Main._location_history)
+        save_location_history(self._location_history)
+        if (
+            not request.original_request.from_history
+            and self._navigation_history.current_item != request.originally_from
+        ):
+            self._navigation_history.add(request.originally_from)
+            self.mutate_reactive(Main._navigation_history)
+            save_naviagation_history(self._navigation_history)
+
+    @on(OpenText)
+    def open_text(self, message: OpenText) -> None:
+        """Open text in the viewer.
+
+        Args:
+            message: The message containing the text to open.
+        """
+        self._maybe_remember_location(message)
+        self._viewer.document = Viewer.Document(message.originally_from, message.text)
+        self.refresh_bindings()
 
     @work
     async def _load_from_capsule(self, request: OpenLocation) -> None:
@@ -305,15 +304,34 @@ class Main(EnhancedScreen[None]):
         finally:
             self._command_line.working = False
 
-    @on(OpenText)
-    def open_text(self, message: OpenText) -> None:
-        """Open text in the viewer.
+    @work(thread=True)
+    def _load_from_filesystem(self, request: OpenLocation) -> None:
+        """Load a document from the filesystem.
 
         Args:
-            message: The message containing the text to open.
+            request: The request to load the document from.
         """
-        self._viewer.document = Viewer.Document(message.originally_from, message.text)
-        self.refresh_bindings()
+        assert isinstance(request.location, Path)
+        try:
+            self.post_message(
+                OpenText(
+                    request.location.read_text(encoding="utf-8"),
+                    request,
+                    request.location,
+                )
+            )
+        except OSError as error:
+            self.notify(
+                f"Error loading {request.location}:\n\n{error}",
+                severity="error",
+                title="Filesystem Error",
+            )
+        except UnicodeDecodeError as error:
+            self.notify(
+                f"Error loading {request.location}:\n\n{error}\n\nLikely not a text file.",
+                severity="error",
+                title="Decode Error",
+            )
 
     @on(OpenLocation)
     def open_location(self, message: OpenLocation) -> None:
@@ -324,6 +342,8 @@ class Main(EnhancedScreen[None]):
         """
         if isinstance(message.location, GeminiURI):
             self._load_from_capsule(message)
+        else:
+            self._load_from_filesystem(message)
 
     @on(OpenURI)
     def open_uri(self, message: OpenURI) -> None:
@@ -340,7 +360,10 @@ class Main(EnhancedScreen[None]):
         except URIError:
             pass
 
-        # TODO: Handle gmi files in the filesystem.
+        # Perhaps it's a local text file?
+        if is_likely_local_text_file(message.uri):
+            self.post_message(OpenLocation(path_from_uri(message.uri)))
+            return
 
         # Otherwise, try to open it in the system browser.
         open_in_browser(message.uri)

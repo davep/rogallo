@@ -23,6 +23,8 @@
   ([#45](https://github.com/davep/rogallo/pull/45))
 - Added an `open` CLI command that allows a location to be opened from the
   command line. ([#48](https://github.com/davep/rogallo/pull/48))
+- Added support for working with gemtext files in the local filesystem.
+  ([#49](https://github.com/davep/rogallo/pull/49))
 
 ## v0.2.0
 

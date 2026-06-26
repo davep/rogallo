@@ -40,7 +40,9 @@ class OpenText(Message):
 
     text: str
     """The text to open."""
-    originally_from: GeminiLocation | None = None
+    original_request: OpenLocation
+    """The original request that led to this text being opened."""
+    originally_from: GeminiLocation
     """The location the text was originally from, if any."""
 
 
