@@ -51,7 +51,7 @@ from ..data import (
     update_configuration,
 )
 from ..messages import OpenLocation, OpenText, OpenURI
-from ..preflight import is_likely_local_file, path_from_uri
+from ..preflight import is_likely_text_file, path_from_uri
 from ..providers import MainCommands
 from ..widgets import CommandLine, HistoryViewer, Viewer
 
@@ -329,6 +329,12 @@ class Main(EnhancedScreen[None]):
                 severity="error",
                 title="Filesystem Error",
             )
+        except UnicodeDecodeError as error:
+            self.notify(
+                f"Error loading {request.location}:\n\n{error}\n\nLikely not a text file.",
+                severity="error",
+                title="Decode Error",
+            )
 
     @on(OpenLocation)
     def open_location(self, message: OpenLocation) -> None:
@@ -357,8 +363,8 @@ class Main(EnhancedScreen[None]):
         except URIError:
             pass
 
-        # Perhaps it's a local file?
-        if is_likely_local_file(message.uri):
+        # Perhaps it's a local text file?
+        if is_likely_text_file(message.uri):
             self.post_message(OpenLocation(path_from_uri(message.uri)))
             return
 

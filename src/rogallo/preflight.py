@@ -2,12 +2,19 @@
 
 ##############################################################################
 # Python imports.
+import mimetypes
 from pathlib import Path
 from urllib.parse import urlparse
 
 ##############################################################################
 # Wasat imports.
 from wasat import GeminiURI, URIError
+
+##############################################################################
+# Add Gemini MIME types to the mimetypes module.
+mimetypes.add_type("text/gemini", ".gmi")
+mimetypes.add_type("text/gemini", ".gmni")
+mimetypes.add_type("text/gemini", ".gemini")
 
 
 ##############################################################################
@@ -78,6 +85,25 @@ def is_likely_local_file(uri: str) -> bool:
     except ValueError:
         return False
     return candidate.exists() and candidate.is_file()
+
+
+##############################################################################
+def is_likely_text_file(uri: str) -> bool:
+    """Determine if a URI is likely a text file.
+
+    Args:
+        uri: The URI to check.
+
+    Returns:
+        `True` if the URI is likely a text file, `False` otherwise.
+    """
+    if not is_likely_local_file(uri):
+        return False
+    try:
+        mime_type, _ = mimetypes.guess_type(path_from_uri(uri))
+    except ValueError:
+        return False
+    return mime_type is not None and mime_type.startswith("text/")
 
 
 ### location_tests.py ends here
