@@ -12,7 +12,7 @@ from wasat.uri import GEMINI_PREFIX
 ##############################################################################
 # Local imports.
 from ...messages import OpenLocation
-from ...preflight import is_likely_capsule, is_likely_schemeless_capsule
+from ...preflight import is_likely_schemeless_capsule
 from .base_command import InputCommand
 
 
