@@ -46,6 +46,9 @@ class Configuration:
     show_link_tooltips: bool = True
     """Should tooltips be shown for links?"""
 
+    disable_animations: bool = False
+    """Should animations be disabled?"""
+
 
 ##############################################################################
 def configuration_file() -> Path:

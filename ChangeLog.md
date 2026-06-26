@@ -27,6 +27,10 @@
   ([#49](https://github.com/davep/rogallo/pull/49))
 - Added support for typing scheme-less Gemini URIs into the application's
   command line. ([#51](https://github.com/davep/rogallo/pull/51))
+- Added `disable_animations` as a configuration option (disables the default
+  Textual animations, for those who might dislike them; which is probably
+  anyone with good taste in terminal applications).
+  ([#52](https://github.com/davep/rogallo/pull/52))
 
 ## v0.2.0
 
