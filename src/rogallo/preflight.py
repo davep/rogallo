@@ -91,14 +91,14 @@ def is_likely_local_file(uri: str) -> bool:
 
 
 ##############################################################################
-def is_likely_text_file(uri: str) -> bool:
-    """Determine if a URI is likely a text file.
+def is_likely_local_text_file(uri: str) -> bool:
+    """Determine if a URI is likely a local text file.
 
     Args:
         uri: The URI to check.
 
     Returns:
-        `True` if the URI is likely a text file, `False` otherwise.
+        `True` if the URI is likely a local text file, `False` otherwise.
     """
     if not is_likely_local_file(uri):
         return False

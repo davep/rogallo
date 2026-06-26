@@ -7,7 +7,7 @@ from textual.widget import Widget
 ##############################################################################
 # Local imports.
 from ...messages import OpenLocation
-from ...preflight import is_likely_text_file, path_from_uri
+from ...preflight import is_likely_local_text_file, path_from_uri
 from .base_command import InputCommand
 
 
@@ -28,7 +28,7 @@ class OpenFileCommand(InputCommand):
         Returns:
             `True` if the command was handled; `False` if not.
         """
-        if is_likely_text_file(text):
+        if is_likely_local_text_file(text):
             for_widget.post_message(OpenLocation(path_from_uri(text)))
             return True
         return False
