@@ -39,11 +39,11 @@ from .open_other_uri import OpenOtherURICommand
 
 ##############################################################################
 COMMANDS: Final[tuple[type[InputCommand], ...]] = (
-    OpenGeminiURICommand,
-    OpenOtherURICommand,
-    OpenFileCommand,
     HelpCommand,
     QuitCommand,
+    OpenFileCommand,
+    OpenGeminiURICommand,
+    OpenOtherURICommand,
 )
 """The commands used for the input."""
 

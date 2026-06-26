@@ -47,7 +47,7 @@ class GeneralCommand(InputCommand):
 class HelpCommand(GeneralCommand):
     """Show the help screen"""
 
-    COMMAND = "`help`"
+    COMMAND = "`!help`"
     ALIASES = "`?`"
     MESSAGE = Help
 
@@ -56,8 +56,8 @@ class HelpCommand(GeneralCommand):
 class QuitCommand(GeneralCommand):
     """Quit the application"""
 
-    COMMAND = "`quit`"
-    ALIASES = "`q`"
+    COMMAND = "`!quit`"
+    ALIASES = "`!q`"
     MESSAGE = Quit
 
 
