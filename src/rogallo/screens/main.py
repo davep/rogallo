@@ -188,10 +188,7 @@ class Main(EnhancedScreen[None]):
         if self._arguments.command == "open" and (
             location := getattr(self._arguments, "location", None)
         ):
-            # TODO: We could be being passed a filename, so remember to add
-            # a level of indirection to work out if we should make a
-            # GeminiURI or not.
-            self.post_message(OpenLocation(GeminiURI(location)))
+            self.post_message(OpenURI(location))
         elif self._location_history.current_item:
             self.post_message(
                 OpenLocation(
