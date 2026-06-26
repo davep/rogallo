@@ -53,7 +53,7 @@ def get_args() -> Namespace:
     sub_parser.add_parser(
         "directories",
         aliases=["dirs", "d"],
-        help="Show the directories created and used by OldNews",
+        help="Show the directories created and used by Rogallo",
     )
 
     # Add the 'license' command.
