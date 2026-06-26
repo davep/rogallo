@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v0.3.0
 
-**Released: WiP**
+**Released: 2026-06-26**
 
 - Added a configuration option to turn off link tooltips.
   ([#44](https://github.com/davep/rogallo/pull/44))
