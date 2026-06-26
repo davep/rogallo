@@ -11,10 +11,13 @@ from urllib.parse import urlparse
 from wasat import GeminiURI, URIError
 
 ##############################################################################
+# Local imports.
+from .types import GEMINI_EXTENSIONS, GEMINI_MIME_TYPE
+
+##############################################################################
 # Add Gemini MIME types to the mimetypes module.
-mimetypes.add_type("text/gemini", ".gmi")
-mimetypes.add_type("text/gemini", ".gmni")
-mimetypes.add_type("text/gemini", ".gemini")
+for extension in GEMINI_EXTENSIONS:
+    mimetypes.add_type(GEMINI_MIME_TYPE, extension)
 
 
 ##############################################################################
