@@ -23,6 +23,7 @@ from textual_enhanced.screen import EnhancedScreen
 ##############################################################################
 # Wasat imports.
 from wasat import Client, ConnectionError, GeminiURI, Response, SecurityError, URIError
+from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
 # Local imports.
@@ -51,7 +52,11 @@ from ..data import (
     update_configuration,
 )
 from ..messages import OpenLocation, OpenText, OpenURI
-from ..preflight import is_likely_local_text_file, path_from_uri
+from ..preflight import (
+    is_likely_local_text_file,
+    is_likely_schemeless_capsule,
+    path_from_uri,
+)
 from ..providers import MainCommands
 from ..widgets import CommandLine, HistoryViewer, Viewer
 
@@ -363,6 +368,13 @@ class Main(EnhancedScreen[None]):
         # Perhaps it's a local text file?
         if is_likely_local_text_file(message.uri):
             self.post_message(OpenLocation(path_from_uri(message.uri)))
+            return
+
+        # It's not an obvious Gemini URI, and it's not a file in the local
+        # filesystem. Before we pass it off to the system browser, let's see
+        # it could look like a Gemini URI if we add the scheme.
+        if is_likely_schemeless_capsule(message.uri):
+            self.post_message(OpenLocation(GeminiURI(f"{GEMINI_PREFIX}{message.uri}")))
             return
 
         # Otherwise, try to open it in the system browser.

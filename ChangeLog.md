@@ -25,6 +25,8 @@
   command line. ([#48](https://github.com/davep/rogallo/pull/48))
 - Added support for working with gemtext files in the local filesystem.
   ([#49](https://github.com/davep/rogallo/pull/49))
+- Added support for typing scheme-less Gemini URIs into the application's
+  command line. ([#51](https://github.com/davep/rogallo/pull/51))
 
 ## v0.2.0
 

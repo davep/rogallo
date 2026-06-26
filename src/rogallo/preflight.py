@@ -9,6 +9,7 @@ from urllib.parse import urlparse
 ##############################################################################
 # Wasat imports.
 from wasat import GeminiURI, URIError
+from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
 # Local imports.
@@ -50,6 +51,21 @@ def is_likely_capsule(uri: str) -> bool:
     except URIError:
         # If it's not, check if it's likely a relative URI.
         return is_likely_page_relative(uri)
+
+
+##############################################################################
+def is_likely_schemeless_capsule(uri: str) -> bool:
+    """Determine if a URI is likely a schemeless capsule.
+
+    Args:
+        uri: The URI to check.
+
+    Returns:
+        `True` if the URI is likely a schemeless capsule, `False` otherwise.
+    """
+    if urlparse(uri).scheme:
+        return False
+    return is_likely_capsule(f"{GEMINI_PREFIX}{uri}")
 
 
 ##############################################################################
