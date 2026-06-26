@@ -87,7 +87,7 @@ def is_likely_local_file(uri: str) -> bool:
         candidate = path_from_uri(uri)
     except ValueError:
         return False
-    return candidate.exists() and candidate.is_file()
+    return candidate.is_file()
 
 
 ##############################################################################
