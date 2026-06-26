@@ -13,7 +13,7 @@ from .base_command import InputCommand
 
 ##############################################################################
 class OpenFileCommand(InputCommand):
-    """Open `<file>` in your external browser"""
+    """Open `<file>` as gemtext in the viewer"""
 
     COMMAND = "`<file>`"
 
