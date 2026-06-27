@@ -6,6 +6,10 @@
 
 - Added a `Reload` command.
   ([#58](https://github.com/davep/rogallo/pull/58))
+- Added a `CopyLocationToClipboard` command.
+  ([#61](https://github.com/davep/rogallo/pull/61))
+- Added a `CopyDocumentToClipboard` command.
+  ([#61](https://github.com/davep/rogallo/pull/61))
 
 ## v0.3.0
 
