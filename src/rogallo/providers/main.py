@@ -18,6 +18,7 @@ from ..commands import (
     Forward,
     JumpToCommandLine,
     JumpToDocument,
+    Reload,
     ToggleHistory,
 )
 
@@ -41,6 +42,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(Backward)
         yield from self.maybe(Forward)
         yield from self.maybe(ToggleHistory)
+        yield from self.maybe(Reload)
 
 
 ### main.py ends here
