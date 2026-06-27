@@ -7,15 +7,7 @@ authors = [
     { name = "Dave Pearson", email = "davep@davep.org" }
 ]
 requires-python = ">=3.12"
-dependencies = [
-    "bagofstuff>=1.0.0",
-    "gemtext>=0.1.0",
-    "textual>=8.2.7",
-    "textual-enhanced>=1.5.0",
-    "wasat>=0.1.0",
-    "xdg-base-dirs>=6.0.2",
-]
-
+license = "GPL-3.0-or-later"
 keywords = [
     "API",
     "Gemini",
@@ -28,15 +20,28 @@ keywords = [
     "Terminal",
     "Textual",
 ]
+dependencies = [
+    "bagofstuff>=1.0.0",
+    "gemtext>=0.1.0",
+    "textual>=8.2.7",
+    "textual-enhanced>=1.5.0",
+    "wasat>=0.1.0",
+    "xdg-base-dirs>=6.0.2",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
-    "Topic :: Software Development :: Libraries",
+    "Topic :: Communications",
+    "Topic :: Internet",
+    "Topic :: Terminals",
     "Typing :: Typed",
 ]
 
