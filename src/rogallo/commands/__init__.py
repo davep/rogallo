@@ -6,6 +6,7 @@ from .main import (
     ChangeCommandLineLocation,
     JumpToCommandLine,
     JumpToDocument,
+    Reload,
     ToggleHistory,
 )
 from .navigation import Backward, Forward
@@ -18,6 +19,7 @@ __all__ = [
     "Forward",
     "JumpToCommandLine",
     "JumpToDocument",
+    "Reload",
     "ToggleHistory",
 ]
 

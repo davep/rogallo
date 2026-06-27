@@ -34,6 +34,7 @@ from ..commands import (
     Forward,
     JumpToCommandLine,
     JumpToDocument,
+    Reload,
     ToggleHistory,
 )
 from ..data import (
@@ -137,6 +138,7 @@ class Main(EnhancedScreen[None]):
         ChangeCommandLineLocation,
         JumpToCommandLine,
         JumpToDocument,
+        Reload,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -223,6 +225,8 @@ class Main(EnhancedScreen[None]):
             return self._navigation_history.can_go_forward or None
         if action == ToggleHistory.action_name():
             return len(self._location_history) > 0 or None
+        if action == Reload.action_name():
+            return bool(self._viewer.document)
         return True
 
     async def _handle_response(self, response: Response, request: OpenLocation) -> None:
@@ -446,6 +450,13 @@ class Main(EnhancedScreen[None]):
             self._history_viewer.focus()
         else:
             self._viewer.take_control()
+
+    def action_reload_command(self) -> None:
+        """Reload the current document."""
+        if self._viewer.document.location:
+            self.post_message(
+                OpenLocation(self._viewer.document.location, from_history=True)
+            )
 
 
 ### main.py ends here

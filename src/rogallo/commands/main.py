@@ -35,4 +35,11 @@ class ToggleHistory(Command):
     FOOTER_TEXT = "History"
 
 
+##############################################################################
+class Reload(Command):
+    """Reload the current document"""
+
+    BINDING_KEY = "ctrl+r, f5"
+
+
 ### main.py ends here
