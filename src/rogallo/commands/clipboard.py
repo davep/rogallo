@@ -12,4 +12,11 @@ class CopyLocationToClipboard(Command):
     BINDING_KEY = "ctrl+shift+c"
 
 
+##############################################################################
+class CopyDocumentToClipboard(Command):
+    """Copy the current document to the clipboard."""
+
+    BINDING_KEY = "alt+shift+c"
+
+
 ### clipboard.py ends here

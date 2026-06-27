@@ -36,6 +36,7 @@ from .. import __version__
 from ..commands import (
     Backward,
     ChangeCommandLineLocation,
+    CopyDocumentToClipboard,
     CopyLocationToClipboard,
     Forward,
     JumpToCommandLine,
@@ -145,6 +146,7 @@ class Main(EnhancedScreen[None]):
         JumpToCommandLine,
         JumpToDocument,
         Reload,
+        CopyDocumentToClipboard,
         CopyLocationToClipboard,
     ]
 
@@ -233,6 +235,8 @@ class Main(EnhancedScreen[None]):
         if action == ToggleHistory.action_name():
             return len(self._location_history) > 0 or None
         if action in (Reload.action_name(), CopyLocationToClipboard.action_name()):
+            return bool(self._viewer.document.location)
+        if action == CopyDocumentToClipboard.action_name():
             return bool(self._viewer.document)
         return True
 
@@ -496,6 +500,15 @@ class Main(EnhancedScreen[None]):
                 CopyToClipboard(
                     str(self._viewer.document.location),
                     description="current location",
+                )
+            )
+
+    def action_copy_document_to_clipboard_command(self) -> None:
+        """Copy the current document's content to the clipboard."""
+        if self._viewer.document:
+            self.post_message(
+                CopyToClipboard(
+                    self._viewer.document.content, description="current document"
                 )
             )
 

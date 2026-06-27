@@ -15,6 +15,7 @@ from textual_enhanced.commands import (
 from ..commands import (
     Backward,
     ChangeCommandLineLocation,
+    CopyDocumentToClipboard,
     CopyLocationToClipboard,
     Forward,
     JumpToCommandLine,
@@ -44,6 +45,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(Forward)
         yield from self.maybe(ToggleHistory)
         yield from self.maybe(Reload)
+        yield from self.maybe(CopyDocumentToClipboard)
         yield from self.maybe(CopyLocationToClipboard)
 
 
