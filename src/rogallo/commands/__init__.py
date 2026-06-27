@@ -9,6 +9,7 @@ from .main import (
     JumpToDocument,
     Reload,
     ToggleHistory,
+    ToggleView,
 )
 from .navigation import Backward, Forward
 
@@ -24,6 +25,7 @@ __all__ = [
     "JumpToDocument",
     "Reload",
     "ToggleHistory",
+    "ToggleView",
 ]
 
 

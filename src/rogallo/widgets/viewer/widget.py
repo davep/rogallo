@@ -16,12 +16,13 @@ from textual.containers import Vertical
 from textual.events import DescendantBlur, DescendantFocus
 from textual.getters import query_one
 from textual.reactive import var
+from textual.widgets import Static
 
 ##############################################################################
 # Local imports.
 from ...types import GeminiLocation
 from .document_view import DocumentView
-from .gemtext_blocks import GemtextLink, get_block_widget
+from .gemtext_blocks import GemtextLink, GemtextWidget, get_block_widget
 from .status import ViewerStatus
 from .title import ViewerTitle
 
@@ -56,6 +57,8 @@ class Viewer(Vertical, can_focus=False):
 
     document: var[Document] = var(Document(None, ""), toggle_class="--has-content")
     """The details of the document to show in the viewer."""
+    view_source: var[bool] = var(False)
+    """Whether the viewer is showing the source of the document or not."""
 
     _title = query_one(ViewerTitle)
     """The title widget."""
@@ -74,15 +77,31 @@ class Viewer(Vertical, can_focus=False):
         """Watch for changes to the document and update the viewer."""
         self._title.location = self.document.location
         await self._view.remove_children()
-        for widget in (
-            blocks := [
-                get_block_widget(line)
-                for line in Gemtext(self.document.content).content
-            ]
-        ):
-            if isinstance(widget, GemtextLink):
-                widget.normalise_uri(self.document.location)
+        blocks: list[Static] | list[GemtextWidget]
+        if self.view_source:
+            blocks = [Static(self.document.content, markup=False)]
+        else:
+            for widget in (
+                blocks := [
+                    get_block_widget(line)
+                    for line in Gemtext(self.document.content).content
+                ]
+            ):
+                if isinstance(widget, GemtextLink):
+                    widget.normalise_uri(self.document.location)
         await self._view.mount_all(blocks)
+        # This next bit of nonsense is because Textual fails to sort its
+        # scrollbars out upon clearing down and remounting a new set of
+        # children. So we have to force it to refresh and then scroll to the
+        # end and home to get it to sort itself out. I have this feeling
+        # I've reported this before, although I can't find the issue back
+        # now. Not that it matters, issues seem to be ignored these days.
+        self.call_after_refresh(self._view.scroll_end, animate=False, immediate=True)
+        self.call_after_refresh(self._view.scroll_home, animate=False, immediate=True)
+
+    def _watch_view_source(self) -> None:
+        """Watch for changes to the view_source property and update the viewer."""
+        self.mutate_reactive(Viewer.document)
 
     def take_control(self) -> None:
         """Take control of the UI."""

@@ -43,6 +43,7 @@ from ..commands import (
     JumpToDocument,
     Reload,
     ToggleHistory,
+    ToggleView,
 )
 from ..data import (
     CommandLineHistory,
@@ -148,6 +149,7 @@ class Main(EnhancedScreen[None]):
         Reload,
         CopyDocumentToClipboard,
         CopyLocationToClipboard,
+        ToggleView,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -236,7 +238,7 @@ class Main(EnhancedScreen[None]):
             return len(self._location_history) > 0 or None
         if action in (Reload.action_name(), CopyLocationToClipboard.action_name()):
             return bool(self._viewer.document.location)
-        if action == CopyDocumentToClipboard.action_name():
+        if action in (CopyDocumentToClipboard.action_name(), ToggleView.action_name()):
             return bool(self._viewer.document)
         return True
 
@@ -511,6 +513,10 @@ class Main(EnhancedScreen[None]):
                     self._viewer.document.content, description="current document"
                 )
             )
+
+    def action_toggle_view_command(self) -> None:
+        """Toggle the view between rendered and source."""
+        self._viewer.view_source = not self._viewer.view_source
 
 
 ### main.py ends here
