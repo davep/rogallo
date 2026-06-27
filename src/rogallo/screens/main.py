@@ -7,6 +7,11 @@ from pathlib import Path
 from webbrowser import open as open_in_browser
 
 ##############################################################################
+# Pyperclip imports.
+from pyperclip import PyperclipException
+from pyperclip import copy as copy_to_clipboard
+
+##############################################################################
 # Textual imports.
 from textual import on, work
 from textual.app import ComposeResult
@@ -31,6 +36,8 @@ from .. import __version__
 from ..commands import (
     Backward,
     ChangeCommandLineLocation,
+    CopyDocumentToClipboard,
+    CopyLocationToClipboard,
     Forward,
     JumpToCommandLine,
     JumpToDocument,
@@ -52,7 +59,7 @@ from ..data import (
     trust_file,
     update_configuration,
 )
-from ..messages import OpenLocation, OpenText, OpenURI
+from ..messages import CopyToClipboard, OpenLocation, OpenText, OpenURI
 from ..preflight import (
     is_likely_local_text_file,
     is_likely_schemeless_capsule,
@@ -139,6 +146,8 @@ class Main(EnhancedScreen[None]):
         JumpToCommandLine,
         JumpToDocument,
         Reload,
+        CopyDocumentToClipboard,
+        CopyLocationToClipboard,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -225,7 +234,9 @@ class Main(EnhancedScreen[None]):
             return self._navigation_history.can_go_forward or None
         if action == ToggleHistory.action_name():
             return len(self._location_history) > 0 or None
-        if action == Reload.action_name():
+        if action in (Reload.action_name(), CopyLocationToClipboard.action_name()):
+            return bool(self._viewer.document.location)
+        if action == CopyDocumentToClipboard.action_name():
             return bool(self._viewer.document)
         return True
 
@@ -393,6 +404,30 @@ class Main(EnhancedScreen[None]):
         """
         save_command_history(message.command_line.history)
 
+    @on(CopyToClipboard)
+    def _copy_text_to_clipboard(self, message: CopyToClipboard) -> None:
+        """Copy text to the clipboard.
+
+        Args:
+            message: The message containing the text to copy.
+        """
+        # First off, use Textual's own copy to clipboard facility. Generally
+        # this will work in most terminals, and if it does it'll likely work
+        # best, getting the text through remote connections to the user's
+        # own environment.
+        self.app.copy_to_clipboard(message.text)
+        # However, as a backup, use pyerclip too. If the above did fail due
+        # to the terminal not supporting the operation, this might.
+        try:
+            copy_to_clipboard(message.text)
+        except PyperclipException:
+            pass
+        self.notify(
+            f"Copied {message.description} to clipboard"
+            if message.description
+            else "Copied"
+        )
+
     @on(Quit)
     def action_quit_command(self) -> None:
         """Quit the application."""
@@ -456,6 +491,25 @@ class Main(EnhancedScreen[None]):
         if self._viewer.document.location:
             self.post_message(
                 OpenLocation(self._viewer.document.location, from_history=True)
+            )
+
+    def action_copy_uri_to_clipboard_command(self) -> None:
+        """Copy the current document's URI to the clipboard."""
+        if self._viewer.document.location:
+            self.post_message(
+                CopyToClipboard(
+                    str(self._viewer.document.location),
+                    description="current location",
+                )
+            )
+
+    def action_copy_document_to_clipboard_command(self) -> None:
+        """Copy the current document's content to the clipboard."""
+        if self._viewer.document:
+            self.post_message(
+                CopyToClipboard(
+                    self._viewer.document.content, description="current document"
+                )
             )
 
 

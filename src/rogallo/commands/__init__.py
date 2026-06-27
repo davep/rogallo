@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Local imports.
+from .clipboard import CopyDocumentToClipboard, CopyLocationToClipboard
 from .main import (
     ChangeCommandLineLocation,
     JumpToCommandLine,
@@ -16,6 +17,8 @@ from .navigation import Backward, Forward
 __all__ = [
     "Backward",
     "ChangeCommandLineLocation",
+    "CopyDocumentToClipboard",
+    "CopyLocationToClipboard",
     "Forward",
     "JumpToCommandLine",
     "JumpToDocument",
