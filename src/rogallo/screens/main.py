@@ -36,6 +36,7 @@ from .. import __version__
 from ..commands import (
     Backward,
     ChangeCommandLineLocation,
+    CopyLocationToClipboard,
     Forward,
     JumpToCommandLine,
     JumpToDocument,
@@ -144,6 +145,7 @@ class Main(EnhancedScreen[None]):
         JumpToCommandLine,
         JumpToDocument,
         Reload,
+        CopyLocationToClipboard,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -230,7 +232,7 @@ class Main(EnhancedScreen[None]):
             return self._navigation_history.can_go_forward or None
         if action == ToggleHistory.action_name():
             return len(self._location_history) > 0 or None
-        if action == Reload.action_name():
+        if action in (Reload.action_name(), CopyLocationToClipboard.action_name()):
             return bool(self._viewer.document)
         return True
 
@@ -485,6 +487,16 @@ class Main(EnhancedScreen[None]):
         if self._viewer.document.location:
             self.post_message(
                 OpenLocation(self._viewer.document.location, from_history=True)
+            )
+
+    def action_copy_uri_to_clipboard_command(self) -> None:
+        """Copy the current document's URI to the clipboard."""
+        if self._viewer.document.location:
+            self.post_message(
+                CopyToClipboard(
+                    str(self._viewer.document.location),
+                    description="current location",
+                )
             )
 
 
