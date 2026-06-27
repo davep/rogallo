@@ -10,6 +10,8 @@
   ([#61](https://github.com/davep/rogallo/pull/61))
 - Added a `CopyDocumentToClipboard` command.
   ([#61](https://github.com/davep/rogallo/pull/61))
+- Added the ability to toggle between a rendered view and a source view.
+  ([#62](https://github.com/davep/rogallo/pull/62))
 
 ## v0.3.0
 

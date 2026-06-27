@@ -42,4 +42,11 @@ class Reload(Command):
     BINDING_KEY = "ctrl+r, f5"
 
 
+##############################################################################
+class ToggleView(Command):
+    """Toggle between rendered and source view of the document"""
+
+    BINDING_KEY = "f3"
+
+
 ### main.py ends here
