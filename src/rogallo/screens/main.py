@@ -495,7 +495,7 @@ class Main(EnhancedScreen[None]):
                 OpenLocation(self._viewer.document.location, from_history=True)
             )
 
-    def action_copy_uri_to_clipboard_command(self) -> None:
+    def action_copy_location_to_clipboard_command(self) -> None:
         """Copy the current document's URI to the clipboard."""
         if self._viewer.document.location:
             self.post_message(
