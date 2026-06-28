@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v0.4.0
 
-**Released: WiP**
+**Released: 2026-06-28**
 
 - Added a `Reload` command.
   ([#58](https://github.com/davep/rogallo/pull/58))
