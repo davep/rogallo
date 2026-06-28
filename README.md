@@ -30,7 +30,7 @@ active development.
 The application can be installed using [`pipx`](https://pypa.github.io/pipx/):
 
 ```sh
-$ pipx install rogallo
+pipx install rogallo
 ```
 
 ### uv
