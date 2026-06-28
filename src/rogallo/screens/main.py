@@ -27,7 +27,15 @@ from textual_enhanced.screen import EnhancedScreen
 
 ##############################################################################
 # Wasat imports.
-from wasat import Client, ConnectionError, GeminiURI, Response, SecurityError, URIError
+from wasat import (
+    Client,
+    ConnectionError,
+    GeminiURI,
+    Response,
+    SecurityError,
+    StatusCode,
+    URIError,
+)
 from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
@@ -68,6 +76,7 @@ from ..preflight import (
 )
 from ..providers import MainCommands
 from ..widgets import CommandLine, HistoryViewer, Viewer
+from .user_input import UserInput
 
 
 ##############################################################################
@@ -242,6 +251,25 @@ class Main(EnhancedScreen[None]):
             return bool(self._viewer.document)
         return True
 
+    async def _handle_input_request(self, location: GeminiURI, sensitive: bool) -> None:
+        """Handle a request for input from a Gemini request.
+
+        Args:
+            location: The location making the request.
+            sensitive: Whether the input is sensitive.
+        """
+        if user_input := await self.app.push_screen_wait(
+            UserInput(location, sensitive)
+        ):
+            try:
+                self.post_message(OpenLocation(location.with_query(user_input)))
+            except URIError as error:
+                self.notify(
+                    f"Unable to create query for {location}:\n\n{error}",
+                    severity="error",
+                    title="Input Error",
+                )
+
     async def _handle_response(self, response: Response, request: OpenLocation) -> None:
         """Handle a response from a Gemini request.
 
@@ -251,6 +279,11 @@ class Main(EnhancedScreen[None]):
         """
         assert isinstance(request.location, GeminiURI)
         uri = response.uri or response.requested_uri or request.location
+        if response.status.is_input:
+            await self._handle_input_request(
+                request.location, response.status is StatusCode.SENSITIVE_INPUT
+            )
+            return
         if not response.status.is_success:
             self.notify(
                 f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
