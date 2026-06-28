@@ -12,6 +12,8 @@
   ([#61](https://github.com/davep/rogallo/pull/61))
 - Added the ability to toggle between a rendered view and a source view.
   ([#62](https://github.com/davep/rogallo/pull/62))
+- Added support for user input.
+  ([#64](https://github.com/davep/rogallo/pull/64))
 
 ## v0.3.0
 
