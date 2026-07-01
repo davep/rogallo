@@ -6,6 +6,8 @@
 
 - Added the MIME type of the document to the viewer's status bar.
   ([#70](https://github.com/davep/rogallo/pull/70))
+- Handle showing plain text content without attempting to render it as
+  Gemtext. ([#71](https://github.com/davep/rogallo/pull/71))
 
 ## v0.4.0
 
