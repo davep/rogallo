@@ -267,7 +267,7 @@ class Main(EnhancedScreen[None]):
         Returns:
             `True` if the MIME type is displayable, `False` otherwise.
         """
-        if not mime_type in load_configuration().displayable_content_types:
+        if mime_type not in load_configuration().displayable_content_types:
             self.notify(
                 f"Error loading {location}:\n\nUnsupported MIME type: {mime_type}",
                 severity="error",
