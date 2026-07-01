@@ -76,6 +76,7 @@ from ..preflight import (
     path_from_uri,
 )
 from ..providers import MainCommands
+from ..types import GeminiLocation
 from ..widgets import CommandLine, HistoryViewer, Viewer
 from .user_input import UserInput
 
@@ -254,6 +255,29 @@ class Main(EnhancedScreen[None]):
             return bool(self._viewer.document) and self._viewer.is_viewing_gemtext
         return True
 
+    def _is_displayable(self, location: GeminiLocation, mime_type: str | None) -> bool:
+        """Check if a MIME type is displayable.
+
+        Args:
+            mime_type: The MIME type to check.
+            operation: The operation being performed.
+
+        Returns:
+            `True` if the MIME type is displayable, `False` otherwise.
+
+        Note:
+            As a side-effect, if the location can't be opened it is handled
+            off to the operating system's web browser.
+        """
+        if mime_type not in load_configuration().displayable_content_types:
+            self.notify(
+                f"Unable to display {location} because it is {mime_type}.",
+                title="Unsupported MIME type",
+            )
+            open_in_browser(str(location))
+            return False
+        return True
+
     async def _handle_input_request(self, location: GeminiURI, sensitive: bool) -> None:
         """Handle a request for input from a Gemini request.
 
@@ -294,12 +318,7 @@ class Main(EnhancedScreen[None]):
                 title="Request Error",
             )
             return
-        if response.content_type not in load_configuration().displayable_content_types:
-            self.notify(
-                f"Error loading {uri}:\n\nUnsupported MIME type: {response.mime_type}",
-                severity="error",
-                title="Request Error",
-            )
+        if not self._is_displayable(uri, response.mime_type):
             return
         self.post_message(
             OpenText(await response.text(), request, uri, response.mime_type)
@@ -374,13 +393,16 @@ class Main(EnhancedScreen[None]):
             request: The request to load the document from.
         """
         assert isinstance(request.location, Path)
+        mime_type = guess_type(request.location)[0]
+        if not self._is_displayable(request.location, mime_type):
+            return
         try:
             self.post_message(
                 OpenText(
                     request.location.read_text(encoding="utf-8"),
                     request,
                     request.location,
-                    guess_type(request.location)[0] or "text/plain",
+                    mime_type,
                 )
             )
         except OSError as error:
