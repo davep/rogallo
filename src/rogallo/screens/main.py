@@ -247,8 +247,10 @@ class Main(EnhancedScreen[None]):
             return len(self._location_history) > 0 or None
         if action in (Reload.action_name(), CopyLocationToClipboard.action_name()):
             return bool(self._viewer.document.location)
-        if action in (CopyDocumentToClipboard.action_name(), ToggleView.action_name()):
+        if action == CopyDocumentToClipboard.action_name():
             return bool(self._viewer.document)
+        if action == ToggleView.action_name():
+            return bool(self._viewer.document) and self._viewer.is_viewing_gemtext
         return True
 
     async def _handle_input_request(self, location: GeminiURI, sensitive: bool) -> None:
@@ -554,7 +556,8 @@ class Main(EnhancedScreen[None]):
 
     def action_toggle_view_command(self) -> None:
         """Toggle the view between rendered and source."""
-        self._viewer.view_source = not self._viewer.view_source
+        if self._viewer.is_viewing_gemtext:
+            self._viewer.view_source = not self._viewer.view_source
 
 
 ### main.py ends here
