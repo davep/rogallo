@@ -10,6 +10,8 @@
   Gemtext. ([#71](https://github.com/davep/rogallo/pull/71))
 - Added support for working out the type of a local file when the user goes
   to view it. ([#72](https://github.com/davep/rogallo/pull/72))
+- MIME types that can't be handled are all now handed off to the operating
+  system's web browser. ([#73](https://github.com/davep/rogallo/pull/73))
 
 ## v0.4.0
 
