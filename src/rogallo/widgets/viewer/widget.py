@@ -50,6 +50,8 @@ class Viewer(Vertical, can_focus=False):
         """The source of the document."""
         content: str
         """The content of the document."""
+        mime_type: str | None = None
+        """The MIME type of the document, if any."""
 
         def __bool__(self) -> bool:
             """Return True if the document has content, False otherwise."""
@@ -76,6 +78,7 @@ class Viewer(Vertical, can_focus=False):
     async def _watch_document(self) -> None:
         """Watch for changes to the document and update the viewer."""
         self._title.location = self.document.location
+        self._status.mime_type = self.document.mime_type or ""
         await self._view.remove_children()
         blocks: list[Static] | list[GemtextWidget]
         if self.view_source:
