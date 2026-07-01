@@ -272,7 +272,7 @@ class Main(EnhancedScreen[None]):
         if mime_type not in load_configuration().displayable_content_types:
             self.notify(
                 f"Unable to display {location} because it is {mime_type}.",
-                title=f"Unsupported MIME type",
+                title="Unsupported MIME type",
             )
             open_in_browser(str(location))
             return False
