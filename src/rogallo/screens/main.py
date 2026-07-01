@@ -255,9 +255,7 @@ class Main(EnhancedScreen[None]):
             return bool(self._viewer.document) and self._viewer.is_viewing_gemtext
         return True
 
-    def _is_displayable(
-        self, location: GeminiLocation, mime_type: str | None, operation: str
-    ) -> bool:
+    def _is_displayable(self, location: GeminiLocation, mime_type: str | None) -> bool:
         """Check if a MIME type is displayable.
 
         Args:
@@ -266,13 +264,17 @@ class Main(EnhancedScreen[None]):
 
         Returns:
             `True` if the MIME type is displayable, `False` otherwise.
+
+        Note:
+            As a side-effect, if the location can't be opened it is handled
+            off to the operating system's web browser.
         """
         if mime_type not in load_configuration().displayable_content_types:
             self.notify(
-                f"Error loading {location}:\n\nUnsupported MIME type: {mime_type}",
-                severity="error",
-                title=f"{operation} Error",
+                f"Unable to display {location} because it is {mime_type}.",
+                title=f"Unsupported MIME type",
             )
+            open_in_browser(str(location))
             return False
         return True
 
@@ -316,7 +318,7 @@ class Main(EnhancedScreen[None]):
                 title="Request Error",
             )
             return
-        if not self._is_displayable(uri, response.mime_type, "Request"):
+        if not self._is_displayable(uri, response.mime_type):
             return
         self.post_message(
             OpenText(await response.text(), request, uri, response.mime_type)
@@ -392,7 +394,7 @@ class Main(EnhancedScreen[None]):
         """
         assert isinstance(request.location, Path)
         mime_type = guess_type(request.location)[0]
-        if not self._is_displayable(request.location, mime_type, "File Open"):
+        if not self._is_displayable(request.location, mime_type):
             return
         try:
             self.post_message(
