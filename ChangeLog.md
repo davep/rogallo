@@ -8,6 +8,8 @@
   ([#70](https://github.com/davep/rogallo/pull/70))
 - Handle showing plain text content without attempting to render it as
   Gemtext. ([#71](https://github.com/davep/rogallo/pull/71))
+- Added support for working out the type of a local file when the user goes
+  to view it. ([#72](https://github.com/davep/rogallo/pull/72))
 
 ## v0.4.0
 
