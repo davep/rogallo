@@ -250,7 +250,7 @@ class Main(EnhancedScreen[None]):
         if action == CopyDocumentToClipboard.action_name():
             return bool(self._viewer.document)
         if action == ToggleView.action_name():
-            return self._viewer.document and self._viewer.is_viewing_gemtext
+            return bool(self._viewer.document) and self._viewer.is_viewing_gemtext
         return True
 
     async def _handle_input_request(self, location: GeminiURI, sensitive: bool) -> None:
