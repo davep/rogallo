@@ -44,6 +44,8 @@ class OpenText(Message):
     """The original request that led to this text being opened."""
     originally_from: GeminiLocation
     """The location the text was originally from, if any."""
+    mime_type: str | None = None
+    """The MIME type of the text, if any."""
 
 
 ### opening.py ends here

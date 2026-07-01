@@ -298,7 +298,9 @@ class Main(EnhancedScreen[None]):
                 title="Request Error",
             )
             return
-        self.post_message(OpenText(await response.text(), request, uri))
+        self.post_message(
+            OpenText(await response.text(), request, uri, response.mime_type)
+        )
 
     def _maybe_remember_location(self, request: OpenText) -> None:
         """Remember a location in the history.
@@ -326,7 +328,9 @@ class Main(EnhancedScreen[None]):
             message: The message containing the text to open.
         """
         self._maybe_remember_location(message)
-        self._viewer.document = Viewer.Document(message.originally_from, message.text)
+        self._viewer.document = Viewer.Document(
+            message.originally_from, message.text, message.mime_type
+        )
         self.refresh_bindings()
 
     @work
@@ -373,6 +377,7 @@ class Main(EnhancedScreen[None]):
                     request.location.read_text(encoding="utf-8"),
                     request,
                     request.location,
+                    # TODO: Work out mine type of file.
                 )
             )
         except OSError as error:

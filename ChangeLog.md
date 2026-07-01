@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added the MIME type of the document to the viewer's status bar.
+  ([#70](https://github.com/davep/rogallo/pull/70))
+
 ## v0.4.0
 
 **Released: 2026-06-28**
