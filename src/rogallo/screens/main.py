@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from argparse import Namespace
+from mimetypes import guess_type
 from pathlib import Path
 from webbrowser import open as open_in_browser
 
@@ -379,7 +380,7 @@ class Main(EnhancedScreen[None]):
                     request.location.read_text(encoding="utf-8"),
                     request,
                     request.location,
-                    # TODO: Work out mine type of file.
+                    guess_type(request.location)[0] or "text/plain",
                 )
             )
         except OSError as error:
