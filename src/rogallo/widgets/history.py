@@ -184,7 +184,7 @@ class HistoryViewer(EnhancedOptionList):
     @work
     async def action_delete_all_locations(self) -> None:
         """Delete all locations from the history."""
-        if self.option_count and await self.app.push_screen_wait(
+        if self.option_count > 0 and await self.app.push_screen_wait(
             Confirm(
                 "Delete all locations", "Are you sure you want to delete all locations?"
             )
