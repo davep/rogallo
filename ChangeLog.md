@@ -12,6 +12,10 @@
   to view it. ([#72](https://github.com/davep/rogallo/pull/72))
 - MIME types that can't be handled are all now handed off to the operating
   system's web browser. ([#73](https://github.com/davep/rogallo/pull/73))
+- Added the ability to remove individual items from the location history.
+  ([#74](https://github.com/davep/rogallo/pull/74))
+- Added the ability to clear all locations from the location history.
+  ([#74](https://github.com/davep/rogallo/pull/74))
 
 ## v0.4.0
 
