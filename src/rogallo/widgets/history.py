@@ -179,7 +179,7 @@ class HistoryViewer(EnhancedOptionList):
             with self.preserved_highlight:
                 self.mutate_reactive(HistoryViewer.history)
             self.post_message(self.HistoryModified(self))
-            self.notify(f"{location.location}", title="Location deleted")
+            self.notify(f"{location.location} deleted", title="Location history")
 
     @work
     async def action_delete_all_locations(self) -> None:
@@ -192,7 +192,7 @@ class HistoryViewer(EnhancedOptionList):
             self.history.clear()
             self.mutate_reactive(HistoryViewer.history)
             self.post_message(self.HistoryModified(self))
-            self.notify("All locations deleted")
+            self.notify("All locations deleted", title="Location history")
 
 
 ### history.py ends here
