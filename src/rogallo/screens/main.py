@@ -469,6 +469,15 @@ class Main(EnhancedScreen[None]):
         """
         save_command_history(message.command_line.history)
 
+    @on(HistoryViewer.HistoryModified)
+    def _save_location_history(self, message: HistoryViewer.HistoryModified) -> None:
+        """Save the location history when it is modified.
+
+        Args:
+            message: The message containing the modified history.
+        """
+        save_location_history(self._location_history)
+
     @on(CopyToClipboard)
     def _copy_text_to_clipboard(self, message: CopyToClipboard) -> None:
         """Copy text to the clipboard.
