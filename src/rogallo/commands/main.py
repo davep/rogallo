@@ -67,7 +67,7 @@ class SetHomeToCurrentLocation(Command):
 class SetHome(Command):
     """Set the home page to a specific location"""
 
-    BINDING_KEY = "ctrl+alt+h"
+    BINDING_KEY = "alt+h"
 
 
 ### main.py ends here
