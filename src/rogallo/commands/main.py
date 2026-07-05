@@ -49,4 +49,11 @@ class ToggleView(Command):
     BINDING_KEY = "f3"
 
 
+##############################################################################
+class GoHome(Command):
+    """Go to the home page"""
+
+    BINDING_KEY = "ctrl+h"
+
+
 ### main.py ends here

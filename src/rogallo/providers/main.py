@@ -18,6 +18,7 @@ from ..commands import (
     CopyDocumentToClipboard,
     CopyLocationToClipboard,
     Forward,
+    GoHome,
     JumpToCommandLine,
     JumpToDocument,
     Reload,
@@ -49,6 +50,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(CopyDocumentToClipboard)
         yield from self.maybe(CopyLocationToClipboard)
         yield from self.maybe(ToggleView)
+        yield from self.maybe(GoHome)
 
 
 ### main.py ends here

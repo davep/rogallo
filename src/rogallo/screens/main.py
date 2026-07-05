@@ -48,6 +48,7 @@ from ..commands import (
     CopyDocumentToClipboard,
     CopyLocationToClipboard,
     Forward,
+    GoHome,
     JumpToCommandLine,
     JumpToDocument,
     Reload,
@@ -161,6 +162,7 @@ class Main(EnhancedScreen[None]):
         CopyDocumentToClipboard,
         CopyLocationToClipboard,
         ToggleView,
+        GoHome,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -253,6 +255,8 @@ class Main(EnhancedScreen[None]):
             return bool(self._viewer.document)
         if action == ToggleView.action_name():
             return bool(self._viewer.document) and self._viewer.is_viewing_gemtext
+        if action == GoHome.action_name():
+            return bool(load_configuration().home_page.strip())
         return True
 
     def _is_displayable(self, location: GeminiLocation, mime_type: str | None) -> bool:
@@ -590,6 +594,11 @@ class Main(EnhancedScreen[None]):
         """Toggle the view between rendered and source."""
         if self._viewer.is_viewing_gemtext:
             self._viewer.view_source = not self._viewer.view_source
+
+    def action_go_home_command(self) -> None:
+        """Go to the home page."""
+        if home_page := load_configuration().home_page.strip():
+            self.post_message(OpenURI(home_page))
 
 
 ### main.py ends here
