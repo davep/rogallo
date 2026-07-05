@@ -20,6 +20,8 @@
   ([#75](https://github.com/davep/rogallo/pull/75))
 - Added a `GoHome` command.
   ([#75](https://github.com/davep/rogallo/pull/75))
+- Added a `SetHome` command.
+  ([#75](https://github.com/davep/rogallo/pull/75))
 - Added a `SetHomeToCurrentLocation` command.
   ([#75](https://github.com/davep/rogallo/pull/75))
 
