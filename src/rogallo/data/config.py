@@ -49,6 +49,9 @@ class Configuration:
     disable_animations: bool = False
     """Should animations be disabled?"""
 
+    home_page: str = "gemini://geminiprotocol.net/"
+    """The home page for the application."""
+
 
 ##############################################################################
 def configuration_file() -> Path:

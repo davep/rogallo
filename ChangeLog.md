@@ -16,6 +16,14 @@
   ([#74](https://github.com/davep/rogallo/pull/74))
 - Added the ability to clear all locations from the location history.
   ([#74](https://github.com/davep/rogallo/pull/74))
+- Added `home_page` to the configuration file.
+  ([#75](https://github.com/davep/rogallo/pull/75))
+- Added a `GoHome` command.
+  ([#75](https://github.com/davep/rogallo/pull/75))
+- Added a `SetHome` command.
+  ([#75](https://github.com/davep/rogallo/pull/75))
+- Added a `SetHomeToCurrentLocation` command.
+  ([#75](https://github.com/davep/rogallo/pull/75))
 
 ## v0.4.0
 

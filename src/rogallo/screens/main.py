@@ -24,6 +24,7 @@ from textual.widgets import Footer, Header, Label
 ##############################################################################
 # Textual enhanced imports.
 from textual_enhanced.commands import ChangeTheme, Command, Help, Quit
+from textual_enhanced.dialogs import ModalInput
 from textual_enhanced.screen import EnhancedScreen
 
 ##############################################################################
@@ -48,9 +49,12 @@ from ..commands import (
     CopyDocumentToClipboard,
     CopyLocationToClipboard,
     Forward,
+    GoHome,
     JumpToCommandLine,
     JumpToDocument,
     Reload,
+    SetHome,
+    SetHomeToCurrentLocation,
     ToggleHistory,
     ToggleView,
 )
@@ -161,6 +165,9 @@ class Main(EnhancedScreen[None]):
         CopyDocumentToClipboard,
         CopyLocationToClipboard,
         ToggleView,
+        GoHome,
+        SetHome,
+        SetHomeToCurrentLocation,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -247,12 +254,18 @@ class Main(EnhancedScreen[None]):
             return self._navigation_history.can_go_forward or None
         if action == ToggleHistory.action_name():
             return len(self._location_history) > 0 or None
-        if action in (Reload.action_name(), CopyLocationToClipboard.action_name()):
+        if action in (
+            Reload.action_name(),
+            CopyLocationToClipboard.action_name(),
+            SetHomeToCurrentLocation.action_name(),
+        ):
             return bool(self._viewer.document.location)
         if action == CopyDocumentToClipboard.action_name():
             return bool(self._viewer.document)
         if action == ToggleView.action_name():
             return bool(self._viewer.document) and self._viewer.is_viewing_gemtext
+        if action == GoHome.action_name():
+            return bool(load_configuration().home_page.strip())
         return True
 
     def _is_displayable(self, location: GeminiLocation, mime_type: str | None) -> bool:
@@ -590,6 +603,31 @@ class Main(EnhancedScreen[None]):
         """Toggle the view between rendered and source."""
         if self._viewer.is_viewing_gemtext:
             self._viewer.view_source = not self._viewer.view_source
+
+    def action_go_home_command(self) -> None:
+        """Go to the home page."""
+        if home_page := load_configuration().home_page.strip():
+            self.post_message(OpenURI(home_page))
+
+    @work
+    async def action_set_home_command(self) -> None:
+        """Set the home page."""
+        if user_input := await self.app.push_screen_wait(
+            ModalInput("New home page", load_configuration().home_page.strip())
+        ):
+            with update_configuration() as config:
+                config.home_page = user_input.strip()
+            self.notify(f"Set to {user_input}", title="Home Page Set")
+
+    def action_set_home_to_current_location_command(self) -> None:
+        """Set the home page to the current document's location."""
+        if self._viewer.document.location:
+            with update_configuration() as config:
+                config.home_page = str(self._viewer.document.location)
+            self.notify(
+                f"Set to {self._viewer.document.location}",
+                title="Home Page Set",
+            )
 
 
 ### main.py ends here

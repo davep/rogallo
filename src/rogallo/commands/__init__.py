@@ -5,9 +5,12 @@
 from .clipboard import CopyDocumentToClipboard, CopyLocationToClipboard
 from .main import (
     ChangeCommandLineLocation,
+    GoHome,
     JumpToCommandLine,
     JumpToDocument,
     Reload,
+    SetHome,
+    SetHomeToCurrentLocation,
     ToggleHistory,
     ToggleView,
 )
@@ -21,9 +24,12 @@ __all__ = [
     "CopyDocumentToClipboard",
     "CopyLocationToClipboard",
     "Forward",
+    "GoHome",
     "JumpToCommandLine",
     "JumpToDocument",
     "Reload",
+    "SetHome",
+    "SetHomeToCurrentLocation",
     "ToggleHistory",
     "ToggleView",
 ]
