@@ -24,6 +24,7 @@ from textual.widgets import Footer, Header, Label
 ##############################################################################
 # Textual enhanced imports.
 from textual_enhanced.commands import ChangeTheme, Command, Help, Quit
+from textual_enhanced.dialogs import ModalInput
 from textual_enhanced.screen import EnhancedScreen
 
 ##############################################################################
@@ -52,6 +53,7 @@ from ..commands import (
     JumpToCommandLine,
     JumpToDocument,
     Reload,
+    SetHome,
     SetHomeToCurrentLocation,
     ToggleHistory,
     ToggleView,
@@ -164,6 +166,7 @@ class Main(EnhancedScreen[None]):
         CopyLocationToClipboard,
         ToggleView,
         GoHome,
+        SetHome,
         SetHomeToCurrentLocation,
     ]
 
@@ -605,6 +608,16 @@ class Main(EnhancedScreen[None]):
         """Go to the home page."""
         if home_page := load_configuration().home_page.strip():
             self.post_message(OpenURI(home_page))
+
+    @work
+    async def action_set_home_command(self) -> None:
+        """Set the home page."""
+        if user_input := await self.app.push_screen_wait(
+            ModalInput("New home page", load_configuration().home_page.strip())
+        ):
+            with update_configuration() as config:
+                config.home_page = user_input.strip()
+            self.notify(f"Set to {user_input}", title="Home Page Set")
 
     def action_set_home_to_current_location_command(self) -> None:
         """Set the home page to the current document's location."""
