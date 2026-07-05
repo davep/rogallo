@@ -9,6 +9,7 @@ from .main import (
     JumpToCommandLine,
     JumpToDocument,
     Reload,
+    SetHomeToCurrentLocation,
     ToggleHistory,
     ToggleView,
 )
@@ -26,6 +27,7 @@ __all__ = [
     "JumpToCommandLine",
     "JumpToDocument",
     "Reload",
+    "SetHomeToCurrentLocation",
     "ToggleHistory",
     "ToggleView",
 ]

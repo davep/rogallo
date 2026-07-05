@@ -56,4 +56,11 @@ class GoHome(Command):
     BINDING_KEY = "ctrl+h"
 
 
+##############################################################################
+class SetHomeToCurrentLocation(Command):
+    """Set the home page to the current location"""
+
+    BINDING_KEY = "ctrl+shift+h"
+
+
 ### main.py ends here
