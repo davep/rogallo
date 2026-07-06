@@ -17,6 +17,7 @@ from .main import (
     ToggleView,
 )
 from .navigation import Backward, Forward
+from .search import SearchHistory
 
 ##############################################################################
 # Exports.
@@ -31,6 +32,7 @@ __all__ = [
     "JumpToCommandLine",
     "JumpToDocument",
     "Reload",
+    "SearchHistory",
     "SetHome",
     "SetHomeToCurrentLocation",
     "ToggleBookmarks",

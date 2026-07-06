@@ -23,6 +23,7 @@ from ..commands import (
     JumpToCommandLine,
     JumpToDocument,
     Reload,
+    SearchHistory,
     SetHome,
     SetHomeToCurrentLocation,
     ToggleBookmarks,
@@ -58,6 +59,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(GoHome)
         yield from self.maybe(SetHomeToCurrentLocation)
         yield from self.maybe(AddLocationToBookmarks)
+        yield from self.maybe(SearchHistory)
         yield SetHome()
 
 

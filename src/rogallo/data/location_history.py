@@ -23,7 +23,7 @@ from .locations import data_dir
 
 
 ##############################################################################
-@dataclass
+@dataclass(frozen=True)
 class LocationVisit:
     """A record of a visit to a location."""
 
