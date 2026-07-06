@@ -2,7 +2,8 @@
 
 ##############################################################################
 # Python imports.
-from typing import Iterator, NamedTuple
+from collections.abc import Iterator
+from typing import NamedTuple
 
 ##############################################################################
 # Gemtext imports.
