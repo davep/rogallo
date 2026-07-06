@@ -110,6 +110,22 @@ class BookmarksViewer(EnhancedOptionList):
         assert isinstance(event.option, BookmarkOption)
         self.post_message(OpenLocation(event.option.bookmark.location))
 
+    def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
+        """Check if an action is possible to perform right now.
+
+        Args:
+            action: The action to perform.
+            parameters: The parameters of the action.
+
+        Returns:
+            `True` if it can perform, `False` or `None` if not.
+        """
+        if not self.is_mounted:
+            return False
+        if action in ("rename", "delete"):
+            return self.highlighted is not None
+        return True
+
     @dataclass
     class BookmarksModified(Message):
         """A message indicating that the bookmarks have been modified."""
