@@ -8,7 +8,6 @@ from __future__ import annotations
 # Python imports.
 from dataclasses import dataclass
 from datetime import datetime
-from pathlib import Path
 
 ##############################################################################
 # Rich imports.
@@ -26,10 +25,6 @@ from textual.widgets.option_list import Option
 from textual_enhanced.binding import HelpfulBinding
 from textual_enhanced.dialogs import Confirm
 from textual_enhanced.widgets import EnhancedOptionList
-
-##############################################################################
-# Wasat imports.
-from wasat.uri import GEMINI_PREFIX, GeminiURI
 
 ##############################################################################
 # Local imports.
