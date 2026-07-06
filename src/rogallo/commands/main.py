@@ -36,6 +36,15 @@ class ToggleHistory(Command):
 
 
 ##############################################################################
+class ToggleBookmarks(Command):
+    """Toggle the display of the bookmarks viewer"""
+
+    BINDING_KEY = "f3"
+    SHOW_IN_FOOTER = True
+    FOOTER_TEXT = "Bookmarks"
+
+
+##############################################################################
 class Reload(Command):
     """Reload the current document"""
 

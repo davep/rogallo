@@ -11,6 +11,7 @@ from .main import (
     Reload,
     SetHome,
     SetHomeToCurrentLocation,
+    ToggleBookmarks,
     ToggleHistory,
     ToggleView,
 )
@@ -30,6 +31,7 @@ __all__ = [
     "Reload",
     "SetHome",
     "SetHomeToCurrentLocation",
+    "ToggleBookmarks",
     "ToggleHistory",
     "ToggleView",
 ]

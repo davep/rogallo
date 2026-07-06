@@ -24,6 +24,7 @@ from ..commands import (
     Reload,
     SetHome,
     SetHomeToCurrentLocation,
+    ToggleBookmarks,
     ToggleHistory,
     ToggleView,
 )
@@ -47,6 +48,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(JumpToDocument)
         yield from self.maybe(Backward)
         yield from self.maybe(Forward)
+        yield from self.maybe(ToggleBookmarks)
         yield from self.maybe(ToggleHistory)
         yield from self.maybe(Reload)
         yield from self.maybe(CopyDocumentToClipboard)

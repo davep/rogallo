@@ -56,6 +56,7 @@ from ..commands import (
     Reload,
     SetHome,
     SetHomeToCurrentLocation,
+    ToggleBookmarks,
     ToggleHistory,
     ToggleView,
 )
@@ -84,7 +85,7 @@ from ..preflight import (
 )
 from ..providers import MainCommands
 from ..types import GeminiLocation
-from ..widgets import CommandLine, HistoryViewer, Viewer
+from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .user_input import UserInput
 
 
@@ -130,7 +131,7 @@ class Main(EnhancedScreen[None]):
             }
         }
 
-        #history {
+        #history, #bookmarks {
             width: 30%;
             display: none;
             Label {
@@ -142,6 +143,9 @@ class Main(EnhancedScreen[None]):
         }
 
         &.--show-history #history {
+            display: block;
+        }
+        &.--show-bookmarks #bookmarks {
             display: block;
         }
     }
@@ -156,6 +160,7 @@ class Main(EnhancedScreen[None]):
         # for the footer.
         Help,
         ToggleHistory,
+        ToggleBookmarks,
         Backward,
         Forward,
         Quit,
@@ -195,6 +200,8 @@ class Main(EnhancedScreen[None]):
 
     _history_visible: var[bool] = var(False, toggle_class="--show-history")
     """Is the history panel visible?"""
+    _bookmarks_visible: var[bool] = var(False, toggle_class="--show-bookmarks")
+    """Is the bookmarks panel visible?"""
 
     def __init__(self, arguments: Namespace) -> None:
         """Initialize the main screen.
@@ -215,6 +222,9 @@ class Main(EnhancedScreen[None]):
                 with VerticalGroup(classes="panel", id="history"):
                     yield Label("History")
                     yield HistoryViewer().data_bind(history=Main._location_history)
+                with VerticalGroup(classes="panel", id="bookmarks"):
+                    yield Label("Bookmarks")
+                    yield BookmarksViewer().data_bind(bookmarks=Main._bookmarks)
             yield CommandLine().data_bind(history=Main._command_history)
         yield Footer()
 
@@ -227,6 +237,7 @@ class Main(EnhancedScreen[None]):
         self._command_line.dock_top = config.command_line_on_top
         self._command_line.history = load_command_history()
         self._history_visible = config.history_visible
+        self._bookmarks_visible = config.bookmarks_visble
         if self._arguments.command == "open" and (
             location := getattr(self._arguments, "location", None)
         ):
@@ -572,12 +583,35 @@ class Main(EnhancedScreen[None]):
             self._history_visible = not self._history_viewer.has_focus
         else:
             self._history_visible = True
-        with update_configuration() as config:
-            config.history_visible = self._history_visible
         if self._history_visible:
             self._history_viewer.focus()
         else:
             self._viewer.take_control()
+        if self._history_visible and self._bookmarks_visible:
+            self._bookmarks_visible = False
+
+    def action_toggle_bookmarks_command(self) -> None:
+        """Toggle the visibility of the bookmarks panel."""
+        if self._bookmarks_visible:
+            self._bookmarks_visible = not self.query_one(BookmarksViewer).has_focus
+        else:
+            self._bookmarks_visible = True
+        if self._bookmarks_visible:
+            self.query_one(BookmarksViewer).focus()
+        else:
+            self._viewer.take_control()
+        if self._bookmarks_visible and self._history_visible:
+            self._history_visible = False
+
+    def _watch__history_visible(self) -> None:
+        """Watch for changes to the history visibility."""
+        with update_configuration() as config:
+            config.history_visible = self._history_visible
+
+    def _watch__bookmarks_visible(self) -> None:
+        """Watch for changes to the bookmarks visibility."""
+        with update_configuration() as config:
+            config.bookmarks_visble = self._bookmarks_visible
 
     def action_reload_command(self) -> None:
         """Reload the current document."""
