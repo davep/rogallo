@@ -271,6 +271,8 @@ class Main(EnhancedScreen[None]):
             return self._navigation_history.can_go_forward or None
         if action == ToggleHistory.action_name():
             return len(self._location_history) > 0 or None
+        if action == ToggleBookmarks.action_name():
+            return len(self._bookmarks) > 0 or None
         if action in (
             Reload.action_name(),
             CopyLocationToClipboard.action_name(),
