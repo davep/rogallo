@@ -36,6 +36,15 @@ class ToggleHistory(Command):
 
 
 ##############################################################################
+class ToggleBookmarks(Command):
+    """Toggle the display of the bookmarks viewer"""
+
+    BINDING_KEY = "f3"
+    SHOW_IN_FOOTER = True
+    FOOTER_TEXT = "Bookmarks"
+
+
+##############################################################################
 class Reload(Command):
     """Reload the current document"""
 
@@ -46,7 +55,7 @@ class Reload(Command):
 class ToggleView(Command):
     """Toggle between rendered and source view of the document"""
 
-    BINDING_KEY = "f3"
+    BINDING_KEY = "f4"
 
 
 ##############################################################################
@@ -68,6 +77,13 @@ class SetHome(Command):
     """Set the home page to a specific location"""
 
     BINDING_KEY = "alt+h"
+
+
+##############################################################################
+class AddLocationToBookmarks(Command):
+    """Add the current location to the bookmarks"""
+
+    BINDING_KEY = "ctrl+b"
 
 
 ### main.py ends here

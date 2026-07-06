@@ -4,6 +4,7 @@
 # Local imports.
 from .clipboard import CopyDocumentToClipboard, CopyLocationToClipboard
 from .main import (
+    AddLocationToBookmarks,
     ChangeCommandLineLocation,
     GoHome,
     JumpToCommandLine,
@@ -11,6 +12,7 @@ from .main import (
     Reload,
     SetHome,
     SetHomeToCurrentLocation,
+    ToggleBookmarks,
     ToggleHistory,
     ToggleView,
 )
@@ -19,6 +21,7 @@ from .navigation import Backward, Forward
 ##############################################################################
 # Exports.
 __all__ = [
+    "AddLocationToBookmarks",
     "Backward",
     "ChangeCommandLineLocation",
     "CopyDocumentToClipboard",
@@ -30,6 +33,7 @@ __all__ = [
     "Reload",
     "SetHome",
     "SetHomeToCurrentLocation",
+    "ToggleBookmarks",
     "ToggleHistory",
     "ToggleView",
 ]

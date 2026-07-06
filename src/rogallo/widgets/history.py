@@ -8,7 +8,6 @@ from __future__ import annotations
 # Python imports.
 from dataclasses import dataclass
 from datetime import datetime
-from pathlib import Path
 
 ##############################################################################
 # Rich imports.
@@ -28,14 +27,10 @@ from textual_enhanced.dialogs import Confirm
 from textual_enhanced.widgets import EnhancedOptionList
 
 ##############################################################################
-# Wasat imports.
-from wasat.uri import GEMINI_PREFIX, GeminiURI
-
-##############################################################################
 # Local imports.
 from ..data import LocationHistory, LocationVisit
 from ..messages import OpenLocation
-from ..types import GeminiLocation
+from ..types import GeminiLocation, short_location
 
 
 ##############################################################################
@@ -66,27 +61,13 @@ class HistoryOption(Option):
         """The location to display."""
         super().__init__(
             (
-                f"{escape(self._location_display)}\n"
+                f"{escape(short_location(visit.location))}\n"
                 f"[dim i]{_clean_time(visit.timestamp)}[/]"
             ),
             id=str(visit.location),
         )
         self._history_position = history_position
         """The position of the visit in the history."""
-
-    @property
-    def _location_display(self) -> str:
-        """Get the display string for the location.
-
-        Returns:
-            The display string for the location.
-        """
-        if isinstance(self._location, GeminiURI):
-            return str(self._location).removeprefix(GEMINI_PREFIX)
-        try:
-            return (Path("~") / self._location.relative_to(Path.home())).as_posix()
-        except ValueError:
-            return self._location.as_posix()
 
     @property
     def location(self) -> GeminiLocation:

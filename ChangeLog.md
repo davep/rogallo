@@ -24,6 +24,8 @@
   ([#75](https://github.com/davep/rogallo/pull/75))
 - Added a `SetHomeToCurrentLocation` command.
   ([#75](https://github.com/davep/rogallo/pull/75))
+- Added support for bookmarks.
+  ([#78](https://github.com/davep/rogallo/pull/78))
 
 ## v0.4.0
 

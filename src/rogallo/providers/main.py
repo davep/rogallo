@@ -13,6 +13,7 @@ from textual_enhanced.commands import (
 ##############################################################################
 # Local imports.
 from ..commands import (
+    AddLocationToBookmarks,
     Backward,
     ChangeCommandLineLocation,
     CopyDocumentToClipboard,
@@ -24,6 +25,7 @@ from ..commands import (
     Reload,
     SetHome,
     SetHomeToCurrentLocation,
+    ToggleBookmarks,
     ToggleHistory,
     ToggleView,
 )
@@ -47,6 +49,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(JumpToDocument)
         yield from self.maybe(Backward)
         yield from self.maybe(Forward)
+        yield from self.maybe(ToggleBookmarks)
         yield from self.maybe(ToggleHistory)
         yield from self.maybe(Reload)
         yield from self.maybe(CopyDocumentToClipboard)
@@ -54,6 +57,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(ToggleView)
         yield from self.maybe(GoHome)
         yield from self.maybe(SetHomeToCurrentLocation)
+        yield from self.maybe(AddLocationToBookmarks)
         yield SetHome()
 
 

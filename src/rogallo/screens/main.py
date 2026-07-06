@@ -45,6 +45,7 @@ from wasat.uri import GEMINI_PREFIX
 # Local imports.
 from .. import __version__
 from ..commands import (
+    AddLocationToBookmarks,
     Backward,
     ChangeCommandLineLocation,
     CopyDocumentToClipboard,
@@ -56,18 +57,23 @@ from ..commands import (
     Reload,
     SetHome,
     SetHomeToCurrentLocation,
+    ToggleBookmarks,
     ToggleHistory,
     ToggleView,
 )
 from ..data import (
+    Bookmark,
+    Bookmarks,
     CommandLineHistory,
     LocationHistory,
     LocationVisit,
     NavigationHistory,
+    load_bookmarks,
     load_command_history,
     load_configuration,
     load_location_history,
     load_navigation_history,
+    save_bookmarks,
     save_command_history,
     save_location_history,
     save_naviagation_history,
@@ -82,7 +88,7 @@ from ..preflight import (
 )
 from ..providers import MainCommands
 from ..types import GeminiLocation
-from ..widgets import CommandLine, HistoryViewer, Viewer
+from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .user_input import UserInput
 
 
@@ -128,7 +134,7 @@ class Main(EnhancedScreen[None]):
             }
         }
 
-        #history {
+        #history, #bookmarks {
             width: 30%;
             display: none;
             Label {
@@ -140,6 +146,9 @@ class Main(EnhancedScreen[None]):
         }
 
         &.--show-history #history {
+            display: block;
+        }
+        &.--show-bookmarks #bookmarks {
             display: block;
         }
     }
@@ -154,10 +163,12 @@ class Main(EnhancedScreen[None]):
         # for the footer.
         Help,
         ToggleHistory,
+        ToggleBookmarks,
         Backward,
         Forward,
         Quit,
         # Everything else.
+        AddLocationToBookmarks,
         ChangeTheme,
         ChangeCommandLineLocation,
         JumpToCommandLine,
@@ -188,9 +199,13 @@ class Main(EnhancedScreen[None]):
     """The navigation history."""
     _command_history: var[CommandLineHistory] = var(CommandLineHistory)
     """The command line history."""
+    _bookmarks: var[Bookmarks] = var(list)
+    """The bookmarks."""
 
     _history_visible: var[bool] = var(False, toggle_class="--show-history")
     """Is the history panel visible?"""
+    _bookmarks_visible: var[bool] = var(False, toggle_class="--show-bookmarks")
+    """Is the bookmarks panel visible?"""
 
     def __init__(self, arguments: Namespace) -> None:
         """Initialize the main screen.
@@ -211,6 +226,9 @@ class Main(EnhancedScreen[None]):
                 with VerticalGroup(classes="panel", id="history"):
                     yield Label("History")
                     yield HistoryViewer().data_bind(history=Main._location_history)
+                with VerticalGroup(classes="panel", id="bookmarks"):
+                    yield Label("Bookmarks")
+                    yield BookmarksViewer().data_bind(bookmarks=Main._bookmarks)
             yield CommandLine().data_bind(history=Main._command_history)
         yield Footer()
 
@@ -218,10 +236,12 @@ class Main(EnhancedScreen[None]):
         """Called when the screen is mounted."""
         self._location_history = load_location_history()
         self._navigation_history = load_navigation_history()
+        self._bookmarks = load_bookmarks()
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
         self._command_line.history = load_command_history()
         self._history_visible = config.history_visible
+        self._bookmarks_visible = config.bookmarks_visble
         if self._arguments.command == "open" and (
             location := getattr(self._arguments, "location", None)
         ):
@@ -255,6 +275,8 @@ class Main(EnhancedScreen[None]):
             return self._navigation_history.can_go_forward or None
         if action == ToggleHistory.action_name():
             return len(self._location_history) > 0 or None
+        if action == ToggleBookmarks.action_name():
+            return len(self._bookmarks) > 0 or None
         if action in (
             Reload.action_name(),
             CopyLocationToClipboard.action_name(),
@@ -267,6 +289,10 @@ class Main(EnhancedScreen[None]):
             return bool(self._viewer.document) and self._viewer.is_viewing_gemtext
         if action == GoHome.action_name():
             return bool(load_configuration().home_page.strip())
+        if action == AddLocationToBookmarks.action_name():
+            return bool(self._viewer.document.location) and (
+                self._viewer.document.location not in self._bookmarks
+            )
         return True
 
     def _is_displayable(self, location: GeminiLocation, mime_type: str | None) -> bool:
@@ -492,6 +518,15 @@ class Main(EnhancedScreen[None]):
         """
         save_location_history(self._location_history)
 
+    @on(BookmarksViewer.BookmarksModified)
+    def _save_bookmarks(self) -> None:
+        """Save the bookmarks when they are modified.
+
+        Args:
+            message: The message containing the modified bookmarks.
+        """
+        save_bookmarks(self._bookmarks)
+
     @on(CopyToClipboard)
     def _copy_text_to_clipboard(self, message: CopyToClipboard) -> None:
         """Copy text to the clipboard.
@@ -567,12 +602,35 @@ class Main(EnhancedScreen[None]):
             self._history_visible = not self._history_viewer.has_focus
         else:
             self._history_visible = True
-        with update_configuration() as config:
-            config.history_visible = self._history_visible
         if self._history_visible:
             self._history_viewer.focus()
         else:
             self._viewer.take_control()
+        if self._history_visible and self._bookmarks_visible:
+            self._bookmarks_visible = False
+
+    def action_toggle_bookmarks_command(self) -> None:
+        """Toggle the visibility of the bookmarks panel."""
+        if self._bookmarks_visible:
+            self._bookmarks_visible = not self.query_one(BookmarksViewer).has_focus
+        else:
+            self._bookmarks_visible = True
+        if self._bookmarks_visible:
+            self.query_one(BookmarksViewer).focus()
+        else:
+            self._viewer.take_control()
+        if self._bookmarks_visible and self._history_visible:
+            self._history_visible = False
+
+    def _watch__history_visible(self) -> None:
+        """Watch for changes to the history visibility."""
+        with update_configuration() as config:
+            config.history_visible = self._history_visible
+
+    def _watch__bookmarks_visible(self) -> None:
+        """Watch for changes to the bookmarks visibility."""
+        with update_configuration() as config:
+            config.bookmarks_visble = self._bookmarks_visible
 
     def action_reload_command(self) -> None:
         """Reload the current document."""
@@ -634,6 +692,26 @@ class Main(EnhancedScreen[None]):
             self.notify(
                 f"Set to {self._viewer.document.location}",
                 title="Home Page Set",
+            )
+
+    @work
+    async def action_add_location_to_bookmarks_command(self) -> None:
+        """Add the current document's location to the bookmarks."""
+        if self._viewer.document.location and (
+            title := await self.app.push_screen_wait(
+                ModalInput(
+                    "Bookmark title",
+                    "",
+                    sub_title=f"Bookmark for {self._viewer.document.location}",
+                )
+            )
+        ):
+            self._bookmarks.append(Bookmark(title, self._viewer.document.location))
+            self.mutate_reactive(Main._bookmarks)
+            save_bookmarks(self._bookmarks)
+            self.notify(
+                f"Added {self._viewer.document.location} to bookmarks",
+                title="Bookmark Added",
             )
 
 
