@@ -510,7 +510,7 @@ class Main(EnhancedScreen[None]):
         save_command_history(message.command_line.history)
 
     @on(HistoryViewer.HistoryModified)
-    def _save_location_history(self, message: HistoryViewer.HistoryModified) -> None:
+    def _save_location_history(self) -> None:
         """Save the location history when it is modified.
 
         Args:
