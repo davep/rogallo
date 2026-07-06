@@ -165,9 +165,13 @@ class CommandLine(Vertical):
                 *reversed(list(self.history)),
                 # Let's also splice in the other histories and bookmarks so
                 # that the user can get suggestions for those too.
-                *[str(visit.location) for visit in self.location_history],
-                *[str(visit) for visit in self.navigation_history],
-                *[str(bookmark.location) for bookmark in self.bookmarks],
+                *set(
+                    (
+                        *(str(visit.location) for visit in self.location_history),
+                        *(str(visit) for visit in self.navigation_history),
+                        *(str(bookmark.location) for bookmark in self.bookmarks),
+                    )
+                ),
                 # Tack known commands on the end; this means that the user
                 # will get prompted for commands they've not used yet.
                 *chain(*(command.suggestions() for command in COMMANDS)),
