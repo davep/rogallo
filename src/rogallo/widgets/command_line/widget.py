@@ -30,7 +30,7 @@ from textual_enhanced.commands import Quit
 
 ##############################################################################
 # Local imports.
-from ...data import CommandLineHistory
+from ...data import Bookmarks, CommandLineHistory, LocationHistory, NavigationHistory
 from .base_command import InputCommand
 from .general import HelpCommand, QuitCommand
 from .open_file import OpenFileCommand
@@ -135,6 +135,13 @@ class CommandLine(Vertical):
     history: var[CommandLineHistory] = var(CommandLineHistory)
     """The history for the command line."""
 
+    location_history: var[LocationHistory] = var(LocationHistory)
+    """The history of locations visited."""
+    navigation_history: var[NavigationHistory] = var(NavigationHistory)
+    """The history of navigation through locations."""
+    bookmarks: var[Bookmarks] = var(list)
+    """The bookmarks for the application."""
+
     _input = query_one(Input)
     """The input widget for the command line."""
     _prompt = query_one(Label)
@@ -156,6 +163,11 @@ class CommandLine(Vertical):
                 # commands first so suggestions come from the thing
                 # most-recently done.
                 *reversed(list(self.history)),
+                # Let's also splice in the other histories and bookmarks so
+                # that the user can get suggestions for those too.
+                *[str(visit.location) for visit in self.location_history],
+                *[str(visit) for visit in self.navigation_history],
+                *[str(bookmark.location) for bookmark in self.bookmarks],
                 # Tack known commands on the end; this means that the user
                 # will get prompted for commands they've not used yet.
                 *chain(*(command.suggestions() for command in COMMANDS)),
