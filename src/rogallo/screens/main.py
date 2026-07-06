@@ -229,7 +229,12 @@ class Main(EnhancedScreen[None]):
                 with VerticalGroup(classes="panel", id="bookmarks"):
                     yield Label("Bookmarks")
                     yield BookmarksViewer().data_bind(bookmarks=Main._bookmarks)
-            yield CommandLine().data_bind(history=Main._command_history)
+            yield CommandLine().data_bind(
+                history=Main._command_history,
+                location_history=Main._location_history,
+                navigation_history=Main._navigation_history,
+                bookmarks=Main._bookmarks,
+            )
         yield Footer()
 
     def on_mount(self) -> None:

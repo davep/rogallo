@@ -26,6 +26,9 @@
   ([#75](https://github.com/davep/rogallo/pull/75))
 - Added support for bookmarks.
   ([#78](https://github.com/davep/rogallo/pull/78))
+- Added navigation history, location history and bookmarks as application
+  command line completion suggestions.
+  ([#83](https://github.com/davep/rogallo/pull/83))
 
 ## v0.4.0
 
