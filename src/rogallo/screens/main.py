@@ -41,8 +41,6 @@ from wasat import (
 )
 from wasat.uri import GEMINI_PREFIX
 
-from rogallo.data.bookmarks import Bookmark
-
 ##############################################################################
 # Local imports.
 from .. import __version__
@@ -64,6 +62,7 @@ from ..commands import (
     ToggleView,
 )
 from ..data import (
+    Bookmark,
     Bookmarks,
     CommandLineHistory,
     LocationHistory,
