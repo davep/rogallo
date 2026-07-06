@@ -1,9 +1,11 @@
 """Provides the bookmarks panel widget."""
 
 ##############################################################################
-# Rich imports.
+# Python imports.
 from dataclasses import dataclass
 
+##############################################################################
+# Rich imports.
 from rich.markup import escape
 
 ##############################################################################
