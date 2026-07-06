@@ -22,7 +22,7 @@ from textual.widgets.option_list import Option
 ##############################################################################
 # Textual enhanced imports.
 from textual_enhanced.binding import HelpfulBinding
-from textual_enhanced.dialogs import ModalInput
+from textual_enhanced.dialogs import Confirm, ModalInput
 from textual_enhanced.widgets import EnhancedOptionList
 
 ##############################################################################
@@ -87,6 +87,9 @@ class BookmarksViewer(EnhancedOptionList):
         HelpfulBinding(
             "r", "rename", "Rename", show=True, tooltip="Rename the selected bookmark"
         ),
+        HelpfulBinding(
+            "d", "delete", "Delete", show=True, tooltip="Delete the selected bookmark"
+        ),
     ]
 
     bookmarks: var[Bookmarks] = var(list)
@@ -134,6 +137,31 @@ class BookmarksViewer(EnhancedOptionList):
             except ValueError:
                 self.notify(
                     "Unable to find the bookmark to rename. It may have been removed.",
+                    title="Error",
+                    severity="error",
+                )
+
+    @work
+    async def action_delete(self) -> None:
+        """Delete the currently-selected bookmark."""
+        if self.highlighted is None:
+            return
+        bookmark_view = self.get_option_at_index(self.highlighted)
+        assert isinstance(bookmark_view, BookmarkOption)
+        if await self.app.push_screen_wait(
+            Confirm(
+                "Delete bookmark",
+                f"Are you sure you want to delete the bookmark '{escape(bookmark_view.bookmark.title)}'?",
+            )
+        ):
+            try:
+                del self.bookmarks[self.bookmarks.index(bookmark_view.bookmark)]
+                with self.preserved_highlight:
+                    self.mutate_reactive(BookmarksViewer.bookmarks)
+                self.post_message(self.BookmarksModified(self))
+            except ValueError:
+                self.notify(
+                    "Unable to find the bookmark to delete.",
                     title="Error",
                     severity="error",
                 )
