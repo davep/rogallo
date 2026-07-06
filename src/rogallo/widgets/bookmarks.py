@@ -33,7 +33,7 @@ class BookmarkOption(Option):
         super().__init__(
             (
                 f"{escape(bookmark.title)}\n"
-                f"[dim]{escape(short_location(bookmark.location))}[/]"
+                f"[dim i]{escape(short_location(bookmark.location))}[/]"
             ),
             id=str(bookmark.location),
         )
