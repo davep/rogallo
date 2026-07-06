@@ -64,7 +64,7 @@ class Bookmark:
 
     def __eq__(self, other: object, /) -> bool:
         if isinstance(other, Bookmark):
-            return self.title.casefold() == other.title.casefold()
+            return self.location == other.location
         if isinstance(other, str):
             return self.title.casefold() == other.casefold()
         if isinstance(other, Path):

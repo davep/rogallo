@@ -519,6 +519,15 @@ class Main(EnhancedScreen[None]):
         """
         save_location_history(self._location_history)
 
+    @on(BookmarksViewer.BookmarksModified)
+    def _save_bookmarks(self) -> None:
+        """Save the bookmarks when they are modified.
+
+        Args:
+            message: The message containing the modified bookmarks.
+        """
+        save_bookmarks(self._bookmarks)
+
     @on(CopyToClipboard)
     def _copy_text_to_clipboard(self, message: CopyToClipboard) -> None:
         """Copy text to the clipboard.

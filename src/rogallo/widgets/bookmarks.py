@@ -2,16 +2,21 @@
 
 ##############################################################################
 # Rich imports.
+from dataclasses import dataclass
+
 from rich.markup import escape
 
 ##############################################################################
 # Textual imports.
-from textual import on
+from textual import on, work
+from textual.message import Message
 from textual.reactive import var
 from textual.widgets.option_list import Option
 
 ##############################################################################
 # Textual enhanced imports.
+from textual_enhanced.binding import HelpfulBinding
+from textual_enhanced.dialogs import ModalInput
 from textual_enhanced.widgets import EnhancedOptionList
 
 ##############################################################################
@@ -72,13 +77,19 @@ class BookmarksViewer(EnhancedOptionList):
     and also manage the bookmarks.
     """
 
+    BINDINGS = [
+        HelpfulBinding(
+            "r", "rename", "Rename", show=True, tooltip="Rename the selected bookmark"
+        ),
+    ]
+
     bookmarks: var[Bookmarks] = var(list)
     """The bookmarks to display."""
 
     def _watch_bookmarks(self) -> None:
         """React to the bookmarks changing."""
         self.clear_options().add_options(
-            [BookmarkOption(bookmark) for bookmark in self.bookmarks]
+            [BookmarkOption(bookmark) for bookmark in sorted(self.bookmarks)]
         )
         if self.option_count:
             self.highlighted = 0
@@ -89,6 +100,37 @@ class BookmarksViewer(EnhancedOptionList):
         event.stop()
         assert isinstance(event.option, BookmarkOption)
         self.post_message(OpenLocation(event.option.bookmark.location))
+
+    @dataclass
+    class BookmarksModified(Message):
+        """A message indicating that the bookmarks have been modified."""
+
+        bookmarks_viewer: BookmarksViewer
+        """The new bookmarks."""
+
+    @work
+    async def action_rename(self) -> None:
+        """Rename the currently-selected bookmark."""
+        if self.highlighted is None:
+            return
+        bookmark_view = self.get_option_at_index(self.highlighted)
+        assert isinstance(bookmark_view, BookmarkOption)
+        if title := await self.app.push_screen_wait(
+            ModalInput("Bookmark title", bookmark_view.bookmark.title)
+        ):
+            try:
+                self.bookmarks[self.bookmarks.index(bookmark_view.bookmark)] = Bookmark(
+                    title, bookmark_view.bookmark.location
+                )
+                with self.preserved_highlight:
+                    self.mutate_reactive(BookmarksViewer.bookmarks)
+                self.post_message(self.BookmarksModified(self))
+            except ValueError:
+                self.notify(
+                    "Unable to find the bookmark to rename. It may have been removed.",
+                    title="Error",
+                    severity="error",
+                )
 
 
 ### bookmarks.py ends here
