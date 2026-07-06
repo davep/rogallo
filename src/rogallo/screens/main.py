@@ -41,10 +41,13 @@ from wasat import (
 )
 from wasat.uri import GEMINI_PREFIX
 
+from rogallo.data.bookmarks import Bookmark
+
 ##############################################################################
 # Local imports.
 from .. import __version__
 from ..commands import (
+    AddLocationToBookmarks,
     Backward,
     ChangeCommandLineLocation,
     CopyDocumentToClipboard,
@@ -71,6 +74,7 @@ from ..data import (
     load_configuration,
     load_location_history,
     load_navigation_history,
+    save_bookmarks,
     save_command_history,
     save_location_history,
     save_naviagation_history,
@@ -165,6 +169,7 @@ class Main(EnhancedScreen[None]):
         Forward,
         Quit,
         # Everything else.
+        AddLocationToBookmarks,
         ChangeTheme,
         ChangeCommandLineLocation,
         JumpToCommandLine,
@@ -285,6 +290,10 @@ class Main(EnhancedScreen[None]):
             return bool(self._viewer.document) and self._viewer.is_viewing_gemtext
         if action == GoHome.action_name():
             return bool(load_configuration().home_page.strip())
+        if action == AddLocationToBookmarks.action_name():
+            return bool(self._viewer.document.location) and (
+                self._viewer.document.location not in self._bookmarks
+            )
         return True
 
     def _is_displayable(self, location: GeminiLocation, mime_type: str | None) -> bool:
@@ -675,6 +684,26 @@ class Main(EnhancedScreen[None]):
             self.notify(
                 f"Set to {self._viewer.document.location}",
                 title="Home Page Set",
+            )
+
+    @work
+    async def action_add_location_to_bookmarks_command(self) -> None:
+        """Add the current document's location to the bookmarks."""
+        if self._viewer.document.location and (
+            title := await self.app.push_screen_wait(
+                ModalInput(
+                    "Bookmark title",
+                    "",
+                    sub_title=f"Bookmark for {self._viewer.document.location}",
+                )
+            )
+        ):
+            self._bookmarks.append(Bookmark(title, self._viewer.document.location))
+            self.mutate_reactive(Main._bookmarks)
+            save_bookmarks(self._bookmarks)
+            self.notify(
+                f"Added {self._viewer.document.location} to bookmarks",
+                title="Bookmark Added",
             )
 
 

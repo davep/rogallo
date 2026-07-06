@@ -79,4 +79,11 @@ class SetHome(Command):
     BINDING_KEY = "alt+h"
 
 
+##############################################################################
+class AddLocationToBookmarks(Command):
+    """Add the current location to the bookmarks"""
+
+    BINDING_KEY = "ctrl+b"
+
+
 ### main.py ends here
