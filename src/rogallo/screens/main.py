@@ -60,7 +60,6 @@ from ..commands import (
     ToggleView,
 )
 from ..data import (
-    Bookmark,
     Bookmarks,
     CommandLineHistory,
     LocationHistory,
@@ -71,7 +70,6 @@ from ..data import (
     load_configuration,
     load_location_history,
     load_navigation_history,
-    save_bookmarks,
     save_command_history,
     save_location_history,
     save_naviagation_history,
