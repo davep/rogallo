@@ -2,12 +2,14 @@
 
 ##############################################################################
 # Local imports.
+from .bookmarks import BookmarkSearchCommands
 from .history import HistorySearchCommands
 from .main import MainCommands
 
 ##############################################################################
 # Exports.
 __all__ = [
+    "BookmarkSearchCommands",
     "HistorySearchCommands",
     "MainCommands",
 ]

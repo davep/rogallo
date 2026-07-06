@@ -55,6 +55,7 @@ from ..commands import (
     JumpToCommandLine,
     JumpToDocument,
     Reload,
+    SearchBookmarks,
     SearchHistory,
     SetHome,
     SetHomeToCurrentLocation,
@@ -87,7 +88,7 @@ from ..preflight import (
     is_likely_schemeless_capsule,
     path_from_uri,
 )
-from ..providers import HistorySearchCommands, MainCommands
+from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
 from ..types import GeminiLocation
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .user_input import UserInput
@@ -182,6 +183,7 @@ class Main(EnhancedScreen[None]):
         SetHome,
         SetHomeToCurrentLocation,
         SearchHistory,
+        SearchBookmarks,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -728,6 +730,11 @@ class Main(EnhancedScreen[None]):
         HistorySearchCommands.navigation_history = self._navigation_history
         HistorySearchCommands.location_history = self._location_history
         self.show_palette(HistorySearchCommands)
+
+    def action_search_bookmarks_command(self) -> None:
+        """Search the bookmarks."""
+        BookmarkSearchCommands.bookmarks = self._bookmarks
+        self.show_palette(BookmarkSearchCommands)
 
 
 ### main.py ends here
