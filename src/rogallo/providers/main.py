@@ -43,26 +43,26 @@ class MainCommands(CommandsProvider):
         Yields:
             The commands for the command palette.
         """
+        yield from self.maybe(AddLocationToBookmarks)
+        yield from self.maybe(Backward)
         yield ChangeCommandLineLocation()
         yield ChangeTheme()
-        yield Help()
-        yield Quit()
-        yield from self.maybe(JumpToCommandLine)
-        yield from self.maybe(JumpToDocument)
-        yield from self.maybe(Backward)
-        yield from self.maybe(Forward)
-        yield from self.maybe(ToggleBookmarks)
-        yield from self.maybe(ToggleHistory)
-        yield from self.maybe(Reload)
         yield from self.maybe(CopyDocumentToClipboard)
         yield from self.maybe(CopyLocationToClipboard)
-        yield from self.maybe(ToggleView)
+        yield from self.maybe(Forward)
         yield from self.maybe(GoHome)
-        yield from self.maybe(SetHomeToCurrentLocation)
-        yield from self.maybe(AddLocationToBookmarks)
+        yield Help()
+        yield from self.maybe(JumpToCommandLine)
+        yield from self.maybe(JumpToDocument)
+        yield Quit()
+        yield from self.maybe(Reload)
         yield from self.maybe(SearchBookmarks)
         yield from self.maybe(SearchHistory)
         yield SetHome()
+        yield from self.maybe(SetHomeToCurrentLocation)
+        yield from self.maybe(ToggleBookmarks)
+        yield from self.maybe(ToggleHistory)
+        yield from self.maybe(ToggleView)
 
 
 ### main.py ends here
