@@ -60,14 +60,18 @@ from ..commands import (
     ToggleView,
 )
 from ..data import (
+    Bookmark,
+    Bookmarks,
     CommandLineHistory,
     LocationHistory,
     LocationVisit,
     NavigationHistory,
+    load_bookmarks,
     load_command_history,
     load_configuration,
     load_location_history,
     load_navigation_history,
+    save_bookmarks,
     save_command_history,
     save_location_history,
     save_naviagation_history,
@@ -188,6 +192,8 @@ class Main(EnhancedScreen[None]):
     """The navigation history."""
     _command_history: var[CommandLineHistory] = var(CommandLineHistory)
     """The command line history."""
+    _bookmarks: var[Bookmarks] = var(list)
+    """The bookmarks."""
 
     _history_visible: var[bool] = var(False, toggle_class="--show-history")
     """Is the history panel visible?"""
@@ -218,6 +224,7 @@ class Main(EnhancedScreen[None]):
         """Called when the screen is mounted."""
         self._location_history = load_location_history()
         self._navigation_history = load_navigation_history()
+        self._bookmarks = load_bookmarks()
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
         self._command_line.history = load_command_history()
