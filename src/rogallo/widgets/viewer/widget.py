@@ -2,11 +2,11 @@
 
 ##############################################################################
 # Python imports.
-from typing import NamedTuple
+from typing import Iterator, NamedTuple
 
 ##############################################################################
 # Gemtext imports.
-from gemtext import Gemtext
+from gemtext import Gemtext, Line, Paragraph
 
 ##############################################################################
 # Textual imports.
@@ -83,6 +83,28 @@ class Viewer(Vertical, can_focus=False):
         yield DocumentView()
         yield ViewerStatus()
 
+    @staticmethod
+    def _consolidate(lines: tuple[Line, ...]) -> Iterator[Line]:
+        """Consolidate consecutive paragraphs into a single paragraph.
+
+        Args:
+            lines: The lines to consolidate.
+
+        Yields:
+            The consolidated lines.
+        """
+        buffer: list[str] = []
+        for line in lines:
+            if isinstance(line, Paragraph):
+                buffer.append(str(line))
+            else:
+                if buffer:
+                    yield Paragraph("\n".join(buffer))
+                    buffer.clear()
+                yield line
+        if buffer:
+            yield Paragraph("\n".join(buffer))
+
     async def _watch_document(self) -> None:
         """Watch for changes to the document and update the viewer."""
         self._title.location = self.document.location
@@ -95,7 +117,9 @@ class Viewer(Vertical, can_focus=False):
             for widget in (
                 blocks := [
                     get_block_widget(line)
-                    for line in Gemtext(self.document.content).content
+                    for line in self._consolidate(
+                        Gemtext(self.document.content).content
+                    )
                 ]
             ):
                 if isinstance(widget, GemtextLink):
