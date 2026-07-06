@@ -19,6 +19,7 @@ from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, VerticalGroup
 from textual.getters import query_one
 from textual.reactive import var
+from textual.suggester import SuggestFromList
 from textual.widgets import Footer, Header, Label
 
 ##############################################################################
@@ -613,7 +614,13 @@ class Main(EnhancedScreen[None]):
     async def action_set_home_command(self) -> None:
         """Set the home page."""
         if user_input := await self.app.push_screen_wait(
-            ModalInput("New home page", load_configuration().home_page.strip())
+            ModalInput(
+                "New home page",
+                load_configuration().home_page.strip(),
+                suggester=SuggestFromList(
+                    sorted(str(visit.location) for visit in self._location_history)
+                ),
+            ),
         ):
             with update_configuration() as config:
                 config.home_page = user_input.strip()

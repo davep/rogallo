@@ -1163,15 +1163,15 @@ wheels = [
 
 [[package]]
 name = "python-discovery"
-version = "1.4.2"
+version = "1.4.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "filelock" },
     { name = "platformdirs" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/0b/1a/cbbaf13b730abb0a16b964d984e19f2fe520c21a4dc664051359a3f5a9e7/python_discovery-1.4.2.tar.gz", hash = "sha256:8f3746c4b4968d22afbb97d36e1a0e5b66e6c0f297290f2e95f05b9b8bf18690", size = 70277, upload-time = "2026-06-11T16:10:42.383Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/66/26/8b004cc36f430345136f6f00fa1aa9ed596c8ed1e8504625fa79522ff39c/python_discovery-1.4.3.tar.gz", hash = "sha256:ad57d7045a862460d4a235986c33f13ed707d3aeb9153fa47eb7dfd0d4673289", size = 70438, upload-time = "2026-07-03T13:21:51.621Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1a/82/a70006589557f267f15bd384c0642ad49f0d97b690c3a05b166b9dcbad3b/python_discovery-1.4.2-py3-none-any.whl", hash = "sha256:475803f53b7b2ed6e490e27373f9d8340f7d2eebf9acdaf645d7d714c97bb500", size = 33886, upload-time = "2026-06-11T16:10:41.192Z" },
+    { url = "https://files.pythonhosted.org/packages/28/78/9b77ecb4644d1bbea94d29abf78f21c47eca6eb79e9745b702ec0bed2e19/python_discovery-1.4.3-py3-none-any.whl", hash = "sha256:b6e1e4a7d9e3f6948c39746ffe8218225162d738ba39d05ab1d2f6c1cac4878c", size = 33885, upload-time = "2026-07-03T13:21:50.174Z" },
 ]
 
 [[package]]
@@ -1266,7 +1266,7 @@ requires-dist = [
     { name = "gemtext", specifier = ">=0.1.0" },
     { name = "pyperclip", specifier = ">=1.11.0" },
     { name = "textual", specifier = ">=8.2.7" },
-    { name = "textual-enhanced", specifier = ">=1.5.0" },
+    { name = "textual-enhanced", specifier = ">=1.6.0" },
     { name = "types-pyperclip", specifier = ">=1.11.0.20260508" },
     { name = "wasat", specifier = ">=0.1.0" },
     { name = "xdg-base-dirs", specifier = ">=6.0.2" },
@@ -1345,14 +1345,14 @@ wheels = [
 
 [[package]]
 name = "textual-enhanced"
-version = "1.5.0"
+version = "1.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "textual" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/90/5f/01369681adf4e33e2d393e94093e25b8d0d6ce2791b204b67ddbb7cdecbd/textual_enhanced-1.5.0.tar.gz", hash = "sha256:acd77b29f78e213f0ca1a677baf99d5ed834e9d065aba7dd07ab7b31692db993", size = 15446, upload-time = "2026-05-22T18:21:29.683Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ee/b6/ac6d8d55e730c57ce8dea1565cd730a345f1f1fed771d7278f13170748a0/textual_enhanced-1.6.0.tar.gz", hash = "sha256:5976b608854b5b2550d48810be7f4455a648f4976ce632d643a9a37a05fa67b1", size = 15663, upload-time = "2026-07-06T08:19:15.279Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4f/72/55d82f77fa02d2bb445ec949156e4616e6e18beb817c3b25ebff931b3350/textual_enhanced-1.5.0-py3-none-any.whl", hash = "sha256:48c5ff1b8e35b290c2b829dcb1d2e0f238616f99347064ce3c9e6fd68ff22435", size = 23625, upload-time = "2026-05-22T18:21:27.966Z" },
+    { url = "https://files.pythonhosted.org/packages/4c/a5/132d18d7b87ce883b3a9bf6bd357c8491532aa25f46ba4bcb229ef5eb532/textual_enhanced-1.6.0-py3-none-any.whl", hash = "sha256:6541f7e63abcd408d562a476152459371a67bceebc8c6e982174a5a1b56c5bf2", size = 23835, upload-time = "2026-07-06T08:19:13.971Z" },
 ]
 
 [[package]]
