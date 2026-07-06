@@ -316,6 +316,8 @@ class Main(EnhancedScreen[None]):
             As a side-effect, if the location can't be opened it is handled
             off to the operating system's web browser.
         """
+        if isinstance(mime_type, str):
+            mime_type, _, _ = mime_type.partition(";")
         if mime_type not in load_configuration().displayable_content_types:
             self.notify(
                 f"Unable to display {location} because it is {mime_type}.",
