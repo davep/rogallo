@@ -46,7 +46,7 @@ class Reload(Command):
 class ToggleView(Command):
     """Toggle between rendered and source view of the document"""
 
-    BINDING_KEY = "f3"
+    BINDING_KEY = "f4"
 
 
 ##############################################################################
