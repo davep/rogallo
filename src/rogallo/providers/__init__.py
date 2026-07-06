@@ -2,11 +2,13 @@
 
 ##############################################################################
 # Local imports.
+from .history import HistorySearchCommands
 from .main import MainCommands
 
 ##############################################################################
 # Exports.
 __all__ = [
+    "HistorySearchCommands",
     "MainCommands",
 ]
 

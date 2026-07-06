@@ -29,6 +29,8 @@
 - Added navigation history, location history and bookmarks as application
   command line completion suggestions.
   ([#83](https://github.com/davep/rogallo/pull/83))
+- Added a `SeachHistory` command.
+  ([#86](https://github.com/davep/rogallo/pull/86))
 
 ## v0.4.0
 

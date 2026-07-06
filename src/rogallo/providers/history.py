@@ -1,0 +1,90 @@
+"""Search and visit history from the command palette."""
+
+##############################################################################
+# Python imports.
+from dataclasses import dataclass
+from functools import total_ordering
+from itertools import chain
+
+##############################################################################
+# Textual enhanced imports.
+from textual_enhanced.commands import CommandHit, CommandHits, CommandsProvider
+
+##############################################################################
+# Local imports.
+from ..data import LocationHistory, LocationVisit, NavigationHistory
+from ..messages import OpenURI
+from ..types import GeminiLocation
+
+
+##############################################################################
+@dataclass(frozen=True)
+@total_ordering
+class Historical:
+    """Represents a historical location."""
+
+    location: GeminiLocation | LocationVisit
+    """The historical location."""
+
+    @property
+    def name(self) -> str:
+        """Get the name of the historical location."""
+        if isinstance(self.location, LocationVisit):
+            return str(self.location.location)
+        return str(self.location)
+
+    @property
+    def context(self) -> str:
+        """The context for the location."""
+        if isinstance(self.location, LocationVisit):
+            return f"From history, last visited on {self.location.timestamp}"
+        return "From navigation history"
+
+    def __gt__(self, value: object, /) -> bool:
+        if isinstance(value, Historical):
+            return self.name.casefold() > value.name.casefold()
+        raise NotImplementedError
+
+    def __eq__(self, value: object, /) -> bool:
+        if isinstance(value, Historical):
+            return self.name.casefold() == value.name.casefold()
+        raise NotImplementedError
+
+    def __str__(self) -> str:
+        return self.name
+
+
+##############################################################################
+class HistorySearchCommands(CommandsProvider):
+    """Provides commands for searching and visiting history."""
+
+    navigation_history: NavigationHistory = NavigationHistory()
+    """The navigation history."""
+    location_history: LocationHistory = LocationHistory()
+    """The location history."""
+
+    @classmethod
+    def prompt(cls) -> str:
+        """The prompt for the command provider."""
+        return "Search history..."
+
+    def commands(self) -> CommandHits:
+        """Provide the commands for searching and visiting history.
+
+        Yields:
+            The commands for searching and visiting history.
+        """
+        for location in sorted(
+            set(
+                Historical(location)
+                for location in chain(self.navigation_history, self.location_history)
+            )
+        ):
+            yield CommandHit(
+                location.name,
+                location.context,
+                OpenURI(str(location)),
+            )
+
+
+### history.py ends here

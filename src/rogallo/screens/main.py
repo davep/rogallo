@@ -55,6 +55,7 @@ from ..commands import (
     JumpToCommandLine,
     JumpToDocument,
     Reload,
+    SearchHistory,
     SetHome,
     SetHomeToCurrentLocation,
     ToggleBookmarks,
@@ -86,7 +87,7 @@ from ..preflight import (
     is_likely_schemeless_capsule,
     path_from_uri,
 )
-from ..providers import MainCommands
+from ..providers import HistorySearchCommands, MainCommands
 from ..types import GeminiLocation
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .user_input import UserInput
@@ -180,6 +181,7 @@ class Main(EnhancedScreen[None]):
         GoHome,
         SetHome,
         SetHomeToCurrentLocation,
+        SearchHistory,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -278,7 +280,7 @@ class Main(EnhancedScreen[None]):
             return self._navigation_history.can_go_backward or None
         if action == Forward.action_name():
             return self._navigation_history.can_go_forward or None
-        if action == ToggleHistory.action_name():
+        if action in (ToggleHistory.action_name(), SearchHistory.action_name()):
             return len(self._location_history) > 0 or None
         if action == ToggleBookmarks.action_name():
             return len(self._bookmarks) > 0 or None
@@ -718,6 +720,12 @@ class Main(EnhancedScreen[None]):
                 f"Added {self._viewer.document.location} to bookmarks",
                 title="Bookmark Added",
             )
+
+    def action_search_history_command(self) -> None:
+        """Search the history."""
+        HistorySearchCommands.navigation_history = self._navigation_history
+        HistorySearchCommands.location_history = self._location_history
+        self.show_palette(HistorySearchCommands)
 
 
 ### main.py ends here
