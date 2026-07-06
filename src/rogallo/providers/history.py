@@ -13,7 +13,7 @@ from textual_enhanced.commands import CommandHit, CommandHits, CommandsProvider
 ##############################################################################
 # Local imports.
 from ..data import LocationHistory, LocationVisit, NavigationHistory
-from ..messages import OpenURI
+from ..messages import OpenLocation
 from ..types import GeminiLocation
 
 
@@ -37,8 +37,15 @@ class Historical:
     def context(self) -> str:
         """The context for the location."""
         if isinstance(self.location, LocationVisit):
-            return f"From history, last visited on {self.location.timestamp}"
+            return f"From history; last visited: {self.location.timestamp.replace(microsecond=0)}"
         return "From navigation history"
+
+    @property
+    def target(self) -> GeminiLocation:
+        """Get the target location."""
+        if isinstance(self.location, LocationVisit):
+            return self.location.location
+        return self.location
 
     def __gt__(self, value: object, /) -> bool:
         if isinstance(value, Historical):
@@ -52,6 +59,9 @@ class Historical:
 
     def __str__(self) -> str:
         return self.name
+
+    def __hash__(self) -> int:
+        return hash(str(self.target))
 
 
 ##############################################################################
@@ -83,7 +93,7 @@ class HistorySearchCommands(CommandsProvider):
             yield CommandHit(
                 location.name,
                 location.context,
-                OpenURI(str(location)),
+                OpenLocation(location.target),
             )
 
 
