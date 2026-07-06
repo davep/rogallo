@@ -6,6 +6,7 @@ from rich.markup import escape
 
 ##############################################################################
 # Textual imports.
+from textual import on
 from textual.reactive import var
 from textual.widgets.option_list import Option
 
@@ -16,6 +17,7 @@ from textual_enhanced.widgets import EnhancedOptionList
 ##############################################################################
 # Local imports.
 from ..data.bookmarks import Bookmark, Bookmarks
+from ..messages import OpenLocation
 from ..types import short_location
 
 
@@ -80,6 +82,13 @@ class BookmarksViewer(EnhancedOptionList):
         )
         if self.option_count:
             self.highlighted = 0
+
+    @on(EnhancedOptionList.OptionSelected)
+    def _jump_to_bookmark(self, event: EnhancedOptionList.OptionSelected) -> None:
+        """Jump to the selected bookmark."""
+        event.stop()
+        assert isinstance(event.option, BookmarkOption)
+        self.post_message(OpenLocation(event.option.bookmark.location))
 
 
 ### bookmarks.py ends here
