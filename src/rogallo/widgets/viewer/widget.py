@@ -20,7 +20,7 @@ from textual.widgets import Static
 
 ##############################################################################
 # Local imports.
-from ...types import GEMINI_MIME_TYPE, GeminiLocation
+from ...types import GeminiLocation, is_gemini_mime_type
 from .document_view import DocumentView
 from .gemtext_blocks import GemtextLink, GemtextWidget, get_block_widget
 from .status import ViewerStatus
@@ -75,7 +75,7 @@ class Viewer(Vertical, can_focus=False):
 
         Note that this is regardless of the 'view source' status.
         """
-        return self.document.mime_type == GEMINI_MIME_TYPE
+        return is_gemini_mime_type(self.document.mime_type)
 
     def compose(self) -> ComposeResult:
         """Compose the viewer widget."""
@@ -89,7 +89,7 @@ class Viewer(Vertical, can_focus=False):
         self._status.mime_type = self.document.mime_type or ""
         await self._view.remove_children()
         blocks: list[Static] | list[GemtextWidget]
-        if (self.document.mime_type != GEMINI_MIME_TYPE) or self.view_source:
+        if not self.is_viewing_gemtext or self.view_source:
             blocks = [Static(self.document.content, markup=False)]
         else:
             for widget in (
