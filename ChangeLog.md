@@ -33,6 +33,8 @@
   ([#86](https://github.com/davep/rogallo/pull/86))
 - Adjacent paragraphs in a Gemini document are now consolidated into a
   single widget. ([#91](https://github.com/davep/rogallo/pull/91))
+- Cleaned up unnecessary empty lines between quote blocks.
+  ([#92](https://github.com/davep/rogallo/pull/92))
 
 ## v0.4.0
 
