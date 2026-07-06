@@ -256,7 +256,6 @@ class GemtextQuote(GemtextText):
     GemtextQuote {
         background: $boost;
         border-left: outer $text-primary 50%;
-        margin: 1 0;
         padding: 0 1;
         &:light {
             border-left: outer $text-secondary;
