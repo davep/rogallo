@@ -31,6 +31,8 @@
   ([#83](https://github.com/davep/rogallo/pull/83))
 - Added a `SeachHistory` command.
   ([#86](https://github.com/davep/rogallo/pull/86))
+- Adjacent paragraphs in a Gemini document are now consolidated into a
+  single widget. ([#91](https://github.com/davep/rogallo/pull/91))
 
 ## v0.4.0
 
