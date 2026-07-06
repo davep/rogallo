@@ -1,6 +1,10 @@
 """Provides the bookmarks panel widget."""
 
 ##############################################################################
+# Python future imports.
+from __future__ import annotations
+
+##############################################################################
 # Python imports.
 from dataclasses import dataclass
 
