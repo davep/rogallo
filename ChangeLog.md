@@ -35,6 +35,9 @@
   single widget. ([#91](https://github.com/davep/rogallo/pull/91))
 - Cleaned up unnecessary empty lines between quote blocks.
   ([#92](https://github.com/davep/rogallo/pull/92))
+- When showing a source view of a page, escape sequences are now shown as
+  markup, rather than parsed and rendered.
+  ([#94](https://github.com/davep/rogallo/pull/94))
 
 ## v0.4.0
 
