@@ -113,7 +113,12 @@ class Viewer(Vertical, can_focus=False):
         await self._view.remove_children()
         blocks: list[Static] | list[GemtextWidget]
         if not self.is_viewing_gemtext or self.view_source:
-            blocks = [Static(self.document.content, markup=False)]
+            blocks = [
+                Static(
+                    self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}"),
+                    markup=False,
+                )
+            ]
         else:
             for widget in (
                 blocks := [
