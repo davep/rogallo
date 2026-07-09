@@ -317,7 +317,13 @@ class Main(EnhancedScreen[None]):
             "Opening in the system's web browser instead.",
             title="Unsupported MIME type",
         )
-        open_in_browser(str(location))
+        open_in_browser(
+            str(
+                location
+                if isinstance(location, GeminiURI)
+                else location.resolve().as_uri()
+            )
+        )
 
     def _is_displayable(self, location: GeminiLocation, mime_type: str | None) -> bool:
         """Check if a MIME type is displayable.
