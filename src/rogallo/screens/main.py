@@ -54,6 +54,7 @@ from ..commands import (
     GoHome,
     JumpToCommandLine,
     JumpToDocument,
+    JumpToSidebar,
     Reload,
     SearchBookmarks,
     SearchHistory,
@@ -176,6 +177,7 @@ class Main(EnhancedScreen[None]):
         ChangeCommandLineLocation,
         JumpToCommandLine,
         JumpToDocument,
+        JumpToSidebar,
         Reload,
         CopyDocumentToClipboard,
         CopyLocationToClipboard,
@@ -197,6 +199,8 @@ class Main(EnhancedScreen[None]):
     """The command line widget."""
     _history_viewer = query_one(HistoryViewer)
     """The history viewer widget."""
+    _bookmarks_viewer = query_one(BookmarksViewer)
+    """The bookmarks viewer widget."""
 
     _location_history: var[LocationHistory] = var(LocationHistory)
     """The location history."""
@@ -610,6 +614,16 @@ class Main(EnhancedScreen[None]):
         if self._viewer.document:
             self._viewer.take_control()
 
+    def action_jump_to_sidebar_command(self) -> None:
+        """Jump to the sidebar."""
+        if self._history_visible:
+            self._history_viewer.focus()
+        elif self._bookmarks_visible:
+            self._bookmarks_viewer.focus()
+        else:
+            self._history_visible = True
+            self._history_viewer.focus()
+
     def action_backward_command(self) -> None:
         """Go backward in the navigation history."""
         if (
@@ -645,11 +659,11 @@ class Main(EnhancedScreen[None]):
     def action_toggle_bookmarks_command(self) -> None:
         """Toggle the visibility of the bookmarks panel."""
         if self._bookmarks_visible:
-            self._bookmarks_visible = not self.query_one(BookmarksViewer).has_focus
+            self._bookmarks_visible = not self._bookmarks_viewer.has_focus
         else:
             self._bookmarks_visible = True
         if self._bookmarks_visible:
-            self.query_one(BookmarksViewer).focus()
+            self._bookmarks_viewer.focus()
         else:
             self._viewer.take_control()
         if self._bookmarks_visible and self._history_visible:
