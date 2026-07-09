@@ -25,7 +25,7 @@ from textual.widgets import Footer, Header, Label
 ##############################################################################
 # Textual enhanced imports.
 from textual_enhanced.commands import ChangeTheme, Command, Help, Quit
-from textual_enhanced.dialogs import ModalInput
+from textual_enhanced.dialogs import Confirm, ModalInput
 from textual_enhanced.screen import EnhancedScreen
 
 ##############################################################################
@@ -49,6 +49,7 @@ from ..commands import (
     AddLocationToBookmarks,
     Backward,
     ChangeCommandLineLocation,
+    ClearCache,
     CopyDocumentToClipboard,
     CopyLocationToClipboard,
     Forward,
@@ -188,6 +189,7 @@ class Main(EnhancedScreen[None]):
         SetHomeToCurrentLocation,
         SearchHistory,
         SearchBookmarks,
+        ClearCache,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -793,6 +795,18 @@ class Main(EnhancedScreen[None]):
         """Search the bookmarks."""
         BookmarkSearchCommands.bookmarks = self._bookmarks
         self.show_palette(BookmarkSearchCommands)
+
+    @work
+    async def action_clear_cache_command(self) -> None:
+        """Clear the cache."""
+        if await self.app.push_screen_wait(
+            Confirm(
+                "Clear cache",
+                "Are you sure you want to clear all cached content?",
+            )
+        ):
+            self._cache.clear()
+            self.notify("All cached content has been cleared.", title="Cache")
 
 
 ### main.py ends here

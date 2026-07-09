@@ -5,6 +5,7 @@
 from datetime import datetime
 from json import JSONDecodeError, dumps, loads
 from pathlib import Path
+from shutil import rmtree
 
 ##############################################################################
 # BagOfStuff imports.
@@ -110,6 +111,10 @@ class ContentCache(CacheManager):
         except OSError:
             pass
         return document
+
+    def clear(self) -> None:
+        """Clear the cache."""
+        rmtree(self.base_path, ignore_errors=True)
 
 
 ### cache.py ends here
