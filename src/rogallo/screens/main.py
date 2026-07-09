@@ -323,19 +323,14 @@ class Main(EnhancedScreen[None]):
             else location.resolve().as_uri()
         )
 
-    def _is_displayable(self, location: GeminiLocation, mime_type: str | None) -> bool:
+    def _is_displayable(self, mime_type: str | None) -> bool:
         """Check if a MIME type is displayable.
 
         Args:
             mime_type: The MIME type to check.
-            operation: The operation being performed.
 
         Returns:
             `True` if the MIME type is displayable, `False` otherwise.
-
-        Note:
-            As a side-effect, if the location can't be opened it is handled
-            off to the operating system's web browser.
         """
         if isinstance(mime_type, str):
             mime_type, _, _ = mime_type.partition(";")
@@ -381,7 +376,7 @@ class Main(EnhancedScreen[None]):
                 title="Request Error",
             )
             return
-        if self._is_displayable(uri, response.mime_type):
+        if self._is_displayable(response.mime_type):
             self.post_message(
                 OpenDocument(
                     document=Document(
@@ -467,7 +462,7 @@ class Main(EnhancedScreen[None]):
         """
         assert isinstance(request.location, Path)
         mime_type = guess_type(request.location)[0]
-        if not self._is_displayable(request.location, mime_type):
+        if not self._is_displayable(mime_type):
             self._open_externally(request.location, mime_type)
             return
         try:
