@@ -82,6 +82,7 @@ from ..data import (
     trust_file,
     update_configuration,
 )
+from ..document import Document
 from ..messages import CopyToClipboard, OpenLocation, OpenText, OpenURI
 from ..preflight import (
     is_likely_local_text_file,
@@ -295,7 +296,7 @@ class Main(EnhancedScreen[None]):
         if action == CopyDocumentToClipboard.action_name():
             return bool(self._viewer.document)
         if action == ToggleView.action_name():
-            return bool(self._viewer.document) and self._viewer.is_viewing_gemtext
+            return bool(self._viewer.document) and self._viewer.document.is_gemtext
         if action == GoHome.action_name():
             return bool(load_configuration().home_page.strip())
         if action == AddLocationToBookmarks.action_name():
@@ -401,7 +402,7 @@ class Main(EnhancedScreen[None]):
             message: The message containing the text to open.
         """
         self._maybe_remember_location(message)
-        self._viewer.document = Viewer.Document(
+        self._viewer.document = Document(
             message.originally_from, message.text, message.mime_type
         )
         self.refresh_bindings()
@@ -671,7 +672,7 @@ class Main(EnhancedScreen[None]):
 
     def action_toggle_view_command(self) -> None:
         """Toggle the view between rendered and source."""
-        if self._viewer.is_viewing_gemtext:
+        if self._viewer.document.is_gemtext:
             self._viewer.view_source = not self._viewer.view_source
 
     def action_go_home_command(self) -> None:
