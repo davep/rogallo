@@ -422,6 +422,7 @@ class Main(EnhancedScreen[None]):
         self._maybe_remember_location(message)
         self._viewer.document = message.document
         self.refresh_bindings()
+        self._viewer.take_control()
 
     @work
     async def _load_from_capsule(self, request: OpenLocation) -> None:

@@ -38,6 +38,8 @@
 - When showing a source view of a page, escape sequences are now shown as
   markup, rather than parsed and rendered.
   ([#94](https://github.com/davep/rogallo/pull/94))
+- When a document is loaded, the viewer now automatically gains focus.
+  ([#100](https://github.com/davep/rogallo/pull/100))
 
 ## v0.4.0
 
