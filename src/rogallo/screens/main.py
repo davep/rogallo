@@ -413,11 +413,11 @@ class Main(EnhancedScreen[None]):
             save_naviagation_history(self._navigation_history)
 
     @on(OpenDocument)
-    def open_text(self, message: OpenDocument) -> None:
-        """Open text in the viewer.
+    def open_document(self, message: OpenDocument) -> None:
+        """Open a document in the viewer.
 
         Args:
-            message: The message containing the text to open.
+            message: The message containing the document to open.
         """
         self._maybe_remember_location(message)
         self._viewer.document = message.document
