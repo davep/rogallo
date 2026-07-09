@@ -6,7 +6,7 @@ from pathlib import Path
 
 ##############################################################################
 # XDG imports.
-from xdg_base_dirs import xdg_config_home, xdg_data_home
+from xdg_base_dirs import xdg_cache_home, xdg_config_home, xdg_data_home
 
 
 ##############################################################################
@@ -53,6 +53,16 @@ def config_dir() -> Path:
         of calling this function.
     """
     return _app_dir(xdg_config_home())
+
+
+##############################################################################
+def cache_dir() -> Path:
+    """The path to the cache directory for the application.
+
+    Returns:
+        The path to the cache directory for the application.
+    """
+    return _app_dir(xdg_cache_home())
 
 
 ### locations.py ends here
