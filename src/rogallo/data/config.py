@@ -55,6 +55,9 @@ class Configuration:
     home_page: str = "gemini://geminiprotocol.net/"
     """The home page for the application."""
 
+    cache_ttl: int = 24 * 60 * 60
+    """The time-to-live for cached content, in seconds."""
+
 
 ##############################################################################
 def configuration_file() -> Path:

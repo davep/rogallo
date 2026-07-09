@@ -16,6 +16,7 @@ from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
+from .data import load_configuration
 from .data.locations import cache_dir
 from .document import Document
 
@@ -49,12 +50,26 @@ class ContentCache(CacheManager):
         Returns:
             The cached document, or `None` if it is not cached.
         """
-        # TODO: Expiration.
         meta_data_file, content_file = self._cache_files(uri)
+
+        # Load the metadata.
         try:
             meta_data = loads(meta_data_file.read_text(encoding="utf-8"))
         except (OSError, JSONDecodeError):
             return None
+
+        # In the unlikely event we can't work out when the document was
+        # cached, treat it as not cached.
+        if (cached_at := meta_data.get("cached_at")) is None:
+            return None
+
+        # See if the cached document has expired.
+        if (
+            datetime.now() - datetime.fromisoformat(cached_at)
+        ).total_seconds() > load_configuration().cache_ttl:
+            return None
+
+        # Load the content and return the document.
         try:
             return Document(
                 location=uri,
