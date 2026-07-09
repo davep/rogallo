@@ -318,11 +318,9 @@ class Main(EnhancedScreen[None]):
             title="Unsupported MIME type",
         )
         open_in_browser(
-            str(
-                location
-                if isinstance(location, GeminiURI)
-                else location.resolve().as_uri()
-            )
+            str(location)
+            if isinstance(location, GeminiURI)
+            else location.resolve().as_uri()
         )
 
     def _is_displayable(self, location: GeminiLocation, mime_type: str | None) -> bool:
