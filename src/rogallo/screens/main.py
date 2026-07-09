@@ -305,30 +305,36 @@ class Main(EnhancedScreen[None]):
             )
         return True
 
-    def _is_displayable(self, location: GeminiLocation, mime_type: str | None) -> bool:
+    def _open_externally(self, location: GeminiLocation, mime_type: str | None) -> None:
+        """Open a location in the system's web browser.
+
+        Args:
+            location: The location to open.
+            mime_type: The MIME type of the content at the location.
+        """
+        self.notify(
+            f"Unable to display {location} because it is {mime_type}. "
+            "Opening in the system's web browser instead.",
+            title="Unsupported MIME type",
+        )
+        open_in_browser(
+            str(location)
+            if isinstance(location, GeminiURI)
+            else location.resolve().as_uri()
+        )
+
+    def _is_displayable(self, mime_type: str | None) -> bool:
         """Check if a MIME type is displayable.
 
         Args:
             mime_type: The MIME type to check.
-            operation: The operation being performed.
 
         Returns:
             `True` if the MIME type is displayable, `False` otherwise.
-
-        Note:
-            As a side-effect, if the location can't be opened it is handled
-            off to the operating system's web browser.
         """
         if isinstance(mime_type, str):
             mime_type, _, _ = mime_type.partition(";")
-        if mime_type not in load_configuration().displayable_content_types:
-            self.notify(
-                f"Unable to display {location} because it is {mime_type}.",
-                title="Unsupported MIME type",
-            )
-            open_in_browser(str(location))
-            return False
-        return True
+        return mime_type in load_configuration().displayable_content_types
 
     async def _handle_input_request(self, location: GeminiURI, sensitive: bool) -> None:
         """Handle a request for input from a Gemini request.
@@ -370,20 +376,20 @@ class Main(EnhancedScreen[None]):
                 title="Request Error",
             )
             return
-        if not self._is_displayable(uri, response.mime_type):
-            return
-
-        self.post_message(
-            OpenDocument(
-                document=Document(
-                    location=uri,
-                    original_location=request.location,
-                    content=await response.text(),
-                    mime_type=response.mime_type,
-                ),
-                original_request=request,
+        if self._is_displayable(response.mime_type):
+            self.post_message(
+                OpenDocument(
+                    document=Document(
+                        location=uri,
+                        original_location=request.location,
+                        content=await response.text(),
+                        mime_type=response.mime_type,
+                    ),
+                    original_request=request,
+                )
             )
-        )
+        else:
+            self._open_externally(uri, response.mime_type)
 
     def _maybe_remember_location(self, request: OpenDocument) -> None:
         """Remember a location in the history.
@@ -456,7 +462,8 @@ class Main(EnhancedScreen[None]):
         """
         assert isinstance(request.location, Path)
         mime_type = guess_type(request.location)[0]
-        if not self._is_displayable(request.location, mime_type):
+        if not self._is_displayable(mime_type):
+            self._open_externally(request.location, mime_type)
             return
         try:
             self.post_message(
