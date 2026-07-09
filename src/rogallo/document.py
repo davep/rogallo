@@ -34,6 +34,9 @@ class Document(NamedTuple):
     mime_type: str | None = None
     """The MIME type of the document, if any."""
 
+    from_cache: bool = False
+    """Whether the document was loaded from cache."""
+
     def __bool__(self) -> bool:
         """Return `True` if the document has content, `False` otherwise."""
         return bool(self.content)

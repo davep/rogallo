@@ -3,9 +3,15 @@
 ##############################################################################
 # Python imports.
 from argparse import Namespace
+from datetime import datetime
+from json import JSONDecodeError, dumps, loads
 from mimetypes import guess_type
 from pathlib import Path
 from webbrowser import open as open_in_browser
+
+##############################################################################
+# BagOfStuff imports.
+from bagofstuff.cache import CacheManager
 
 ##############################################################################
 # Pyperclip imports.
@@ -83,6 +89,7 @@ from ..data import (
     trust_file,
     update_configuration,
 )
+from ..data.locations import cache_dir
 from ..document import Document
 from ..messages import CopyToClipboard, OpenDocument, OpenLocation, OpenURI
 from ..preflight import (
@@ -225,6 +232,8 @@ class Main(EnhancedScreen[None]):
         super().__init__()
         self._arguments = arguments
         """The command line arguments."""
+        self._cache = CacheManager(cache_dir())
+        """The disk cache manager."""
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
@@ -266,6 +275,74 @@ class Main(EnhancedScreen[None]):
                     self._location_history.current_item.location, from_history=True
                 )
             )
+
+    def _cache_files(self, uri: GeminiURI) -> tuple[Path, Path]:
+        """Get the paths to the cache files.
+
+        Args:
+            uri: The URI to get the cache files for.
+
+        Returns:
+            A tuple containing the paths to the cache files.
+        """
+        cache_path = self._cache.get(uri=uri)
+        return cache_path.with_suffix(".meta"), cache_path.with_suffix(".content")
+
+    def _cached(self, uri: GeminiURI) -> Document | None:
+        """Get a cached copy of a document for a given URI.
+
+        Args:
+            uri: The URI to get the cached copy for.
+
+        Returns:
+            The cached document, or `None` if it is not cached.
+        """
+        # TODO: Expiration.
+        meta_data_file, content_file = self._cache_files(uri)
+        try:
+            meta_data = loads(meta_data_file.read_text(encoding="utf-8"))
+        except (OSError, JSONDecodeError):
+            return None
+        try:
+            return Document(
+                location=uri,
+                original_location=GeminiURI(meta_data.get("original_location", uri)),
+                content=content_file.read_text(encoding="utf-8"),
+                mime_type=meta_data.get("mime_type"),
+                from_cache=True,
+            )
+        except OSError:
+            return None
+
+    def _add_to_cache(self, document: Document) -> Document:
+        """Cache a document.
+
+        Args:
+            document: The document to cache.
+
+        Returns:
+            The document that was cached.
+        """
+        if not isinstance(document.location, GeminiURI):
+            return document
+        meta_data_file, content_file = self._cache_files(document.location)
+        try:
+            content_file.write_text(document.content, encoding="utf-8")
+            meta_data_file.write_text(
+                dumps(
+                    {
+                        "location": str(document.location),
+                        "original_location": str(document.original_location),
+                        "mime_type": document.mime_type,
+                        "cached_at": datetime.now().isoformat(),
+                    },
+                    indent=4,
+                ),
+                encoding="utf-8",
+            )
+        except OSError:
+            pass
+        return document
 
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
         """Check if an action is possible to perform right now.
@@ -383,11 +460,13 @@ class Main(EnhancedScreen[None]):
         if self._is_displayable(response.mime_type):
             self.post_message(
                 OpenDocument(
-                    document=Document(
-                        location=uri,
-                        original_location=request.location,
-                        content=await response.text(),
-                        mime_type=response.mime_type,
+                    document=self._add_to_cache(
+                        Document(
+                            location=uri,
+                            original_location=request.location,
+                            content=await response.text(),
+                            mime_type=response.mime_type,
+                        )
                     ),
                     original_request=request,
                 )
@@ -435,8 +514,21 @@ class Main(EnhancedScreen[None]):
         Args:
             uri: The Gemini URI to load the document from.
         """
-        assert isinstance(request.location, GeminiURI)
         uri = request.location
+        assert isinstance(uri, GeminiURI)
+
+        # If a cached copy of the document exists and the request allows it,
+        # use that instead of making a network request.
+        if request.allow_cached and (cached_document := self._cached(uri)):
+            self.post_message(
+                OpenDocument(
+                    document=cached_document,
+                    original_request=request,
+                )
+            )
+            return
+
+        # Otherwise, make a request to the capsule and handle the response.
         try:
             self._command_line.working = True
             async with await Client(
@@ -683,7 +775,11 @@ class Main(EnhancedScreen[None]):
         """Reload the current document."""
         if self._viewer.document.location:
             self.post_message(
-                OpenLocation(self._viewer.document.location, from_history=True)
+                OpenLocation(
+                    self._viewer.document.location,
+                    from_history=True,
+                    allow_cached=False,
+                )
             )
 
     def action_copy_location_to_clipboard_command(self) -> None:
