@@ -31,6 +31,7 @@ from textual_enhanced.commands import Quit
 ##############################################################################
 # Local imports.
 from ...data import Bookmarks, CommandLineHistory, LocationHistory, NavigationHistory
+from ...types import short_location
 from .base_command import InputCommand
 from .general import HelpCommand, QuitCommand
 from .open_file import OpenFileCommand
@@ -165,11 +166,25 @@ class CommandLine(Vertical):
                 *reversed(list(self.history)),
                 # Let's also splice in the other histories and bookmarks so
                 # that the user can get suggestions for those too.
-                *set(
-                    (
-                        *(str(visit.location) for visit in self.location_history),
-                        *(str(visit) for visit in self.navigation_history),
-                        *(str(bookmark.location) for bookmark in self.bookmarks),
+                *sorted(
+                    set(
+                        chain(
+                            (str(visit.location) for visit in self.location_history),
+                            (str(visit) for visit in self.navigation_history),
+                            (str(bookmark.location) for bookmark in self.bookmarks),
+                            (
+                                short_location(visit.location)
+                                for visit in self.location_history
+                            ),
+                            (
+                                short_location(visit)
+                                for visit in self.navigation_history
+                            ),
+                            (
+                                short_location(bookmark.location)
+                                for bookmark in self.bookmarks
+                            ),
+                        )
                     )
                 ),
                 # Tack known commands on the end; this means that the user

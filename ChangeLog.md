@@ -40,6 +40,9 @@
   ([#94](https://github.com/davep/rogallo/pull/94))
 - When a document is loaded, the viewer now automatically gains focus.
   ([#100](https://github.com/davep/rogallo/pull/100))
+- Added shortened versions of history, location history and bookmarks as
+  application command line completion suggestions.
+  ([#103](https://github.com/davep/rogallo/pull/103))
 
 ## v0.4.0
 
