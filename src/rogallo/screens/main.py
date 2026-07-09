@@ -82,7 +82,8 @@ from ..data import (
     trust_file,
     update_configuration,
 )
-from ..messages import CopyToClipboard, OpenLocation, OpenText, OpenURI
+from ..document import Document
+from ..messages import CopyToClipboard, OpenDocument, OpenLocation, OpenURI
 from ..preflight import (
     is_likely_local_text_file,
     is_likely_schemeless_capsule,
@@ -295,7 +296,7 @@ class Main(EnhancedScreen[None]):
         if action == CopyDocumentToClipboard.action_name():
             return bool(self._viewer.document)
         if action == ToggleView.action_name():
-            return bool(self._viewer.document) and self._viewer.is_viewing_gemtext
+            return bool(self._viewer.document) and self._viewer.document.is_gemtext
         if action == GoHome.action_name():
             return bool(load_configuration().home_page.strip())
         if action == AddLocationToBookmarks.action_name():
@@ -371,39 +372,49 @@ class Main(EnhancedScreen[None]):
             return
         if not self._is_displayable(uri, response.mime_type):
             return
+
         self.post_message(
-            OpenText(await response.text(), request, uri, response.mime_type)
+            OpenDocument(
+                document=Document(
+                    location=uri,
+                    original_location=request.location,
+                    content=await response.text(),
+                    mime_type=response.mime_type,
+                ),
+                original_request=request,
+            )
         )
 
-    def _maybe_remember_location(self, request: OpenText) -> None:
+    def _maybe_remember_location(self, request: OpenDocument) -> None:
         """Remember a location in the history.
 
         Args:
             request: The request to open text for. This is used to determine
                 the location to remember.
         """
-        self._location_history.add(LocationVisit(request.originally_from))
+        if request.document.original_location is None:
+            return
+        self._location_history.add(LocationVisit(request.document.original_location))
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
         if (
             not request.original_request.from_history
-            and self._navigation_history.current_item != request.originally_from
+            and self._navigation_history.current_item
+            != request.document.original_location
         ):
-            self._navigation_history.add(request.originally_from)
+            self._navigation_history.add(request.document.original_location)
             self.mutate_reactive(Main._navigation_history)
             save_naviagation_history(self._navigation_history)
 
-    @on(OpenText)
-    def open_text(self, message: OpenText) -> None:
+    @on(OpenDocument)
+    def open_text(self, message: OpenDocument) -> None:
         """Open text in the viewer.
 
         Args:
             message: The message containing the text to open.
         """
         self._maybe_remember_location(message)
-        self._viewer.document = Viewer.Document(
-            message.originally_from, message.text, message.mime_type
-        )
+        self._viewer.document = message.document
         self.refresh_bindings()
 
     @work
@@ -449,11 +460,14 @@ class Main(EnhancedScreen[None]):
             return
         try:
             self.post_message(
-                OpenText(
-                    request.location.read_text(encoding="utf-8"),
-                    request,
-                    request.location,
-                    mime_type,
+                OpenDocument(
+                    document=Document(
+                        location=request.location,
+                        original_location=request.location,
+                        content=request.location.read_text(encoding="utf-8"),
+                        mime_type=mime_type,
+                    ),
+                    original_request=request,
                 )
             )
         except OSError as error:
@@ -671,7 +685,7 @@ class Main(EnhancedScreen[None]):
 
     def action_toggle_view_command(self) -> None:
         """Toggle the view between rendered and source."""
-        if self._viewer.is_viewing_gemtext:
+        if self._viewer.document.is_gemtext:
             self._viewer.view_source = not self._viewer.view_source
 
     def action_go_home_command(self) -> None:

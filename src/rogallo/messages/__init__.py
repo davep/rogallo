@@ -3,14 +3,14 @@
 ##############################################################################
 # Local imports.
 from .clipboard import CopyToClipboard
-from .opening import OpenLocation, OpenText, OpenURI
+from .opening import OpenDocument, OpenLocation, OpenURI
 
 ##############################################################################
 # Exports.
 __all__ = [
     "CopyToClipboard",
+    "OpenDocument",
     "OpenLocation",
-    "OpenText",
     "OpenURI",
 ]
 

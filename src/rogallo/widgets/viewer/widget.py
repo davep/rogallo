@@ -3,7 +3,6 @@
 ##############################################################################
 # Python imports.
 from collections.abc import Iterator
-from typing import NamedTuple
 
 ##############################################################################
 # Gemtext imports.
@@ -21,7 +20,7 @@ from textual.widgets import Static
 
 ##############################################################################
 # Local imports.
-from ...types import GeminiLocation, is_gemini_mime_type
+from ...document import Document
 from .document_view import DocumentView
 from .gemtext_blocks import GemtextLink, GemtextWidget, get_block_widget
 from .status import ViewerStatus
@@ -44,21 +43,7 @@ class Viewer(Vertical, can_focus=False):
     }
     """
 
-    class Document(NamedTuple):
-        """A named tuple representing details of the document."""
-
-        location: GeminiLocation | None
-        """The source of the document."""
-        content: str
-        """The content of the document."""
-        mime_type: str | None = None
-        """The MIME type of the document, if any."""
-
-        def __bool__(self) -> bool:
-            """Return True if the document has content, False otherwise."""
-            return bool(self.content)
-
-    document: var[Document] = var(Document(None, ""), toggle_class="--has-content")
+    document: var[Document] = var(Document(), toggle_class="--has-content")
     """The details of the document to show in the viewer."""
     view_source: var[bool] = var(False)
     """Whether the viewer is showing the source of the document or not."""
@@ -69,14 +54,6 @@ class Viewer(Vertical, can_focus=False):
     """The document view widget."""
     _status = query_one(ViewerStatus)
     """The status bar widget."""
-
-    @property
-    def is_viewing_gemtext(self) -> bool:
-        """`True` if the viewer is showing a Gemtext document, `False` otherwise.
-
-        Note that this is regardless of the 'view source' status.
-        """
-        return is_gemini_mime_type(self.document.mime_type)
 
     def compose(self) -> ComposeResult:
         """Compose the viewer widget."""
@@ -112,7 +89,7 @@ class Viewer(Vertical, can_focus=False):
         self._status.mime_type = self.document.mime_type or ""
         await self._view.remove_children()
         blocks: list[Static] | list[GemtextWidget]
-        if not self.is_viewing_gemtext or self.view_source:
+        if not self.document.is_gemtext or self.view_source:
             blocks = [
                 Static(
                     self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}"),
