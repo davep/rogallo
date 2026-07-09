@@ -83,7 +83,7 @@ from ..data import (
     update_configuration,
 )
 from ..document import Document
-from ..messages import CopyToClipboard, OpenLocation, OpenText, OpenURI
+from ..messages import CopyToClipboard, OpenDocument, OpenLocation, OpenURI
 from ..preflight import (
     is_likely_local_text_file,
     is_likely_schemeless_capsule,
@@ -372,11 +372,20 @@ class Main(EnhancedScreen[None]):
             return
         if not self._is_displayable(uri, response.mime_type):
             return
+
         self.post_message(
-            OpenText(await response.text(), request, uri, response.mime_type)
+            OpenDocument(
+                Document(
+                    location=uri,
+                    content=await response.text(),
+                    mime_type=response.mime_type,
+                ),
+                request,
+                request.location,
+            )
         )
 
-    def _maybe_remember_location(self, request: OpenText) -> None:
+    def _maybe_remember_location(self, request: OpenDocument) -> None:
         """Remember a location in the history.
 
         Args:
@@ -394,17 +403,15 @@ class Main(EnhancedScreen[None]):
             self.mutate_reactive(Main._navigation_history)
             save_naviagation_history(self._navigation_history)
 
-    @on(OpenText)
-    def open_text(self, message: OpenText) -> None:
+    @on(OpenDocument)
+    def open_text(self, message: OpenDocument) -> None:
         """Open text in the viewer.
 
         Args:
             message: The message containing the text to open.
         """
         self._maybe_remember_location(message)
-        self._viewer.document = Document(
-            message.originally_from, message.text, message.mime_type
-        )
+        self._viewer.document = message.document
         self.refresh_bindings()
 
     @work
@@ -450,11 +457,14 @@ class Main(EnhancedScreen[None]):
             return
         try:
             self.post_message(
-                OpenText(
-                    request.location.read_text(encoding="utf-8"),
+                OpenDocument(
+                    Document(
+                        location=request.location,
+                        content=request.location.read_text(encoding="utf-8"),
+                        mime_type=mime_type,
+                    ),
                     request,
                     request.location,
-                    mime_type,
                 )
             )
         except OSError as error:

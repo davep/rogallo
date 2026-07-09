@@ -10,6 +10,7 @@ from textual.message import Message
 
 ##############################################################################
 # Local imports.
+from ..document import Document
 from ..types import GeminiLocation
 
 
@@ -35,17 +36,15 @@ class OpenLocation(Message):
 
 ##############################################################################
 @dataclass
-class OpenText(Message):
-    """Open the given text for viewing."""
+class OpenDocument(Message):
+    """Open the given document for viewing."""
 
-    text: str
-    """The text to open."""
+    document: Document
+    """The document to open."""
     original_request: OpenLocation
     """The original request that led to this text being opened."""
     originally_from: GeminiLocation
     """The location the text was originally from, if any."""
-    mime_type: str | None = None
-    """The MIME type of the text, if any."""
 
 
 ### opening.py ends here
