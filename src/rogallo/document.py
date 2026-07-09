@@ -15,6 +15,8 @@ class Document(NamedTuple):
 
     location: GeminiLocation | None = None
     """The source of the document."""
+    original_location: GeminiLocation | None = None
+    """The original source of the document, if any."""
     content: str = ""
     """The content of the document."""
     mime_type: str | None = None

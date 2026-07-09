@@ -375,13 +375,13 @@ class Main(EnhancedScreen[None]):
 
         self.post_message(
             OpenDocument(
-                Document(
+                document=Document(
                     location=uri,
+                    original_location=request.location,
                     content=await response.text(),
                     mime_type=response.mime_type,
                 ),
-                request,
-                request.location,
+                original_request=request,
             )
         )
 
@@ -392,14 +392,17 @@ class Main(EnhancedScreen[None]):
             request: The request to open text for. This is used to determine
                 the location to remember.
         """
-        self._location_history.add(LocationVisit(request.originally_from))
+        if request.document.original_location is None:
+            return
+        self._location_history.add(LocationVisit(request.document.original_location))
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
         if (
             not request.original_request.from_history
-            and self._navigation_history.current_item != request.originally_from
+            and self._navigation_history.current_item
+            != request.document.original_location
         ):
-            self._navigation_history.add(request.originally_from)
+            self._navigation_history.add(request.document.original_location)
             self.mutate_reactive(Main._navigation_history)
             save_naviagation_history(self._navigation_history)
 
@@ -458,13 +461,13 @@ class Main(EnhancedScreen[None]):
         try:
             self.post_message(
                 OpenDocument(
-                    Document(
+                    document=Document(
                         location=request.location,
+                        original_location=request.location,
                         content=request.location.read_text(encoding="utf-8"),
                         mime_type=mime_type,
                     ),
-                    request,
-                    request.location,
+                    original_request=request,
                 )
             )
         except OSError as error:
