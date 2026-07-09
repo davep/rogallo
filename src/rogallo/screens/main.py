@@ -313,7 +313,8 @@ class Main(EnhancedScreen[None]):
             mime_type: The MIME type of the content at the location.
         """
         self.notify(
-            f"Unable to display {location} because it is {mime_type}.",
+            f"Unable to display {location} because it is {mime_type}. "
+            "Opening in the system's web browser instead.",
             title="Unsupported MIME type",
         )
         open_in_browser(str(location))
