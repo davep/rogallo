@@ -22,6 +22,7 @@ from ..commands import (
     GoHome,
     JumpToCommandLine,
     JumpToDocument,
+    JumpToSidebar,
     Reload,
     SearchBookmarks,
     SearchHistory,
@@ -54,6 +55,7 @@ class MainCommands(CommandsProvider):
         yield Help()
         yield from self.maybe(JumpToCommandLine)
         yield from self.maybe(JumpToDocument)
+        yield JumpToSidebar()
         yield Quit()
         yield from self.maybe(Reload)
         yield from self.maybe(SearchBookmarks)

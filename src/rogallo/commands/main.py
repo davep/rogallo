@@ -20,6 +20,13 @@ class JumpToDocument(Command):
 
 
 ##############################################################################
+class JumpToSidebar(Command):
+    """Jump to the sidebar"""
+
+    BINDING_KEY = "ctrl+3"
+
+
+##############################################################################
 class ChangeCommandLineLocation(Command):
     """Swap the position of the command line between top and bottom"""
 
@@ -30,7 +37,7 @@ class ChangeCommandLineLocation(Command):
 class ToggleHistory(Command):
     """Toggle the display of the history viewer"""
 
-    BINDING_KEY = "f2, ctrl+3"
+    BINDING_KEY = "f2"
     SHOW_IN_FOOTER = True
     FOOTER_TEXT = "History"
 
