@@ -407,7 +407,7 @@ class Main(EnhancedScreen[None]):
         # Handle a request for user input.
         if response.status.is_input:
             await self._handle_input_request(
-                request.location,
+                uri,
                 response.meta.strip(),
                 response.status is StatusCode.SENSITIVE_INPUT,
             )
