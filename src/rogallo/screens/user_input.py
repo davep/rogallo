@@ -3,16 +3,13 @@
 ##############################################################################
 # Textual imports.
 from textual.app import ComposeResult
+from textual.content import Content
 from textual.screen import ModalScreen
 from textual.widgets import TextArea
 
 ##############################################################################
 # Wasat imports.
 from wasat import GeminiURI
-
-##############################################################################
-# Local imports.
-from ..safe_escape import escape
 
 
 ##############################################################################
@@ -65,7 +62,7 @@ class UserInput(ModalScreen[str | None]):
                 highlight_cursor_line=False, placeholder="Enter your input here..."
             )
         )
-        user_input.border_title = escape(
+        user_input.border_title = Content(
             self._prompt
             or (
                 f"{'Sensitive input' if self._sensitive else 'Input'} for {self._location}"
