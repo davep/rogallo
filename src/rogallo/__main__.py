@@ -9,7 +9,7 @@ from operator import attrgetter
 ##############################################################################
 # Local imports.
 from . import __doc__, __version__
-from .data.locations import config_dir, data_dir
+from .data.locations import cache_dir, config_dir, data_dir
 from .rogallo import Rogallo
 
 
@@ -119,6 +119,7 @@ def main() -> None:
     """Main entry point for the rogallo application."""
     match (args := get_args()).command:
         case "d" | "dirs" | "directories":
+            print(cache_dir())
             print(config_dir())
             print(data_dir())
         case "license" | "licence":

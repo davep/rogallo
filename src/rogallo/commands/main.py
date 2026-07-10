@@ -93,4 +93,11 @@ class AddLocationToBookmarks(Command):
     BINDING_KEY = "ctrl+b"
 
 
+##############################################################################
+class ClearCache(Command):
+    """Clear the cache for all content"""
+
+    BINDING_KEY = "shift+f5"
+
+
 ### main.py ends here

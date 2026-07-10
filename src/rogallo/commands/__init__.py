@@ -6,6 +6,7 @@ from .clipboard import CopyDocumentToClipboard, CopyLocationToClipboard
 from .main import (
     AddLocationToBookmarks,
     ChangeCommandLineLocation,
+    ClearCache,
     GoHome,
     JumpToCommandLine,
     JumpToDocument,
@@ -25,6 +26,7 @@ from .search import SearchBookmarks, SearchHistory
 __all__ = [
     "AddLocationToBookmarks",
     "Backward",
+    "ClearCache",
     "ChangeCommandLineLocation",
     "CopyDocumentToClipboard",
     "CopyLocationToClipboard",

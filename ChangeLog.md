@@ -43,6 +43,8 @@
 - Added shortened versions of history, location history and bookmarks as
   application command line completion suggestions.
   ([#103](https://github.com/davep/rogallo/pull/103))
+- Added a content cache for content loaded from remote capsules.
+  ([#104](https://github.com/davep/rogallo/pull/104))
 
 ## v0.4.0
 

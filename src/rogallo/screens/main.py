@@ -25,7 +25,7 @@ from textual.widgets import Footer, Header, Label
 ##############################################################################
 # Textual enhanced imports.
 from textual_enhanced.commands import ChangeTheme, Command, Help, Quit
-from textual_enhanced.dialogs import ModalInput
+from textual_enhanced.dialogs import Confirm, ModalInput
 from textual_enhanced.screen import EnhancedScreen
 
 ##############################################################################
@@ -44,10 +44,12 @@ from wasat.uri import GEMINI_PREFIX
 ##############################################################################
 # Local imports.
 from .. import __version__
+from ..cache import ContentCache
 from ..commands import (
     AddLocationToBookmarks,
     Backward,
     ChangeCommandLineLocation,
+    ClearCache,
     CopyDocumentToClipboard,
     CopyLocationToClipboard,
     Forward,
@@ -187,6 +189,7 @@ class Main(EnhancedScreen[None]):
         SetHomeToCurrentLocation,
         SearchHistory,
         SearchBookmarks,
+        ClearCache,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -225,6 +228,8 @@ class Main(EnhancedScreen[None]):
         super().__init__()
         self._arguments = arguments
         """The command line arguments."""
+        self._cache = ContentCache()
+        """The disk cache manager."""
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
@@ -383,11 +388,13 @@ class Main(EnhancedScreen[None]):
         if self._is_displayable(response.mime_type):
             self.post_message(
                 OpenDocument(
-                    document=Document(
-                        location=uri,
-                        original_location=request.location,
-                        content=await response.text(),
-                        mime_type=response.mime_type,
+                    document=self._cache.add_document(
+                        Document(
+                            location=uri,
+                            original_location=request.location,
+                            content=await response.text(),
+                            mime_type=response.mime_type,
+                        )
                     ),
                     original_request=request,
                 )
@@ -435,8 +442,21 @@ class Main(EnhancedScreen[None]):
         Args:
             uri: The Gemini URI to load the document from.
         """
-        assert isinstance(request.location, GeminiURI)
         uri = request.location
+        assert isinstance(uri, GeminiURI)
+
+        # If a cached copy of the document exists and the request allows it,
+        # use that instead of making a network request.
+        if request.allow_cached and (cached_document := self._cache.get_document(uri)):
+            self.post_message(
+                OpenDocument(
+                    document=cached_document,
+                    original_request=request,
+                )
+            )
+            return
+
+        # Otherwise, make a request to the capsule and handle the response.
         try:
             self._command_line.working = True
             async with await Client(
@@ -683,7 +703,11 @@ class Main(EnhancedScreen[None]):
         """Reload the current document."""
         if self._viewer.document.location:
             self.post_message(
-                OpenLocation(self._viewer.document.location, from_history=True)
+                OpenLocation(
+                    self._viewer.document.location,
+                    from_history=True,
+                    allow_cached=False,
+                )
             )
 
     def action_copy_location_to_clipboard_command(self) -> None:
@@ -771,6 +795,18 @@ class Main(EnhancedScreen[None]):
         """Search the bookmarks."""
         BookmarkSearchCommands.bookmarks = self._bookmarks
         self.show_palette(BookmarkSearchCommands)
+
+    @work
+    async def action_clear_cache_command(self) -> None:
+        """Clear the cache."""
+        if await self.app.push_screen_wait(
+            Confirm(
+                "Clear cache",
+                "Are you sure you want to clear all cached content?",
+            )
+        ):
+            self._cache.clear()
+            self.notify("All cached content has been cleared.", title="Cache")
 
 
 ### main.py ends here
