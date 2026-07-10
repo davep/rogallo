@@ -2,10 +2,12 @@
 
 ## Unreleased
 
+**Released: WiP**
+
 - Added support for client certificates.
   ([#106](https://github.com/davep/rogallo/pull/106))
-
-**Released: WiP**
+- Pages opened from in-page links now bypass the cache.
+  ([#106](https://github.com/davep/rogallo/pull/106))
 
 ## v0.5.0
 
