@@ -379,15 +379,22 @@ class Main(EnhancedScreen[None]):
                     title="Input Error",
                 )
 
-    async def _handle_client_certificate_request(self, location: GeminiURI) -> None:
+    async def _handle_client_certificate_request(
+        self, location: GeminiURI, request_reason: str
+    ) -> None:
         """Handle a request for a client certificate from a Gemini request.
 
         Args:
             location: The location making the request.
+            request_reason: The reason for the client certificate request.
         """
         if (
             common_name := await self.app.push_screen_wait(
-                ModalInput("Enter a descriptive name for the client certificate")
+                ModalInput(
+                    "Enter a descriptive name for the client certificate",
+                    title=f"Client certificate request for {location}",
+                    sub_title=request_reason,
+                )
             )
         ) is None:
             self.notify("Client certificate request cancelled.", severity="warning")
@@ -421,7 +428,7 @@ class Main(EnhancedScreen[None]):
 
         # Handle a request for a client certificate.
         if response.status.is_client_certificate_required:
-            await self._handle_client_certificate_request(uri)
+            await self._handle_client_certificate_request(uri, response.meta.strip())
             return
 
         # Handle any other non-successful response.
