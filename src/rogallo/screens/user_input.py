@@ -10,6 +10,10 @@ from textual.widgets import TextArea
 # Wasat imports.
 from wasat import GeminiURI
 
+##############################################################################
+# Local imports.
+from ..safe_escape import escape
+
 
 ##############################################################################
 class UserInput(ModalScreen[str | None]):
@@ -61,10 +65,13 @@ class UserInput(ModalScreen[str | None]):
                 highlight_cursor_line=False, placeholder="Enter your input here..."
             )
         )
-        user_input.border_title = self._prompt or (
-            f"{'Sensitive input' if self._sensitive else 'Input'} for {self._location}"
-            if self._location
-            else "Input"
+        user_input.border_title = escape(
+            self._prompt
+            or (
+                f"{'Sensitive input' if self._sensitive else 'Input'} for {self._location}"
+                if self._location
+                else "Input"
+            )
         )
         user_input.border_subtitle = "Press F2 to submit"
 

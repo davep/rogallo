@@ -279,6 +279,10 @@ class Main(EnhancedScreen[None]):
                 )
             )
 
+    async def on_unmount(self) -> None:
+        """Called when the screen is unmounted."""
+        await self._client.close()
+
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
         """Check if an action is possible to perform right now.
 

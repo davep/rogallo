@@ -10,10 +10,6 @@ from dataclasses import dataclass
 from datetime import datetime
 
 ##############################################################################
-# Rich imports.
-from rich.markup import escape
-
-##############################################################################
 # Textual imports.
 from textual import on, work
 from textual.message import Message
@@ -30,6 +26,7 @@ from textual_enhanced.widgets import EnhancedOptionList
 # Local imports.
 from ..data import LocationHistory, LocationVisit
 from ..messages import OpenLocation
+from ..safe_escape import escape
 from ..types import GeminiLocation, short_location
 
 

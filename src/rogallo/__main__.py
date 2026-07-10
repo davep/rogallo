@@ -91,8 +91,8 @@ def get_args() -> Namespace:
 def show_bindable_commands() -> None:
     """Show the commands that can have bindings applied."""
     from rich.console import Console
-    from rich.markup import escape
 
+    from .safe_escape import escape
     from .screens import Main
 
     console = Console(highlight=False)
