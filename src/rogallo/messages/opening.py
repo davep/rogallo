@@ -21,6 +21,8 @@ class OpenURI(Message):
 
     uri: str
     """The URI to open."""
+    allow_cached: bool = True
+    """Whether to allow opening the URI from cache."""
 
 
 ##############################################################################

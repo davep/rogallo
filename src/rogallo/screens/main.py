@@ -581,7 +581,9 @@ class Main(EnhancedScreen[None]):
 
         # Does it look like a Gemini URI?
         try:
-            self.post_message(OpenLocation(GeminiURI(message.uri)))
+            self.post_message(
+                OpenLocation(GeminiURI(message.uri), allow_cached=message.allow_cached)
+            )
             return
         except URIError:
             pass
@@ -595,7 +597,12 @@ class Main(EnhancedScreen[None]):
         # filesystem. Before we pass it off to the system browser, let's see
         # it could look like a Gemini URI if we add the scheme.
         if is_likely_schemeless_capsule(message.uri):
-            self.post_message(OpenLocation(GeminiURI(f"{GEMINI_PREFIX}{message.uri}")))
+            self.post_message(
+                OpenLocation(
+                    GeminiURI(f"{GEMINI_PREFIX}{message.uri}"),
+                    allow_cached=message.allow_cached,
+                )
+            )
             return
 
         # Otherwise, try to open it in the system browser.
