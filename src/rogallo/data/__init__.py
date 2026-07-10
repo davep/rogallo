@@ -3,6 +3,7 @@
 ##############################################################################
 # Local imports.
 from .bookmarks import Bookmark, Bookmarks, load_bookmarks, save_bookmarks
+from .client_certificates import client_certificates_directory
 from .command_history import (
     CommandLineHistory,
     load_command_history,
@@ -32,6 +33,7 @@ from .trust import trust_file
 __all__ = [
     "Bookmark",
     "Bookmarks",
+    "client_certificates_directory",
     "CommandLineHistory",
     "Configuration",
     "load_bookmarks",

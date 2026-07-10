@@ -73,6 +73,7 @@ from ..data import (
     LocationHistory,
     LocationVisit,
     NavigationHistory,
+    client_certificates_directory,
     load_bookmarks,
     load_command_history,
     load_configuration,
@@ -460,7 +461,9 @@ class Main(EnhancedScreen[None]):
         try:
             self._command_line.working = True
             async with await Client(
-                verify_mode="tofu", trust_store_path=trust_file()
+                verify_mode="tofu",
+                trust_store_path=trust_file(),
+                client_cert_store_path=client_certificates_directory(),
             ).request(uri) as response:
                 await self._handle_response(response, request)
         except ConnectionError as error:
