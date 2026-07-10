@@ -55,6 +55,9 @@ class Configuration:
     home_page: str = "gemini://geminiprotocol.net/"
     """The home page for the application."""
 
+    with_cache: bool = True
+    """Should the application use a cache for remote content?"""
+
     cache_ttl: int = 24 * 60 * 60
     """The time-to-live for cached content, in seconds."""
 
