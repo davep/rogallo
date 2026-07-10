@@ -33,7 +33,6 @@ from textual_enhanced.screen import EnhancedScreen
 from wasat import (
     Client,
     ConnectionError,
-    FileClientCertificateStore,
     GeminiURI,
     Response,
     SecurityError,
@@ -232,6 +231,12 @@ class Main(EnhancedScreen[None]):
         """The command line arguments."""
         self._cache = ContentCache()
         """The disk cache manager."""
+        self._client = Client(
+            verify_mode="tofu",
+            trust_store_path=trust_file(),
+            client_cert_store_path=client_certificates_directory(),
+        )
+        """The Gemini client."""
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
@@ -381,9 +386,7 @@ class Main(EnhancedScreen[None]):
         ) is None:
             self.notify("Client certificate request cancelled.", severity="warning")
             return
-        await FileClientCertificateStore(
-            client_certificates_directory()
-        ).create_credentials(
+        await self._client.client_cert_store.create_credentials(
             uri=location,
             transient=False,
             common_name=common_name.strip(),
@@ -412,7 +415,8 @@ class Main(EnhancedScreen[None]):
 
         # Handle a request for a client certificate.
         if response.status.is_client_certificate_required:
-            await self._handle_client_certificate_request(uri)
+            if not await self._client.client_cert_store.get_credentials(uri):
+                await self._handle_client_certificate_request(uri)
             return
 
         # Handle any other non-successful response.
@@ -499,11 +503,7 @@ class Main(EnhancedScreen[None]):
         # Otherwise, make a request to the capsule and handle the response.
         try:
             self._command_line.working = True
-            async with await Client(
-                verify_mode="tofu",
-                trust_store_path=trust_file(),
-                client_cert_store_path=client_certificates_directory(),
-            ).request(uri) as response:
+            async with await self._client.request(uri) as response:
                 await self._handle_response(response, request)
         except ConnectionError as error:
             self.notify(
