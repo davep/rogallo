@@ -347,7 +347,9 @@ class Main(EnhancedScreen[None]):
             mime_type, _, _ = mime_type.partition(";")
         return mime_type in load_configuration().displayable_content_types
 
-    async def _handle_input_request(self, location: GeminiURI, sensitive: bool) -> None:
+    async def _handle_input_request(
+        self, location: GeminiURI, prompt: str, sensitive: bool
+    ) -> None:
         """Handle a request for input from a Gemini request.
 
         Args:
@@ -355,7 +357,7 @@ class Main(EnhancedScreen[None]):
             sensitive: Whether the input is sensitive.
         """
         if user_input := await self.app.push_screen_wait(
-            UserInput(location, sensitive)
+            UserInput(location, prompt=prompt, sensitive=sensitive)
         ):
             try:
                 self.post_message(OpenLocation(location.with_query(user_input)))
@@ -402,7 +404,9 @@ class Main(EnhancedScreen[None]):
         # Handle a request for user input.
         if response.status.is_input:
             await self._handle_input_request(
-                request.location, response.status is StatusCode.SENSITIVE_INPUT
+                request.location,
+                response.meta.strip(),
+                response.status is StatusCode.SENSITIVE_INPUT,
             )
             return
 

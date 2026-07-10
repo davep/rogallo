@@ -38,16 +38,19 @@ class UserInput(ModalScreen[str | None]):
         ("f2", "submit"),
     ]
 
-    def __init__(self, location: GeminiURI, sensitive: bool) -> None:
+    def __init__(self, location: GeminiURI, prompt: str, sensitive: bool) -> None:
         """Initialise the object.
 
         Args:
             request_from: The request that prompted this input.
+            prompt: The prompt to display to the user.
             sensitive: Whether the input is sensitive.
         """
         super().__init__(classes=("--sensitive" if sensitive else ""))
         self._location = location
         """The location making the request."""
+        self._prompt = prompt.strip()
+        """The prompt to display to the user."""
         self._sensitive = sensitive
         """Whether the input is sensitive."""
 
@@ -58,7 +61,7 @@ class UserInput(ModalScreen[str | None]):
                 highlight_cursor_line=False, placeholder="Enter your input here..."
             )
         )
-        user_input.border_title = (
+        user_input.border_title = self._prompt or (
             f"{'Sensitive input' if self._sensitive else 'Input'} for {self._location}"
             if self._location
             else "Input"
