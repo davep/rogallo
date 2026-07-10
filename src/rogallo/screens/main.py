@@ -33,6 +33,7 @@ from textual_enhanced.screen import EnhancedScreen
 from wasat import (
     Client,
     ConnectionError,
+    FileClientCertificateStore,
     GeminiURI,
     Response,
     SecurityError,
@@ -365,6 +366,28 @@ class Main(EnhancedScreen[None]):
                     title="Input Error",
                 )
 
+    async def _handle_client_certificate_request(self, location: GeminiURI) -> None:
+        """Handle a request for a client certificate from a Gemini request.
+
+        Args:
+            location: The location making the request.
+        """
+        if (
+            common_name := await self.app.push_screen_wait(
+                ModalInput("Enter a descriptive name for the client certificate")
+            )
+        ) is None:
+            # TODO: Notify the user that access is denied or something?
+            return
+        store = FileClientCertificateStore(client_certificates_directory())
+        await store.create_credentials(
+            uri=location,
+            transient=False,
+            common_name=common_name.strip(),
+            valid_days=None,
+        )
+        self.post_message(OpenLocation(location, allow_cached=False))
+
     async def _handle_response(self, response: Response, request: OpenLocation) -> None:
         """Handle a response from a Gemini request.
 
@@ -374,11 +397,20 @@ class Main(EnhancedScreen[None]):
         """
         assert isinstance(request.location, GeminiURI)
         uri = response.uri or response.requested_uri or request.location
+
+        # Handle a request for user input.
         if response.status.is_input:
             await self._handle_input_request(
                 request.location, response.status is StatusCode.SENSITIVE_INPUT
             )
             return
+
+        # Handle a request for a client certificate.
+        if response.status.is_client_certificate_required:
+            await self._handle_client_certificate_request(uri)
+            return
+
+        # Handle any other non-successful response.
         if not response.status.is_success:
             self.notify(
                 f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
@@ -386,6 +418,8 @@ class Main(EnhancedScreen[None]):
                 title="Request Error",
             )
             return
+
+        # Handle a successful response.
         if self._is_displayable(response.mime_type):
             self.post_message(
                 OpenDocument(
