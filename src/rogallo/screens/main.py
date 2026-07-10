@@ -377,7 +377,7 @@ class Main(EnhancedScreen[None]):
                 ModalInput("Enter a descriptive name for the client certificate")
             )
         ) is None:
-            # TODO: Notify the user that access is denied or something?
+            self.notify("Client certificate request cancelled.", severity="warning")
             return
         await FileClientCertificateStore(
             client_certificates_directory()
