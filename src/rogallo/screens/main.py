@@ -365,7 +365,9 @@ class Main(EnhancedScreen[None]):
             UserInput(location, prompt=prompt, sensitive=sensitive)
         ):
             try:
-                self.post_message(OpenLocation(location.with_query(user_input)))
+                self.post_message(
+                    OpenLocation(location.with_query(user_input), allow_cached=False)
+                )
             except URIError as error:
                 self.notify(
                     f"Unable to create query for {location}:\n\n{error}",
