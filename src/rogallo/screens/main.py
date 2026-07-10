@@ -379,8 +379,9 @@ class Main(EnhancedScreen[None]):
         ) is None:
             # TODO: Notify the user that access is denied or something?
             return
-        store = FileClientCertificateStore(client_certificates_directory())
-        await store.create_credentials(
+        await FileClientCertificateStore(
+            client_certificates_directory()
+        ).create_credentials(
             uri=location,
             transient=False,
             common_name=common_name.strip(),
