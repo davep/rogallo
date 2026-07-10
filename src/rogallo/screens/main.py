@@ -421,8 +421,7 @@ class Main(EnhancedScreen[None]):
 
         # Handle a request for a client certificate.
         if response.status.is_client_certificate_required:
-            if not await self._client.client_cert_store.get_credentials(uri):
-                await self._handle_client_certificate_request(uri)
+            await self._handle_client_certificate_request(uri)
             return
 
         # Handle any other non-successful response.
