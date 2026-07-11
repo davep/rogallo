@@ -16,6 +16,8 @@
   ([#113](https://github.com/davep/rogallo/pull/113))
 - Added `read_timeout` as a configuration option.
   ([#113](https://github.com/davep/rogallo/pull/113))
+- Added `maximum_redirects` as a configuration option.
+  ([#113](https://github.com/davep/rogallo/pull/113))
 
 ## v0.5.0
 
