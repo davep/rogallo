@@ -245,7 +245,7 @@ class GemtextLink(Horizontal, can_focus=True):
     @on(Click)
     def _action_open_link(self) -> None:
         """Open the link."""
-        self.post_message(OpenURI(self._normalised_uri))
+        self.post_message(OpenURI(self._normalised_uri, allow_cached=False))
 
 
 ##############################################################################

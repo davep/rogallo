@@ -73,6 +73,7 @@ from ..data import (
     LocationHistory,
     LocationVisit,
     NavigationHistory,
+    client_certificates_directory,
     load_bookmarks,
     load_command_history,
     load_configuration,
@@ -95,6 +96,7 @@ from ..preflight import (
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
 from ..types import GeminiLocation
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
+from .certificate import Certificate
 from .user_input import UserInput
 
 
@@ -230,6 +232,12 @@ class Main(EnhancedScreen[None]):
         """The command line arguments."""
         self._cache = ContentCache()
         """The disk cache manager."""
+        self._client = Client(
+            verify_mode="tofu",
+            trust_store_path=trust_file(),
+            client_cert_store_path=client_certificates_directory(),
+        )
+        """The Gemini client."""
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
@@ -271,6 +279,10 @@ class Main(EnhancedScreen[None]):
                     self._location_history.current_item.location, from_history=True
                 )
             )
+
+    async def on_unmount(self) -> None:
+        """Called when the screen is unmounted."""
+        await self._client.close()
 
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
         """Check if an action is possible to perform right now.
@@ -345,7 +357,9 @@ class Main(EnhancedScreen[None]):
             mime_type, _, _ = mime_type.partition(";")
         return mime_type in load_configuration().displayable_content_types
 
-    async def _handle_input_request(self, location: GeminiURI, sensitive: bool) -> None:
+    async def _handle_input_request(
+        self, location: GeminiURI, prompt: str, sensitive: bool
+    ) -> None:
         """Handle a request for input from a Gemini request.
 
         Args:
@@ -353,16 +367,39 @@ class Main(EnhancedScreen[None]):
             sensitive: Whether the input is sensitive.
         """
         if user_input := await self.app.push_screen_wait(
-            UserInput(location, sensitive)
+            UserInput(location, prompt=prompt, sensitive=sensitive)
         ):
             try:
-                self.post_message(OpenLocation(location.with_query(user_input)))
+                self.post_message(
+                    OpenLocation(location.with_query(user_input), allow_cached=False)
+                )
             except URIError as error:
                 self.notify(
                     f"Unable to create query for {location}:\n\n{error}",
                     severity="error",
                     title="Input Error",
                 )
+
+    async def _handle_client_certificate_request(
+        self, location: GeminiURI, request_reason: str
+    ) -> None:
+        """Handle a request for a client certificate from a Gemini request.
+
+        Args:
+            location: The location making the request.
+            request_reason: The reason for the client certificate request.
+        """
+        if (
+            certificate_data := await self.app.push_screen_wait(
+                Certificate(location, request_reason)
+            )
+        ) is None:
+            self.notify("Client certificate request cancelled.", severity="warning")
+            return
+        await self._client.client_cert_store.create_credentials(
+            uri=location, **certificate_data
+        )
+        self.post_message(OpenLocation(location, allow_cached=False))
 
     async def _handle_response(self, response: Response, request: OpenLocation) -> None:
         """Handle a response from a Gemini request.
@@ -373,11 +410,22 @@ class Main(EnhancedScreen[None]):
         """
         assert isinstance(request.location, GeminiURI)
         uri = response.uri or response.requested_uri or request.location
+
+        # Handle a request for user input.
         if response.status.is_input:
             await self._handle_input_request(
-                request.location, response.status is StatusCode.SENSITIVE_INPUT
+                uri,
+                response.meta.strip(),
+                response.status is StatusCode.SENSITIVE_INPUT,
             )
             return
+
+        # Handle a request for a client certificate.
+        if response.status.is_client_certificate_required:
+            await self._handle_client_certificate_request(uri, response.meta.strip())
+            return
+
+        # Handle any other non-successful response.
         if not response.status.is_success:
             self.notify(
                 f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
@@ -385,6 +433,8 @@ class Main(EnhancedScreen[None]):
                 title="Request Error",
             )
             return
+
+        # Handle a successful response.
         if self._is_displayable(response.mime_type):
             self.post_message(
                 OpenDocument(
@@ -459,9 +509,7 @@ class Main(EnhancedScreen[None]):
         # Otherwise, make a request to the capsule and handle the response.
         try:
             self._command_line.working = True
-            async with await Client(
-                verify_mode="tofu", trust_store_path=trust_file()
-            ).request(uri) as response:
+            async with await self._client.request(uri) as response:
                 await self._handle_response(response, request)
         except ConnectionError as error:
             self.notify(
@@ -537,7 +585,9 @@ class Main(EnhancedScreen[None]):
 
         # Does it look like a Gemini URI?
         try:
-            self.post_message(OpenLocation(GeminiURI(message.uri)))
+            self.post_message(
+                OpenLocation(GeminiURI(message.uri), allow_cached=message.allow_cached)
+            )
             return
         except URIError:
             pass
@@ -551,7 +601,12 @@ class Main(EnhancedScreen[None]):
         # filesystem. Before we pass it off to the system browser, let's see
         # it could look like a Gemini URI if we add the scheme.
         if is_likely_schemeless_capsule(message.uri):
-            self.post_message(OpenLocation(GeminiURI(f"{GEMINI_PREFIX}{message.uri}")))
+            self.post_message(
+                OpenLocation(
+                    GeminiURI(f"{GEMINI_PREFIX}{message.uri}"),
+                    allow_cached=message.allow_cached,
+                )
+            )
             return
 
         # Otherwise, try to open it in the system browser.

@@ -9,10 +9,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 ##############################################################################
-# Rich imports.
-from rich.markup import escape
-
-##############################################################################
 # Textual imports.
 from textual import on, work
 from textual.message import Message
@@ -29,6 +25,7 @@ from textual_enhanced.widgets import EnhancedOptionList
 # Local imports.
 from ..data.bookmarks import Bookmark, Bookmarks
 from ..messages import OpenLocation
+from ..safe_escape import escape
 from ..types import short_location
 
 
