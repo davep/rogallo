@@ -279,7 +279,8 @@ class Main(EnhancedScreen[None]):
         elif self._location_history.current_item:
             self.post_message(
                 OpenLocation(
-                    self._location_history.current_item.location, from_history=True
+                    self._location_history.current_item.location,
+                    do_not_record_in_history=True,
                 )
             )
 
@@ -463,17 +464,17 @@ class Main(EnhancedScreen[None]):
             request: The request to open text for. This is used to determine
                 the location to remember.
         """
-        if request.document.original_location is None:
+        if (location := request.document.location) is None:
             return
-        self._location_history.add(LocationVisit(request.document.original_location))
+        self._location_history.add(LocationVisit(location))
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
         if (
-            not request.original_request.from_history
+            not request.original_request.do_not_record_in_history
             and self._navigation_history.current_item
             != request.document.original_location
         ):
-            self._navigation_history.add(request.document.original_location)
+            self._navigation_history.add(location)
             self.mutate_reactive(Main._navigation_history)
             save_naviagation_history(self._navigation_history)
 
@@ -710,7 +711,9 @@ class Main(EnhancedScreen[None]):
             and self._navigation_history.current_item
         ):
             self.post_message(
-                OpenLocation(self._navigation_history.current_item, from_history=True)
+                OpenLocation(
+                    self._navigation_history.current_item, do_not_record_in_history=True
+                )
             )
             self.mutate_reactive(Main._navigation_history)
 
@@ -718,7 +721,9 @@ class Main(EnhancedScreen[None]):
         """Go forward in the navigation history."""
         if self._navigation_history.forward() and self._navigation_history.current_item:
             self.post_message(
-                OpenLocation(self._navigation_history.current_item, from_history=True)
+                OpenLocation(
+                    self._navigation_history.current_item, do_not_record_in_history=True
+                )
             )
             self.mutate_reactive(Main._navigation_history)
 
@@ -764,7 +769,7 @@ class Main(EnhancedScreen[None]):
             self.post_message(
                 OpenLocation(
                     self._viewer.document.location,
-                    from_history=True,
+                    do_not_record_in_history=True,
                     allow_cached=False,
                 )
             )

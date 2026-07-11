@@ -32,8 +32,8 @@ class OpenLocation(Message):
 
     location: GeminiLocation
     """The location to open."""
-    from_history: bool = False
-    """Whether the location is being opened from history."""
+    do_not_record_in_history: bool = False
+    """Whether we should avoid recording this in history."""
     allow_cached: bool = True
     """Whether to allow opening the location from cache."""
 
