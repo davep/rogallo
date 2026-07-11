@@ -23,6 +23,9 @@
   ([#114](https://github.com/davep/rogallo/pull/114))
 - Pages that need a client-side certificate are now always excluded from the
   content cache. ([#114](https://github.com/davep/rogallo/pull/114))
+- Fixed the way history is recorded so that "post"-type URIs don't end up
+  dropping into history and potentially resulting in duplicate inputs being
+  sent to capsules. ([#119](https://github.com/davep/rogallo/pull/119))
 
 ## v0.5.0
 
