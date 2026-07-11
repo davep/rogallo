@@ -464,9 +464,9 @@ class Main(EnhancedScreen[None]):
             request: The request to open text for. This is used to determine
                 the location to remember.
         """
-        if request.document.original_location is None:
+        if (location := request.document.location) is None:
             return
-        self._location_history.add(LocationVisit(request.document.original_location))
+        self._location_history.add(LocationVisit(location))
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
         if (
@@ -474,7 +474,7 @@ class Main(EnhancedScreen[None]):
             and self._navigation_history.current_item
             != request.document.original_location
         ):
-            self._navigation_history.add(request.document.original_location)
+            self._navigation_history.add(location)
             self.mutate_reactive(Main._navigation_history)
             save_naviagation_history(self._navigation_history)
 
