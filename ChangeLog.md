@@ -12,6 +12,12 @@
   ([#111](https://github.com/davep/rogallo/pull/111))
 - Fixed bookmark search being available when there are no bookmarks to
   search. ([#112](https://github.com/davep/rogallo/pull/112))
+- Added `connection_timeout` as a configuration option.
+  ([#113](https://github.com/davep/rogallo/pull/113))
+- Added `read_timeout` as a configuration option.
+  ([#113](https://github.com/davep/rogallo/pull/113))
+- Added `maximum_redirects` as a configuration option.
+  ([#113](https://github.com/davep/rogallo/pull/113))
 
 ## v0.5.0
 
