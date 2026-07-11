@@ -61,6 +61,12 @@ class Configuration:
     cache_ttl: int = 3_600
     """The time-to-live for cached content, in seconds."""
 
+    connection_timeout: int = 10
+    """The connection timeout for network requests, in seconds."""
+
+    read_timeout: int = 30
+    """The read timeout for network requests, in seconds."""
+
 
 ##############################################################################
 def configuration_file() -> Path:

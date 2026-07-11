@@ -236,6 +236,8 @@ class Main(EnhancedScreen[None]):
             verify_mode="tofu",
             trust_store_path=trust_file(),
             client_cert_store_path=client_certificates_directory(),
+            connect_timeout=load_configuration().connection_timeout,
+            read_timeout=load_configuration().read_timeout,
         )
         """The Gemini client."""
 
