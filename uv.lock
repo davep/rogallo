@@ -1297,7 +1297,7 @@ requires-dist = [
     { name = "textual", specifier = ">=8.2.7" },
     { name = "textual-enhanced", specifier = ">=1.6.0" },
     { name = "types-pyperclip", specifier = ">=1.11.0.20260508" },
-    { name = "wasat", specifier = ">=0.2.1" },
+    { name = "wasat", specifier = ">=0.3.0" },
     { name = "xdg-base-dirs", specifier = ">=6.0.2" },
 ]
 
@@ -1429,7 +1429,7 @@ wheels = [
 
 [[package]]
 name = "virtualenv"
-version = "21.6.0"
+version = "21.6.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "distlib" },
@@ -1437,21 +1437,21 @@ dependencies = [
     { name = "platformdirs" },
     { name = "python-discovery" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/74/65/ec1d92091671e6407d3e7c1f5801413bb7b2b57630a50cae7750456ba0ed/virtualenv-21.6.0.tar.gz", hash = "sha256:e18a4d750f2b64dea73e72ffde3922f3c52365fabdc8157ebd3da20d031c4734", size = 5526111, upload-time = "2026-07-06T22:49:56.972Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/34/d9/b477fddb68840b570af8b22afe9b035cbc277b5fb7b33dea390617a8b10f/virtualenv-21.6.1.tar.gz", hash = "sha256:15f978b7cd329f24855ff4a0c4b4899cc7678589f49adbdcbbb4d3232e641128", size = 5526620, upload-time = "2026-07-10T19:33:53.312Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b8/e7/2fbd0cc1653c53eed8f10670538bb547de2b3e37aacad283faa82a71094b/virtualenv-21.6.0-py3-none-any.whl", hash = "sha256:bce9d097950fef9d81129b333babfb7767072850c2f1acce0ec536708401bfd1", size = 5506216, upload-time = "2026-07-06T22:49:54.941Z" },
+    { url = "https://files.pythonhosted.org/packages/c1/7c/4e7225d46d634a0d8d534dd8a6ce0c319d09b4d0cf0337eb314ca4789d8c/virtualenv-21.6.1-py3-none-any.whl", hash = "sha256:afe991df855715a2b2f60edfcc0107ef95a79fdfd8cb4cdaa71603d1c12e463b", size = 5506392, upload-time = "2026-07-10T19:33:51.629Z" },
 ]
 
 [[package]]
 name = "wasat"
-version = "0.2.1"
+version = "0.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cryptography" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6f/0e/4e015952159b30f6a8d4eb5c4e8a5009846d22386457d7832050a3bfa628/wasat-0.2.1.tar.gz", hash = "sha256:68554c2526353f82a272439eb19bad92f3c632a60fdc1c1959bd7ee2926d3f18", size = 19320, upload-time = "2026-07-10T16:10:13.248Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/86/68/d00cba89f6b5f8dc50251db2547b5b954ec258850a5e6d9405718cc041b7/wasat-0.3.0.tar.gz", hash = "sha256:f5639ef07f889cd7b07fd11f2b4a45f438c84e4ee5b8b6b8f0d66639998cbc86", size = 19428, upload-time = "2026-07-11T13:31:59.218Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/67/7c/f00d27882e71d07ccb6f8e6ea4e93bb3153d0ee6618521d839c1a90cf41d/wasat-0.2.1-py3-none-any.whl", hash = "sha256:5d0307fc6e412b5aaebd12dbb7aea423d890de4015485535b2ef2b8ad1a92d93", size = 23348, upload-time = "2026-07-10T16:10:12.118Z" },
+    { url = "https://files.pythonhosted.org/packages/20/60/fa0b2bc90f33c2ad02941ab437d87e7379eb022f7c2e1e1b6c6e5ba3cf82/wasat-0.3.0-py3-none-any.whl", hash = "sha256:b734cbfe680181999832bb94ed021b379f20c1b4d3510fed1a758157de12a4ca", size = 23495, upload-time = "2026-07-11T13:31:57.939Z" },
 ]
 
 [[package]]
