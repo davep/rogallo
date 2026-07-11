@@ -85,6 +85,7 @@ class Viewer(Vertical, can_focus=False):
 
     async def _watch_document(self) -> None:
         """Watch for changes to the document and update the viewer."""
+        self._title.needed_certificate = self.document.needed_certificate
         self._title.location = self.document.location
         self._status.mime_type = self.document.mime_type or ""
         await self._view.remove_children()
