@@ -100,7 +100,11 @@ class ContentCache(CacheManager):
             The document that was cached.
         """
 
-        if self._disabled or not isinstance(document.location, GeminiURI):
+        if (
+            self._disabled
+            or not isinstance(document.location, GeminiURI)
+            or document.needed_certificate
+        ):
             return document
 
         meta_data_file, content_file = self._cache_files(document.location)
