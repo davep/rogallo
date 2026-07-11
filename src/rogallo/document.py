@@ -37,6 +37,9 @@ class Document(NamedTuple):
     from_cache: bool = False
     """Whether the document was loaded from cache."""
 
+    needed_certificate: bool = False
+    """Whether the document required a client certificate to access."""
+
     def __bool__(self) -> bool:
         """Return `True` if the document has content, `False` otherwise."""
         return bool(self.content)
