@@ -96,6 +96,7 @@ from ..preflight import (
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
 from ..types import GeminiLocation
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
+from .certificate import Certificate
 from .user_input import UserInput
 
 
@@ -389,21 +390,14 @@ class Main(EnhancedScreen[None]):
             request_reason: The reason for the client certificate request.
         """
         if (
-            common_name := await self.app.push_screen_wait(
-                ModalInput(
-                    "Enter a descriptive name for the client certificate",
-                    title=f"Client certificate request for {location}",
-                    sub_title=request_reason,
-                )
+            certificate_data := await self.app.push_screen_wait(
+                Certificate(location, request_reason)
             )
         ) is None:
             self.notify("Client certificate request cancelled.", severity="warning")
             return
         await self._client.client_cert_store.create_credentials(
-            uri=location,
-            transient=False,
-            common_name=common_name.strip(),
-            valid_days=None,
+            uri=location, **certificate_data
         )
         self.post_message(OpenLocation(location, allow_cached=False))
 
