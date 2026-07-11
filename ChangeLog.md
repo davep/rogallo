@@ -10,6 +10,8 @@
   ([#106](https://github.com/davep/rogallo/pull/106))
 - Fixed a layout issue with list items.
   ([#111](https://github.com/davep/rogallo/pull/111))
+- Fixed bookmark search being available when there are no bookmarks to
+  search. ([#112](https://github.com/davep/rogallo/pull/112))
 
 ## v0.5.0
 
