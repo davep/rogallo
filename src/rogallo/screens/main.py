@@ -447,6 +447,7 @@ class Main(EnhancedScreen[None]):
                             original_location=request.location,
                             content=await response.text(),
                             mime_type=response.mime_type,
+                            needed_certificate=response.client_cert_used,
                         )
                     ),
                     original_request=request,
