@@ -18,6 +18,11 @@
   ([#113](https://github.com/davep/rogallo/pull/113))
 - Added `maximum_redirects` as a configuration option.
   ([#113](https://github.com/davep/rogallo/pull/113))
+- When a page needs a client-side certificate to load, a key icon is shown
+  in the viewer's title bar.
+  ([#114](https://github.com/davep/rogallo/pull/114))
+- Pages that need a client-side certificate are now always excluded from the
+  content cache. ([#114](https://github.com/davep/rogallo/pull/114))
 
 ## v0.5.0
 
