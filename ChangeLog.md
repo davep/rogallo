@@ -8,6 +8,8 @@
   ([#106](https://github.com/davep/rogallo/pull/106))
 - Pages opened from in-page links now bypass the cache.
   ([#106](https://github.com/davep/rogallo/pull/106))
+- Fixed a layout issue with list items.
+  ([#111](https://github.com/davep/rogallo/pull/111))
 
 ## v0.5.0
 
