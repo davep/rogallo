@@ -1,6 +1,6 @@
 # Introduction
 
-```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo" lines=40 columns=120}
+```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo" lines=35 columns=90}
 ```
 
 Rogallo is a terminal-based client for browsing

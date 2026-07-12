@@ -90,7 +90,8 @@ checkall: spellcheck codestyle lint stricttypecheck test # Check all the things
 ##############################################################################
 # Documentation.
 
-DOCS_XDG_ENV = XDG_CONFIG_HOME="$(CURDIR)/docs/build/config" XDG_CACHE_HOME="$(CURDIR)/docs/build/cache" XDG_DATA_HOME="$(CURDIR)/docs/build/data"
+DOCS_BUILD_DIR = "$(CURDIR)/docs/build"
+DOCS_XDG_ENV = XDG_CONFIG_HOME="$(DOCS_BUILD_DIR)/config" XDG_CACHE_HOME="$(DOCS_BUILD_DIR)/cache" XDG_DATA_HOME="$(DOCS_BUILD_DIR)/data"
 
 .PHONY: docs
 docs:                           # Generate the system documentation
@@ -143,8 +144,12 @@ tidy: pep8ify delint		# Tidy up the code, fixing lint and format issues.
 clean-packaging:		# Clean the package building files
 	rm -rf dist
 
+.PHONY: clean-docs
+clean-docs:			# Clean up the documentation building files
+	rm -rf site .screenshot_cache
+
 .PHONY: clean
-clean: clean-packaging # Clean the build directories
+clean: clean-packaging clean-docs # Clean the build directories
 
 .PHONY: realclean
 realclean: clean		# Clean the venv and build directories
