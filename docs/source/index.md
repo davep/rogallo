@@ -74,4 +74,95 @@ If you need help, or have any ideas, please feel free to [raise an
 issue](https://github.com/davep/rogallo/issues) or [start a
 discussion](https://github.com/davep/rogallo/discussions).
 
+## Running Rogallo
+
+Once you've installed Rogallo using one of the [above methods](#installing),
+you can run the application using the `rogallo` command. A number of command
+line commands and switches available:
+
+```sh
+rogallo --help
+```
+```bash exec="on" result="text"
+rogallo --help
+```
+
+### `bindings`
+
+Prints the application commands whose keyboard bindings can be modified,
+giving the defaults too.
+
+```sh
+rogallo bindings
+```
+```bash exec="on" result="text"
+rogallo bindings
+```
+
+### `directories`
+
+```sh
+rogallo directories
+```
+
+This prints each of the directories where Rogallo stores cache,
+configuration and data files. The output will look something like this:
+
+```
+/Users/davep/.cache/rogallo
+/Users/davep/.config/rogallo
+/Users/davep/.local/share/rogallo
+```
+
+The exact values will, of course, depend on [your own
+environment](https://specifications.freedesktop.org/basedir/latest/).
+
+### `licence`
+
+Prints Rogallo's licence.
+
+```sh
+rogallo licence
+```
+```bash exec="on" result="text"
+rogallo licence
+```
+
+### `open`
+
+The open command can be used to open either a Gemtext file in the local
+filesystem, or a connection to content on a Gemini capsule (normally a URI
+starting with `gemini://`).
+
+```sh
+rogallo open --help
+```
+```bash exec="on" result="text"
+rogallo open --help
+```
+
+### `themes`
+
+Shows a list of all of the themes that are available.
+
+```sh
+rogallo themes
+```
+```bash exec="on" result="text"
+rogallo themes
+```
+
+Use the `--theme` switch to set a theme from the command line.
+
+### `--version`
+
+Prints the version number of Rogallo.
+
+```sh
+rogallo --version
+```
+```bash exec="on" result="text"
+rogallo --version
+```
+
 [//]: # (index.md ends here)
