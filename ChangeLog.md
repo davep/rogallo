@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v0.6.0
 
-**Released: WiP**
+**Released: 2026-07-12**
 
 - Added support for client certificates.
   ([#106](https://github.com/davep/rogallo/pull/106))
