@@ -1,6 +1,6 @@
 # Welcome to Rogallo
 
-Rogallo is a terminal-based client for browsing Geminispace. It's key
+Rogallo is a terminal-based client for browsing Geminispace. Its key
 features include:
 
 * A bookmark facility (with search)
