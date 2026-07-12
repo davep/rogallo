@@ -24,7 +24,7 @@ Protocol](https://geminiprotocol.net/). Key features include:
 - Support for in-application generation of self-signed client certificates,
   with persistent per-capsule management
 - Support for redirections (`3x` responses)
-- Copy-to-clipboard support for URLs, page text, or raw source
+- Copy-to-clipboard support for URIs or page contents
 - Designed to work on macOS, GNU/Linux and Windows (and likely on other
   operating systems that support modern Python)
 - Mouse support

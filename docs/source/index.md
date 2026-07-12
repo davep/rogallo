@@ -13,7 +13,7 @@ Rogallo is a terminal-based client for browsing
 - Support for user input (`1x` responses), including masked inputs for sensitive fields
 - Support for in-application generation of self-signed client certificates, with persistent per-capsule management
 - Support for redirections (`3x` responses)
-- Copy-to-clipboard support for URLs, page text, or raw source
+- Copy-to-clipboard support for URIs or page contents
 - Designed to work on macOS, GNU/Linux and Windows (and likely on other operating systems that support modern Python)
 - Mouse support
 - A view source facility
