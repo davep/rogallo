@@ -400,7 +400,15 @@ class Main(EnhancedScreen[None]):
         ) is None:
             self.notify("Client certificate request cancelled.", severity="warning")
             return
-        await self._client.client_cert_store.create_credentials(**certificate_data)
+        try:
+            await self._client.client_cert_store.create_credentials(**certificate_data)
+        except (ValueError, OSError, RuntimeError) as error:
+            self.notify(
+                f"Unable to create client certificate for {location}:\n\n{error}",
+                severity="error",
+                title="Client Certificate Error",
+            )
+            return
         self.post_message(OpenLocation(location, allow_cached=False))
 
     async def _handle_response(self, response: Response, request: OpenLocation) -> None:
