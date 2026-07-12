@@ -91,7 +91,7 @@ checkall: spellcheck codestyle lint stricttypecheck test # Check all the things
 # Documentation.
 
 DOCS_BUILD_DIR = "$(CURDIR)/docs/build"
-DOCS_XDG_ENV = XDG_CONFIG_HOME="$(DOCS_BUILD_DIR)/config" XDG_CACHE_HOME="$(DOCS_BUILD_DIR)/cache" XDG_DATA_HOME="$(DOCS_BUILD_DIR)/data"
+DOCS_XDG_ENV = XDG_CONFIG_HOME="$(DOCS_BUILD_DIR)/config" XDG_DATA_HOME="$(DOCS_BUILD_DIR)/data"
 
 .PHONY: docs
 docs:                           # Generate the system documentation
