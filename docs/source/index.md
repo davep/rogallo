@@ -4,7 +4,7 @@
 ```
 
 Rogallo is a terminal-based client for browsing
-[Geminispace](https://geminiprotocol.net/). It's key features include:
+[Geminispace](https://geminiprotocol.net/). Its key features include:
 
 - A bookmark facility (with search)
 - A location history facility (with search)
