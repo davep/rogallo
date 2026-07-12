@@ -15,3 +15,5 @@ wheels/
 # Docs
 site/
 .DS_Store
+.screenshot_cache/
+docs/build/

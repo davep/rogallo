@@ -89,17 +89,20 @@ checkall: spellcheck codestyle lint stricttypecheck test # Check all the things
 
 ##############################################################################
 # Documentation.
+
+DOCS_XDG_ENV = XDG_CONFIG_HOME="$(CURDIR)/docs/build/config" XDG_CACHE_HOME="$(CURDIR)/docs/build/cache" XDG_DATA_HOME="$(CURDIR)/docs/build/data"
+
 .PHONY: docs
 docs:                           # Generate the system documentation
-	$(mkdocs) build
+	$(DOCS_XDG_ENV) $(mkdocs) build
 
 .PHONY: rtfm
 rtfm:                           # Locally read the library documentation
-	$(mkdocs) serve --livereload
+	$(DOCS_XDG_ENV) $(mkdocs) serve --livereload
 
 .PHONY: publishdocs
 publishdocs:			# Set up the docs for publishing
-	$(mkdocs) gh-deploy
+	$(DOCS_XDG_ENV) $(mkdocs) gh-deploy
 
 ##############################################################################
 # Package/publish.

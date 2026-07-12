@@ -13,15 +13,31 @@
 ## Introduction
 
 Rogallo is a terminal-based client for [the Gemini
-Protocol](https://geminiprotocol.net/). As of the time of writing it should
-be considered to be very early alpha-quality software. What features it has
-work well, but it is lacking a good number of features. It is in early
-active development.
+Protocol](https://geminiprotocol.net/). Key features include:
 
-> [!important]
-> This means, until it hits v1.0.0, any given update might be very different
-> or might break things from the previous update. If you decide to try it
-> out, please keep this in mind.
+- A bookmark facility (with search)
+- A location history facility (with search)
+- A backward/forward navigation facility
+- Support for setting a home page
+- Support for user input (`1x` responses), including masked inputs for
+  sensitive fields
+- Support for in-application generation of self-signed client certificates,
+  with persistent per-capsule management
+- Support for redirections (`3x` responses)
+- Copy-to-clipboard support for URLs, page text, or raw source
+- Designed to work on macOS, GNU/Linux and Windows (and likely on other
+  operating systems that support modern Python)
+- Mouse support
+- A view source facility
+- A trust-on-first-use (TOFU) trust facility
+- Has in-application help screens
+- Has an easy-to-use command palette
+- Hands unknown MIME types off to the operating system
+- Optional support (on by default) for ANSI escape sequences in pages
+- Support for viewing local Gemtext files
+- Choice of themes
+- Persistent user configuration across sessions
+- Fully responsive layout that adjusts dynamically to terminal resizing
 
 ## Installing
 

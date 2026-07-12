@@ -1,0 +1,25 @@
+# Welcome to Rogallo
+
+Rogallo is a terminal-based client for browsing Geminispace. It's key
+features include:
+
+* A bookmark facility (with search)
+* A location history facility (with search)
+* A backward/forward navigation facility
+* Support for setting a home page
+* Support for user input (`1x` responses), including masked inputs for sensitive fields
+* Support for in-application generation of self-signed client certificates, with persistent per-capsule management
+* Support for redirections (`3x` responses)
+* Copy-to-clipboard support for URLs, page text, or raw source
+* Designed to work on macOS, GNU/Linux and Windows (and likely on other operating systems that support modern Python)
+* Mouse support
+* A view source facility
+* A trust-on-first-use (TOFU) trust facility
+* Has in-application help screens
+* Has an easy-to-use command palette
+* Hands unknown MIME types off to the operating system
+* Optional support (on by default) for ANSI escape sequences in pages
+* Support for viewing local Gemtext files
+* Choice of themes
+* Persistent user configuration across sessions
+* Fully responsive layout that adjusts dynamically to terminal resizing
