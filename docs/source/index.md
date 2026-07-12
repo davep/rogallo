@@ -27,6 +27,14 @@ Rogallo is a terminal-based client for browsing
 - Persistent user configuration across sessions
 - Fully responsive layout that adjusts dynamically to terminal resizing
 
+!!! note
+
+    Rogallo is primarily designed to browse content on Gemini capsules.
+    However, in this documentation, you will mainly see it browsing files in
+    the local filesystem. This is because the screenshots are generated when
+    the documentation is generated, and so visiting `gemini://...` locations
+    would be slow and brittle.
+
 ## Installing
 
 ### pipx
