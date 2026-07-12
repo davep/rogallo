@@ -101,6 +101,12 @@ class Certificate(ModalScreen[CertificateData | None]):
             )
             with Collapsible(title="Advanced options"):
                 yield Checkbox(
+                    "Scope to domain/port [dim](ignores the path when scoping)[/]",
+                    True,
+                    id="scope-to-domain",
+                    classes="leave-room",
+                )
+                yield Checkbox(
                     "Transient [dim](not saved to disk)[/]",
                     id="transient",
                     classes="leave-room",
@@ -154,11 +160,24 @@ class Certificate(ModalScreen[CertificateData | None]):
         if value := self.query_one(f"#{key}", Input).value.strip():
             data[key] = value
 
+    def _scoped_location(self) -> GeminiURI:
+        """Returns the location scoped as per the user's choice.
+
+        Returns:
+            The location to scope the certificate to.
+        """
+        return (
+            self._location.with_path(None).with_query(None)
+            if self.query_one("#scope-to-domain", Checkbox).value
+            else self._location
+        )
+
     @on(Button.Pressed, "#create")
     def action_create(self) -> None:
         """Create the certificate."""
         certificate_data: CertificateData = {
-            "transient": self.query_one("#transient", Checkbox).value
+            "uri": self._scoped_location(),
+            "transient": self.query_one("#transient", Checkbox).value,
         }
         self._maybe_add(certificate_data, "common_name")
         try:
