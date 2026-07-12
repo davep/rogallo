@@ -68,12 +68,6 @@ powershell -ExecutionPolicy ByPass -c "irm https://uvx.sh/rogallo/install.ps1 | 
 
 Once installed run the `rogallo` command.
 
-## Getting help
-
-If you need help, or have any ideas, please feel free to [raise an
-issue](https://github.com/davep/rogallo/issues) or [start a
-discussion](https://github.com/davep/rogallo/discussions).
-
 ## Running Rogallo
 
 Once you've installed Rogallo using one of the [above methods](#installing),
@@ -154,7 +148,12 @@ rogallo themes
 
 Use the `--theme` switch to set a theme from the command line.
 
-### `--version`
+### `-t`, `--theme`
+
+Sets Rogallo's theme; this overrides and changes any previous theme choice
+made [via the user interface](configuration.md#theme).
+
+### `-v`, `--version`
 
 Prints the version number of Rogallo.
 
@@ -164,5 +163,39 @@ rogallo --version
 ```bash exec="on" result="text"
 rogallo --version
 ```
+
+## Getting help
+
+A great way to get to know Rogallo is to read the help screen. Once in the
+application you can see this by pressing <kbd>F1</kbd>.
+
+```{.textual path="docs/screenshots/main_screenshot.py" title="The Rogallo help sceeen" press="f1" lines=50 columns=120}
+```
+
+The help will adapt to which part of the screen has focus, providing extra
+detail where appropriate.
+
+### The command palette
+
+Another way of discovering commands and keys in Rogallo is to use the
+command palette (by default you can call it with
+<kbd>ctrl</kbd>+<kbd>p</kbd>).
+
+```{.textual path="docs/screenshots/main_screenshot.py" title="The Rogallo command palette" press="ctrl+p" lines=50 columns=120}
+```
+
+## Questions and feedback
+
+If you have any questions about Rogallo, or you have ideas for how it might
+be improved, do please feel free to [visit the discussion
+area](https://github.com/davep/rogallo/discussions) and [ask your
+question](https://github.com/davep/rogallo/discussions/categories/q-a) or
+[suggest an
+improvement](https://github.com/davep/rogallo/discussions/categories/ideas).
+
+When doing so, please do search past discussions and also [issues current
+and previous](https://github.com/davep/rogallo/issues) to make sure I've not
+already dealt with this, or don't have your proposed change already flagged
+as something to do.
 
 [//]: # (index.md ends here)
