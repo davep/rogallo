@@ -33,6 +33,25 @@ will be `false` (at the bottom) by default:
 "command_line_on_top": false
 ```
 
+## Displayable content types
+
+By default Rogallo only considers a narrow set of MIME types as displayable
+in the application. In the event that you need to expand this list, you can
+change the value of `displayable_content_types`:
+
+```json
+"displayable_content_types": [
+    "text/gemini",
+    "text/plain"
+]
+```
+
+!!! important
+
+    Rogallo is currently only capable of displaying text-based content,
+    showing either rendered Gemtext or plain text. Adding other MIME types
+    might cause unwanted or unpredictable results.
+
 ## Keyboard bindings
 
 Rogallo allows for a degree of configuration of its keyboard bindings;
