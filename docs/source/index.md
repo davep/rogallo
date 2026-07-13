@@ -10,9 +10,9 @@ Rogallo is a terminal-based client for browsing
 - A location history facility (with search)
 - A backward/forward navigation facility
 - Support for setting a home page
-- Support for user input (`1x` responses), including masked inputs for sensitive fields
-- Support for in-application generation of self-signed client certificates, with persistent per-capsule management
-- Support for redirections (`3x` responses)
+- Support for user input ([`1x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#input-expected)), including masked inputs for sensitive fields
+- Support for in-application generation of self-signed [client certificates](https://geminiprotocol.net/docs/protocol-specification.gmi#client-certificates), with persistent per-capsule management
+- Support for redirections ([`3x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#redirection))
 - Copy-to-clipboard support for URIs or page contents
 - Designed to work on macOS, GNU/Linux and Windows (and likely on other operating systems that support modern Python)
 - Mouse support
@@ -22,7 +22,7 @@ Rogallo is a terminal-based client for browsing
 - Has an easy-to-use command palette
 - Hands unknown MIME types off to the operating system
 - Optional support (on by default) for ANSI escape sequences in pages
-- Support for viewing local Gemtext files
+- Support for viewing local [Gemtext](https://geminiprotocol.net/docs/gemtext-specification.gmi) files
 - Choice of themes
 - Persistent user configuration across sessions
 - Fully responsive layout that adjusts dynamically to terminal resizing
