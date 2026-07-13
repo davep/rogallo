@@ -98,7 +98,7 @@ rtfm:                           # Locally read the library documentation
 	$(mkdocs) serve --livereload
 
 .PHONY: publishdocs
-publishdocs:			# Set up the docs for publishing
+publishdocs: clean-docs	# Set up the docs for publishing
 	$(mkdocs) gh-deploy
 
 ##############################################################################
