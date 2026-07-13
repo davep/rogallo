@@ -32,6 +32,26 @@ be `false` (not visible) by default:
 "bookmarks_visble": false
 ```
 
+## Content cache
+
+Rogallo uses a content cache to make some forms of navigation between pages
+faster, reducing the need to connect to a capsule and download data. The
+`cache_ttl` configuration setting controls how long a cache entry is used
+before it is considered stale. This is an integer number of seconds, set to
+`3600` (1 hour) by default.
+
+```json
+"cache_ttl": 3600
+```
+
+If you would prefer to not use a cache at all, this can be turned off via
+the `with_cache` setting. Value values are `true` and `false`, set to `true`
+by default.
+
+```json
+"with_cache": true
+```
+
 ## Command line position
 
 By default, Rogallo's command line appears at the bottom of the screen,
