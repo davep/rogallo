@@ -32,6 +32,23 @@ be `false` (not visible) by default:
 "bookmarks_visble": false
 ```
 
+## Connection settings
+
+Rogallo imposes some limits on connections to capsules. These include the
+connection timeout, the read timeout and the maximum number of redirects
+that will be handled. If you wish to modify these you can change the
+following values:
+
+```json
+"connection_timeout": 10,
+"read_timeout": 30,
+"maximum_redirects": 5,
+```
+
+`connection_timeout` and `read_timeout` are an integer number of seconds.
+`maximum_redirects` is an integer number of redirections that will be
+followed.
+
 ## Content cache
 
 Rogallo uses a content cache to make some forms of navigation between pages
