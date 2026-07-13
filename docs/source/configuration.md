@@ -52,6 +52,26 @@ change the value of `displayable_content_types`:
     showing either rendered Gemtext or plain text. Adding other MIME types
     might cause unwanted or unpredictable results.
 
+## Handling ANSI escape sequences
+
+Some Gemini capsules have content -- sometimes optional, sometimes mandatory
+-- which makes use of ANSI escape sequences to add colour to a document.
+Rogallo supports this and will accept and correctly render the sequences.
+
+If you would prefer that Rogallo *didn't* handle server-supplied escape
+sequences you can turn it off with the `handle_ansi_escape_sequences`
+setting. It takes `true` and `false` as valid values, and is `true` by
+default.
+
+```json
+"handle_ansi_escape_sequences": true
+```
+
+!!! note
+
+    Turning this off and visiting sites that still deliver escape sequences
+    will have unpredictable results.
+
 ## Keyboard bindings
 
 Rogallo allows for a degree of configuration of its keyboard bindings;
