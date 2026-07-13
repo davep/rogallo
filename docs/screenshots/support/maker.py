@@ -1,4 +1,4 @@
-"""This script is used to generate screenshots of Rogallo for the documentation."""
+"""Provides code for building a screenshot-ready Rogallo instance."""
 
 import os
 from argparse import Namespace
@@ -44,9 +44,7 @@ save_bookmarks(
 
 
 ##############################################################################
-# Create the Rogallo app with the specified command line arguments. Also
-# create the instance as `app` in the global namespace so that it can be
-# found by and used by the screenshot facility.
+# Create the Rogallo app with the specified command line arguments.
 def make_app(viewing: str = "features"):
     return Rogallo(
         Namespace(
