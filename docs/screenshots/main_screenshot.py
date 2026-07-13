@@ -50,6 +50,7 @@ app = Rogallo(
     Namespace(
         command="open",
         location=str(docs_dir / "examples/features.gmi"),
+        theme=None,
     )
 )
 
