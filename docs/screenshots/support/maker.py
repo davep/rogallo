@@ -30,17 +30,6 @@ os.environ["XDG_CONFIG_HOME"] = str(docs_build_dir / "config")
 os.environ["XDG_DATA_HOME"] = str(docs_build_dir / "data")
 
 ##############################################################################
-# Start out with the same configuration for every screenshot.
-with update_configuration() as config:
-    config.bookmarks_visble = False
-    config.command_line_on_top = False
-    config.disable_animations = True
-    config.history_visible = False
-    config.home_page = str(docs_dir / "examples/features.gmi")
-    config.theme = "textual-mono"
-    config.with_cache = False
-
-##############################################################################
 # Create some bookmarks for the screenshots.
 save_bookmarks(
     [
@@ -51,49 +40,60 @@ save_bookmarks(
     ]
 )
 
+
 ##############################################################################
 # Create some location history for the screenshots.
-save_location_history(
-    LocationHistory(
-        list(
-            reversed(
-                [
-                    LocationVisit(
-                        GeminiURI(location),
-                        datetime.now()
-                        - timedelta(
-                            hours=position,
-                            minutes=randint(0, 59),
-                            seconds=randint(0, 59),
-                        ),
-                    )
-                    for position, location in enumerate(
-                        [
-                            "gemini://tlgs.one/",
-                            "gemini://lagrange-point.space/",
-                            "gemini://station.martinrue.com/davep",
-                            "gemini://station.martinrue.com/",
-                            "gemini://theunixzoo.co.uk/",
-                            "gemini://astrobotany.mozz.us/app/pond",
-                            "gemini://astrobotany.mozz.us/",
-                            "gemini://station.martinrue.com/davep/notifications",
-                            "gemini://station.martinrue.com/davep/followers",
-                            "gemini://station.martinrue.com/davep/",
-                            "gemini://geminiprotocol.net/",
-                            "gemini://geminiprotocol.net/docs/",
-                            "gemini://geminiprotocol.net/docs/gemtext-specification.gmi",
-                        ]
-                    )
-                ]
+def fake_history() -> None:
+    save_location_history(
+        LocationHistory(
+            list(
+                reversed(
+                    [
+                        LocationVisit(
+                            GeminiURI(location),
+                            datetime.now()
+                            - timedelta(
+                                hours=position,
+                                minutes=randint(0, 59),
+                                seconds=randint(0, 59),
+                            ),
+                        )
+                        for position, location in enumerate(
+                            [
+                                "gemini://tlgs.one/",
+                                "gemini://lagrange-point.space/",
+                                "gemini://station.martinrue.com/davep",
+                                "gemini://station.martinrue.com/",
+                                "gemini://theunixzoo.co.uk/",
+                                "gemini://astrobotany.mozz.us/app/pond",
+                                "gemini://astrobotany.mozz.us/",
+                                "gemini://station.martinrue.com/davep/notifications",
+                                "gemini://station.martinrue.com/davep/followers",
+                                "gemini://station.martinrue.com/davep/",
+                                "gemini://geminiprotocol.net/",
+                                "gemini://geminiprotocol.net/docs/",
+                                "gemini://geminiprotocol.net/docs/gemtext-specification.gmi",
+                            ]
+                        )
+                    ]
+                )
             )
         )
     )
-)
 
 
 ##############################################################################
 # Create the Rogallo app with the specified command line arguments.
 def make_app(viewing: str = "features"):
+    fake_history()
+    with update_configuration() as config:
+        config.bookmarks_visble = False
+        config.command_line_on_top = False
+        config.disable_animations = True
+        config.history_visible = False
+        config.home_page = str(docs_dir / "examples/features.gmi")
+        config.theme = "textual-mono"
+        config.with_cache = False
     return Rogallo(
         Namespace(
             command="open",
