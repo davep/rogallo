@@ -51,6 +51,20 @@ will be `false` (at the bottom) by default:
 "command_line_on_top": false
 ```
 
+## Disable animations
+
+Rogallo is built using the [Textual
+framework](https://textual.textualize.io/). Textual has a tendency to go
+overboard with animations when scrolling content. Some people like this,
+some don't. For some it's an accessibility issue. If you would prefer that
+such animations are disabled, set the `disable_animations` configuration
+setting. It accepts `true` or `false` as valid values. It will be `false`
+(use animations) by default:
+
+```json
+"disable_animations": false
+```
+
 ## Displayable content types
 
 By default Rogallo only considers a narrow set of MIME types as displayable
