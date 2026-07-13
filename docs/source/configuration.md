@@ -14,6 +14,24 @@ called `~/.config/rogallo/configuration.json`.
     You can discover the exact directory with the [`directories` command
     line command](index.md#directories)
 
+## Bookmarks visible
+
+Rogallo has a sidebar that displays the bookmarks you've saved. By default
+it isn't visible. It can be made visible with the `Toggle Bookmarks` command
+([`ToggleBookmarks`](#bindable-commands), bound to <kbd>F3</kbd> by
+default).
+
+```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo with the command line on top" lines=35 columns=90 press="f3"}
+```
+
+The setting itself is saved in the configuration file as
+`bookmarks_visible`, which takes `true` or `false` as valid values. It will
+be `false` (not visible) by default:
+
+```json
+"bookmarks_visble": false
+```
+
 ## Command line position
 
 By default, Rogallo's command line appears at the bottom of the screen,
