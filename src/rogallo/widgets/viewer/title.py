@@ -57,9 +57,9 @@ class ViewerTitle(Horizontal):
             len(
                 display := ""
                 if self.location is None
-                else str(self.location)[-self.size.width :]
+                else str(self.location)[-self._location_label.size.width :]
             )
-            >= self.size.width
+            >= self._location_label.size.width
         ):
             display = f"…{display[1:]}"
         self._location_label.update(display)
