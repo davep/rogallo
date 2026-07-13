@@ -151,8 +151,8 @@ dhv themes | sed 's/^/- /'
 !!! tip
 
     You can also [set the theme via the command line](index.md#-t-theme). This can
-    be useful if you want to ensure that DHV runs up with a specific theme.
-    Note that this *also* configures the theme for future runs of DHV.
+    be useful if you want to ensure that Rogallo runs up with a specific theme.
+    Note that this *also* configures the theme for future runs of Rogallo.
 
 Here's a sample of some of the themes:
 
