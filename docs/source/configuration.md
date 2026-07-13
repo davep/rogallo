@@ -159,7 +159,7 @@ Rogallo has a number of themes available. You can select a theme using the
 <kbd>F9</kbd> by default) command. The available themes include:
 
 ```bash exec="on"
-dhv themes | sed 's/^/- /'
+rogallo themes | sed 's/^/- /'
 ```
 
 !!! tip
