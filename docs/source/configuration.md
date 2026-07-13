@@ -21,7 +21,7 @@ it isn't visible. It can be made visible with the `Toggle Bookmarks` command
 ([`ToggleBookmarks`](#bindable-commands), bound to <kbd>F3</kbd> by
 default).
 
-```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo with the command line on top" lines=35 columns=90 press="f3"}
+```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo with the bookmarks visible" lines=35 columns=90 press="f3"}
 ```
 
 The setting itself is saved in the configuration file as
