@@ -2,11 +2,20 @@
 
 import os
 from argparse import Namespace
+from datetime import datetime, timedelta
 from pathlib import Path
+from random import randint
 
 from wasat import GeminiURI
 
-from rogallo.data import Bookmark, save_bookmarks, update_configuration
+from rogallo.data import (
+    Bookmark,
+    LocationHistory,
+    LocationVisit,
+    save_bookmarks,
+    save_location_history,
+    update_configuration,
+)
 from rogallo.rogallo import Rogallo
 
 ##############################################################################
@@ -40,6 +49,45 @@ save_bookmarks(
         Bookmark("Station", GeminiURI("gemini://station.martinrue.com/")),
         Bookmark("AstroBotany", GeminiURI("gemini://astrobotany.mozz.us/")),
     ]
+)
+
+##############################################################################
+# Create some location history for the screenshots.
+save_location_history(
+    LocationHistory(
+        list(
+            reversed(
+                [
+                    LocationVisit(
+                        GeminiURI(location),
+                        datetime.now()
+                        - timedelta(
+                            hours=position,
+                            minutes=randint(0, 59),
+                            seconds=randint(0, 59),
+                        ),
+                    )
+                    for position, location in enumerate(
+                        [
+                            "gemini://tlgs.one/",
+                            "gemini://lagrange-point.space/",
+                            "gemini://station.martinrue.com/davep",
+                            "gemini://station.martinrue.com/",
+                            "gemini://theunixzoo.co.uk/",
+                            "gemini://astrobotany.mozz.us/app/pond",
+                            "gemini://astrobotany.mozz.us/",
+                            "gemini://station.martinrue.com/davep/notifications",
+                            "gemini://station.martinrue.com/davep/followers",
+                            "gemini://station.martinrue.com/davep/",
+                            "gemini://geminiprotocol.net/",
+                            "gemini://geminiprotocol.net/docs/",
+                            "gemini://geminiprotocol.net/docs/gemtext-specification.gmi",
+                        ]
+                    )
+                ]
+            )
+        )
+    )
 )
 
 
