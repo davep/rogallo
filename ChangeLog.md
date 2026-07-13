@@ -1,5 +1,13 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Fixed a cosmetic issue with the horizontal truncation of the current
+  location as shown in the viewer panel, when it is wider than the viewer.
+  ([#131](https://github.com/davep/rogallo/pull/131))
+
 ## v0.6.0
 
 **Released: 2026-07-12**
