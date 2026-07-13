@@ -124,6 +124,18 @@ default.
     Turning this off and visiting sites that still deliver escape sequences
     will have unpredictable results.
 
+## Home page
+
+Rogallo has a home page setting. This can be set using the `Set Home`
+command ([`SetHome`](#bindable-commands) command, bound to
+<kbd>Alt</kbd>+<kbd>h</kbd> by default). This sets the currently-visited
+page as the home page. If you wish you can also modify it in the
+configuration file:
+
+```json
+"home_page": "gemini://geminiprotocol.net/"
+```
+
 ## Keyboard bindings
 
 Rogallo allows for a degree of configuration of its keyboard bindings;
