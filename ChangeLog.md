@@ -7,6 +7,8 @@
 - Fixed a cosmetic issue with the horizontal truncation of the current
   location as shown in the viewer panel, when it is wider than the viewer.
   ([#131](https://github.com/davep/rogallo/pull/131))
+- The command line suggestions now also include all hosts found in the trust
+  store. ([#132](https://github.com/davep/rogallo/pull/132))
 
 ## v0.6.0
 

@@ -262,7 +262,7 @@ class Main(EnhancedScreen[None]):
             )
         yield Footer()
 
-    def on_mount(self) -> None:
+    async def on_mount(self) -> None:
         """Called when the screen is mounted."""
         self._location_history = load_location_history()
         self._navigation_history = load_navigation_history()
@@ -270,6 +270,11 @@ class Main(EnhancedScreen[None]):
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
         self._command_line.history = load_command_history()
+        if self._client.trust_store:
+            self._command_line.known_hosts = [
+                GeminiURI(f"{GEMINI_PREFIX}{host}:{port}")
+                for host, port in await self._client.trust_store.get_hosts()
+            ]
         self._history_visible = config.history_visible
         self._bookmarks_visible = config.bookmarks_visble
         if self._arguments.command == "open" and (
@@ -630,6 +635,7 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the command that was executed.
         """
+        self.mutate_reactive(Main._command_history)
         save_command_history(message.command_line.history)
 
     @on(HistoryViewer.HistoryModified)
@@ -639,6 +645,7 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the modified history.
         """
+        self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
 
     @on(BookmarksViewer.BookmarksModified)
@@ -648,6 +655,7 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the modified bookmarks.
         """
+        self.mutate_reactive(Main._bookmarks)
         save_bookmarks(self._bookmarks)
 
     @on(CopyToClipboard)
