@@ -216,6 +216,11 @@ class CommandLine(Vertical):
         command: str
         """The command that was executed."""
 
+    def _refresh_suggestions(self) -> None:
+        """Refresh the suggestions for the input."""
+        if self.is_mounted:
+            self._input.suggester = self._history_suggester
+
     def handle_input(self, command: str) -> None:
         """Handle input from the user.
 
@@ -229,7 +234,7 @@ class CommandLine(Vertical):
                 self.history.add(command)
                 self.post_message(self.CommandExecuted(self, command))
                 self._input.value = ""
-                self._input.suggester = self._history_suggester
+                self._refresh_suggestions()
                 return
         self.notify("Unable to handle that input", title="Error", severity="error")
 
@@ -245,8 +250,19 @@ class CommandLine(Vertical):
 
     def _watch_history(self) -> None:
         """React to history being updated."""
-        if self.is_mounted:
-            self._input.suggester = self._history_suggester
+        self._refresh_suggestions()
+
+    def _watch_location_history(self) -> None:
+        """React to the location history being updated."""
+        self._refresh_suggestions()
+
+    def _watch_navigation_history(self) -> None:
+        """React to the navigation history being updated."""
+        self._refresh_suggestions()
+
+    def _watch_bookmarks(self) -> None:
+        """React to the bookmarks being updated."""
+        self._refresh_suggestions()
 
     def _watch_working(self) -> None:
         """React to the working state being updated."""

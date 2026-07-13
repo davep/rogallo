@@ -630,6 +630,7 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the command that was executed.
         """
+        self.mutate_reactive(Main._command_history)
         save_command_history(message.command_line.history)
 
     @on(HistoryViewer.HistoryModified)
@@ -639,6 +640,7 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the modified history.
         """
+        self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
 
     @on(BookmarksViewer.BookmarksModified)
@@ -648,6 +650,7 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the modified bookmarks.
         """
+        self.mutate_reactive(Main._bookmarks)
         save_bookmarks(self._bookmarks)
 
     @on(CopyToClipboard)
