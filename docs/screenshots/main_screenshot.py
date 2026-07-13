@@ -2,7 +2,9 @@ import os
 from argparse import Namespace
 from pathlib import Path
 
-from rogallo.data import update_configuration
+from wasat import GeminiURI
+
+from rogallo.data import Bookmark, save_bookmarks, update_configuration
 from rogallo.rogallo import Rogallo
 
 docs_dir = Path(__file__).parent.parent
@@ -17,6 +19,15 @@ with update_configuration() as config:
     config.history_visible = False
     config.home_page = str(docs_dir / "examples/features.gmi")
     config.with_cache = False
+
+save_bookmarks(
+    [
+        Bookmark("The Gemini Protocol", GeminiURI("gemini://geminiprotocol.net/")),
+        Bookmark("davep", GeminiURI("gemini://davep.gemcities.com/")),
+        Bookmark("Station", GeminiURI("gemini://station.martinrue.com/")),
+        Bookmark("AstroBotany", GeminiURI("gemini://astrobotany.mozz.us/")),
+    ]
+)
 
 app = Rogallo(
     Namespace(
