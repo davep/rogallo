@@ -14,6 +14,25 @@ called `~/.config/rogallo/configuration.json`.
     You can discover the exact directory with the [`directories` command
     line command](index.md#directories)
 
+## Command line position
+
+By default, Rogallo's command line appears at the bottom of the screen,
+above the footer of the application. It can be moved to the top of the
+screen, below the application header, with the `Change Command Line
+Location` command ([`ChangeCommandLineLocation`](#bindable-commands), bound
+to <kbd>Ctrl</kbd>+<kbd>Up</kbd> by default).
+
+```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo with the command line on top" lines=35 columns=90 press="ctrl+up,ctrl+1"}
+```
+
+The setting itself is saved in the configuration file as
+`command_line_on_top`, which takes `true` or `false` as valid values. It
+will be `false` (at the bottom) by default:
+
+```json
+"command_line_on_top": false
+```
+
 ## Keyboard bindings
 
 Rogallo allows for a degree of configuration of its keyboard bindings;
