@@ -28,6 +28,13 @@ def get_args() -> Namespace:
         epilog=f"v{__version__}",
     )
 
+    # Add --theme
+    parser.add_argument(
+        "-t",
+        "--theme",
+        help="Set the theme for the application (see `themes` command for available themes)",
+    )
+
     # Add --version
     parser.add_argument(
         "-v",
@@ -37,16 +44,15 @@ def get_args() -> Namespace:
         version=f"%(prog)s v{__version__}",
     )
 
-    # Add --theme
-    parser.add_argument(
-        "-t",
-        "--theme",
-        help="Set the theme for the application (see `themes` command for available themes)",
-    )
-
     # Allow for commands on the command line.
     sub_parser = parser.add_subparsers(
         dest="command", help="Available commands", required=False
+    )
+
+    # Add the 'bindings' command.
+    sub_parser.add_parser(
+        "bindings",
+        help="List commands that can have their bindings changed",
     )
 
     # Add the 'directories' command.
@@ -63,17 +69,6 @@ def get_args() -> Namespace:
         help="Show license information",
     )
 
-    # Add the 'bindings' command.
-    sub_parser.add_parser(
-        "bindings",
-        help="List commands that can have their bindings changed",
-    )
-
-    # Add the 'themes' command.
-    sub_parser.add_parser(
-        "themes", help="List the available themes that can be used with --theme"
-    )
-
     # Add the 'open' command.
     sub_parser.add_parser(
         "open",
@@ -81,6 +76,11 @@ def get_args() -> Namespace:
     ).add_argument(
         "location",
         help="The location to open",
+    )
+
+    # Add the 'themes' command.
+    sub_parser.add_parser(
+        "themes", help="List the available themes that can be used with --theme"
     )
 
     # Finally, parse the command line.
