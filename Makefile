@@ -98,7 +98,7 @@ rtfm:                           # Locally read the library documentation
 	$(mkdocs) serve --livereload
 
 .PHONY: publishdocs
-publishdocs:			# Set up the docs for publishing
+publishdocs: clean-docs	# Set up the docs for publishing
 	$(mkdocs) gh-deploy
 
 ##############################################################################
@@ -127,11 +127,11 @@ repl:				# Start a Python REPL in the venv.
 
 .PHONY: delint
 delint:			# Fix linting issues.
-	$(lint) --fix  $(src) $(tests)
+	$(lint) --fix  $(src) $(tests) $(docs)
 
 .PHONY: pep8ify
 pep8ify:			# Reformat the code to be as PEP8 as possible.
-	$(fmt) $(src) $(tests)
+	$(fmt) $(src) $(tests) $(docs)
 
 .PHONY: tidy
 tidy: pep8ify delint		# Tidy up the code, fixing lint and format issues.
@@ -140,8 +140,12 @@ tidy: pep8ify delint		# Tidy up the code, fixing lint and format issues.
 clean-packaging:		# Clean the package building files
 	rm -rf dist
 
+.PHONY: clean-docs
+clean-docs:			# Clean up the documentation building files
+	rm -rf site .screenshot_cache
+
 .PHONY: clean
-clean: clean-packaging # Clean the build directories
+clean: clean-packaging clean-docs # Clean the build directories
 
 .PHONY: realclean
 realclean: clean		# Clean the venv and build directories
