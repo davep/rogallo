@@ -1,0 +1,14 @@
+# The Gemini Protocol
+
+The primary documentation for the Gemini Protocol can be found here:
+
+=> gemini://geminiprotocol.net/docs/ The Gemini Protocol
+
+The specification for the protocol itself is here:
+
+=> gemini://geminiprotocol.net/docs/protocol-specification.gmi
+
+The specification for the hypertext format is here:
+
+=> gemini://geminiprotocol.net/docs/gemtext-specification.gmi
+

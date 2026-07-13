@@ -201,6 +201,22 @@ generally use a name (`number_sign`, `at`, `asterisk`, etc...).
     If you need help with keyboard bindings [please feel free to
     ask](index.md#questions-and-feedback).
 
+## Link tooltips
+
+By default, when using a mouse, Rogallo will show a tooltip containing the
+target URI when you hover the mouse cursor over a link.
+
+```{.textual path="docs/screenshots/links_screenshot.py" title="Rogallo showing a link tooltip" lines=35 columns=90 hover="GemtextLink"}
+```
+
+If this feels too cluttered it can be turned off with the
+`show_link_tooltips` setting. Valid values are `true` and `false`, with
+`true` (show the tooltips) being the default.
+
+```json
+"show_link_tooltips": true
+```
+
 ## Theme
 
 Rogallo has a number of themes available. You can select a theme using the
