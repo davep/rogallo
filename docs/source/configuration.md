@@ -141,6 +141,24 @@ default.
     Turning this off and visiting sites that still deliver escape sequences
     will have unpredictable results.
 
+## History visible
+
+Rogallo has a sidebar that displays the history of locations you've visited.
+By default it isn't visible. It can be made visible with the `Toggle
+History` command ([`Toggle History`](#bindable-commands), bound to
+<kbd>F2</kbd> by default).
+
+```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo with the history visible" lines=50 columns=120 press="f2"}
+```
+
+The setting itself is saved in the configuration file as `history_visible`,
+which takes `true` or `false` as valid values. It will be `false` (not
+visible) by default:
+
+```json
+"history_visble": false
+```
+
 ## Home page
 
 Rogallo has a home page setting. This can be set using the `Set Home`
