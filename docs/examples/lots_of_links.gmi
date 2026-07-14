@@ -15,7 +15,7 @@ Here's a document that has quite a few links, all next to each other.
 => https://pypi.org/user/davepearson/ My Python code on PyPI
 => https://www.reddit.com/user/davepearson/ Me on Reddit
 => https://steamcommunity.com/id/davepdotorg Me on Steam
-=> https://www.tiktok.com/@davepdotorg My on TikTok
+=> https://www.tiktok.com/@davepdotorg Me on TikTok
 => https://www.youtube.com/user/daveporg My YouTube channel
 => https://gitlab.com/davep My GitLab
 => https://codeberg.org/davep My Codeberg
