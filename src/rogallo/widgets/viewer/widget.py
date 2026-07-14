@@ -44,6 +44,10 @@ class Viewer(Vertical, can_focus=False):
         &.--stripe-links GemtextLink.--stripe {
             background: $boost 200%;
         }
+
+        &.--with-link-numbers GemtextLink #jump {
+            display: block;
+        }
     }
     """
 
@@ -51,6 +55,8 @@ class Viewer(Vertical, can_focus=False):
     """The details of the document to show in the viewer."""
     view_source: var[bool] = var(False)
     """Whether the viewer is showing the source of the document or not."""
+    with_link_numbers: var[bool] = var(False, toggle_class="--with-link-numbers")
+    """Whether the viewer is showing link numbers or not."""
     stripe_links: var[bool] = var(False, toggle_class="--stripe-links")
     """Whether the viewer is showing links with stripes or not."""
 
@@ -128,9 +134,13 @@ class Viewer(Vertical, can_focus=False):
         """Watch for changes to the view_source property and update the viewer."""
         self.mutate_reactive(Viewer.document)
 
+    def _watch_with_link_numbers(self) -> None:
+        """Watch for changes to the with_link_numbers property."""
+        self._jump = None
+
     def _watch__jump(self) -> None:
         """Watch for changes to the jump property and update the viewer."""
-        if self._jump is not None:
+        if self.with_link_numbers and self._jump is not None:
             for link in self._view.query(GemtextLink):
                 if link.jump_number == self._jump:
                     self._view.scroll_to_widget(link)
@@ -159,6 +169,8 @@ class Viewer(Vertical, can_focus=False):
     @on(Key)
     def _jumper(self, event: Key) -> None:
         """Handle jump key presses."""
+        if not self.with_link_numbers:
+            return
         if event.key.isdigit():
             event.stop()
             self._jump = (self._jump or 0) * 10 + int(event.key)

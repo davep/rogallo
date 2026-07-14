@@ -32,6 +32,7 @@ from ..commands import (
     StripeLinks,
     ToggleBookmarks,
     ToggleHistory,
+    ToggleLinkNumbers,
     ToggleView,
 )
 
@@ -68,6 +69,7 @@ class MainCommands(CommandsProvider):
         yield StripeLinks()
         yield from self.maybe(ToggleBookmarks)
         yield from self.maybe(ToggleHistory)
+        yield ToggleLinkNumbers()
         yield from self.maybe(ToggleView)
 
 

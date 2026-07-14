@@ -17,6 +17,7 @@ from .main import (
     StripeLinks,
     ToggleBookmarks,
     ToggleHistory,
+    ToggleLinkNumbers,
     ToggleView,
 )
 from .navigation import Backward, Forward
@@ -44,6 +45,7 @@ __all__ = [
     "StripeLinks",
     "ToggleBookmarks",
     "ToggleHistory",
+    "ToggleLinkNumbers",
     "ToggleView",
 ]
 

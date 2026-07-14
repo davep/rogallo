@@ -107,4 +107,11 @@ class StripeLinks(Command):
     BINDING_KEY = "f8"
 
 
+##############################################################################
+class ToggleLinkNumbers(Command):
+    """Toggle the display of link numbers in the document viewer"""
+
+    BINDING_KEY = "shift+f8"
+
+
 ### main.py ends here
