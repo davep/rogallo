@@ -13,6 +13,8 @@
   ([#137](https://github.com/davep/rogallo/pull/137))
 - Fixed a cosmetic issue with word-wrapping of the description of a link.
   ([#141](https://github.com/davep/rogallo/pull/141))
+- Added support for numeric-based quick jumping to links in the viewer.
+  ([#141](https://github.com/davep/rogallo/pull/141))
 
 ## v0.6.0
 

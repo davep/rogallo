@@ -30,6 +30,7 @@ from textual import on
 from textual.app import ComposeResult
 from textual.containers import Horizontal
 from textual.events import Click
+from textual.getters import query_one
 from textual.reactive import var
 from textual.widgets import Label, Static
 
@@ -175,7 +176,6 @@ class GemtextLink(Horizontal, can_focus=True):
     GemtextLink {
         margin: 0 2 0 0;
         height: auto;
-        pointer: pointer;
 
         #icon {
             color: $text-primary;
@@ -183,8 +183,13 @@ class GemtextLink(Horizontal, can_focus=True):
             height: auto;
         }
 
+        #text-wrap {
+            height: auto;
+        }
+
         #text {
             margin-right: 2;
+            pointer: pointer;
         }
 
         &:hover #text, #text:hover {
@@ -194,6 +199,15 @@ class GemtextLink(Horizontal, can_focus=True):
         &:focus #text {
             color: $block-cursor-foreground;
             background: $block-cursor-background;
+        }
+
+        #jump {
+            color: $text-muted 30%;
+        }
+
+        &:focus #jump {
+            color: $text-primary;
+            text-style: bold;
         }
     }
     """
@@ -207,8 +221,14 @@ class GemtextLink(Horizontal, can_focus=True):
 
     BINDINGS = [HelpfulBinding("enter", "open_link", "Open link", show=False)]
 
+    jump_number: var[int | None] = var(None)
+    """The jump number for the link."""
+
     _normalised_uri: var[str] = var("")
     """The normalised URI to use when opening the link."""
+
+    _jump_link = query_one("#jump", Label)
+    """The jump link label."""
 
     def __init__(self, link: Line) -> None:
         """Initialize a Gemtext link widget.
@@ -250,10 +270,18 @@ class GemtextLink(Horizontal, can_focus=True):
         if load_configuration().show_link_tooltips:
             self.tooltip = self._normalised_uri
 
+    def _watch_jump_number(self) -> None:
+        """Watch for changes to the jump number."""
+        self._jump_link.update(
+            "" if self.jump_number is None else f"[{self.jump_number}]"
+        )
+
     def compose(self) -> ComposeResult:
         """Compose the Gemtext link widget."""
         yield Label(self._icon, id="icon")
-        yield Label(line_filter()(self._link), id="text", markup=False, shrink=True)
+        with Horizontal(id="text-wrap"):
+            yield Label(line_filter()(self._link), id="text", markup=False, shrink=True)
+        yield Label("[nnnnnn]", id="jump", markup=False)
 
     @on(Click)
     def _action_open_link(self) -> None:

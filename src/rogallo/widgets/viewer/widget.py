@@ -13,7 +13,7 @@ from gemtext import Gemtext, Line, Paragraph
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import Vertical
-from textual.events import DescendantBlur, DescendantFocus
+from textual.events import DescendantBlur, DescendantFocus, Key
 from textual.getters import query_one
 from textual.reactive import var
 from textual.widgets import Static
@@ -54,6 +54,9 @@ class Viewer(Vertical, can_focus=False):
     """The document view widget."""
     _status = query_one(ViewerStatus)
     """The status bar widget."""
+
+    _jump: var[int | None] = var(None)
+    """Keeps track of the jump progress."""
 
     def compose(self) -> ComposeResult:
         """Compose the viewer widget."""
@@ -98,17 +101,14 @@ class Viewer(Vertical, can_focus=False):
                 )
             ]
         else:
-            for widget in (
-                blocks := [
-                    get_block_widget(line)
-                    for line in self._consolidate(
-                        Gemtext(self.document.content).content
-                    )
-                ]
-            ):
-                if isinstance(widget, GemtextLink):
-                    widget.normalise_uri(self.document.location)
+            blocks = [
+                get_block_widget(line)
+                for line in self._consolidate(Gemtext(self.document.content).content)
+            ]
         await self._view.mount_all(blocks)
+        for jump_number, link in enumerate(self._view.query(GemtextLink)):
+            link.normalise_uri(self.document.location)
+            link.jump_number = jump_number + 1
         # This next bit of nonsense is because Textual fails to sort its
         # scrollbars out upon clearing down and remounting a new set of
         # children. So we have to force it to refresh and then scroll to the
@@ -121,6 +121,16 @@ class Viewer(Vertical, can_focus=False):
     def _watch_view_source(self) -> None:
         """Watch for changes to the view_source property and update the viewer."""
         self.mutate_reactive(Viewer.document)
+
+    def _watch__jump(self) -> None:
+        """Watch for changes to the jump property and update the viewer."""
+        if self._jump is not None:
+            for link in self._view.query(GemtextLink):
+                if link.jump_number == self._jump:
+                    self._view.scroll_to_widget(link, animate=True)
+                    link.focus()
+                    return
+            self._jump = self._jump % 10 if self._jump > 9 else None
 
     def take_control(self) -> None:
         """Take control of the UI."""
@@ -139,6 +149,15 @@ class Viewer(Vertical, can_focus=False):
         """Clear the status bar when a descendant widget is blurred."""
         if self.screen.focused and self not in self.screen.focused.ancestors:
             self._status.message = ""
+
+    @on(Key)
+    def _jumper(self, event: Key) -> None:
+        """Handle jump key presses."""
+        if event.key.isdigit():
+            event.stop()
+            self._jump = (self._jump or 0) * 10 + int(event.key)
+        else:
+            self._jump = None
 
 
 ### widget.py ends here
