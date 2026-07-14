@@ -9,6 +9,8 @@
   ([#131](https://github.com/davep/rogallo/pull/131))
 - The command line suggestions now also include all hosts found in the trust
   store. ([#132](https://github.com/davep/rogallo/pull/132))
+- Added known hosts from the trust store to the history search palette.
+  ([#137](https://github.com/davep/rogallo/pull/137))
 
 ## v0.6.0
 
