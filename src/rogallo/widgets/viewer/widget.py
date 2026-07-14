@@ -22,7 +22,7 @@ from textual.widgets import Static
 # Local imports.
 from ...document import Document
 from .document_view import DocumentView
-from .gemtext_blocks import GemtextLink, GemtextWidget, get_block_widget
+from .gemtext_blocks import GemtextLink, get_block_widget
 from .status import ViewerStatus
 from .title import ViewerTitle
 
@@ -104,20 +104,19 @@ class Viewer(Vertical, can_focus=False):
         self._title.location = self.document.location
         self._status.mime_type = self.document.mime_type or ""
         await self._view.remove_children()
-        blocks: list[Static] | list[GemtextWidget]
-        if not self.document.is_gemtext or self.view_source:
-            blocks = [
+        await self._view.mount_all(
+            [
                 Static(
                     self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}"),
                     markup=False,
                 )
             ]
-        else:
-            blocks = [
+            if not self.document.is_gemtext or self.view_source
+            else [
                 get_block_widget(line)
                 for line in self._consolidate(Gemtext(self.document.content).content)
             ]
-        await self._view.mount_all(blocks)
+        )
         for jump_number, link in enumerate(self._view.query(GemtextLink)):
             link.normalise_uri(self.document.location)
             link.jump_number = jump_number + 1
