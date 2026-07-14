@@ -11,6 +11,8 @@
   store. ([#132](https://github.com/davep/rogallo/pull/132))
 - Added known hosts from the trust store to the history search palette.
   ([#137](https://github.com/davep/rogallo/pull/137))
+- Fixed a cosmetic issue with word-wrapping of the description of a link.
+  ([#141](https://github.com/davep/rogallo/pull/141))
 
 ## v0.6.0
 
