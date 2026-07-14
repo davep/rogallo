@@ -30,6 +30,7 @@ from textual import on
 from textual.app import ComposeResult
 from textual.containers import Horizontal
 from textual.events import Click
+from textual.getters import query_one
 from textual.reactive import var
 from textual.widgets import Label, Static
 
@@ -134,14 +135,16 @@ class GemtextListItem(Horizontal):
     GemtextListItem {
         margin: 0 2 0 0;
         height: auto;
-        Label.--bullet {
+
+        #bullet {
             color: $text-primary;
             padding-right: 1;
             &:light {
                 color: $text-secondary;
             }
         }
-        Label.--text {
+
+        #text {
             margin-right: 2;
         }
     }
@@ -159,9 +162,9 @@ class GemtextListItem(Horizontal):
 
     def compose(self) -> ComposeResult:
         """Compose the Gemtext list item widget."""
-        yield Label("•", classes="--bullet")
+        yield Label("•", id="bullet")
         yield Label(
-            line_filter()(self._list_item), markup=False, shrink=True, classes="--text"
+            line_filter()(self._list_item), markup=False, shrink=True, id="text"
         )
 
 
@@ -171,21 +174,43 @@ class GemtextLink(Horizontal, can_focus=True):
 
     DEFAULT_CSS = """
     GemtextLink {
-        padding: 0 2 0 0;
+        margin: 0 2 0 0;
         height: auto;
-        .--icon {
+        pointer: pointer;
+
+        #icon {
             color: $text-primary;
             margin-right: 1;
             height: auto;
         }
-        &:hover .--uri, .--uri:hover {
+
+        #text-wrap {
+            height: auto;
+        }
+
+        #text {
+            margin-right: 2;
+        }
+
+        #jump {
+            display: none;
+            color: $text-muted 30%;
+        }
+
+        &:hover {
             background: $block-hover-background;
         }
-        &:focus .--uri {
-            color: $block-cursor-foreground;
-            background: $block-cursor-background;
+
+        &:focus {
+            #text-wrap, #jump {
+                color: $block-cursor-foreground;
+                background: $block-cursor-background;
+            }
+            #jump {
+                color: $text;
+                text-style: bold;
+            }
         }
-        pointer: pointer;
     }
     """
 
@@ -198,8 +223,14 @@ class GemtextLink(Horizontal, can_focus=True):
 
     BINDINGS = [HelpfulBinding("enter", "open_link", "Open link", show=False)]
 
+    jump_number: var[int | None] = var(None)
+    """The jump number for the link."""
+
     _normalised_uri: var[str] = var("")
     """The normalised URI to use when opening the link."""
+
+    _jump_link = query_one("#jump", Label)
+    """The jump link label."""
 
     def __init__(self, link: Line) -> None:
         """Initialize a Gemtext link widget.
@@ -241,12 +272,22 @@ class GemtextLink(Horizontal, can_focus=True):
         if load_configuration().show_link_tooltips:
             self.tooltip = self._normalised_uri
 
+    def _watch_jump_number(self) -> None:
+        """Watch for changes to the jump number."""
+        self._jump_link.update(
+            "" if self.jump_number is None else f"[{self.jump_number}]"
+        )
+        self.set_class(
+            self.jump_number is not None and not bool(self.jump_number % 2),
+            "--stripe",
+        )
+
     def compose(self) -> ComposeResult:
         """Compose the Gemtext link widget."""
-        yield Label(self._icon, classes="--icon")
-        yield Label(
-            line_filter()(self._link), classes="--uri", markup=False, shrink=True
-        )
+        yield Label(self._icon, id="icon")
+        with Horizontal(id="text-wrap"):
+            yield Label(line_filter()(self._link), id="text", markup=False, shrink=True)
+        yield Label(id="jump", markup=False)
 
     @on(Click)
     def _action_open_link(self) -> None:
@@ -276,12 +317,12 @@ class GemtextPreformatted(Static):
 
     DEFAULT_CSS = """
     GemtextPreformatted {
+        margin: 0 2;
         background: black 35%;
+        overflow: auto;
         &:light {
             background: white 35%;
         }
-        overflow: auto;
-        margin: 0 2;
     }
     """
 
@@ -293,6 +334,7 @@ class GemtextPreformatted(Static):
         """
         assert isinstance(preformatted, PreFormatted)
         self._preformatted = preformatted
+        """The Gemtext preformatted text to display."""
         super().__init__()
 
     def compose(self) -> ComposeResult:

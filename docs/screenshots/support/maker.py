@@ -94,6 +94,7 @@ def make_app(viewing: str = "features"):
         config.home_page = str(docs_dir / "examples/features.gmi")
         config.theme = "textual-mono"
         config.with_cache = False
+        config.stripe_links = False
     return Rogallo(
         Namespace(
             command="open",

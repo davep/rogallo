@@ -14,8 +14,10 @@ from .main import (
     Reload,
     SetHome,
     SetHomeToCurrentLocation,
+    StripeLinks,
     ToggleBookmarks,
     ToggleHistory,
+    ToggleLinkNumbers,
     ToggleView,
 )
 from .navigation import Backward, Forward
@@ -40,8 +42,10 @@ __all__ = [
     "SearchHistory",
     "SetHome",
     "SetHomeToCurrentLocation",
+    "StripeLinks",
     "ToggleBookmarks",
     "ToggleHistory",
+    "ToggleLinkNumbers",
     "ToggleView",
 ]
 

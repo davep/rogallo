@@ -69,6 +69,12 @@ class Configuration:
     maximum_redirects: int = 5
     """The maximum number of redirects to follow for network requests."""
 
+    stripe_links: bool = False
+    """Should links be given alternating backgrounds to help them stand out?"""
+
+    with_link_jumps: bool = True
+    """Should the application support jumping to links via numeric labels?"""
+
 
 ##############################################################################
 def configuration_file() -> Path:

@@ -61,8 +61,10 @@ from ..commands import (
     SearchHistory,
     SetHome,
     SetHomeToCurrentLocation,
+    StripeLinks,
     ToggleBookmarks,
     ToggleHistory,
+    ToggleLinkNumbers,
     ToggleView,
 )
 from ..data import (
@@ -190,7 +192,9 @@ class Main(EnhancedScreen[None]):
         SetHomeToCurrentLocation,
         SearchHistory,
         SearchBookmarks,
+        StripeLinks,
         ClearCache,
+        ToggleLinkNumbers,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -277,6 +281,8 @@ class Main(EnhancedScreen[None]):
             HistorySearchCommands.known_hosts = self._command_line.known_hosts
         self._history_visible = config.history_visible
         self._bookmarks_visible = config.bookmarks_visble
+        self._viewer.stripe_links = config.stripe_links
+        self._viewer.with_link_numbers = config.with_link_jumps
         if self._arguments.command == "open" and (
             location := getattr(self._arguments, "location", None)
         ):
@@ -885,6 +891,18 @@ class Main(EnhancedScreen[None]):
         ):
             self._cache.clear()
             self.notify("All cached content has been cleared.", title="Cache")
+
+    def action_stripe_links_command(self) -> None:
+        """Toggle link striping."""
+        self._viewer.stripe_links = not self._viewer.stripe_links
+        with update_configuration() as config:
+            config.stripe_links = self._viewer.stripe_links
+
+    def action_toggle_link_numbers_command(self) -> None:
+        """Toggle link numbers."""
+        self._viewer.with_link_numbers = not self._viewer.with_link_numbers
+        with update_configuration() as config:
+            config.with_link_jumps = self._viewer.with_link_numbers
 
 
 ### main.py ends here

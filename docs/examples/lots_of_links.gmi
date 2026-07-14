@@ -1,0 +1,23 @@
+# An example of lots of links
+
+Here's a document that has quite a few links, all next to each other.
+
+=> https://bandcamp.com/davep Bandcamp
+=> https://bsky.app/profile/davep.org BlueSky
+=> https://discord.gg/ut3angb2Nr My discord server
+=> https://www.flickr.com/photos/davepearson/ My Flickr
+=> https://github.com/davep My GitHub
+=> https://www.instagram.com/davepdotorg/ My Instagram
+=> https://www.last.fm/user/davepdotorg Me on last.fm
+=> https://www.linkedin.com/in/davepdotorg/ Me on LinkedIn
+=> https://fosstodon.org/@davep My Mastodon account
+=> https://www.npmjs.com/~davep.org My stuff on NPM
+=> https://pypi.org/user/davepearson/ My Python code on PyPI
+=> https://www.reddit.com/user/davepearson/ Me on Reddit
+=> https://steamcommunity.com/id/davepdotorg Me on Steam
+=> https://www.tiktok.com/@davepdotorg Me on TikTok
+=> https://www.youtube.com/user/daveporg My YouTube channel
+=> https://gitlab.com/davep My GitLab
+=> https://codeberg.org/davep My Codeberg
+
+The stripes helps connect the link to the label.

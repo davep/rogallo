@@ -145,7 +145,7 @@ default.
 
 Rogallo has a sidebar that displays the history of locations you've visited.
 By default it isn't visible. It can be made visible with the `Toggle
-History` command ([`Toggle History`](#bindable-commands), bound to
+History` command ([`ToggleHistory`](#bindable-commands), bound to
 <kbd>F2</kbd> by default).
 
 ```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo with the history visible" lines=50 columns=120 press="f2"}
@@ -219,6 +219,38 @@ generally use a name (`number_sign`, `at`, `asterisk`, etc...).
     If you need help with keyboard bindings [please feel free to
     ask](index.md#questions-and-feedback).
 
+## Link jumps
+
+In Rogallo, you can navigate to links using <kbd>Tab</kbd> and
+<kbd>Shift</kbd>+<kbd>Tab</kbd> (the method of navigating between most UI
+elements in the application), and you can also use the mouse. Sometimes,
+though, if there's lots of links, it's handy to be able to jump straight to
+a link. To this end Rogallo provides numeric labels:
+
+```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with labels" lines=30 columns=70}
+```
+
+When the viewer is focused, if you type the number of a link, that link will
+be highlighted:
+
+```{.textual path="docs/screenshots/stripes_screenshot.py" title="A highlighted link after typing its number" lines=30 columns=70 press="5"}
+```
+
+If anyone finds this distracting, you can turn the labels off with the
+`Toggle Link Numbers` ([`ToggleLinkNumbers`](#bindable-commands), bound to
+<kbd>Shift</kbd>+<kbd>F8</kbd> by default) command.
+
+```{.textual path="docs/screenshots/stripes_screenshot.py" title="Link number jumps turned off" lines=30 columns=70 press="shift+f8"}
+```
+
+The setting itself is saved in the configuration file as the
+`with_link_jumps`configuration setting. It accepts `true` or `false` as
+valid values. It will be `true` (with labels) by default.
+
+```json
+"with_link_jumps": true
+```
+
 ## Link tooltips
 
 By default, when using a mouse, Rogallo will show a tooltip containing the
@@ -233,6 +265,33 @@ If this feels too cluttered it can be turned off with the
 
 ```json
 "show_link_tooltips": true
+```
+
+## Striped links
+
+Rogallo provides a method of quick-jumping to links that is based around
+numeric labels that appear on the right in the viewer area. Placing the
+labels to the right helps keep a readable flow of text, but can possibly
+make it trickier to know which label matches which link.
+
+```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links and labels with no stripes" lines=30 columns=70}
+```
+
+To help with this you can turn on "striped links", which alternates the
+background colour of links to help make them stand out and connect with
+their labels. This is toggled using the `Stripe Links`
+([`StripeLinks`](#bindable-commands) command, bound to <kbd>F8</kbd> by
+default).
+
+```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with stripes" lines=30 columns=70 press="f8"}
+```
+
+The setting itself is saved in the configuration file as the `strike_links`
+configuration setting. It accepts `true` or `false` as valid values. It will
+be `false` (no stripes) by default:
+
+```json
+"stripe_links": false
 ```
 
 ## Theme
