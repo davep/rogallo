@@ -39,7 +39,6 @@ from wasat import (
     StatusCode,
     URIError,
 )
-from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
 # Local imports.
