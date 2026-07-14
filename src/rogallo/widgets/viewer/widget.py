@@ -133,7 +133,7 @@ class Viewer(Vertical, can_focus=False):
         if self._jump is not None:
             for link in self._view.query(GemtextLink):
                 if link.jump_number == self._jump:
-                    self._view.scroll_to_widget(link, animate=True)
+                    self._view.scroll_to_widget(link)
                     link.focus()
                     return
             self._jump = self._jump % 10 if self._jump > 9 else None
