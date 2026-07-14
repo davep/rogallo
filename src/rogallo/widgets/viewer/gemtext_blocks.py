@@ -333,6 +333,7 @@ class GemtextPreformatted(Static):
         """
         assert isinstance(preformatted, PreFormatted)
         self._preformatted = preformatted
+        """The Gemtext preformatted text to display."""
         super().__init__()
 
     def compose(self) -> ComposeResult:
