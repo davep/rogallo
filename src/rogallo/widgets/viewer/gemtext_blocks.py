@@ -171,21 +171,28 @@ class GemtextLink(Horizontal, can_focus=True):
 
     DEFAULT_CSS = """
     GemtextLink {
-        padding: 0 2 0 0;
+        margin: 0 2 0 0;
         height: auto;
-        .--icon {
+        pointer: pointer;
+
+        #icon {
             color: $text-primary;
             margin-right: 1;
             height: auto;
         }
-        &:hover .--uri, .--uri:hover {
+
+        #text {
+            margin-right: 2;
+        }
+
+        &:hover #text, #text:hover {
             background: $block-hover-background;
         }
-        &:focus .--uri {
+
+        &:focus #text {
             color: $block-cursor-foreground;
             background: $block-cursor-background;
         }
-        pointer: pointer;
     }
     """
 
@@ -243,10 +250,8 @@ class GemtextLink(Horizontal, can_focus=True):
 
     def compose(self) -> ComposeResult:
         """Compose the Gemtext link widget."""
-        yield Label(self._icon, classes="--icon")
-        yield Label(
-            line_filter()(self._link), classes="--uri", markup=False, shrink=True
-        )
+        yield Label(self._icon, id="icon")
+        yield Label(line_filter()(self._link), id="text", markup=False, shrink=True)
 
     @on(Click)
     def _action_open_link(self) -> None:
