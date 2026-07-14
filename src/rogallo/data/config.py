@@ -32,7 +32,6 @@ class Configuration:
         default_factory=lambda: [
             "text/gemini",
             "text/plain",
-            "application/octet-stream",
         ]
     )
     """The content types that can be displayed in the viewer."""
