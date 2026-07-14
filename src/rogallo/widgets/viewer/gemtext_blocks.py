@@ -176,6 +176,7 @@ class GemtextLink(Horizontal, can_focus=True):
     GemtextLink {
         margin: 0 2 0 0;
         height: auto;
+        pointer: pointer;
 
         #icon {
             color: $text-primary;
@@ -189,25 +190,25 @@ class GemtextLink(Horizontal, can_focus=True):
 
         #text {
             margin-right: 2;
-            pointer: pointer;
-        }
-
-        &:hover #text, #text:hover {
-            background: $block-hover-background;
-        }
-
-        &:focus #text {
-            color: $block-cursor-foreground;
-            background: $block-cursor-background;
         }
 
         #jump {
             color: $text-muted 30%;
         }
 
-        &:focus #jump {
-            color: $text-primary;
-            text-style: bold;
+        &:hover {
+            background: $block-hover-background;
+        }
+
+        &:focus {
+            #text-wrap, #jump {
+                color: $block-cursor-foreground;
+                background: $block-cursor-background;
+            }
+            #jump {
+                color: $text;
+                text-style: bold;
+            }
         }
     }
     """
