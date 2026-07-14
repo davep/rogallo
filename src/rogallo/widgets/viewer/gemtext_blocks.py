@@ -286,7 +286,7 @@ class GemtextLink(Horizontal, can_focus=True):
         yield Label(self._icon, id="icon")
         with Horizontal(id="text-wrap"):
             yield Label(line_filter()(self._link), id="text", markup=False, shrink=True)
-        yield Label("[nnnnnn]", id="jump", markup=False)
+        yield Label("", id="jump", markup=False)
 
     @on(Click)
     def _action_open_link(self) -> None:
