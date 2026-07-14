@@ -39,7 +39,6 @@ from wasat import (
     StatusCode,
     URIError,
 )
-from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
 # Local imports.
@@ -272,7 +271,7 @@ class Main(EnhancedScreen[None]):
         self._command_line.history = load_command_history()
         if self._client.trust_store:
             self._command_line.known_hosts = [
-                GeminiURI(f"{GEMINI_PREFIX}{host}:{port}")
+                GeminiURI.with_default_scheme(f"{host}:{port}")
                 for host, port in await self._client.trust_store.get_hosts()
             ]
             HistorySearchCommands.known_hosts = self._command_line.known_hosts
@@ -620,7 +619,7 @@ class Main(EnhancedScreen[None]):
         if is_likely_schemeless_capsule(message.uri):
             self.post_message(
                 OpenLocation(
-                    GeminiURI(f"{GEMINI_PREFIX}{message.uri}"),
+                    GeminiURI.with_default_scheme(message.uri),
                     allow_cached=message.allow_cached,
                 )
             )

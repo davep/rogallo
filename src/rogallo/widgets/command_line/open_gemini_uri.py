@@ -7,7 +7,6 @@ from textual.widget import Widget
 ##############################################################################
 # Wasat imports.
 from wasat import GeminiURI, URIError
-from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
 # Local imports.
@@ -37,7 +36,7 @@ class OpenGeminiURICommand(InputCommand):
             uri = GeminiURI(text)
         except URIError:
             if is_likely_schemeless_capsule(text):
-                uri = GeminiURI(f"{GEMINI_PREFIX}{text}")
+                uri = GeminiURI.with_default_scheme(text)
             else:
                 return False
         for_widget.post_message(OpenLocation(uri))
