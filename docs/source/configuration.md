@@ -219,6 +219,38 @@ generally use a name (`number_sign`, `at`, `asterisk`, etc...).
     If you need help with keyboard bindings [please feel free to
     ask](index.md#questions-and-feedback).
 
+## Link jumps
+
+In Rogallo, you can navigate to links using <kbd>Tab</kbd> and
+<kbd>Shift</kbd>+<kbd>Tab</kbd> (the method of navigating between most UI
+elements in the application), and you can also use the mouse. Sometimes,
+though, if there's lots of links, it's handy to be able to jump straight to
+a link. To this end Rogallo provides numeric labels:
+
+```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with labels" lines=30 columns=70}
+```
+
+When the viewer is focused, if you type the number of a link, that link will
+be highlighted:
+
+```{.textual path="docs/screenshots/stripes_screenshot.py" title="A highlighted link after typing its number" lines=30 columns=70 press="5"}
+```
+
+If anyone finds this distracting, you can turn the labels off with the
+`Toggle Link Numbers` ([`ToggleLinkNumbers`](#bindable-commands), bound to
+<kbd>Shift</kbd>+<kbd>F8</kbd> by default) command.
+
+```{.textual path="docs/screenshots/stripes_screenshot.py" title="Link number jumps turned off" lines=30 columns=70 press="shift+f8"}
+```
+
+The setting itself is saved in the configuration file as the
+`with_link_jumps`configuration setting. It accepts `true` or `false` as
+valid values. It will be `true` (with labels) by default.
+
+```json
+"with_link_jumps": true
+```
+
 ## Link tooltips
 
 By default, when using a mouse, Rogallo will show a tooltip containing the
@@ -247,8 +279,9 @@ make it trickier to know which label matches which link.
 
 To help with this you can turn on "striped links", which alternates the
 background colour of links to help make them stand out and connect with
-their labels. This is toggled using the `Stripe Links` command
-([`StripeLinks`](#bindable-commands).
+their labels. This is toggled using the `Stripe Links`
+([`StripeLinks`](#bindable-commands) command, bound to <kbd>F8</kbd> by
+default).
 
 ```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with stripes" lines=30 columns=70 press="f8"}
 ```
