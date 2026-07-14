@@ -11,10 +11,19 @@ from itertools import chain
 from textual_enhanced.commands import CommandHit, CommandHits, CommandsProvider
 
 ##############################################################################
+# Wasat imports.
+from wasat import GeminiURI
+
+##############################################################################
 # Local imports.
 from ..data import LocationHistory, LocationVisit, NavigationHistory
 from ..messages import OpenLocation
 from ..types import GeminiLocation
+
+
+##############################################################################
+class KnownHost(GeminiURI):
+    """A known host."""
 
 
 ##############################################################################
@@ -23,7 +32,7 @@ from ..types import GeminiLocation
 class Historical:
     """Represents a historical location."""
 
-    location: GeminiLocation | LocationVisit
+    location: GeminiLocation | LocationVisit | GeminiURI
     """The historical location."""
 
     @property
@@ -38,6 +47,8 @@ class Historical:
         """The context for the location."""
         if isinstance(self.location, LocationVisit):
             return f"From history; last visited: {self.location.timestamp.replace(microsecond=0)}"
+        if isinstance(self.location, KnownHost):
+            return "From known hosts"
         return "From navigation history"
 
     @property
@@ -72,6 +83,8 @@ class HistorySearchCommands(CommandsProvider):
     """The navigation history."""
     location_history: LocationHistory = LocationHistory()
     """The location history."""
+    known_hosts: list[GeminiURI] = []
+    """The known hosts."""
 
     @classmethod
     def prompt(cls) -> str:
@@ -87,7 +100,11 @@ class HistorySearchCommands(CommandsProvider):
         for location in sorted(
             set(
                 Historical(location)
-                for location in chain(self.navigation_history, self.location_history)
+                for location in chain(
+                    self.navigation_history,
+                    self.location_history,
+                    (KnownHost(host) for host in self.known_hosts),
+                )
             )
         ):
             yield CommandHit(

@@ -275,6 +275,7 @@ class Main(EnhancedScreen[None]):
                 GeminiURI(f"{GEMINI_PREFIX}{host}:{port}")
                 for host, port in await self._client.trust_store.get_hosts()
             ]
+            HistorySearchCommands.known_hosts = self._command_line.known_hosts
         self._history_visible = config.history_visible
         self._bookmarks_visible = config.bookmarks_visble
         if self._arguments.command == "open" and (
