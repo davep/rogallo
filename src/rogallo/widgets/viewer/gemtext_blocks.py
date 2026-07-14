@@ -134,14 +134,16 @@ class GemtextListItem(Horizontal):
     GemtextListItem {
         margin: 0 2 0 0;
         height: auto;
-        Label.--bullet {
+
+        #bullet {
             color: $text-primary;
             padding-right: 1;
             &:light {
                 color: $text-secondary;
             }
         }
-        Label.--text {
+
+        #text {
             margin-right: 2;
         }
     }
@@ -159,9 +161,9 @@ class GemtextListItem(Horizontal):
 
     def compose(self) -> ComposeResult:
         """Compose the Gemtext list item widget."""
-        yield Label("•", classes="--bullet")
+        yield Label("•", id="bullet")
         yield Label(
-            line_filter()(self._list_item), markup=False, shrink=True, classes="--text"
+            line_filter()(self._list_item), markup=False, shrink=True, id="text"
         )
 
 
