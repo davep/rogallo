@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v0.7.0
 
-**Released: WiP**
+**Released: 2026-07-14**
 
 - Fixed a cosmetic issue with the horizontal truncation of the current
   location as shown in the viewer panel, when it is wider than the viewer.
