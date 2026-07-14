@@ -40,6 +40,10 @@ class Viewer(Vertical, can_focus=False):
         &.--has-content {
             visibility: visible;
         }
+
+        &.--stripe-links GemtextLink.--stripe {
+            background: $boost 200%;
+        }
     }
     """
 
@@ -47,6 +51,8 @@ class Viewer(Vertical, can_focus=False):
     """The details of the document to show in the viewer."""
     view_source: var[bool] = var(False)
     """Whether the viewer is showing the source of the document or not."""
+    stripe_links: var[bool] = var(False, toggle_class="--stripe-links")
+    """Whether the viewer is showing links with stripes or not."""
 
     _title = query_one(ViewerTitle)
     """The title widget."""

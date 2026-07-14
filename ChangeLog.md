@@ -15,6 +15,8 @@
   ([#141](https://github.com/davep/rogallo/pull/141))
 - Added support for numeric-based quick jumping to links in the viewer.
   ([#141](https://github.com/davep/rogallo/pull/141))
+- Added a `StripeLinks` command to help alternating links stand out better.
+  ([#141](https://github.com/davep/rogallo/pull/141))
 
 ## v0.6.0
 

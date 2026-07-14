@@ -29,6 +29,7 @@ from ..commands import (
     SearchHistory,
     SetHome,
     SetHomeToCurrentLocation,
+    StripeLinks,
     ToggleBookmarks,
     ToggleHistory,
     ToggleView,
@@ -64,6 +65,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(SearchHistory)
         yield SetHome()
         yield from self.maybe(SetHomeToCurrentLocation)
+        yield StripeLinks()
         yield from self.maybe(ToggleBookmarks)
         yield from self.maybe(ToggleHistory)
         yield from self.maybe(ToggleView)

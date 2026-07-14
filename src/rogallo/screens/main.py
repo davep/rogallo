@@ -61,6 +61,7 @@ from ..commands import (
     SearchHistory,
     SetHome,
     SetHomeToCurrentLocation,
+    StripeLinks,
     ToggleBookmarks,
     ToggleHistory,
     ToggleView,
@@ -190,6 +191,7 @@ class Main(EnhancedScreen[None]):
         SetHomeToCurrentLocation,
         SearchHistory,
         SearchBookmarks,
+        StripeLinks,
         ClearCache,
     ]
 
@@ -277,6 +279,7 @@ class Main(EnhancedScreen[None]):
             HistorySearchCommands.known_hosts = self._command_line.known_hosts
         self._history_visible = config.history_visible
         self._bookmarks_visible = config.bookmarks_visble
+        self._viewer.stripe_links = config.stripe_links
         if self._arguments.command == "open" and (
             location := getattr(self._arguments, "location", None)
         ):
@@ -885,6 +888,12 @@ class Main(EnhancedScreen[None]):
         ):
             self._cache.clear()
             self.notify("All cached content has been cleared.", title="Cache")
+
+    def action_stripe_links_command(self) -> None:
+        """Toggle link striping."""
+        self._viewer.stripe_links = not self._viewer.stripe_links
+        with update_configuration() as config:
+            config.stripe_links = self._viewer.stripe_links
 
 
 ### main.py ends here

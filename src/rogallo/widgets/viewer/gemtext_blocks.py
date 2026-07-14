@@ -276,6 +276,10 @@ class GemtextLink(Horizontal, can_focus=True):
         self._jump_link.update(
             "" if self.jump_number is None else f"[{self.jump_number}]"
         )
+        self.set_class(
+            self.jump_number is not None and not bool(self.jump_number % 2),
+            "--stripe",
+        )
 
     def compose(self) -> ComposeResult:
         """Compose the Gemtext link widget."""
