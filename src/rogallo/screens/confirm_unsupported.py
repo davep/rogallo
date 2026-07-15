@@ -55,18 +55,18 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
 
     BINDINGS = [("o", "open_once"), ("a", "open_always"), ("escape", "cancel")]
 
-    def __init__(self, uri: str, scheme: str) -> None:
+    def __init__(self, uri: str, description: str) -> None:
         """Initialise the screen.
 
         Args:
             uri: The URI to confirm.
-            scheme: The scheme of the URI to confirm.
+            description: A description for the confirmation.
         """
         super().__init__()
         self._uri = uri
         """The URI to confirm."""
-        self._scheme = scheme
-        """The scheme of the URI to confirm."""
+        self._description = description
+        """The description for the configuration dialog."""
 
     def compose(self) -> ComposeResult:
         """Compose the screen.
@@ -76,12 +76,7 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
         """
         with VerticalGroup() as dialog:
             dialog.border_title = f"Open {self._uri}?"
-            yield Label(
-                f"The scheme '{self._scheme}' is not supported by Rogallo. "
-                "Do you want to open the URI in your external browser?",
-                shrink=True,
-                markup=False,
-            )
+            yield Label(self._description, shrink=True, markup=False)
             with HorizontalGroup(id="buttons"):
                 yield Button(add_key("Once", "o"), id="once", variant="success")
                 yield Button(add_key("Always", "a"), id="always", variant="success")
@@ -89,7 +84,7 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
 
     @on(Button.Pressed, "#once")
     def action_open_once(self) -> None:
-        """Allow opening the scheme this once.
+        """Allow opening this once.
 
         Args:
             message: The button pressed message.
@@ -98,7 +93,7 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
 
     @on(Button.Pressed, "#always")
     def action_open_always(self) -> None:
-        """Allow always opening the scheme.
+        """Allow always opening.
 
         Args:
             message: The button pressed message.
@@ -111,4 +106,4 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
         self.dismiss(None)
 
 
-### confirm_unsupported_uri.py ends here
+### confirm_unsupported.py ends here

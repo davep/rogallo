@@ -81,11 +81,13 @@ from ..data import (
     load_configuration,
     load_location_history,
     load_navigation_history,
+    load_trusted_mime_types,
     load_trusted_schemes,
     save_bookmarks,
     save_command_history,
     save_location_history,
     save_naviagation_history,
+    save_trusted_mime_types,
     save_trusted_schemes,
     trust_file,
     update_configuration,
@@ -107,7 +109,7 @@ from ..preflight import (
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .certificate import Certificate
-from .confirm_unsupported_uri import ConfirmUnsupportedURI
+from .confirm_unsupported import ConfirmUnsupportedURI
 from .user_input import UserInput
 
 
@@ -247,6 +249,8 @@ class Main(EnhancedScreen[None]):
         """The disk cache manager."""
         self._trusted_schemes = load_trusted_schemes()
         """The trusted schemes."""
+        self._trusted_mime_types = load_trusted_mime_types()
+        """The trusted MIME types."""
         self._client = Client(
             verify_mode="tofu",
             trust_store_path=trust_file(),
@@ -654,7 +658,11 @@ class Main(EnhancedScreen[None]):
         # If the scheme isn't trusted, let's see what the user wants to do about it.
         if not (open_uri := scheme in self._trusted_schemes):
             match await self.app.push_screen_wait(
-                ConfirmUnsupportedURI(message.uri, scheme)
+                ConfirmUnsupportedURI(
+                    message.uri,
+                    f"The scheme '{scheme}' is not supported by Rogallo. "
+                    "Do you want to open the URI in your external browser?",
+                )
             ):
                 case "once":
                     open_uri = True
@@ -679,13 +687,27 @@ class Main(EnhancedScreen[None]):
             location: The location to open.
             mime_type: The MIME type of the content at the location.
         """
-        if await self.app.push_screen_wait(
-            Confirm(
-                "Open externally",
-                f"{message.location}\n\n"
-                f"This location is {message.mime_type} and can't be opened in Rogallo, open externally?",
-            )
-        ):
+
+        # If the MIME type isn't trusted, let's see what the user wants to
+        # do about it.
+        if not (open_uri := message.mime_type in self._trusted_mime_types):
+            match await self.app.push_screen_wait(
+                ConfirmUnsupportedURI(
+                    str(message.location),
+                    f"The MIME type '{message.mime_type}' is not supported by Rogallo. "
+                    "Do you want to open the location in your external browser?",
+                )
+            ):
+                case "once":
+                    open_uri = True
+                case "always":
+                    open_uri = True
+                    self._trusted_mime_types.add(message.mime_type)
+                    save_trusted_mime_types(self._trusted_mime_types)
+
+        # At this point, if the user has consented to opening the location
+        # based on the MIME type, let's do it.
+        if open_uri:
             open_in_browser(
                 str(message.location)
                 if isinstance(message.location, GeminiURI)
