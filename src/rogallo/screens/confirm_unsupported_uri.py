@@ -53,7 +53,7 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
     }
     """
 
-    BINDINGS = [("n", "open_once"), ("a", "open_always"), ("escape", "cancel")]
+    BINDINGS = [("o", "open_once"), ("a", "open_always"), ("escape", "cancel")]
 
     def __init__(self, uri: str, scheme: str) -> None:
         """Initialise the screen.
@@ -83,16 +83,12 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
                 markup=False,
             )
             with HorizontalGroup(id="buttons"):
-                yield Button(add_key("Open now", "n"), id="once", variant="primary")
-                yield Button(
-                    add_key(f"Always open {self._scheme} URIs", "a"),
-                    id="always",
-                    variant="success",
-                )
+                yield Button(add_key("Once", "o"), id="once", variant="success")
+                yield Button(add_key(f"Always", "a"), id="always", variant="success")
                 yield Button(add_key("Cancel", "Esc"), id="cancel", variant="error")
 
     @on(Button.Pressed, "#once")
-    def action_once(self) -> None:
+    def action_open_once(self) -> None:
         """Allow opening the scheme this once.
 
         Args:
@@ -101,7 +97,7 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
         self.dismiss("once")
 
     @on(Button.Pressed, "#always")
-    def action_always(self) -> None:
+    def action_open_always(self) -> None:
         """Allow always opening the scheme.
 
         Args:
