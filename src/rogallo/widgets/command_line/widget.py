@@ -297,12 +297,9 @@ class CommandLine(Vertical):
 
     def action_history_previous(self) -> None:
         """Move backwards through the command line history."""
-        value = ""
-        if self.history.can_go_backward:
-            if self._input.value:
-                self.history.backward()
-            value = self.history.current_item or ""
-        if value:
+        if self._input.value and self.history.can_go_backward:
+            self.history.backward()
+        if value := (self.history.current_item or ""):
             self._input.value = value
             self._input.selection = Selection(0, len(value))
 
