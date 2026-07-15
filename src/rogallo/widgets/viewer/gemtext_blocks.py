@@ -195,6 +195,7 @@ class GemtextLink(Horizontal, can_focus=True):
         #jump {
             display: none;
             color: $text-muted 30%;
+            height: 100%;
         }
 
         &:hover {
