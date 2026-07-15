@@ -3,7 +3,13 @@
 ##############################################################################
 # Local imports.
 from .clipboard import CopyToClipboard
-from .opening import OpenDocument, OpenLocation, OpenURI
+from .opening import (
+    OpenDocument,
+    OpenLocation,
+    OpenUnsupportedMIMEType,
+    OpenUnsupportedURI,
+    OpenURI,
+)
 
 ##############################################################################
 # Exports.
@@ -11,6 +17,8 @@ __all__ = [
     "CopyToClipboard",
     "OpenDocument",
     "OpenLocation",
+    "OpenUnsupportedMIMEType",
+    "OpenUnsupportedURI",
     "OpenURI",
 ]
 

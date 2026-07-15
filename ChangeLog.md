@@ -6,6 +6,8 @@
 
 - Fixed command line history not recording and recovering correctly.
   ([#143](https://github.com/davep/rogallo/pull/143))
+- Add a confirmation step before externally opening unsupported locations or
+  MIME types. ([#144](https://github.com/davep/rogallo/pull/144))
 
 ## v0.7.0
 
