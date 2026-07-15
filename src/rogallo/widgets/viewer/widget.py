@@ -188,16 +188,20 @@ class Viewer(Vertical, can_focus=False):
 
     def action_previous_link(self) -> None:
         """Focus the previous link."""
+        if not (links := self._view.query(GemtextLink)):
+            return
         current = self._view.query_one_optional("GemtextLink:focus", GemtextLink)
         if current is None or (current.jump_number and current.jump_number <= 1):
-            self._jump = self._view.query(GemtextLink).last().jump_number
+            self._jump = links.last().jump_number
         elif current.jump_number is not None:
             self._jump = current.jump_number - 1
 
     def action_next_link(self) -> None:
         """Focus the next link."""
+        if not (links := self._view.query(GemtextLink)):
+            return
         current = self._view.query_one_optional("GemtextLink:focus", GemtextLink)
-        if (last := self._view.query(GemtextLink).last().jump_number) is None:
+        if (last := links.last().jump_number) is None:
             return
         if current is None or (current.jump_number and current.jump_number >= last):
             self._jump = 1
