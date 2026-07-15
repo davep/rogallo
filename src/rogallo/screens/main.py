@@ -267,12 +267,12 @@ class Main(EnhancedScreen[None]):
 
     async def on_mount(self) -> None:
         """Called when the screen is mounted."""
+        self._command_history = load_command_history()
         self._location_history = load_location_history()
         self._navigation_history = load_navigation_history()
         self._bookmarks = load_bookmarks()
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
-        self._command_line.history = load_command_history()
         if self._client.trust_store:
             self._command_line.known_hosts = [
                 GeminiURI.with_default_scheme(f"{host}:{port}")

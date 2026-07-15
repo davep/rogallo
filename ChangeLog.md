@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Fixed command line history not recording and recovering correctly.
+  ([#143](https://github.com/davep/rogallo/pull/143))
+
 ## v0.7.0
 
 **Released: 2026-07-14**
