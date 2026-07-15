@@ -19,6 +19,10 @@ from textual.reactive import var
 from textual.widgets import Static
 
 ##############################################################################
+# Textual enhanced imports.
+from textual_enhanced.binding import HelpfulBinding
+
+##############################################################################
 # Local imports.
 from ...document import Document
 from .document_view import DocumentView
@@ -50,6 +54,13 @@ class Viewer(Vertical, can_focus=False):
         }
     }
     """
+
+    BINDINGS = [
+        HelpfulBinding(
+            "left", "previous_link", "Move backwards through each of the links"
+        ),
+        HelpfulBinding("right", "next_link", "Move forward through each of the links"),
+    ]
 
     document: var[Document] = var(Document(), toggle_class="--has-content")
     """The details of the document to show in the viewer."""
@@ -174,6 +185,24 @@ class Viewer(Vertical, can_focus=False):
             self._jump = (self._jump or 0) * 10 + int(event.key)
         else:
             self._jump = None
+
+    def action_previous_link(self) -> None:
+        """Focus the previous link."""
+        current = self._view.query_one_optional("GemtextLink:focus", GemtextLink)
+        if current is None or (current.jump_number and current.jump_number <= 1):
+            self._jump = self._view.query(GemtextLink).last().jump_number
+        elif current.jump_number is not None:
+            self._jump = current.jump_number - 1
+
+    def action_next_link(self) -> None:
+        """Focus the next link."""
+        current = self._view.query_one_optional("GemtextLink:focus", GemtextLink)
+        if (last := self._view.query(GemtextLink).last().jump_number) is None:
+            return
+        if current is None or (current.jump_number and current.jump_number >= last):
+            self._jump = 1
+        elif current.jump_number is not None:
+            self._jump = current.jump_number + 1
 
 
 ### widget.py ends here

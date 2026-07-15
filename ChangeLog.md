@@ -6,8 +6,11 @@
 
 - Fixed command line history not recording and recovering correctly.
   ([#143](https://github.com/davep/rogallo/pull/143))
-- Add a confirmation step before externally opening unsupported locations or
+- Added a confirmation step before externally opening unsupported locations or
   MIME types. ([#144](https://github.com/davep/rogallo/pull/144))
+- Added keyboard shortcuts to the viewer for easily navigating between each
+  of the links, with wrap-around.
+  ([#145](https://github.com/davep/rogallo/pull/145))
 
 ## v0.7.0
 
