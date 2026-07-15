@@ -27,6 +27,7 @@ from .navigation_history import (
     save_naviagation_history,
 )
 from .trust import trust_file
+from .trusted_schemes import load_trusted_schemes, save_trusted_schemes
 
 ##############################################################################
 # Exports.
@@ -41,6 +42,7 @@ __all__ = [
     "load_configuration",
     "load_location_history",
     "load_navigation_history",
+    "load_trusted_schemes",
     "LocationHistory",
     "LocationVisit",
     "NavigationHistory",
@@ -49,6 +51,7 @@ __all__ = [
     "save_configuration",
     "save_location_history",
     "save_naviagation_history",
+    "save_trusted_schemes",
     "trust_file",
     "update_configuration",
 ]

@@ -5,6 +5,7 @@
 from argparse import Namespace
 from mimetypes import guess_type
 from pathlib import Path
+from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
 
 ##############################################################################
@@ -80,10 +81,12 @@ from ..data import (
     load_configuration,
     load_location_history,
     load_navigation_history,
+    load_trusted_schemes,
     save_bookmarks,
     save_command_history,
     save_location_history,
     save_naviagation_history,
+    save_trusted_schemes,
     trust_file,
     update_configuration,
 )
@@ -104,6 +107,7 @@ from ..preflight import (
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .certificate import Certificate
+from .confirm_unsupported_uri import ConfirmUnsupportedURI
 from .user_input import UserInput
 
 
@@ -241,6 +245,8 @@ class Main(EnhancedScreen[None]):
         """The command line arguments."""
         self._cache = ContentCache()
         """The disk cache manager."""
+        self._trusted_schemes = load_trusted_schemes()
+        """The trusted schemes."""
         self._client = Client(
             verify_mode="tofu",
             trust_store_path=trust_file(),
@@ -630,13 +636,36 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the unsupported URI.
         """
-        if await self.app.push_screen_wait(
-            Confirm(
-                "Open externally",
-                f"{message.uri}\n\n"
-                "This location can't be opened in Rogallo, open externally?",
+
+        # Because we want to gatekeep which schemes get passed on, let's
+        # grab the scheme.
+        try:
+            scheme = urlparse(message.uri).scheme.lower()
+        except ValueError:
+            return
+
+        # If there's no scheme, let's GTFO.
+        if not scheme:
+            self.notify(
+                f"Unable to open {message.uri}: no scheme found", severity="error"
             )
-        ):
+            return
+
+        # If the scheme isn't trusted, let's see what the user wants to do about it.
+        if not (open_uri := scheme in self._trusted_schemes):
+            match await self.app.push_screen_wait(
+                ConfirmUnsupportedURI(message.uri, scheme)
+            ):
+                case "once":
+                    open_uri = True
+                case "always":
+                    open_uri = True
+                    self._trusted_schemes.add(scheme)
+                    save_trusted_schemes(self._trusted_schemes)
+
+        # At this point, if the user has consented to opening the URI based
+        # on the scheme, let's do it.
+        if open_uri:
             open_in_browser(message.uri)
 
     @on(OpenUnsupportedMIMEType)
