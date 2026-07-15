@@ -57,9 +57,15 @@ class Viewer(Vertical, can_focus=False):
 
     BINDINGS = [
         HelpfulBinding(
-            "left", "previous_link", "Move backwards through each of the links"
+            "left, shift+up, L",
+            "previous_link",
+            "Move backwards through each of the links",
         ),
-        HelpfulBinding("right", "next_link", "Move forward through each of the links"),
+        HelpfulBinding(
+            "right, shift+down, l",
+            "next_link",
+            "Move forward through each of the links",
+        ),
     ]
 
     document: var[Document] = var(Document(), toggle_class="--has-content")
