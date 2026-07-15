@@ -681,11 +681,10 @@ class Main(EnhancedScreen[None]):
     async def _open_unsupported_mime_type(
         self, message: OpenUnsupportedMIMEType
     ) -> None:
-        """Open a location in the system's web browser.
+        """Open an unsupported MIME typed location in the system's web browser.
 
         Args:
-            location: The location to open.
-            mime_type: The MIME type of the content at the location.
+            message: The message containing the unsupported MIME type.
         """
 
         # If the MIME type isn't trusted, let's see what the user wants to
