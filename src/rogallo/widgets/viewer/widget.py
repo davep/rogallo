@@ -55,16 +55,21 @@ class Viewer(Vertical, can_focus=False):
     }
     """
 
+    HELP = """
+    As well as the normal widget navigation keys, the following keys are
+    available to navigate through the links:
+    """
+
     BINDINGS = [
         HelpfulBinding(
             "left, shift+up, L",
             "previous_link",
-            "Move backwards through each of the links",
+            tooltip="Move backwards through each of the links",
         ),
         HelpfulBinding(
             "right, shift+down, l",
             "next_link",
-            "Move forward through each of the links",
+            tooltip="Move forward through each of the links",
         ),
     ]
 
