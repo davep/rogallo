@@ -156,7 +156,7 @@ class Viewer(Vertical, can_focus=False):
 
     def _watch__jump(self) -> None:
         """Watch for changes to the jump property and update the viewer."""
-        if self.with_link_numbers and self._jump is not None:
+        if self._jump is not None:
             for link in self._view.query(GemtextLink):
                 if link.jump_number == self._jump:
                     link.focus(scroll_visible=True)
