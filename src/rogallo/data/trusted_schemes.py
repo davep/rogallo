@@ -20,7 +20,7 @@ def trusted_schemes_file() -> Path:
     Returns:
         The path for the trusted schemes file.
     """
-    return data_dir() / "trusted-schemes"
+    return data_dir() / "trusted_schemes"
 
 
 ##############################################################################
