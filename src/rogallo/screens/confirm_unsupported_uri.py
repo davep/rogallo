@@ -84,7 +84,7 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
             )
             with HorizontalGroup(id="buttons"):
                 yield Button(add_key("Once", "o"), id="once", variant="success")
-                yield Button(add_key(f"Always", "a"), id="always", variant="success")
+                yield Button(add_key("Always", "a"), id="always", variant="success")
                 yield Button(add_key("Cancel", "Esc"), id="cancel", variant="error")
 
     @on(Button.Pressed, "#once")
