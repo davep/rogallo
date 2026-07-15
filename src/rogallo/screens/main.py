@@ -5,6 +5,7 @@
 from argparse import Namespace
 from mimetypes import guess_type
 from pathlib import Path
+from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
 
 ##############################################################################
@@ -80,24 +81,35 @@ from ..data import (
     load_configuration,
     load_location_history,
     load_navigation_history,
+    load_trusted_mime_types,
+    load_trusted_schemes,
     save_bookmarks,
     save_command_history,
     save_location_history,
     save_naviagation_history,
+    save_trusted_mime_types,
+    save_trusted_schemes,
     trust_file,
     update_configuration,
 )
 from ..document import Document
-from ..messages import CopyToClipboard, OpenDocument, OpenLocation, OpenURI
+from ..messages import (
+    CopyToClipboard,
+    OpenDocument,
+    OpenLocation,
+    OpenUnsupportedMIMEType,
+    OpenUnsupportedURI,
+    OpenURI,
+)
 from ..preflight import (
     is_likely_local_text_file,
     is_likely_schemeless_capsule,
     path_from_uri,
 )
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
-from ..types import GeminiLocation
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .certificate import Certificate
+from .confirm_unsupported import ConfirmUnsupportedURI
 from .user_input import UserInput
 
 
@@ -235,6 +247,10 @@ class Main(EnhancedScreen[None]):
         """The command line arguments."""
         self._cache = ContentCache()
         """The disk cache manager."""
+        self._trusted_schemes = load_trusted_schemes()
+        """The trusted schemes."""
+        self._trusted_mime_types = load_trusted_mime_types()
+        """The trusted MIME types."""
         self._client = Client(
             verify_mode="tofu",
             trust_store_path=trust_file(),
@@ -340,24 +356,6 @@ class Main(EnhancedScreen[None]):
                 self._viewer.document.location not in self._bookmarks
             )
         return True
-
-    def _open_externally(self, location: GeminiLocation, mime_type: str | None) -> None:
-        """Open a location in the system's web browser.
-
-        Args:
-            location: The location to open.
-            mime_type: The MIME type of the content at the location.
-        """
-        self.notify(
-            f"Unable to display {location} because it is {mime_type}. "
-            "Opening in the system's web browser instead.",
-            title="Unsupported MIME type",
-        )
-        open_in_browser(
-            str(location)
-            if isinstance(location, GeminiURI)
-            else location.resolve().as_uri()
-        )
 
     def _is_displayable(self, mime_type: str | None) -> bool:
         """Check if a MIME type is displayable.
@@ -472,7 +470,7 @@ class Main(EnhancedScreen[None]):
                 )
             )
         else:
-            self._open_externally(uri, response.mime_type)
+            self.post_message(OpenUnsupportedMIMEType(uri, response.mime_type))
 
     def _maybe_remember_location(self, request: OpenDocument) -> None:
         """Remember a location in the history.
@@ -556,9 +554,9 @@ class Main(EnhancedScreen[None]):
             request: The request to load the document from.
         """
         assert isinstance(request.location, Path)
-        mime_type = guess_type(request.location)[0]
+        mime_type = guess_type(request.location)[0] or "application/octet-stream"
         if not self._is_displayable(mime_type):
-            self._open_externally(request.location, mime_type)
+            self.post_message(OpenUnsupportedMIMEType(request.location, mime_type))
             return
         try:
             self.post_message(
@@ -632,7 +630,88 @@ class Main(EnhancedScreen[None]):
             return
 
         # Otherwise, try to open it in the system browser.
-        open_in_browser(message.uri)
+        self.post_message(OpenUnsupportedURI(message.uri))
+
+    @on(OpenUnsupportedURI)
+    @work
+    async def _open_unsupported_uri(self, message: OpenUnsupportedURI) -> None:
+        """Maybe open an unsupported URI in the system's web browser.
+
+        Args:
+            message: The message containing the unsupported URI.
+        """
+
+        # Because we want to gatekeep which schemes get passed on, let's
+        # grab the scheme.
+        try:
+            scheme = urlparse(message.uri).scheme.lower()
+        except ValueError:
+            return
+
+        # If there's no scheme, let's GTFO.
+        if not scheme:
+            self.notify(
+                f"Unable to open {message.uri}: no scheme found", severity="error"
+            )
+            return
+
+        # If the scheme isn't trusted, let's see what the user wants to do about it.
+        if not (open_uri := scheme in self._trusted_schemes):
+            match await self.app.push_screen_wait(
+                ConfirmUnsupportedURI(
+                    message.uri,
+                    f"The scheme '{scheme}' is not supported by Rogallo. "
+                    "Do you want to open the URI in your external browser?",
+                )
+            ):
+                case "once":
+                    open_uri = True
+                case "always":
+                    open_uri = True
+                    self._trusted_schemes.add(scheme)
+                    save_trusted_schemes(self._trusted_schemes)
+
+        # At this point, if the user has consented to opening the URI based
+        # on the scheme, let's do it.
+        if open_uri:
+            open_in_browser(message.uri)
+
+    @on(OpenUnsupportedMIMEType)
+    @work
+    async def _open_unsupported_mime_type(
+        self, message: OpenUnsupportedMIMEType
+    ) -> None:
+        """Open an unsupported MIME typed location in the system's web browser.
+
+        Args:
+            message: The message containing the unsupported MIME type.
+        """
+
+        # If the MIME type isn't trusted, let's see what the user wants to
+        # do about it.
+        if not (open_uri := message.mime_type in self._trusted_mime_types):
+            match await self.app.push_screen_wait(
+                ConfirmUnsupportedURI(
+                    str(message.location),
+                    f"The MIME type '{message.mime_type}' is not supported by Rogallo. "
+                    "Do you want to open the location in your external browser?",
+                )
+            ):
+                case "once":
+                    open_uri = True
+                case "always":
+                    open_uri = True
+                    self._trusted_mime_types.add(message.mime_type)
+                    save_trusted_mime_types(self._trusted_mime_types)
+
+        # At this point, if the user has consented to opening the location
+        # based on the MIME type, let's do it.
+        if open_uri:
+            open_in_browser(
+                str(message.location)
+                if isinstance(message.location, GeminiURI)
+                else message.location.resolve().as_uri()
+            )
 
     @on(CommandLine.CommandExecuted)
     def _save_command_line_history(self, message: CommandLine.CommandExecuted) -> None:

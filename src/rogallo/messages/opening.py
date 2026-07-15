@@ -49,4 +49,24 @@ class OpenDocument(Message):
     """The original request that led to this text being opened."""
 
 
+##############################################################################
+@dataclass
+class OpenUnsupportedURI(Message):
+    """Open the given location in an external application."""
+
+    uri: str
+    """The unsupported URI to open."""
+
+
+##############################################################################
+@dataclass
+class OpenUnsupportedMIMEType(Message):
+    """Open the given location in an external application."""
+
+    location: GeminiLocation
+    """The unsupported location to open."""
+    mime_type: str
+    """The unsupported MIME type of the location."""
+
+
 ### opening.py ends here
