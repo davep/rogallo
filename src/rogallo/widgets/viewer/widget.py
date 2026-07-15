@@ -19,6 +19,10 @@ from textual.reactive import var
 from textual.widgets import Static
 
 ##############################################################################
+# Textual enhanced imports.
+from textual_enhanced.binding import HelpfulBinding
+
+##############################################################################
 # Local imports.
 from ...document import Document
 from .document_view import DocumentView
@@ -50,6 +54,19 @@ class Viewer(Vertical, can_focus=False):
         }
     }
     """
+
+    BINDINGS = [
+        HelpfulBinding(
+            "left, shift+up, L",
+            "previous_link",
+            "Move backwards through each of the links",
+        ),
+        HelpfulBinding(
+            "right, shift+down, l",
+            "next_link",
+            "Move forward through each of the links",
+        ),
+    ]
 
     document: var[Document] = var(Document(), toggle_class="--has-content")
     """The details of the document to show in the viewer."""
@@ -139,7 +156,7 @@ class Viewer(Vertical, can_focus=False):
 
     def _watch__jump(self) -> None:
         """Watch for changes to the jump property and update the viewer."""
-        if self.with_link_numbers and self._jump is not None:
+        if self._jump is not None:
             for link in self._view.query(GemtextLink):
                 if link.jump_number == self._jump:
                     link.focus(scroll_visible=True)
@@ -174,6 +191,28 @@ class Viewer(Vertical, can_focus=False):
             self._jump = (self._jump or 0) * 10 + int(event.key)
         else:
             self._jump = None
+
+    def action_previous_link(self) -> None:
+        """Focus the previous link."""
+        if not (links := self._view.query(GemtextLink)):
+            return
+        current = self._view.query_one_optional("GemtextLink:focus", GemtextLink)
+        if current is None or (current.jump_number and current.jump_number <= 1):
+            self._jump = links.last().jump_number
+        elif current.jump_number is not None:
+            self._jump = current.jump_number - 1
+
+    def action_next_link(self) -> None:
+        """Focus the next link."""
+        if not (links := self._view.query(GemtextLink)):
+            return
+        current = self._view.query_one_optional("GemtextLink:focus", GemtextLink)
+        if (last := links.last().jump_number) is None:
+            return
+        if current is None or (current.jump_number and current.jump_number >= last):
+            self._jump = 1
+        elif current.jump_number is not None:
+            self._jump = current.jump_number + 1
 
 
 ### widget.py ends here
