@@ -10,6 +10,8 @@
   ([#154](https://github.com/davep/rogallo/pull/154))
 - The configuration loading code now filters out settings it doesn't know
   about. ([#155](https://github.com/davep/rogallo/pull/155))
+- Added an input length display and guardrail to the user input dialog.
+  ([#156](https://github.com/davep/rogallo/pull/156))
 
 ## v0.8.0
 

@@ -1,9 +1,15 @@
 """Provides a modal screen for getting user input."""
 
 ##############################################################################
+# Python imports.
+from typing import Final
+
+##############################################################################
 # Textual imports.
+from textual import on
 from textual.app import ComposeResult
 from textual.content import Content
+from textual.getters import query_one
 from textual.screen import ModalScreen
 from textual.widgets import TextArea
 
@@ -26,6 +32,11 @@ class UserInput(ModalScreen[str | None]):
             padding: 1;
             height: auto;
             max-height: 60%;
+
+            &.--too-long {
+                border: round $text-error;
+                background: $error;
+            }
         }
 
         &.--sensitive TextArea {
@@ -38,6 +49,9 @@ class UserInput(ModalScreen[str | None]):
         ("escape", "escape"),
         ("f2", "submit"),
     ]
+
+    _input = query_one(TextArea)
+    """The input text area."""
 
     def __init__(self, location: GeminiURI, prompt: str, sensitive: bool) -> None:
         """Initialise the object.
@@ -70,11 +84,45 @@ class UserInput(ModalScreen[str | None]):
                 else "Input"
             )
         )
-        user_input.border_subtitle = "Press F2 to submit"
+
+    @property
+    def _current_text(self) -> str:
+        """The current text in the input area."""
+        return self._input.text
+
+    @property
+    def _current_query(self) -> GeminiURI:
+        """The current query in the input area."""
+        return self._location.with_query(self._current_text)
+
+    _SUBMIT: Final[str] = "Press F2 to submit"
+    """The subtitle to display when the input is valid."""
+
+    def _update_subtitle(self) -> None:
+        """Update the subtitle of the input area."""
+        if not self._input.text:
+            self._input.border_subtitle = self._SUBMIT
+        elif self._current_query.is_too_long:
+            self._input.border_subtitle = "Input is too long!"
+        else:
+            self._input.border_subtitle = (
+                f"{self._SUBMIT} ({self._current_query.bytes_left})"
+            )
+
+    @on(TextArea.Changed)
+    def _limit_check(self) -> None:
+        """Check if the input is too long."""
+        self._input.set_class(self._current_query.is_too_long, "--too-long")
+        self._update_subtitle()
+
+    def on_mount(self) -> None:
+        """Configure the dialog once the DOM is mounted."""
+        self._update_subtitle()
 
     def action_submit(self) -> None:
         """Accept the input."""
-        self.dismiss(self.query_one(TextArea).text.strip())
+        if not self._current_query.is_too_long:
+            self.dismiss(self._current_text)
 
     def action_escape(self) -> None:
         """Escape out without getting the input."""
