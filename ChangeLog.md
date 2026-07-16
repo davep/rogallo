@@ -6,6 +6,8 @@
 
 - Added syntax highlighting to pre-formatted text blocks.
   ([#153](https://github.com/davep/rogallo/pull/153))
+- Improved the links "stripe" visibility with various themes.
+  ([#154](https://github.com/davep/rogallo/pull/154))
 
 ## v0.8.0
 
