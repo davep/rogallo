@@ -22,10 +22,11 @@ keywords = [
 ]
 dependencies = [
     "bagofstuff>=1.2.0",
-    "gemtext>=0.1.0",
+    "gemtext>=1.0.0",
     "pyperclip>=1.11.0",
     "textual>=8.2.7",
     "textual-enhanced>=1.6.0",
+    "types-pygments>=2.20.0.20260518",
     "types-pyperclip>=1.11.0.20260508",
     "wasat>=0.6.1",
     "xdg-base-dirs>=6.0.2",

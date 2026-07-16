@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added syntax highlighting to pre-formatted text blocks.
+  ([#153](https://github.com/davep/rogallo/pull/153))
+
 ## v0.8.0
 
 **Released: 2026-07-15**

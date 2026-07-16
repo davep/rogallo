@@ -48,6 +48,9 @@ class Configuration:
     show_link_tooltips: bool = True
     """Should tooltips be shown for links?"""
 
+    show_preformat_tooltips: bool = True
+    """Should tooltips be shown for preformatted text?"""
+
     disable_animations: bool = False
     """Should animations be disabled?"""
 

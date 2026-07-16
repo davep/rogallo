@@ -1,0 +1,29 @@
+# Pre-formatted text examples
+
+```
+This is some pre-formatted text that has no alt-text.
+```
+
+```text
+This is some pre-formatted text with an alt-text of 'text'.
+```
+
+```lisp
+;; Here is some Lisp code.
+
+(defun collatz (n)
+  "Calculate the next entry in the Collatz sequence for N."
+  (if (zerop (mod n 2))
+      (/ n 2)
+      (1+ (* n 3))))
+
+(defun collatz-sequence (n)
+  "Given N, calculate the whole Collatz sequence until we reach 1."
+  (let ((next (collatz n)))
+    (cons n
+          (funcall
+           (if (eq next 1)
+               #'list
+               #'collatz-sequence)
+           next))))
+```

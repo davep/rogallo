@@ -21,6 +21,11 @@ from gemtext import (
 )
 
 ##############################################################################
+# Pygments imports.
+from pygments.lexers import get_lexer_by_name
+from pygments.util import ClassNotFound
+
+##############################################################################
 # Rich imports.
 from rich.text import Text
 
@@ -31,6 +36,7 @@ from textual.app import ComposeResult
 from textual.containers import Horizontal
 from textual.events import Click
 from textual.getters import query_one
+from textual.highlight import HighlightTheme, highlight
 from textual.reactive import var
 from textual.widgets import Label, Static
 
@@ -52,7 +58,7 @@ from ...types import GeminiLocation
 
 ##############################################################################
 @cache
-def line_filter() -> Callable[[Line], str | Text]:
+def _line_filter() -> Callable[[Line], str | Text]:
     """Get a filter function for Gemtext lines.
 
     Returns:
@@ -67,6 +73,24 @@ def line_filter() -> Callable[[Line], str | Text]:
 
 
 ##############################################################################
+@cache
+def _supported_language(language: str) -> bool:
+    """Check if a language is supported by Pygments.
+
+    Args:
+        language: The language to check.
+
+    Returns:
+        True if the language is supported; False otherwise.
+    """
+    try:
+        _ = get_lexer_by_name(language)
+        return True
+    except ClassNotFound:
+        return False
+
+
+##############################################################################
 class GemtextText(Static):
     """A widget for displaying a block of Gemtext text."""
 
@@ -76,7 +100,7 @@ class GemtextText(Static):
         Args:
             line: The Gemtext line to display.
         """
-        super().__init__(line_filter()(line), markup=False)
+        super().__init__(_line_filter()(line), markup=False)
 
 
 ##############################################################################
@@ -164,7 +188,7 @@ class GemtextListItem(Horizontal):
         """Compose the Gemtext list item widget."""
         yield Label("•", id="bullet")
         yield Label(
-            line_filter()(self._list_item), markup=False, shrink=True, id="text"
+            _line_filter()(self._list_item), markup=False, shrink=True, id="text"
         )
 
 
@@ -287,7 +311,9 @@ class GemtextLink(Horizontal, can_focus=True):
         """Compose the Gemtext link widget."""
         yield Label(self._icon, id="icon")
         with Horizontal(id="text-wrap"):
-            yield Label(line_filter()(self._link), id="text", markup=False, shrink=True)
+            yield Label(
+                _line_filter()(self._link), id="text", markup=False, shrink=True
+            )
         yield Label(id="jump", markup=False)
 
     @on(Click)
@@ -337,10 +363,27 @@ class GemtextPreformatted(Static):
         self._preformatted = preformatted
         """The Gemtext preformatted text to display."""
         super().__init__()
+        self.tooltip = (
+            preformatted.alt_text
+            if preformatted.has_alt_text
+            and load_configuration().show_preformat_tooltips
+            else None
+        )
 
     def compose(self) -> ComposeResult:
         """Compose the Gemtext preformatted text widget."""
-        yield Label(line_filter()(self._preformatted), markup=False)
+        text = _line_filter()(self._preformatted)
+        yield Label(
+            highlight(
+                str(text),
+                language=self._preformatted.alt_text,
+                theme=HighlightTheme,
+            )
+            if self._preformatted.has_alt_text
+            and _supported_language(self._preformatted.alt_text)
+            else text,
+            markup=False,
+        )
 
 
 ##############################################################################
