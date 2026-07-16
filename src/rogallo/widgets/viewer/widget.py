@@ -45,8 +45,11 @@ class Viewer(Vertical, can_focus=False):
             visibility: visible;
         }
 
-        &.--stripe-links GemtextLink.--stripe {
-            background: $boost 200%;
+        &.--stripe-links GemtextLink {
+            background: $background 20%;
+            &.--stripe {
+                background: $background 60%;
+            }
         }
 
         &.--with-link-numbers GemtextLink #jump {
