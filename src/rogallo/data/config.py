@@ -4,10 +4,11 @@
 # Python imports.
 from collections.abc import Iterator
 from contextlib import contextmanager
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, fields
 from functools import cache
 from json import dumps, loads
 from pathlib import Path
+from typing import Final
 
 ##############################################################################
 # Local imports.
@@ -107,6 +108,11 @@ def save_configuration(configuration: Configuration) -> Configuration:
 
 
 ##############################################################################
+_WANTED: Final[set[str]] = {field.name for field in fields(Configuration)}
+"""The set of fields that are wanted from the configuration file."""
+
+
+##############################################################################
 @cache
 def load_configuration() -> Configuration:
     """Load the configuration.
@@ -124,7 +130,13 @@ def load_configuration() -> Configuration:
     """
     source = configuration_file()
     return (
-        Configuration(**loads(source.read_text(encoding="utf-8")))
+        Configuration(
+            **{
+                field: value
+                for field, value in loads(source.read_text(encoding="utf-8")).items()
+                if field in _WANTED
+            }
+        )
         if source.exists()
         else save_configuration(Configuration())
     )

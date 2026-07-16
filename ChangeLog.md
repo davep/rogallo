@@ -8,6 +8,8 @@
   ([#153](https://github.com/davep/rogallo/pull/153))
 - Improved the links "stripe" visibility with various themes.
   ([#154](https://github.com/davep/rogallo/pull/154))
+- The configuration loading code now filters out settings it doesn't know
+  about. ([#155](https://github.com/davep/rogallo/pull/155))
 
 ## v0.8.0
 
