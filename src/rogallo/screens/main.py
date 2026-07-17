@@ -93,6 +93,7 @@ from ..data import (
     update_configuration,
 )
 from ..document import Document
+from ..input_content import InputContent
 from ..messages import (
     CopyToClipboard,
     OpenDocument,
@@ -265,6 +266,8 @@ class Main(EnhancedScreen[None]):
         """The trusted schemes."""
         self._trusted_mime_types = load_trusted_mime_types()
         """The trusted MIME types."""
+        self._last_user_input: InputContent | None = None
+        """The last user input."""
         self._client = Client(
             verify_mode="tofu",
             trust_store_path=trust_file(),
@@ -393,12 +396,28 @@ class Main(EnhancedScreen[None]):
             location: The location making the request.
             sensitive: Whether the input is sensitive.
         """
+        initial_input = ""
+        if self._last_user_input and self._last_user_input == InputContent(
+            location=location, prompt=prompt, sensitive=sensitive
+        ):
+            initial_input = self._last_user_input.content
         if user_input := await self.app.push_screen_wait(
-            UserInput(location, prompt=prompt, sensitive=sensitive)
+            UserInput(
+                location, prompt=prompt, sensitive=sensitive, default=initial_input
+            )
         ):
             try:
                 self.post_message(
-                    OpenLocation(location.with_query(user_input), allow_cached=False)
+                    OpenLocation(
+                        location=location.with_query(user_input),
+                        allow_cached=False,
+                        associated_input=InputContent(
+                            location=location,
+                            prompt=prompt,
+                            sensitive=sensitive,
+                            content=user_input,
+                        ),
+                    )
                 )
             except URIError as error:
                 self.notify(
@@ -460,12 +479,16 @@ class Main(EnhancedScreen[None]):
 
         # Handle any other non-successful response.
         if not response.status.is_success:
+            self._last_user_input = request.associated_input
             self.notify(
                 f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
                 severity="error",
                 title="Request Error",
             )
             return
+
+        # Clear out any saved input.
+        self._last_user_input = None
 
         # Handle a successful response.
         if self._is_displayable(response.mime_type):
@@ -546,6 +569,7 @@ class Main(EnhancedScreen[None]):
             async with await self._client.request(uri) as response:
                 await self._handle_response(response, request)
         except ConnectionError as error:
+            self._last_user_input = request.associated_input
             self.notify(
                 f"Error loading {uri}:\n\n{error}",
                 severity="error",
