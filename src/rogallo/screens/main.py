@@ -114,6 +114,21 @@ from .user_input import UserInput
 
 
 ##############################################################################
+class Workspace(HorizontalGroup):
+    """A workspace for the main screen."""
+
+    DEFAULT_CSS = """
+    Workspace {
+        height: 1fr;
+    }
+    """
+
+    DEFAULT_CLASSES = "dead-space"
+
+    BINDINGS = [("escape", "screen.jump_to_command_line_command")]
+
+
+##############################################################################
 class Main(EnhancedScreen[None]):
     """The main screen for the application."""
 
@@ -127,31 +142,29 @@ class Main(EnhancedScreen[None]):
 
     DEFAULT_CSS = """
     Main {
-        #workspace {
+
+        .dead-space {
             hatch: right $surface;
-            height: 1fr;
-            .panel {
-                border-left: solid $panel;
-                &:focus, &:focus-within {
-                    border-left: solid $border;
-                }
-            }
+        }
+
+        * {
+            scrollbar-background: $surface;
+            scrollbar-background-hover: $surface;
+            scrollbar-background-active: $surface;
+        }
+
+        *:focus, *:focus-within {
+            scrollbar-background: $panel 80%;
+            scrollbar-background-hover: $panel 80%;
+            scrollbar-background-active: $panel 80%;
         }
 
         .panel {
+            border-left: solid $panel;
             background: $surface;
-            &:focus-within {
+            &:focus, &:focus-within {
+                border-left: solid $border;
                 background: $panel 80%;
-            }
-            * {
-                scrollbar-background: $surface;
-                scrollbar-background-hover: $surface;
-                scrollbar-background-active: $surface;
-            }
-            &:focus-within * {
-                scrollbar-background: $panel;
-                scrollbar-background-hover: $panel;
-                scrollbar-background-active: $panel;
             }
         }
 
@@ -169,6 +182,7 @@ class Main(EnhancedScreen[None]):
         &.--show-history #history {
             display: block;
         }
+
         &.--show-bookmarks #bookmarks {
             display: block;
         }
@@ -265,12 +279,12 @@ class Main(EnhancedScreen[None]):
         """Compose the content of the main screen."""
         yield Header()
         with VerticalGroup():
-            with HorizontalGroup(id="workspace"):
-                yield Viewer(classes="panel")
-                with VerticalGroup(classes="panel", id="history"):
+            with Workspace():
+                yield Viewer()
+                with VerticalGroup(id="history"):
                     yield Label("History")
                     yield HistoryViewer().data_bind(history=Main._location_history)
-                with VerticalGroup(classes="panel", id="bookmarks"):
+                with VerticalGroup(id="bookmarks"):
                     yield Label("Bookmarks")
                     yield BookmarksViewer().data_bind(bookmarks=Main._bookmarks)
             yield CommandLine().data_bind(

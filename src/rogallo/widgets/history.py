@@ -94,6 +94,8 @@ class HistoryViewer(EnhancedOptionList):
     }
     """
 
+    DEFAULT_CLASSES = "panel"
+
     HELP = """
     ## Location history
 

@@ -73,6 +73,8 @@ class BookmarksViewer(EnhancedOptionList):
     }
     """
 
+    DEFAULT_CLASSES = "panel"
+
     HELP = """
     ## Bookmarks
 

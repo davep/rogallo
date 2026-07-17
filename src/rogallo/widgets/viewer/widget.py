@@ -106,7 +106,7 @@ class Viewer(Vertical, can_focus=False):
         document = DocumentView()
         if (max_width := load_configuration().maximum_document_width) > 0:
             document.styles.max_width = max_width
-            yield HorizontalGroup(document, id="document-wrapper")
+            yield HorizontalGroup(document, id="document-wrapper", classes="dead-space")
         else:
             yield document
         yield ViewerStatus()
