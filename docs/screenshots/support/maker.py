@@ -95,7 +95,7 @@ def make_app(viewing: str = "features", **config_overrides: Any) -> Rogallo:
         for prop in fields(Configuration):
             setattr(config, prop.name, getattr(defaults, prop.name))
         # Override some details that are better for the docs.
-        config.home_page = str(docs_dir / f"examples/features.gmi")
+        config.home_page = str(docs_dir / "examples/features.gmi")
         config.theme = "textual-mono"
         # Then apply any overrides that were passed in.
         for prop, value in config_overrides.items():
