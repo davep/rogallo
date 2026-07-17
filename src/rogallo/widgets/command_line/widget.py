@@ -41,9 +41,11 @@ from .general import HelpCommand, QuitCommand
 from .open_file import OpenFileCommand
 from .open_gemini_uri import OpenGeminiURICommand
 from .open_other_uri import OpenOtherURICommand
+from .palette_commands import PaletteCommand
 
 ##############################################################################
 COMMANDS: Final[tuple[type[InputCommand], ...]] = (
+    PaletteCommand,
     HelpCommand,
     QuitCommand,
     OpenFileCommand,
