@@ -119,7 +119,6 @@ class Workspace(HorizontalGroup):
 
     DEFAULT_CSS = """
     Workspace {
-        hatch: right $surface;
         height: 1fr;
     }
     """
@@ -141,6 +140,11 @@ class Main(EnhancedScreen[None]):
 
     DEFAULT_CSS = """
     Main {
+
+        .dead-space {
+            hatch: right $surface;
+        }
+
         .panel {
             border-left: solid $panel;
             background: $surface;
@@ -271,14 +275,18 @@ class Main(EnhancedScreen[None]):
         """Compose the content of the main screen."""
         yield Header()
         with VerticalGroup():
-            with Workspace():
-                yield Viewer(classes="panel")
-                with VerticalGroup(classes="panel", id="history"):
+            with Workspace(classes="dead-space"):
+                yield Viewer()
+                with VerticalGroup(id="history"):
                     yield Label("History")
-                    yield HistoryViewer().data_bind(history=Main._location_history)
-                with VerticalGroup(classes="panel", id="bookmarks"):
+                    yield HistoryViewer(classes="panel").data_bind(
+                        history=Main._location_history
+                    )
+                with VerticalGroup(id="bookmarks"):
                     yield Label("Bookmarks")
-                    yield BookmarksViewer().data_bind(bookmarks=Main._bookmarks)
+                    yield BookmarksViewer(classes="panel").data_bind(
+                        bookmarks=Main._bookmarks
+                    )
             yield CommandLine().data_bind(
                 history=Main._command_history,
                 location_history=Main._location_history,
