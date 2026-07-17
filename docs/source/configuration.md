@@ -267,6 +267,37 @@ If this feels too cluttered it can be turned off with the
 "show_link_tooltips": true
 ```
 
+## Maximum document width
+
+By default a document being displayed in Rogallo will take up as much
+horizontal width as possible. So, if the terminal is 80 characters wide,
+it'll look like this:
+
+```{.textual path="docs/screenshots/max_width_off_screenshot.py" title="Text at 80 characters wide" lines=40 columns=80}
+```
+
+At 120:
+
+```{.textual path="docs/screenshots/max_width_off_screenshot.py" title="Text at 120 characters wide" lines=60 columns=120}
+```
+
+And even wider:
+
+```{.textual path="docs/screenshots/max_width_off_screenshot.py" title="Text at 430 characters wide" lines=215 columns=430}
+```
+
+If you prefer that Rogallo always caps the width of text at a specific
+value, set `maximum_document_width` in the configuration file. A value of
+`0` means "no limit" (the default value). If you would prefer that it's set
+to 80 characters, for example:
+
+```json
+"maximum_document_width": 80
+```
+
+```{.textual path="docs/screenshots/max_width_on_screenshot.py" title="Document widget capped at 80 characters wide" lines=60 columns=120}
+```
+
 ## Pre-formatted text tooltips
 
 By default, when using a mouse, Rogallo will show any alt-text associated
