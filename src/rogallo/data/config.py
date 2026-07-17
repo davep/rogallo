@@ -79,6 +79,9 @@ class Configuration:
     with_link_jumps: bool = True
     """Should the application support jumping to links via numeric labels?"""
 
+    maximum_document_width: int = 0
+    """The maximum width of a document, in characters. A value of 0 means no limit."""
+
 
 ##############################################################################
 def configuration_file() -> Path:

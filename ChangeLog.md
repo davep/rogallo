@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added support for an optional maximum document width.
+  ([#164](https://github.com/davep/rogallo/pull/164))
+
 ## v0.9.0
 
 **Released: 2026-07-16**
