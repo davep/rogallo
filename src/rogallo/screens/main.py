@@ -117,6 +117,13 @@ from .user_input import UserInput
 class Workspace(HorizontalGroup):
     """A workspace for the main screen."""
 
+    DEFAULT_CSS = """
+    Workspace {
+        hatch: right $surface;
+        height: 1fr;
+    }
+    """
+
     BINDINGS = [("escape", "screen.jump_to_command_line_command")]
 
 
@@ -134,20 +141,11 @@ class Main(EnhancedScreen[None]):
 
     DEFAULT_CSS = """
     Main {
-        Workspace {
-            hatch: right $surface;
-            height: 1fr;
-            .panel {
-                border-left: solid $panel;
-                &:focus, &:focus-within {
-                    border-left: solid $border;
-                }
-            }
-        }
-
         .panel {
+            border-left: solid $panel;
             background: $surface;
-            &:focus-within {
+            &:focus, &:focus-within {
+                border-left: solid $border;
                 background: $panel 80%;
             }
             * {
@@ -176,6 +174,7 @@ class Main(EnhancedScreen[None]):
         &.--show-history #history {
             display: block;
         }
+
         &.--show-bookmarks #bookmarks {
             display: block;
         }
