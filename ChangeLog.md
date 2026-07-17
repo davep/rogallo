@@ -6,6 +6,11 @@
 
 - Added support for an optional maximum document width.
   ([#164](https://github.com/davep/rogallo/pull/164))
+- Added a link jump progress timeout so numbers typed some time apart don't
+  concatenate. ([#167](https://github.com/davep/rogallo/pull/167))
+- Added `jump_progress_timeout` to the configuration file to control the
+  jump cancellation timeout.
+  ([#167](https://github.com/davep/rogallo/pull/167))
 
 ## v0.9.0
 

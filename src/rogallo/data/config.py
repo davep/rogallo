@@ -82,6 +82,9 @@ class Configuration:
     maximum_document_width: int = 0
     """The maximum width of a document, in characters. A value of 0 means no limit."""
 
+    jump_progress_timeout: float = 1.0
+    """The time in seconds before the jump progress resets."""
+
 
 ##############################################################################
 def configuration_file() -> Path:

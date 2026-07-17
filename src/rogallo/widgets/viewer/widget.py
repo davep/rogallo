@@ -16,6 +16,7 @@ from textual.containers import HorizontalGroup, Vertical
 from textual.events import DescendantBlur, DescendantFocus, Key
 from textual.getters import query_one
 from textual.reactive import var
+from textual.timer import Timer
 from textual.widgets import Static
 
 ##############################################################################
@@ -99,6 +100,8 @@ class Viewer(Vertical, can_focus=False):
 
     _jump: var[int | None] = var(None)
     """Keeps track of the jump progress."""
+    _jump_timer: Timer | None = None
+    """A timer to reset the jump progress after a short delay."""
 
     def compose(self) -> ComposeResult:
         """Compose the viewer widget."""
@@ -199,6 +202,21 @@ class Viewer(Vertical, can_focus=False):
         if self.screen.focused and self not in self.screen.focused.ancestors:
             self._status.message = ""
 
+    def _reset_jump_timer(self, start_new: bool = False) -> None:
+        """Reset the jump timer."""
+        if self._jump_timer is not None:
+            self._jump_timer.stop()
+            self._jump_timer = None
+        if start_new:
+            self._jump_timer = self.set_timer(
+                load_configuration().jump_progress_timeout, self._reset_jump_progress
+            )
+
+    def _reset_jump_progress(self) -> None:
+        """Reset the jump progress."""
+        self._jump = None
+        self._reset_jump_timer()
+
     @on(Key)
     def _jumper(self, event: Key) -> None:
         """Handle jump key presses."""
@@ -207,8 +225,9 @@ class Viewer(Vertical, can_focus=False):
         if event.key.isdigit():
             event.stop()
             self._jump = (self._jump or 0) * 10 + int(event.key)
+            self._reset_jump_timer(start_new=True)
         else:
-            self._jump = None
+            self._reset_jump_progress()
 
     def action_previous_link(self) -> None:
         """Focus the previous link."""
