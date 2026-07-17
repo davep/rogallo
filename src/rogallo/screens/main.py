@@ -123,6 +123,8 @@ class Workspace(HorizontalGroup):
     }
     """
 
+    DEFAULT_CLASSES = "dead-space"
+
     BINDINGS = [("escape", "screen.jump_to_command_line_command")]
 
 
@@ -277,18 +279,14 @@ class Main(EnhancedScreen[None]):
         """Compose the content of the main screen."""
         yield Header()
         with VerticalGroup():
-            with Workspace(classes="dead-space"):
+            with Workspace():
                 yield Viewer()
                 with VerticalGroup(id="history"):
                     yield Label("History")
-                    yield HistoryViewer(classes="panel").data_bind(
-                        history=Main._location_history
-                    )
+                    yield HistoryViewer().data_bind(history=Main._location_history)
                 with VerticalGroup(id="bookmarks"):
                     yield Label("Bookmarks")
-                    yield BookmarksViewer(classes="panel").data_bind(
-                        bookmarks=Main._bookmarks
-                    )
+                    yield BookmarksViewer().data_bind(bookmarks=Main._bookmarks)
             yield CommandLine().data_bind(
                 history=Main._command_history,
                 location_history=Main._location_history,
