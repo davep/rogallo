@@ -92,9 +92,10 @@ def make_app(viewing: str = "features"):
         config.disable_animations = True
         config.history_visible = False
         config.home_page = str(docs_dir / "examples/features.gmi")
+        config.stripe_links = False
         config.theme = "textual-mono"
         config.with_cache = False
-        config.stripe_links = False
+        config.with_link_jumps = True
     return Rogallo(
         Namespace(
             command="open",
