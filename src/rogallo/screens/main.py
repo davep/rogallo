@@ -114,6 +114,13 @@ from .user_input import UserInput
 
 
 ##############################################################################
+class Workspace(HorizontalGroup):
+    """A workspace for the main screen."""
+
+    BINDINGS = [("escape", "screen.jump_to_command_line_command")]
+
+
+##############################################################################
 class Main(EnhancedScreen[None]):
     """The main screen for the application."""
 
@@ -127,7 +134,7 @@ class Main(EnhancedScreen[None]):
 
     DEFAULT_CSS = """
     Main {
-        #workspace {
+        Workspace {
             hatch: right $surface;
             height: 1fr;
             .panel {
@@ -265,7 +272,7 @@ class Main(EnhancedScreen[None]):
         """Compose the content of the main screen."""
         yield Header()
         with VerticalGroup():
-            with HorizontalGroup(id="workspace"):
+            with Workspace():
                 yield Viewer(classes="panel")
                 with VerticalGroup(classes="panel", id="history"):
                     yield Label("History")
