@@ -2,14 +2,17 @@
 
 import os
 from argparse import Namespace
+from dataclasses import fields
 from datetime import datetime, timedelta
 from pathlib import Path
 from random import randint
+from typing import Any
 
 from wasat import GeminiURI
 
 from rogallo.data import (
     Bookmark,
+    Configuration,
     LocationHistory,
     LocationVisit,
     save_bookmarks,
@@ -84,18 +87,19 @@ def fake_history() -> None:
 
 ##############################################################################
 # Create the Rogallo app with the specified command line arguments.
-def make_app(viewing: str = "features"):
+def make_app(viewing: str = "features", **config_overrides: Any) -> Rogallo:
     fake_history()
     with update_configuration() as config:
-        config.bookmarks_visble = False
-        config.command_line_on_top = False
-        config.disable_animations = True
-        config.history_visible = False
-        config.home_page = str(docs_dir / "examples/features.gmi")
-        config.stripe_links = False
+        # Spin up a default configuration.
+        defaults = Configuration()
+        for prop in fields(Configuration):
+            setattr(config, prop.name, getattr(defaults, prop.name))
+        # Override some details that are better for the docs.
+        config.home_page = str(docs_dir / f"examples/features.gmi")
         config.theme = "textual-mono"
-        config.with_cache = False
-        config.with_link_jumps = True
+        # Then apply any overrides that were passed in.
+        for prop, value in config_overrides.items():
+            setattr(config, prop, value)
     return Rogallo(
         Namespace(
             command="open",

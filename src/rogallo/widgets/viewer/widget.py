@@ -12,7 +12,7 @@ from gemtext import Gemtext, Line, Paragraph
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
-from textual.containers import Vertical
+from textual.containers import HorizontalGroup, Vertical
 from textual.events import DescendantBlur, DescendantFocus, Key
 from textual.getters import query_one
 from textual.reactive import var
@@ -24,6 +24,7 @@ from textual_enhanced.binding import HelpfulBinding
 
 ##############################################################################
 # Local imports.
+from ...data import load_configuration
 from ...document import Document
 from .document_view import DocumentView
 from .gemtext_blocks import GemtextLink, get_block_widget
@@ -40,6 +41,10 @@ class Viewer(Vertical, can_focus=False):
         height: 1fr;
         width: 1fr;
         visibility: hidden;
+
+        #document-wrapper {
+            align-horizontal: center;
+        }
 
         &.--has-content {
             visibility: visible;
@@ -98,7 +103,12 @@ class Viewer(Vertical, can_focus=False):
     def compose(self) -> ComposeResult:
         """Compose the viewer widget."""
         yield ViewerTitle()
-        yield DocumentView()
+        document = DocumentView()
+        if (max_width := load_configuration().maximum_document_width) > 0:
+            document.styles.max_width = max_width
+            yield HorizontalGroup(document, id="document-wrapper")
+        else:
+            yield document
         yield ViewerStatus()
 
     @staticmethod
