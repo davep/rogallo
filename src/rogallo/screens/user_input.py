@@ -53,13 +53,16 @@ class UserInput(ModalScreen[str | None]):
     _input = query_one(TextArea)
     """The input text area."""
 
-    def __init__(self, location: GeminiURI, prompt: str, sensitive: bool) -> None:
+    def __init__(
+        self, location: GeminiURI, prompt: str, sensitive: bool, default: str = ""
+    ) -> None:
         """Initialise the object.
 
         Args:
             request_from: The request that prompted this input.
             prompt: The prompt to display to the user.
             sensitive: Whether the input is sensitive.
+            default: The default value to display in the input area.
         """
         super().__init__(classes=("--sensitive" if sensitive else ""))
         self._location = location
@@ -68,12 +71,16 @@ class UserInput(ModalScreen[str | None]):
         """The prompt to display to the user."""
         self._sensitive = sensitive
         """Whether the input is sensitive."""
+        self._default = default
+        """The default value to display in the input area."""
 
     def compose(self) -> ComposeResult:
         """Compose the input dialog."""
         yield (
             user_input := TextArea(
-                highlight_cursor_line=False, placeholder="Enter your input here..."
+                self._default,
+                highlight_cursor_line=False,
+                placeholder="Enter your input here...",
             )
         )
         user_input.border_title = Content(

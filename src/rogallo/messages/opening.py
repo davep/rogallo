@@ -11,6 +11,7 @@ from textual.message import Message
 ##############################################################################
 # Local imports.
 from ..document import Document
+from ..input_content import InputContent
 from ..types import GeminiLocation
 
 
@@ -36,6 +37,8 @@ class OpenLocation(Message):
     """Whether we should avoid recording this in history."""
     allow_cached: bool = True
     """Whether to allow opening the location from cache."""
+    associated_input: InputContent | None = None
+    """The input content associated with this location, if any."""
 
 
 ##############################################################################

@@ -11,6 +11,9 @@
 - Added `jump_progress_timeout` to the configuration file to control the
   jump cancellation timeout.
   ([#167](https://github.com/davep/rogallo/pull/167))
+- If an input to a capsule fails for some reason, and the user tries to post
+  again, the input box is now pre-populated with the failed content for
+  further editing. ([#168](https://github.com/davep/rogallo/pull/168))
 
 ## v0.9.0
 
