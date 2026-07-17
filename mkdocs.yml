@@ -28,8 +28,10 @@ theme:
     logo: fontawesome/solid/user-astronaut
   features:
     - content.code.copy
-    - navigation.top
     - navigation.footer
+    - navigation.indexes
+    - navigation.tabs
+    - navigation.tabs.sticky
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
