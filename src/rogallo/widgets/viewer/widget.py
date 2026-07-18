@@ -173,8 +173,7 @@ class Viewer(Vertical, can_focus=False):
                 visit_check = GeminiURI(link.normalised_uri)
             except URIError:
                 visit_check = None
-            if visit_check:
-                link.visited = visit_check in visited_links
+            link.visited = visit_check in visited_links
             link.jump_number = jump_number + 1
         # This next bit of nonsense is because Textual fails to sort its
         # scrollbars out upon clearing down and remounting a new set of
