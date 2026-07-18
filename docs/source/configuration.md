@@ -14,6 +14,35 @@ called `~/.config/rogallo/configuration.json`.
     You can discover the exact directory with the [`directories` command
     line command](index.md#directories)
 
+## ANSI escape sequence support
+
+Rogallo supports ANSI escape sequences in the content of pages. This means
+that sites can do all sorts of wonderfully colourful things:
+
+```{.textual path="docs/screenshots/ansi_screenshot.py" title="Some fun with ANSI" lines=43 columns=80}
+```
+
+If you would prefer that ANSI escape sequences *aren't* processed, and
+instead a are stripped from the content, you can use the `Toggle ANSI Escape
+Sequence Handling` command
+(([`ToggleANSIEscapeSequenceHandling`](#bindable-commands), bound to
+<kbd>Shift</kbd>+<kbd>F6</kbd> by default))
+
+```{.textual path="docs/screenshots/ansi_screenshot.py" title="Turning off ANSI" lines=43 columns=80 press="shift+f6"}
+```
+
+Admittedly, in this case the stripped version isn't anywhere near as
+interesting, but in most cases you'll get the content you were seeing, just
+without colour.
+
+The setting itself is saved in the configuration file as
+`handle_ansi_escape_sequences`, which takes `true` or `false` as valid
+values. It will be `true` (handle ANSI sequences) by default:
+
+```json
+"handle_ansi_escape_sequences": true
+```
+
 ## Bookmarks manager visible
 
 Rogallo has a sidebar that displays the bookmarks manager. By default it
