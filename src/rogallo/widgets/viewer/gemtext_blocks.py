@@ -2,7 +2,6 @@
 
 ##############################################################################
 # Python imports.
-from collections.abc import Callable
 from functools import cache
 from pathlib import Path
 from typing import Final
@@ -24,10 +23,6 @@ from gemtext import (
 # Pygments imports.
 from pygments.lexers import get_lexer_by_name
 from pygments.util import ClassNotFound
-
-##############################################################################
-# Rich imports.
-from rich.text import Text
 
 ##############################################################################
 # Textual imports.
@@ -54,22 +49,7 @@ from ...data import load_configuration
 from ...messages import OpenURI
 from ...preflight import is_likely_capsule
 from ...types import GeminiLocation
-
-
-##############################################################################
-@cache
-def _line_filter() -> Callable[[Line], str | Text]:
-    """Get a filter function for Gemtext lines.
-
-    Returns:
-        A function that takes a Gemtext line and returns a string or Text
-        object.
-    """
-    return (
-        (lambda line: Text.from_ansi(str(line)))
-        if load_configuration().handle_ansi_escape_sequences
-        else str
-    )
+from .content_filter import GemtextContent
 
 
 ##############################################################################
@@ -100,7 +80,7 @@ class GemtextText(Static):
         Args:
             line: The Gemtext line to display.
         """
-        super().__init__(_line_filter()(line), markup=False)
+        super().__init__(GemtextContent.filter(line), markup=False)
 
 
 ##############################################################################
@@ -188,7 +168,7 @@ class GemtextListItem(Horizontal):
         """Compose the Gemtext list item widget."""
         yield Label("•", id="bullet")
         yield Label(
-            _line_filter()(self._list_item), markup=False, shrink=True, id="text"
+            GemtextContent.filter(self._list_item), markup=False, shrink=True, id="text"
         )
 
 
@@ -318,7 +298,7 @@ class GemtextLink(Horizontal, can_focus=True):
         yield Label(self._icon, id="icon")
         with Horizontal(id="text-wrap"):
             yield Label(
-                _line_filter()(self._link), id="text", markup=False, shrink=True
+                GemtextContent.filter(self._link), id="text", markup=False, shrink=True
             )
         yield Label(id="jump", markup=False)
 
@@ -378,7 +358,7 @@ class GemtextPreformatted(Static):
 
     def compose(self) -> ComposeResult:
         """Compose the Gemtext preformatted text widget."""
-        text = _line_filter()(self._preformatted)
+        text = GemtextContent.filter(self._preformatted)
         yield Label(
             highlight(
                 str(text),
