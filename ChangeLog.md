@@ -14,6 +14,8 @@
 - If an input to a capsule fails for some reason, and the user tries to post
   again, the input box is now pre-populated with the failed content for
   further editing. ([#168](https://github.com/davep/rogallo/pull/168))
+- Added all application commands to the command line too (in `!snake_case`
+  format). ([#169](https://github.com/davep/rogallo/pull/169))
 
 ## v0.9.0
 
