@@ -66,6 +66,7 @@ from ..commands import (
     SetHomeToCurrentLocation,
     StripeLinks,
     ToggleBookmarksManager,
+    ToggleEmojiRemoval,
     ToggleHistoryManager,
     ToggleLinkNumbers,
     ToggleView,
@@ -216,6 +217,7 @@ class Main(EnhancedScreen[None]):
         CopyDocumentToClipboard,
         CopyLocationToClipboard,
         ToggleBookmarksManager,
+        ToggleEmojiRemoval,
         ToggleHistoryManager,
         ToggleView,
         GoHome,
@@ -1066,6 +1068,12 @@ class Main(EnhancedScreen[None]):
             and location.root != location
         ):
             self.post_message(OpenLocation(location.root))
+
+    def action_toggle_emoji_removal_command(self) -> None:
+        """Toggle emoji removal."""
+        self._viewer.strip_emoji = not self._viewer.strip_emoji
+        with update_configuration() as config:
+            config.strip_emoji = self._viewer.strip_emoji
 
 
 ### main.py ends here
