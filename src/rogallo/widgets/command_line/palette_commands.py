@@ -41,16 +41,16 @@ class PaletteCommand(InputCommand):
         return cls._borrowed_commands
 
     @classmethod
-    def help_text(cls) -> list[str]:
+    def help_text(cls) -> tuple[str, ...]:
         """Get the help text for the command.
 
         Returns:
-            The help text formatted as a Markdown table row.
+            The help text formatted as Markdown table rows.
         """
-        return [
+        return tuple(
             f"| `{command_name}` | | {command.__doc__} |"
             for command_name, command in cls.borrowed_commands().items()
-        ]
+        )
 
     @classmethod
     def suggestions(cls) -> tuple[str, ...]:
