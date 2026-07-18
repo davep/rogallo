@@ -14,14 +14,14 @@ called `~/.config/rogallo/configuration.json`.
     You can discover the exact directory with the [`directories` command
     line command](index.md#directories)
 
-## Bookmarks visible
+## Bookmarks manager visible
 
-Rogallo has a sidebar that displays the bookmarks you've saved. By default
-it isn't visible. It can be made visible with the `Toggle Bookmarks` command
-([`ToggleBookmarks`](#bindable-commands), bound to <kbd>F3</kbd> by
+Rogallo has a sidebar that displays the bookmarks manager. By default it
+isn't visible. It can be made visible with the `Toggle Bookmarks Manager`
+command ([`ToggleBookmarks`](#bindable-commands), bound to <kbd>F3</kbd> by
 default).
 
-```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo with the bookmarks visible" lines=35 columns=90 press="f3"}
+```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo with the bookmarks manager visible" lines=35 columns=90 press="shift+f3"}
 ```
 
 The setting itself is saved in the configuration file as
@@ -141,14 +141,13 @@ default.
     Turning this off and visiting sites that still deliver escape sequences
     will have unpredictable results.
 
-## History visible
+## History manager visible
 
-Rogallo has a sidebar that displays the history of locations you've visited.
-By default it isn't visible. It can be made visible with the `Toggle
-History` command ([`ToggleHistory`](#bindable-commands), bound to
-<kbd>F2</kbd> by default).
+Rogallo has a sidebar that displays the history manager. By default it isn't
+visible. It can be made visible with the `Toggle History` command
+([`ToggleHistoryManager`](#bindable-commands), bound to <kbd>F2</kbd> by default).
 
-```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo with the history visible" lines=50 columns=120 press="f2"}
+```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo with the history manager visible" lines=50 columns=120 press="shift+f2"}
 ```
 
 The setting itself is saved in the configuration file as `history_visible`,
