@@ -20,6 +20,8 @@
   ([#173](https://github.com/davep/rogallo/pull/173))
 - Added a `GoToRoot` command.
   ([#173](https://github.com/davep/rogallo/pull/173))
+- Added support for signifying if a link in a page has been visited before.
+  ([#175](https://github.com/davep/rogallo/pull/175))
 
 ## v0.9.0
 
