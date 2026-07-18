@@ -54,6 +54,7 @@ from ..commands import (
     CopyLocationToClipboard,
     Forward,
     GoHome,
+    GoToParent,
     JumpToCommandLine,
     JumpToDocument,
     JumpToSidebar,
@@ -215,6 +216,7 @@ class Main(EnhancedScreen[None]):
         CopyLocationToClipboard,
         ToggleView,
         GoHome,
+        GoToParent,
         SetHome,
         SetHomeToCurrentLocation,
         SearchHistory,
@@ -371,6 +373,13 @@ class Main(EnhancedScreen[None]):
         if action == AddLocationToBookmarks.action_name():
             return bool(self._viewer.document.location) and (
                 self._viewer.document.location not in self._bookmarks
+            )
+        if action == GoToParent.action_name():
+            return (
+                bool(self._viewer.document.location)
+                and isinstance(self._viewer.document.location, GeminiURI)
+                and self._viewer.document.location.parent
+                != self._viewer.document.location
             )
         return True
 
@@ -1020,6 +1029,14 @@ class Main(EnhancedScreen[None]):
         self._viewer.with_link_numbers = not self._viewer.with_link_numbers
         with update_configuration() as config:
             config.with_link_jumps = self._viewer.with_link_numbers
+
+    def action_go_to_parent_command(self) -> None:
+        """Go to the parent of the current document's location."""
+        if (
+            isinstance(location := self._viewer.document.location, GeminiURI)
+            and location.parent != location
+        ):
+            self.post_message(OpenLocation(location.parent))
 
 
 ### main.py ends here

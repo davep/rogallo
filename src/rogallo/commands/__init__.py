@@ -20,7 +20,7 @@ from .main import (
     ToggleLinkNumbers,
     ToggleView,
 )
-from .navigation import Backward, Forward
+from .navigation import Backward, Forward, GoToParent
 from .search import SearchBookmarks, SearchHistory
 
 ##############################################################################
@@ -28,12 +28,13 @@ from .search import SearchBookmarks, SearchHistory
 __all__ = [
     "AddLocationToBookmarks",
     "Backward",
-    "ClearCache",
     "ChangeCommandLineLocation",
+    "ClearCache",
     "CopyDocumentToClipboard",
     "CopyLocationToClipboard",
     "Forward",
     "GoHome",
+    "GoToParent",
     "JumpToCommandLine",
     "JumpToDocument",
     "JumpToSidebar",

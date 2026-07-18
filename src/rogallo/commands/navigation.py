@@ -21,4 +21,11 @@ class Backward(Command):
     SHOW_IN_FOOTER = True
 
 
+##############################################################################
+class GoToParent(Command):
+    """Go to the parent directory"""
+
+    BINDING_KEY = "alt+up"
+
+
 ### navigation.py ends here
