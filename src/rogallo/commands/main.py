@@ -117,4 +117,12 @@ class ToggleEmojiRemoval(Command):
     BINDING_KEY = "f6"
 
 
+##############################################################################
+class ToggleANSIEscapeSequenceHandling(Command):
+    """Toggle the handling of ANSI escape sequences in text content"""
+
+    BINDING_KEY = "shift+f6"
+    ACTION = "toggle_ansi_escape_sequence_handling_command"
+
+
 ### main.py ends here

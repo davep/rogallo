@@ -65,6 +65,7 @@ from ..commands import (
     SetHome,
     SetHomeToCurrentLocation,
     StripeLinks,
+    ToggleANSIEscapeSequenceHandling,
     ToggleBookmarksManager,
     ToggleEmojiRemoval,
     ToggleHistoryManager,
@@ -216,6 +217,7 @@ class Main(EnhancedScreen[None]):
         Reload,
         CopyDocumentToClipboard,
         CopyLocationToClipboard,
+        ToggleANSIEscapeSequenceHandling,
         ToggleBookmarksManager,
         ToggleEmojiRemoval,
         ToggleHistoryManager,
@@ -1074,6 +1076,16 @@ class Main(EnhancedScreen[None]):
         self._viewer.strip_emoji = not self._viewer.strip_emoji
         with update_configuration() as config:
             config.strip_emoji = self._viewer.strip_emoji
+
+    def action_toggle_ansi_escape_sequence_handling_command(self) -> None:
+        """Toggle ANSI escape sequence handling."""
+        self._viewer.handle_ansi_escape_sequences = (
+            not self._viewer.handle_ansi_escape_sequences
+        )
+        with update_configuration() as config:
+            config.handle_ansi_escape_sequences = (
+                self._viewer.handle_ansi_escape_sequences
+            )
 
 
 ### main.py ends here
