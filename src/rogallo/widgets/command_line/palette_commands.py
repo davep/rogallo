@@ -72,11 +72,20 @@ class PaletteCommand(InputCommand):
         Returns:
             `True` if the command was handled; `False` if not.
         """
-        if text in cls.borrowed_commands():
-            for_widget.screen.call_next(
-                for_widget.screen.run_action,
-                cls.borrowed_commands()[text].action_name(),
-            )
+        if (
+            text in cls.borrowed_commands()
+            and (screen := for_widget.screen) is not None
+        ):
+            if screen.check_action(
+                action := cls.borrowed_commands()[text].action_name(), ()
+            ):
+                screen.call_next(screen.run_action, action)
+            else:
+                screen.notify(
+                    "That command isn't available in this context.",
+                    title="Not available",
+                    severity="warning",
+                )
             return True
         return False
 
