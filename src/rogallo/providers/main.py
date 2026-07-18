@@ -22,6 +22,7 @@ from ..commands import (
     Forward,
     GoHome,
     GoToParent,
+    GoToRoot,
     JumpToCommandLine,
     JumpToDocument,
     JumpToSidebar,
@@ -58,6 +59,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(Forward)
         yield from self.maybe(GoHome)
         yield from self.maybe(GoToParent)
+        yield from self.maybe(GoToRoot)
         yield Help()
         yield from self.maybe(JumpToCommandLine)
         yield from self.maybe(JumpToDocument)

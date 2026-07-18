@@ -28,4 +28,11 @@ class GoToParent(Command):
     BINDING_KEY = "alt+up"
 
 
+##############################################################################
+class GoToRoot(Command):
+    """Go to the root directory"""
+
+    BINDING_KEY = "alt+shift+up"
+
+
 ### navigation.py ends here
