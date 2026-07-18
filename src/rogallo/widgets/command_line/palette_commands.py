@@ -76,11 +76,10 @@ class PaletteCommand(InputCommand):
             text in cls.borrowed_commands()
             and (screen := for_widget.screen) is not None
         ):
-            if screen.check_action(cls.borrowed_commands()[text].action_name(), ()):
-                screen.call_next(
-                    screen.run_action,
-                    cls.borrowed_commands()[text].action_name(),
-                )
+            if screen.check_action(
+                action := cls.borrowed_commands()[text].action_name(), ()
+            ):
+                screen.call_next(screen.run_action, action)
             else:
                 screen.notify(
                     "That command isn't available in this context.",
