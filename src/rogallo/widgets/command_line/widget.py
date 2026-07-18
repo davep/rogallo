@@ -45,9 +45,9 @@ from .palette_commands import PaletteCommand
 
 ##############################################################################
 COMMANDS: Final[tuple[type[InputCommand], ...]] = (
-    PaletteCommand,
     HelpCommand,
     QuitCommand,
+    PaletteCommand,
     OpenFileCommand,
     OpenGeminiURICommand,
     OpenOtherURICommand,
@@ -108,15 +108,17 @@ class CommandLine(Vertical):
     a filename or a URL will open that file for viewing; entering a
     directory will open a file opening dialog starting at that location.
 
-    | Command | Aliases | Arguments | Description |
-    | --      | --      | --        | --          |
+    | Command | Aliases | Description |
+    | --      | --      | --          |
     {cli_commands}
 
     ### Special keys
 
     Special keys while in the command line:
     """.format(
-        cli_commands="\n    ".join(sorted(command.help_text() for command in COMMANDS)),
+        cli_commands="\n    ".join(
+            sorted(chain(*(command.help_text() for command in COMMANDS)))
+        ),
     )
 
     BINDINGS = [

@@ -15,17 +15,14 @@ class InputCommand:
     ALIASES = ""
     """Any aliases for the command for the help."""
 
-    ARGUMENTS = ""
-    """Any arguments for the command for the help."""
-
     @classmethod
-    def help_text(cls) -> str:
+    def help_text(cls) -> list[str]:
         """Get the help text for the command.
 
         Returns:
             The help text formatted as a Markdown table row.
         """
-        return f"| {cls.COMMAND} | {cls.ALIASES} | {cls.ARGUMENTS} | {cls.__doc__} |"
+        return [f"| {cls.COMMAND} | {cls.ALIASES} | {cls.__doc__} |"]
 
     @classmethod
     def handle(cls, text: str, for_widget: Widget) -> bool:
