@@ -1,2 +1,3 @@
 [codespell]
-skip = much_text.gmi
+skip = much_text.gmi, much_emoji.gmi
+

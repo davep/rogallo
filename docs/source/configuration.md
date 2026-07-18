@@ -121,6 +121,31 @@ change the value of `displayable_content_types`:
     showing either rendered Gemtext or plain text. Adding other MIME types
     might cause unwanted or unpredictable results.
 
+## Emoji removal
+
+Some people find the use of emoji in Gemtext off-putting. Rogallo has a
+configuration option for those people. The `Toggle Emoji Removal` command
+([`ToggleEmojiRemoval`](#bindable-commands), bound to <kbd>F6</kbd> by
+default) can be used to clean things up.
+
+So, if presented with this:
+
+```{.textual path="docs/screenshots/emoji_screenshot.py" title="Lots of emoji" lines=30 columns=80}
+```
+
+you can run the command and the content will look more like this:
+
+```{.textual path="docs/screenshots/emoji_screenshot.py" title="Cleaned of emoji" lines=30 columns=80 press="f6"}
+```
+
+The setting itself itself is saved in the configuration file as the
+`strip_emoji` configuration setting. It accepts `true` or `false` as valid
+values. It will be `false` (don't remove) by default.
+
+```json
+"strip_emoji": false
+```
+
 ## Handling ANSI escape sequences
 
 Some Gemini capsules have content -- sometimes optional, sometimes mandatory
