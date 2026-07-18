@@ -3,7 +3,7 @@
 ##############################################################################
 # Python imports.
 from argparse import Namespace
-from mimetypes import guess_type, knownfiles
+from mimetypes import guess_type
 from pathlib import Path
 from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
