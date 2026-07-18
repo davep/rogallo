@@ -16,6 +16,10 @@
   further editing. ([#168](https://github.com/davep/rogallo/pull/168))
 - Added all application commands to the command line too (in `!snake_case`
   format). ([#169](https://github.com/davep/rogallo/pull/169))
+- Added a `GoToParent` command.
+  ([#173](https://github.com/davep/rogallo/pull/173))
+- Added a `GoToRoot` command.
+  ([#173](https://github.com/davep/rogallo/pull/173))
 
 ## v0.9.0
 

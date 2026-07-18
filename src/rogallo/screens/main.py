@@ -54,6 +54,8 @@ from ..commands import (
     CopyLocationToClipboard,
     Forward,
     GoHome,
+    GoToParent,
+    GoToRoot,
     JumpToCommandLine,
     JumpToDocument,
     JumpToSidebar,
@@ -215,6 +217,8 @@ class Main(EnhancedScreen[None]):
         CopyLocationToClipboard,
         ToggleView,
         GoHome,
+        GoToParent,
+        GoToRoot,
         SetHome,
         SetHomeToCurrentLocation,
         SearchHistory,
@@ -371,6 +375,20 @@ class Main(EnhancedScreen[None]):
         if action == AddLocationToBookmarks.action_name():
             return bool(self._viewer.document.location) and (
                 self._viewer.document.location not in self._bookmarks
+            )
+        if action == GoToParent.action_name():
+            return (
+                bool(self._viewer.document.location)
+                and isinstance(self._viewer.document.location, GeminiURI)
+                and self._viewer.document.location.parent
+                != self._viewer.document.location
+            )
+        if action == GoToRoot.action_name():
+            return (
+                bool(self._viewer.document.location)
+                and isinstance(self._viewer.document.location, GeminiURI)
+                and self._viewer.document.location.root
+                != self._viewer.document.location
             )
         return True
 
@@ -1020,6 +1038,22 @@ class Main(EnhancedScreen[None]):
         self._viewer.with_link_numbers = not self._viewer.with_link_numbers
         with update_configuration() as config:
             config.with_link_jumps = self._viewer.with_link_numbers
+
+    def action_go_to_parent_command(self) -> None:
+        """Go to the parent of the current document's location."""
+        if (
+            isinstance(location := self._viewer.document.location, GeminiURI)
+            and location.parent != location
+        ):
+            self.post_message(OpenLocation(location.parent))
+
+    def action_go_to_root_command(self) -> None:
+        """Go to the root of the current document's location."""
+        if (
+            isinstance(location := self._viewer.document.location, GeminiURI)
+            and location.root != location
+        ):
+            self.post_message(OpenLocation(location.root))
 
 
 ### main.py ends here
