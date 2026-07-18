@@ -24,8 +24,12 @@ from textual.widgets import Static
 from textual_enhanced.binding import HelpfulBinding
 
 ##############################################################################
+# Wasat imports.
+from wasat import GeminiURI
+
+##############################################################################
 # Local imports.
-from ...data import load_configuration
+from ...data import LocationHistory, load_configuration
 from ...document import Document
 from .document_view import DocumentView
 from .gemtext_blocks import GemtextLink, get_block_widget
@@ -90,6 +94,8 @@ class Viewer(Vertical, can_focus=False):
     """Whether the viewer is showing link numbers or not."""
     stripe_links: var[bool] = var(False, toggle_class="--stripe-links")
     """Whether the viewer is showing links with stripes or not."""
+    location_history: var[LocationHistory] = var(LocationHistory)
+    """The location history for the viewer."""
 
     _title = query_one(ViewerTitle)
     """The title widget."""
@@ -155,9 +161,16 @@ class Viewer(Vertical, can_focus=False):
                 for line in self._consolidate(Gemtext(self.document.content).content)
             ]
         )
-        for jump_number, link in enumerate(self._view.query(GemtextLink)):
-            link.normalise_uri(self.document.location)
-            link.jump_number = jump_number + 1
+        if self.document.is_gemtext and not self.view_source:
+            visited_links = {
+                str(visit.location)
+                for visit in self.location_history
+                if isinstance(visit.location, GeminiURI)
+            }
+            for jump_number, link in enumerate(self._view.query(GemtextLink)):
+                link.normalise_uri(self.document.location)
+                link.visited = link.normalised_uri in visited_links
+                link.jump_number = jump_number + 1
         # This next bit of nonsense is because Textual fails to sort its
         # scrollbars out upon clearing down and remounting a new set of
         # children. So we have to force it to refresh and then scroll to the

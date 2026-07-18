@@ -208,6 +208,10 @@ class GemtextLink(Horizontal, can_focus=True):
             height: auto;
         }
 
+        &.--visited #icon {
+            color: $text-primary 50%;
+        }
+
         #text-wrap {
             height: auto;
         }
@@ -248,6 +252,8 @@ class GemtextLink(Horizontal, can_focus=True):
 
     BINDINGS = [HelpfulBinding("enter", "open_link", "Open link", show=False)]
 
+    visited: var[bool] = var(False, toggle_class="--visited")
+    """Whether the link has been visited or not."""
     jump_number: var[int | None] = var(None)
     """The jump number for the link."""
 

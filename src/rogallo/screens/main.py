@@ -287,7 +287,7 @@ class Main(EnhancedScreen[None]):
         yield Header()
         with VerticalGroup():
             with Workspace():
-                yield Viewer()
+                yield Viewer().data_bind(location_history=Main._location_history)
                 with VerticalGroup(id="history"):
                     yield Label("History")
                     yield HistoryViewer().data_bind(history=Main._location_history)
