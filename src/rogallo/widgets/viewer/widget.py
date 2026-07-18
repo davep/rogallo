@@ -25,8 +25,7 @@ from textual_enhanced.binding import HelpfulBinding
 
 ##############################################################################
 # Wasat imports.
-from wasat import URIError
-from wasat.uri import GeminiURI
+from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
