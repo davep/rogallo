@@ -22,6 +22,10 @@
   ([#173](https://github.com/davep/rogallo/pull/173))
 - Added support for signifying if a link in a page has been visited before.
   ([#175](https://github.com/davep/rogallo/pull/175))
+- Made the command-palette-based interfaces for history and bookmarks the
+  primary interfaces, and turned the previous sidebar-based interfaces into
+  secondary "manager" tools.
+  ([#176](https://github.com/davep/rogallo/pull/176))
 
 ## v0.9.0
 

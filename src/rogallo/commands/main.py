@@ -34,21 +34,17 @@ class ChangeCommandLineLocation(Command):
 
 
 ##############################################################################
-class ToggleHistory(Command):
+class ToggleHistoryManager(Command):
     """Toggle the display of the history viewer"""
 
-    BINDING_KEY = "f2"
-    SHOW_IN_FOOTER = True
-    FOOTER_TEXT = "History"
+    BINDING_KEY = "shift+f2"
 
 
 ##############################################################################
-class ToggleBookmarks(Command):
+class ToggleBookmarksManager(Command):
     """Toggle the display of the bookmarks viewer"""
 
-    BINDING_KEY = "f3"
-    SHOW_IN_FOOTER = True
-    FOOTER_TEXT = "Bookmarks"
+    BINDING_KEY = "shift+f3"
 
 
 ##############################################################################

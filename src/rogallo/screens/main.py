@@ -65,8 +65,8 @@ from ..commands import (
     SetHome,
     SetHomeToCurrentLocation,
     StripeLinks,
-    ToggleBookmarks,
-    ToggleHistory,
+    ToggleBookmarksManager,
+    ToggleHistoryManager,
     ToggleLinkNumbers,
     ToggleView,
 )
@@ -200,8 +200,8 @@ class Main(EnhancedScreen[None]):
         # Keep these together as they're bound to function keys and destined
         # for the footer.
         Help,
-        ToggleHistory,
-        ToggleBookmarks,
+        SearchHistory,
+        SearchBookmarks,
         Backward,
         Forward,
         Quit,
@@ -215,14 +215,14 @@ class Main(EnhancedScreen[None]):
         Reload,
         CopyDocumentToClipboard,
         CopyLocationToClipboard,
+        ToggleBookmarksManager,
+        ToggleHistoryManager,
         ToggleView,
         GoHome,
         GoToParent,
         GoToRoot,
         SetHome,
         SetHomeToCurrentLocation,
-        SearchHistory,
-        SearchBookmarks,
         StripeLinks,
         ClearCache,
         ToggleLinkNumbers,
@@ -356,9 +356,19 @@ class Main(EnhancedScreen[None]):
             return self._navigation_history.can_go_backward or None
         if action == Forward.action_name():
             return self._navigation_history.can_go_forward or None
-        if action in (ToggleHistory.action_name(), SearchHistory.action_name()):
+        if action == ToggleHistoryManager.action_name():
             return len(self._location_history) > 0 or None
-        if action in (ToggleBookmarks.action_name(), SearchBookmarks.action_name()):
+        if action == SearchHistory.action_name():
+            return (
+                len(self._location_history) > 0
+                or len(self._navigation_history) > 0
+                or len(HistorySearchCommands.known_hosts) > 0
+                or None
+            )
+        if action in (
+            ToggleBookmarksManager.action_name(),
+            SearchBookmarks.action_name(),
+        ):
             return len(self._bookmarks) > 0 or None
         if action in (
             Reload.action_name(),
@@ -882,8 +892,8 @@ class Main(EnhancedScreen[None]):
             )
             self.mutate_reactive(Main._navigation_history)
 
-    def action_toggle_history_command(self) -> None:
-        """Toggle the visibility of the history panel."""
+    def action_toggle_history_manager_command(self) -> None:
+        """Toggle the visibility of the history manager panel."""
         if self._history_visible:
             self._history_visible = not self._history_viewer.has_focus
         else:
@@ -895,8 +905,8 @@ class Main(EnhancedScreen[None]):
         if self._history_visible and self._bookmarks_visible:
             self._bookmarks_visible = False
 
-    def action_toggle_bookmarks_command(self) -> None:
-        """Toggle the visibility of the bookmarks panel."""
+    def action_toggle_bookmarks_manager_command(self) -> None:
+        """Toggle the visibility of the bookmarks manager panel."""
         if self._bookmarks_visible:
             self._bookmarks_visible = not self._bookmarks_viewer.has_focus
         else:

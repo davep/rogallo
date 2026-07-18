@@ -15,8 +15,8 @@ from .main import (
     SetHome,
     SetHomeToCurrentLocation,
     StripeLinks,
-    ToggleBookmarks,
-    ToggleHistory,
+    ToggleBookmarksManager,
+    ToggleHistoryManager,
     ToggleLinkNumbers,
     ToggleView,
 )
@@ -45,8 +45,8 @@ __all__ = [
     "SetHome",
     "SetHomeToCurrentLocation",
     "StripeLinks",
-    "ToggleBookmarks",
-    "ToggleHistory",
+    "ToggleBookmarksManager",
+    "ToggleHistoryManager",
     "ToggleLinkNumbers",
     "ToggleView",
 ]
