@@ -9,6 +9,8 @@
 - Added a `ToggleANSIEscapeSequenceHandling` command to toggle the
   processing of ANSI escape sequences on and off.
   ([#181](https://github.com/davep/rogallo/pull/181))
+- Turning off support for ANSI escape sequences now actually strips all
+  sequences. ([#181](https://github.com/davep/rogallo/pull/181))
 
 ## v0.10.0
 
