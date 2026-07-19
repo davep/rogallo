@@ -108,6 +108,7 @@ from ..input_content import InputContent
 from ..messages import (
     CopyToClipboard,
     OpenDocument,
+    OpenFromFileSystem,
     OpenLocation,
     OpenUnsupportedMIMEType,
     OpenUnsupportedURI,
@@ -793,6 +794,23 @@ class Main(EnhancedScreen[None]):
                 else message.location.resolve().as_uri()
             )
 
+    @on(OpenFromFileSystem)
+    @work
+    async def _open_from_filesystem(self, message: OpenFromFileSystem) -> None:
+        """Open a file."""
+        if chosen_file := await self.app.push_screen_wait(
+            FileOpen(
+                message.start_from,
+                title="Open a file to view",
+                filters=Filters(
+                    ("Gemtext", lambda path: path.suffix.lower() == ".gmi"),
+                    ("All files", lambda _: True),
+                ),
+                cancel_button=partial(add_key, key="Esc", context=self),
+            )
+        ):
+            self.post_message(OpenLocation(chosen_file))
+
     @on(CommandLine.CommandExecuted)
     def _save_command_line_history(self, message: CommandLine.CommandExecuted) -> None:
         """Save the command line history when a command is executed.
@@ -1103,16 +1121,7 @@ class Main(EnhancedScreen[None]):
     @work
     async def action_open_file_command(self) -> None:
         """Open a file."""
-        if chosen_file := await self.app.push_screen_wait(
-            FileOpen(
-                filters=Filters(
-                    ("Gemtext", lambda path: path.suffix.lower() == ".gmi"),
-                    ("All files", lambda _: True),
-                ),
-                cancel_button=partial(add_key, key="Esc", context=self),
-            )
-        ):
-            self.post_message(OpenLocation(chosen_file))
+        self.post_message(OpenFromFileSystem())
 
 
 ### main.py ends here

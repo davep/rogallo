@@ -5,6 +5,7 @@
 from .clipboard import CopyToClipboard
 from .opening import (
     OpenDocument,
+    OpenFromFileSystem,
     OpenLocation,
     OpenUnsupportedMIMEType,
     OpenUnsupportedURI,
@@ -16,6 +17,7 @@ from .opening import (
 __all__ = [
     "CopyToClipboard",
     "OpenDocument",
+    "OpenFromFileSystem",
     "OpenLocation",
     "OpenUnsupportedMIMEType",
     "OpenUnsupportedURI",

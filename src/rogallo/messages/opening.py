@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from dataclasses import dataclass
+from pathlib import Path
 
 ##############################################################################
 # Textual imports.
@@ -70,6 +71,15 @@ class OpenUnsupportedMIMEType(Message):
     """The unsupported location to open."""
     mime_type: str
     """The unsupported MIME type of the location."""
+
+
+##############################################################################
+@dataclass
+class OpenFromFileSystem(Message):
+    """Browse for a file to view, from the local filesystem."""
+
+    start_from: Path = Path(".")
+    """The path to start browsing from."""
 
 
 ### opening.py ends here
