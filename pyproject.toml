@@ -21,7 +21,7 @@ keywords = [
     "Textual",
 ]
 dependencies = [
-    "bagofstuff>=1.2.0",
+    "bagofstuff>=1.2.1",
     "gemtext>=1.0.0",
     "pyperclip>=1.11.0",
     "textual>=8.2.7",

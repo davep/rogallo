@@ -110,4 +110,19 @@ class ToggleLinkNumbers(Command):
     BINDING_KEY = "shift+f8"
 
 
+##############################################################################
+class ToggleEmojiRemoval(Command):
+    """Toggle the removal of emoji from text content"""
+
+    BINDING_KEY = "f6"
+
+
+##############################################################################
+class ToggleANSIEscapeSequenceHandling(Command):
+    """Toggle the handling of ANSI escape sequences in text content"""
+
+    BINDING_KEY = "shift+f6"
+    ACTION = "toggle_ansi_escape_sequence_handling_command"
+
+
 ### main.py ends here

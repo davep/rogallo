@@ -32,7 +32,9 @@ from ..commands import (
     SetHome,
     SetHomeToCurrentLocation,
     StripeLinks,
+    ToggleANSIEscapeSequenceHandling,
     ToggleBookmarksManager,
+    ToggleEmojiRemoval,
     ToggleHistoryManager,
     ToggleLinkNumbers,
     ToggleView,
@@ -71,7 +73,9 @@ class MainCommands(CommandsProvider):
         yield SetHome()
         yield from self.maybe(SetHomeToCurrentLocation)
         yield StripeLinks()
+        yield ToggleANSIEscapeSequenceHandling()
         yield from self.maybe(ToggleBookmarksManager)
+        yield ToggleEmojiRemoval()
         yield from self.maybe(ToggleHistoryManager)
         yield ToggleLinkNumbers()
         yield from self.maybe(ToggleView)

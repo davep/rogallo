@@ -65,7 +65,9 @@ from ..commands import (
     SetHome,
     SetHomeToCurrentLocation,
     StripeLinks,
+    ToggleANSIEscapeSequenceHandling,
     ToggleBookmarksManager,
+    ToggleEmojiRemoval,
     ToggleHistoryManager,
     ToggleLinkNumbers,
     ToggleView,
@@ -215,7 +217,9 @@ class Main(EnhancedScreen[None]):
         Reload,
         CopyDocumentToClipboard,
         CopyLocationToClipboard,
+        ToggleANSIEscapeSequenceHandling,
         ToggleBookmarksManager,
+        ToggleEmojiRemoval,
         ToggleHistoryManager,
         ToggleView,
         GoHome,
@@ -320,6 +324,8 @@ class Main(EnhancedScreen[None]):
         self._bookmarks_visible = config.bookmarks_visble
         self._viewer.stripe_links = config.stripe_links
         self._viewer.with_link_numbers = config.with_link_jumps
+        self._viewer.handle_ansi_escape_sequences = config.handle_ansi_escape_sequences
+        self._viewer.strip_emoji = config.strip_emoji
         if self._arguments.command == "open" and (
             location := getattr(self._arguments, "location", None)
         ):
@@ -1064,6 +1070,22 @@ class Main(EnhancedScreen[None]):
             and location.root != location
         ):
             self.post_message(OpenLocation(location.root))
+
+    def action_toggle_emoji_removal_command(self) -> None:
+        """Toggle emoji removal."""
+        self._viewer.strip_emoji = not self._viewer.strip_emoji
+        with update_configuration() as config:
+            config.strip_emoji = self._viewer.strip_emoji
+
+    def action_toggle_ansi_escape_sequence_handling_command(self) -> None:
+        """Toggle ANSI escape sequence handling."""
+        self._viewer.handle_ansi_escape_sequences = (
+            not self._viewer.handle_ansi_escape_sequences
+        )
+        with update_configuration() as config:
+            config.handle_ansi_escape_sequences = (
+                self._viewer.handle_ansi_escape_sequences
+            )
 
 
 ### main.py ends here

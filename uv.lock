@@ -215,11 +215,11 @@ wheels = [
 
 [[package]]
 name = "bagofstuff"
-version = "1.2.0"
+version = "1.2.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/17/1a/a66230b56257ccaee5487665b3268513e7d3c4d3a81dd6d442a95bf3dfd7/bagofstuff-1.2.0.tar.gz", hash = "sha256:490139c6a9280530894a3a319f01666fa5abb67d3bb1b739cd2346df1c700dd6", size = 6547, upload-time = "2026-07-03T09:16:29.528Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/db/2b/ebe1cdb1089d6a4ec9e3e0bdb42abd4d4a670544eca74f5c282b5446db68/bagofstuff-1.2.1.tar.gz", hash = "sha256:099b2bec7c6ecd4e6de1d256f493de8e82119003038651fbec81a0b9423e121d", size = 6535, upload-time = "2026-07-19T07:56:59.561Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/da/f5/b5a5eda9817de18abeb8ebcb757629293e9b62e07523dfa1bea1b5ba423a/bagofstuff-1.2.0-py3-none-any.whl", hash = "sha256:477cde52198b491c69264fbf95d30e987b523861906c9fe1dd3c185d813cd59a", size = 9753, upload-time = "2026-07-03T09:16:28.661Z" },
+    { url = "https://files.pythonhosted.org/packages/73/df/ecbb9d8729ec047c5b2dde8e4bf449cce953dfeb468aeb66e16d9e76c170/bagofstuff-1.2.1-py3-none-any.whl", hash = "sha256:689e2db0dbff1b5f171efad5f557b0fec88985e2da32c449139251b2ab821f91", size = 9753, upload-time = "2026-07-19T07:56:58.528Z" },
 ]
 
 [[package]]
@@ -1559,7 +1559,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "bagofstuff", specifier = ">=1.2.0" },
+    { name = "bagofstuff", specifier = ">=1.2.1" },
     { name = "gemtext", specifier = ">=1.0.0" },
     { name = "pyperclip", specifier = ">=1.11.0" },
     { name = "textual", specifier = ">=8.2.7" },

@@ -1,5 +1,17 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added a `ToggleEmojiRemoval` command to toggle the removal of emoji from
+  the content of a page. ([#181](https://github.com/davep/rogallo/pull/181))
+- Added a `ToggleANSIEscapeSequenceHandling` command to toggle the
+  processing of ANSI escape sequences on and off.
+  ([#181](https://github.com/davep/rogallo/pull/181))
+- Turning off support for ANSI escape sequences now actually strips all
+  sequences. ([#181](https://github.com/davep/rogallo/pull/181))
+
 ## v0.10.0
 
 **Released: 2026-07-18**

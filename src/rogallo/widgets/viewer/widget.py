@@ -31,6 +31,7 @@ from wasat import GeminiURI
 # Local imports.
 from ...data import LocationHistory, load_configuration
 from ...document import Document
+from .content_filter import GemtextContent
 from .document_view import DocumentView
 from .gemtext_blocks import GemtextLink, get_block_widget
 from .status import ViewerStatus
@@ -96,6 +97,10 @@ class Viewer(Vertical, can_focus=False):
     """Whether the viewer is showing links with stripes or not."""
     location_history: var[LocationHistory] = var(LocationHistory)
     """The location history for the viewer."""
+    handle_ansi_escape_sequences: var[bool] = var(True)
+    """Whether the viewer is handling ANSI escape sequences or not."""
+    strip_emoji: var[bool] = var(False)
+    """Whether the viewer is stripping emoji or not."""
 
     _title = query_one(ViewerTitle)
     """The title widget."""
@@ -147,30 +152,33 @@ class Viewer(Vertical, can_focus=False):
         self._title.needed_certificate = self.document.needed_certificate
         self._title.location = self.document.location
         self._status.mime_type = self.document.mime_type or ""
-        await self._view.remove_children()
-        await self._view.mount_all(
-            [
-                Static(
-                    self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}"),
-                    markup=False,
-                )
-            ]
-            if not self.document.is_gemtext or self.view_source
-            else [
-                get_block_widget(line)
-                for line in self._consolidate(Gemtext(self.document.content).content)
-            ]
-        )
-        if self.document.is_gemtext and not self.view_source:
-            visited_links = {
-                str(visit.location)
-                for visit in self.location_history
-                if isinstance(visit.location, GeminiURI)
-            }
-            for jump_number, link in enumerate(self._view.query(GemtextLink)):
-                link.normalise_uri(self.document.location)
-                link.visited = link.normalised_uri in visited_links
-                link.jump_number = jump_number + 1
+        with self.app.batch_update():
+            await self._view.remove_children()
+            await self._view.mount_all(
+                [
+                    Static(
+                        self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}"),
+                        markup=False,
+                    )
+                ]
+                if not self.document.is_gemtext or self.view_source
+                else [
+                    get_block_widget(line)
+                    for line in self._consolidate(
+                        Gemtext(self.document.content).content
+                    )
+                ]
+            )
+            if self.document.is_gemtext and not self.view_source:
+                visited_links = {
+                    str(visit.location)
+                    for visit in self.location_history
+                    if isinstance(visit.location, GeminiURI)
+                }
+                for jump_number, link in enumerate(self._view.query(GemtextLink)):
+                    link.normalise_uri(self.document.location)
+                    link.visited = link.normalised_uri in visited_links
+                    link.jump_number = jump_number + 1
         # This next bit of nonsense is because Textual fails to sort its
         # scrollbars out upon clearing down and remounting a new set of
         # children. So we have to force it to refresh and then scroll to the
@@ -187,6 +195,22 @@ class Viewer(Vertical, can_focus=False):
     def _watch_with_link_numbers(self) -> None:
         """Watch for changes to the with_link_numbers property."""
         self._jump = None
+
+    def _watch_handle_ansi_escape_sequences(self) -> None:
+        """Watch for changes to the handle_ansi_escape_sequences property and update the viewer."""
+        GemtextContent.set_filter(
+            allow_ansi_escape_sequences=self.handle_ansi_escape_sequences,
+            strip_emoji=self.strip_emoji,
+        )
+        self.mutate_reactive(Viewer.document)
+
+    def _watch_strip_emoji(self) -> None:
+        """Watch for changes to the strip_emoji property and update the viewer."""
+        GemtextContent.set_filter(
+            allow_ansi_escape_sequences=self.handle_ansi_escape_sequences,
+            strip_emoji=self.strip_emoji,
+        )
+        self.mutate_reactive(Viewer.document)
 
     def _watch__jump(self) -> None:
         """Watch for changes to the jump property and update the viewer."""
