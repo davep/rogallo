@@ -22,7 +22,7 @@ from .main import (
     ToggleLinkNumbers,
     ToggleView,
 )
-from .navigation import Backward, Forward, GoToParent, GoToRoot
+from .navigation import Backward, Forward, GoToParent, GoToRoot, OpenFile
 from .search import SearchBookmarks, SearchHistory
 
 ##############################################################################
@@ -41,6 +41,7 @@ __all__ = [
     "JumpToCommandLine",
     "JumpToDocument",
     "JumpToSidebar",
+    "OpenFile",
     "Reload",
     "SearchBookmarks",
     "SearchHistory",

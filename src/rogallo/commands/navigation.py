@@ -35,4 +35,11 @@ class GoToRoot(Command):
     BINDING_KEY = "alt+shift+up"
 
 
+##############################################################################
+class OpenFile(Command):
+    """Open a file in the local filesystem"""
+
+    BINDING_KEY = "ctrl+o"
+
+
 ### navigation.py ends here

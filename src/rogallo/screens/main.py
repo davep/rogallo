@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from argparse import Namespace
+from functools import partial
 from mimetypes import guess_type
 from pathlib import Path
 from urllib.parse import urlparse
@@ -28,6 +29,11 @@ from textual.widgets import Footer, Header, Label
 from textual_enhanced.commands import ChangeTheme, Command, Help, Quit
 from textual_enhanced.dialogs import Confirm, ModalInput
 from textual_enhanced.screen import EnhancedScreen
+from textual_enhanced.tools import add_key
+
+##############################################################################
+# Textual file system picker imports.
+from textual_fspicker import FileOpen, Filters
 
 ##############################################################################
 # Wasat imports.
@@ -59,6 +65,7 @@ from ..commands import (
     JumpToCommandLine,
     JumpToDocument,
     JumpToSidebar,
+    OpenFile,
     Reload,
     SearchBookmarks,
     SearchHistory,
@@ -209,27 +216,28 @@ class Main(EnhancedScreen[None]):
         Quit,
         # Everything else.
         AddLocationToBookmarks,
-        ChangeTheme,
         ChangeCommandLineLocation,
+        ChangeTheme,
+        ClearCache,
+        CopyDocumentToClipboard,
+        CopyLocationToClipboard,
+        GoHome,
+        GoToParent,
+        GoToRoot,
         JumpToCommandLine,
         JumpToDocument,
         JumpToSidebar,
+        OpenFile,
         Reload,
-        CopyDocumentToClipboard,
-        CopyLocationToClipboard,
+        SetHome,
+        SetHomeToCurrentLocation,
+        StripeLinks,
         ToggleANSIEscapeSequenceHandling,
         ToggleBookmarksManager,
         ToggleEmojiRemoval,
         ToggleHistoryManager,
-        ToggleView,
-        GoHome,
-        GoToParent,
-        GoToRoot,
-        SetHome,
-        SetHomeToCurrentLocation,
-        StripeLinks,
-        ClearCache,
         ToggleLinkNumbers,
+        ToggleView,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -1091,6 +1099,20 @@ class Main(EnhancedScreen[None]):
             config.handle_ansi_escape_sequences = (
                 self._viewer.handle_ansi_escape_sequences
             )
+
+    @work
+    async def action_open_file_command(self) -> None:
+        """Open a file."""
+        if chosen_file := await self.app.push_screen_wait(
+            FileOpen(
+                filters=Filters(
+                    ("Gemtext", lambda path: path.suffix.lower() == ".gmi"),
+                    ("All files", lambda _: True),
+                ),
+                cancel_button=partial(add_key, key="Esc", context=self),
+            )
+        ):
+            self.post_message(OpenLocation(chosen_file))
 
 
 ### main.py ends here
