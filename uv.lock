@@ -1536,6 +1536,7 @@ dependencies = [
     { name = "pyperclip" },
     { name = "textual" },
     { name = "textual-enhanced" },
+    { name = "textual-fspicker" },
     { name = "types-pygments" },
     { name = "types-pyperclip" },
     { name = "wasat" },
@@ -1564,6 +1565,7 @@ requires-dist = [
     { name = "pyperclip", specifier = ">=1.11.0" },
     { name = "textual", specifier = ">=8.2.7" },
     { name = "textual-enhanced", specifier = ">=1.6.0" },
+    { name = "textual-fspicker", specifier = ">=1.0.1" },
     { name = "types-pygments", specifier = ">=2.20.0.20260518" },
     { name = "types-pyperclip", specifier = ">=1.11.0.20260508" },
     { name = "wasat", specifier = ">=0.8.0" },
@@ -1663,6 +1665,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ee/b6/ac6d8d55e730c57ce8dea1565cd730a345f1f1fed771d7278f13170748a0/textual_enhanced-1.6.0.tar.gz", hash = "sha256:5976b608854b5b2550d48810be7f4455a648f4976ce632d643a9a37a05fa67b1", size = 15663, upload-time = "2026-07-06T08:19:15.279Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/4c/a5/132d18d7b87ce883b3a9bf6bd357c8491532aa25f46ba4bcb229ef5eb532/textual_enhanced-1.6.0-py3-none-any.whl", hash = "sha256:6541f7e63abcd408d562a476152459371a67bceebc8c6e982174a5a1b56c5bf2", size = 23835, upload-time = "2026-07-06T08:19:13.971Z" },
+]
+
+[[package]]
+name = "textual-fspicker"
+version = "1.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "textual" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/34/1d/1c078f971363d6b2fcfcccf3008b3c6d98cb78ba92d4d6152051bfeec76e/textual_fspicker-1.0.1.tar.gz", hash = "sha256:58f7fa983ded7a5ed69b7279f66de57a0ef6fad0e3acb622f217682e85986c9c", size = 16538, upload-time = "2026-05-20T15:56:36.264Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f7/f9/716c82823d1bd93b499a2ab42eaa8ca3c4d57211576c9b569b329a16e8e2/textual_fspicker-1.0.1-py3-none-any.whl", hash = "sha256:12ba71314790008c37f4bf9bb008e430b844bb63d9b615cd8738ca3c1fe1ebbb", size = 24949, upload-time = "2026-05-20T15:56:34.804Z" },
 ]
 
 [[package]]
