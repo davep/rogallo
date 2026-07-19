@@ -69,4 +69,40 @@ class ChangeThemeCommand(GeneralCommand):
     MESSAGE = ChangeTheme
 
 
+##############################################################################
+class UnknownCommand(GeneralCommand):
+    """Handle unknown commands"""
+
+    @classmethod
+    def handle(cls, text: str, for_widget: Widget) -> bool:
+        """Handle the command.
+
+        Args:
+            text: The text of the command.
+            for_widget: The widget to handle the command for.
+
+        Returns:
+            `True` if the command was handled; `False` if not.
+        """
+        if text.startswith("!"):
+            for_widget.notify(
+                text,
+                title="Unknown command",
+                severity="error",
+                markup=False,
+            )
+            return True
+        return False
+
+    @classmethod
+    def suggestions(cls) -> tuple[str, ...]:
+        """Ensure there are no suggestions for unknown commands."""
+        return ()
+
+    @classmethod
+    def help_text(cls) -> tuple[str, ...]:
+        """Ensure there is no help text for unknown commands."""
+        return ()
+
+
 ### general.py ends here

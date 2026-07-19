@@ -37,7 +37,7 @@ from wasat import GeminiURI
 from ...data import Bookmarks, CommandLineHistory, LocationHistory, NavigationHistory
 from ...types import short_location
 from .base_command import InputCommand
-from .general import ChangeThemeCommand, HelpCommand, QuitCommand
+from .general import ChangeThemeCommand, HelpCommand, QuitCommand, UnknownCommand
 from .open_file import OpenFileCommand
 from .open_gemini_uri import OpenGeminiURICommand
 from .open_other_uri import OpenOtherURICommand
@@ -49,6 +49,7 @@ COMMANDS: Final[tuple[type[InputCommand], ...]] = (
     QuitCommand,
     ChangeThemeCommand,
     PaletteCommand,
+    UnknownCommand,
     OpenFileCommand,
     OpenGeminiURICommand,
     OpenOtherURICommand,
