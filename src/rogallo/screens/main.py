@@ -120,6 +120,7 @@ from ..preflight import (
     path_from_uri,
 )
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
+from ..types import GEMINI_EXTENSIONS
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .certificate import Certificate
 from .confirm_unsupported import ConfirmUnsupportedURI
@@ -803,7 +804,7 @@ class Main(EnhancedScreen[None]):
                 message.start_from,
                 title="Open a file to view",
                 filters=Filters(
-                    ("Gemtext", lambda path: path.suffix.lower() == ".gmi"),
+                    ("Gemtext", lambda path: path.suffix.lower() in GEMINI_EXTENSIONS),
                     ("All files", lambda _: True),
                 ),
                 cancel_button=partial(add_key, key="Esc", context=self),
