@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v0.11.0
 
-**Released: WiP**
+**Released: 2026-07-19**
 
 - Added a `ToggleEmojiRemoval` command to toggle the removal of emoji from
   the content of a page. ([#181](https://github.com/davep/rogallo/pull/181))
