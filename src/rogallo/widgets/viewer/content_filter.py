@@ -16,16 +16,17 @@ from gemtext import Line
 # Rich imports.
 from rich.text import Text
 
+
 ##############################################################################
-type ContentFilter = Pipe[Line, str | Text]
-"""A type for a content filter."""
+class ContentFilter(Pipe[Line, str | Text]):
+    """The content filtering pipeline."""
 
 
 ##############################################################################
 class GemtextContent:
     """A class for filtering gemtext content."""
 
-    _filter: ContentFilter = Pipe[Line, str | Text](str)
+    _filter: ContentFilter = ContentFilter(str)
     """The content filter."""
 
     @staticmethod
@@ -62,7 +63,7 @@ class GemtextContent:
             allow_ansi_escape_sequences: Whether to allow ANSI escape sequences.
             strip_emoji: Whether to strip emoji from the content.
         """
-        cls._filter = Pipe[Line, str | Text](str)
+        cls._filter = ContentFilter(str)
         if strip_emoji:
             cls._filter |= cls._strip_emoji
         if allow_ansi_escape_sequences:
