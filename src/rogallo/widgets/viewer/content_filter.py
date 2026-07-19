@@ -22,19 +22,6 @@ type ContentFilter = Pipe[Line, str | Text]
 
 
 ##############################################################################
-def _strip_emoji(text: str) -> str:
-    """Strip emoji from a string.
-
-    Args:
-        text: The string to strip emoji from.
-
-    Returns:
-        The string with emoji stripped.
-    """
-    return "".join(char for char in text if category(char) != "So")
-
-
-##############################################################################
 class GemtextContent:
     """A class for filtering gemtext content."""
 
@@ -47,8 +34,23 @@ class GemtextContent:
 
         Args:
             text: The string to strip ANSI escape sequences from.
+
+        Returns:
+            The string with ANSI escape sequences stripped.
         """
         return Text.from_ansi(text).plain
+
+    @staticmethod
+    def _strip_emoji(text: str) -> str:
+        """Strip emoji from a string.
+
+        Args:
+            text: The string to strip emoji from.
+
+        Returns:
+            The string with emoji stripped.
+        """
+        return "".join(char for char in text if category(char) != "So")
 
     @classmethod
     def set_filter(
@@ -62,7 +64,7 @@ class GemtextContent:
         """
         cls._filter = Pipe[Line, str | Text](str)
         if strip_emoji:
-            cls._filter |= _strip_emoji
+            cls._filter |= cls._strip_emoji
         if allow_ansi_escape_sequences:
             cls._filter |= Text.from_ansi
         else:
