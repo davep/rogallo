@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from argparse import Namespace
+from functools import partial
 from mimetypes import guess_type
 from pathlib import Path
 from urllib.parse import urlparse
@@ -28,6 +29,11 @@ from textual.widgets import Footer, Header, Label
 from textual_enhanced.commands import ChangeTheme, Command, Help, Quit
 from textual_enhanced.dialogs import Confirm, ModalInput
 from textual_enhanced.screen import EnhancedScreen
+from textual_enhanced.tools import add_key
+
+##############################################################################
+# Textual file system picker imports.
+from textual_fspicker import FileOpen, Filters
 
 ##############################################################################
 # Wasat imports.
@@ -59,6 +65,7 @@ from ..commands import (
     JumpToCommandLine,
     JumpToDocument,
     JumpToSidebar,
+    OpenFile,
     Reload,
     SearchBookmarks,
     SearchHistory,
@@ -101,6 +108,7 @@ from ..input_content import InputContent
 from ..messages import (
     CopyToClipboard,
     OpenDocument,
+    OpenFromFileSystem,
     OpenLocation,
     OpenUnsupportedMIMEType,
     OpenUnsupportedURI,
@@ -112,6 +120,7 @@ from ..preflight import (
     path_from_uri,
 )
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
+from ..types import GEMINI_EXTENSIONS
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .certificate import Certificate
 from .confirm_unsupported import ConfirmUnsupportedURI
@@ -209,27 +218,28 @@ class Main(EnhancedScreen[None]):
         Quit,
         # Everything else.
         AddLocationToBookmarks,
-        ChangeTheme,
         ChangeCommandLineLocation,
+        ChangeTheme,
+        ClearCache,
+        CopyDocumentToClipboard,
+        CopyLocationToClipboard,
+        GoHome,
+        GoToParent,
+        GoToRoot,
         JumpToCommandLine,
         JumpToDocument,
         JumpToSidebar,
+        OpenFile,
         Reload,
-        CopyDocumentToClipboard,
-        CopyLocationToClipboard,
+        SetHome,
+        SetHomeToCurrentLocation,
+        StripeLinks,
         ToggleANSIEscapeSequenceHandling,
         ToggleBookmarksManager,
         ToggleEmojiRemoval,
         ToggleHistoryManager,
-        ToggleView,
-        GoHome,
-        GoToParent,
-        GoToRoot,
-        SetHome,
-        SetHomeToCurrentLocation,
-        StripeLinks,
-        ClearCache,
         ToggleLinkNumbers,
+        ToggleView,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -785,6 +795,23 @@ class Main(EnhancedScreen[None]):
                 else message.location.resolve().as_uri()
             )
 
+    @on(OpenFromFileSystem)
+    @work
+    async def _open_from_filesystem(self, message: OpenFromFileSystem) -> None:
+        """Open a file."""
+        if chosen_file := await self.app.push_screen_wait(
+            FileOpen(
+                message.start_from,
+                title="Open a file to view",
+                filters=Filters(
+                    ("Gemtext", lambda path: path.suffix.lower() in GEMINI_EXTENSIONS),
+                    ("All files", lambda _: True),
+                ),
+                cancel_button=partial(add_key, key="Esc", context=self),
+            )
+        ):
+            self.post_message(OpenLocation(chosen_file))
+
     @on(CommandLine.CommandExecuted)
     def _save_command_line_history(self, message: CommandLine.CommandExecuted) -> None:
         """Save the command line history when a command is executed.
@@ -1091,6 +1118,11 @@ class Main(EnhancedScreen[None]):
             config.handle_ansi_escape_sequences = (
                 self._viewer.handle_ansi_escape_sequences
             )
+
+    @work
+    async def action_open_file_command(self) -> None:
+        """Open a file."""
+        self.post_message(OpenFromFileSystem())
 
 
 ### main.py ends here

@@ -32,6 +32,8 @@ from textual_enhanced.commands import Quit
 # Wasat imports.
 from wasat import GeminiURI
 
+from rogallo.widgets.command_line.open_directory import OpenDirectoryCommand
+
 ##############################################################################
 # Local imports.
 from ...data import Bookmarks, CommandLineHistory, LocationHistory, NavigationHistory
@@ -51,6 +53,7 @@ COMMANDS: Final[tuple[type[InputCommand], ...]] = (
     PaletteCommand,
     UnknownCommand,
     OpenFileCommand,
+    OpenDirectoryCommand,
     OpenGeminiURICommand,
     OpenOtherURICommand,
 )

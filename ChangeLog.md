@@ -4,6 +4,11 @@
 
 - Added `!theme` as a command line command.
   ([#186](https://github.com/davep/rogallo/pull/186))
+- Added an `OpenFile` command, which opens a file picker dialog for picking
+  a local file to view. ([#188](https://github.com/davep/rogallo/pull/188))
+- Entering the name of an existing directory in the command line now opens
+  that directory in the file picker dialog.
+  ([#188](https://github.com/davep/rogallo/pull/188))
 
 ## v0.11.0
 

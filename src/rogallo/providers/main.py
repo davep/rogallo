@@ -26,6 +26,7 @@ from ..commands import (
     JumpToCommandLine,
     JumpToDocument,
     JumpToSidebar,
+    OpenFile,
     Reload,
     SearchBookmarks,
     SearchHistory,
@@ -66,6 +67,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(JumpToCommandLine)
         yield from self.maybe(JumpToDocument)
         yield JumpToSidebar()
+        yield OpenFile()
         yield Quit()
         yield from self.maybe(Reload)
         yield from self.maybe(SearchBookmarks)

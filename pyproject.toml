@@ -26,6 +26,7 @@ dependencies = [
     "pyperclip>=1.11.0",
     "textual>=8.2.7",
     "textual-enhanced>=1.6.0",
+    "textual-fspicker>=1.0.1",
     "types-pygments>=2.20.0.20260518",
     "types-pyperclip>=1.11.0.20260508",
     "wasat>=0.8.0",
