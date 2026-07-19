@@ -11,7 +11,7 @@ from textual.widget import Widget
 
 ##############################################################################
 # Textual enhanced imports.
-from textual_enhanced.commands import Help, Quit
+from textual_enhanced.commands import ChangeTheme, Help, Quit
 
 ##############################################################################
 # Local imports.
@@ -59,6 +59,14 @@ class QuitCommand(GeneralCommand):
     COMMAND = "`!quit`"
     ALIASES = "`!q`"
     MESSAGE = Quit
+
+
+##############################################################################
+class ChangeThemeCommand(GeneralCommand):
+    """Change the application theme"""
+
+    COMMAND = "`!theme`"
+    MESSAGE = ChangeTheme
 
 
 ### general.py ends here

@@ -849,6 +849,11 @@ class Main(EnhancedScreen[None]):
         """Handle the help action."""
         await self.run_action("help_command")
 
+    @on(ChangeTheme)
+    async def _change_theme(self) -> None:
+        """Handle the change theme action."""
+        await self.run_action("change_theme_command")
+
     def action_change_command_line_location_command(self) -> None:
         """Change the location of the command line."""
         self._command_line.dock_top = not self._command_line.dock_top

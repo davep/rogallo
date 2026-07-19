@@ -1,5 +1,10 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+- Added `!theme` as a command line command.
+  ([#186](https://github.com/davep/rogallo/pull/186))
+
 ## v0.11.0
 
 **Released: 2026-07-19**
