@@ -11,6 +11,12 @@
   ([#181](https://github.com/davep/rogallo/pull/181))
 - Turning off support for ANSI escape sequences now actually strips all
   sequences. ([#181](https://github.com/davep/rogallo/pull/181))
+- Added the ability to change the in-capsule link icon via the configuration
+  file. ([#182](https://github.com/davep/rogallo/pull/182))
+- Added the ability to change the outwith-capsule link icon via the
+  configuration file. ([#182](https://github.com/davep/rogallo/pull/182))
+- Added the ability to change the list item bullet icon via the
+  configuration file. ([#182](https://github.com/davep/rogallo/pull/182))
 
 ## v0.10.0
 

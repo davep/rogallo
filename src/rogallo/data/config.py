@@ -88,6 +88,15 @@ class Configuration:
     jump_progress_timeout: float = 1.0
     """The time in seconds before the jump progress resets."""
 
+    geminispace_link_icon: str = "⪢"
+    """The icon to use for links to geminispace:// URIs."""
+
+    otherspace_link_icon: str = "↗"
+    """The icon to use for non-gemini URIs."""
+
+    list_item_bullet_icon: str = "•"
+    """The icon to use for list item bullets."""
+
 
 ##############################################################################
 def configuration_file() -> Path:

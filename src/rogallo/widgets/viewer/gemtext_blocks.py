@@ -70,6 +70,21 @@ def _supported_language(language: str) -> bool:
         return False
 
 
+@cache
+def _icon(name: str) -> str:
+    """Get the icon for a given name.
+
+    Args:
+        name: The name of the icon to get.
+
+    Returns:
+        The icon for the given name.
+    """
+    if len(icon := getattr(load_configuration(), name, "?").strip()) < 1:
+        return "?"
+    return icon[0]
+
+
 ##############################################################################
 class GemtextText(Static):
     """A widget for displaying a block of Gemtext text."""
@@ -166,7 +181,7 @@ class GemtextListItem(Horizontal):
 
     def compose(self) -> ComposeResult:
         """Compose the Gemtext list item widget."""
-        yield Label("•", id="bullet")
+        yield Label(_icon("list_item_bullet_icon"), id="bullet")
         yield Label(
             GemtextContent.filter(self._list_item), markup=False, shrink=True, id="text"
         )
@@ -251,7 +266,11 @@ class GemtextLink(Horizontal, can_focus=True):
         """
         super().__init__()
         assert isinstance(link, Link)
-        self._icon = "⪢" if is_likely_capsule(link.uri) else "↗"
+        self._icon = (
+            _icon("geminispace_link_icon")
+            if is_likely_capsule(link.uri)
+            else _icon("otherspace_link_icon")
+        )
         """The icon to display for the link."""
         self._link = link
         """The link data."""
