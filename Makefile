@@ -151,6 +151,10 @@ clean: clean-packaging clean-docs # Clean the build directories
 realclean: clean		# Clean the venv and build directories
 	rm -rf .venv
 
+.PHONY: changelog.gmi
+changelog.gmi:			# Convert the changelog to Gemini format
+	@docs/bin/log2gemini < ChangeLog.md
+
 .PHONY: help
 help:				# Display this help
 	@grep -Eh "^[a-z]+:.+# " $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.+# "}; {printf "%-20s %s\n", $$1, $$2}'

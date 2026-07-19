@@ -1,0 +1,65 @@
+#!/usr/bin/env gawk -f
+
+# Flush out the accumulated list item buffer, parsing any PR links
+function flush_buffer() {
+    if (buffer != "") {
+        # Strip bold formatting (**)
+        gsub(/\*\*/, "", buffer)
+
+        # Look for the Markdown PR link pattern: ([#123](url)) or [#123](url)
+        if (match(buffer, /\(?\[#([0-9]+)\]\(([^)]+)\)\)?/, links)) {
+            pr_num = links[1]
+            url = links[2]
+
+            # Snip the Markdown link out of the main text block
+            sub(/\(?\[#[0-9]+\]\([^)]+\)\)?/, "", buffer)
+
+            # Clean up trailing spaces left behind after stripping the link
+            gsub(/[[:space:]]+$/, "", buffer)
+
+            # Print the unwrapped bullet followed immediately by the Gemtext link line
+            print buffer
+            print "=> " url " PR #" pr_num
+        } else {
+            print buffer
+        }
+        buffer = ""
+    }
+}
+
+# Ignore the Markdown end-of-file comment marker entirely
+/^\[\/\/\]:/ {
+    next
+}
+
+# Headings or blank lines: flush existing text and print line as-is
+/^##*/ || /^$/ {
+    flush_buffer()
+    print $0
+    next
+}
+
+# Start of a new Markdown list item: flush old text and swap hyphen for asterisk
+/^- / {
+    flush_buffer()
+    sub(/^- /, "* ", $0)
+    buffer = $0
+    next
+}
+
+# Continuation lines: strip leading indentation and append to buffer
+{
+    sub(/^[[:space:]]+/, "", $0)
+    if (buffer != "") {
+        buffer = buffer " " $0
+    } else {
+        buffer = $0
+    }
+}
+
+# End of file: catch and flush any remaining items
+END {
+    flush_buffer()
+}
+
+## log2gemini ends here
