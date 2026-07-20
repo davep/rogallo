@@ -381,7 +381,7 @@ class GemtextPreformatted(Static):
 
     def compose(self) -> ComposeResult:
         """Compose the Gemtext preformatted text widget."""
-        text = GemtextContent.filter(self._preformatted)
+        text = GemtextContent.ansi_filter(self._preformatted)
         yield Label(
             highlight(
                 str(text),
