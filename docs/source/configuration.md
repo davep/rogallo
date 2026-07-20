@@ -321,6 +321,28 @@ valid values. It will be `true` (with labels) by default.
 "with_link_jumps": true
 ```
 
+### Cosy link jumps
+
+By default the numeric labels for the jumps are positioned to the right of
+the display. This is done to keep a readable flow of text. While [link
+stripes](#striped-links) are provided to make it easier to know which label
+goes with which link, some people might prefer the labels to really cosy up
+with the links. For those folk the `Toggle Cosy Link Numbers`
+([`ToggleCosyLinkNumbers`](#bindable-commands) command, bound to
+<kbd>Super</kbd>+<kbd>F8</kbd> by default) command is available. The result
+of using it will be:
+
+```{.textual path="docs/screenshots/stripes_screenshot.py" title="Cosy link number labels" lines=30 columns=70 press="super+f8"}
+```
+
+The setting itself is saved in the configuration file as the `cosy_link_jumps`
+configuration setting. It accepts `true` or `false` as valid values. It will
+be `false` (labels on the right) by default:
+
+```json
+"cosy_link_jumps": false
+```
+
 ## Link tooltips
 
 By default, when using a mouse, Rogallo will show a tooltip containing the

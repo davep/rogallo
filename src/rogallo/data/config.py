@@ -82,6 +82,9 @@ class Configuration:
     with_link_jumps: bool = True
     """Should the application support jumping to links via numeric labels?"""
 
+    cosy_link_jumps: bool = False
+    """Should the numeric labels be displayed in a cosy way?"""
+
     maximum_document_width: int = 0
     """The maximum width of a document, in characters. A value of 0 means no limit."""
 

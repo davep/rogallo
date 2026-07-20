@@ -9,6 +9,9 @@
 - Entering the name of an existing directory in the command line now opens
   that directory in the file picker dialog.
   ([#188](https://github.com/davep/rogallo/pull/188))
+- Added a `ToggleCosyLinkNumbers` command, which moves the link jump numbers
+  over to the left of the link text or back to the right.
+  ([#193](https://github.com/davep/rogallo/pull/193))
 
 ## v0.11.0
 
