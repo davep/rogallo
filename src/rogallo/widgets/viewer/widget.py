@@ -66,6 +66,11 @@ class Viewer(Vertical, can_focus=False):
         &.--with-link-numbers GemtextLink #jump {
             display: block;
         }
+
+        &.--cosy-link-numbers GemtextLink #jump {
+            dock: left;
+            padding-right: 1;
+        }
     }
     """
 
@@ -93,6 +98,8 @@ class Viewer(Vertical, can_focus=False):
     """Whether the viewer is showing the source of the document or not."""
     with_link_numbers: var[bool] = var(False, toggle_class="--with-link-numbers")
     """Whether the viewer is showing link numbers or not."""
+    cosy_link_numbers: var[bool] = var(False, toggle_class="--cosy-link-numbers")
+    """Whether the viewer is showing link numbers in a cosy way or not."""
     stripe_links: var[bool] = var(False, toggle_class="--stripe-links")
     """Whether the viewer is showing links with stripes or not."""
     location_history: var[LocationHistory] = var(LocationHistory)

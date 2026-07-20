@@ -28,7 +28,7 @@ from pygments.util import ClassNotFound
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
-from textual.containers import Horizontal
+from textual.containers import Horizontal, HorizontalGroup
 from textual.events import Click
 from textual.getters import query_one
 from textual.highlight import HighlightTheme, highlight
@@ -315,11 +315,15 @@ class GemtextLink(Horizontal, can_focus=True):
     def compose(self) -> ComposeResult:
         """Compose the Gemtext link widget."""
         yield Label(self._icon, id="icon")
-        with Horizontal(id="text-wrap"):
-            yield Label(
-                GemtextContent.filter(self._link), id="text", markup=False, shrink=True
-            )
-        yield Label(id="jump", markup=False)
+        with HorizontalGroup():
+            with HorizontalGroup(id="text-wrap"):
+                yield Label(
+                    GemtextContent.filter(self._link),
+                    id="text",
+                    markup=False,
+                    shrink=True,
+                )
+            yield Label(id="jump", markup=False)
 
     @on(Click)
     def _action_open_link(self) -> None:
