@@ -12,6 +12,8 @@
 - Added a `ToggleCosyLinkNumbers` command, which moves the link jump numbers
   over to the left of the link text or back to the right.
   ([#193](https://github.com/davep/rogallo/pull/193))
+- Modified `ToggleEmojiRemoval` so that it *doesn't* remove emojis from
+  pre-formatted text. ([#196](https://github.com/davep/rogallo/pull/196))
 
 ## v0.11.0
 

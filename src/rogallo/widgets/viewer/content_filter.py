@@ -28,6 +28,8 @@ class GemtextContent:
 
     _filter: ContentFilter = ContentFilter(str)
     """The content filter."""
+    _purely_ansi_filter: ContentFilter = ContentFilter(str)
+    """A content filter that only deals with ANSI escape sequences."""
 
     @staticmethod
     def _strip_ansi(text: str) -> str:
@@ -64,12 +66,15 @@ class GemtextContent:
             strip_emoji: Whether to strip emoji from the content.
         """
         cls._filter = ContentFilter(str)
+        cls._purely_ansi_filter = ContentFilter(str)
         if strip_emoji:
             cls._filter |= cls._strip_emoji
         if allow_ansi_escape_sequences:
             cls._filter |= Text.from_ansi
+            cls._purely_ansi_filter |= Text.from_ansi
         else:
             cls._filter |= cls._strip_ansi
+            cls._purely_ansi_filter |= cls._strip_ansi
 
     @classmethod
     def filter(cls, line: Line) -> str | Text:
@@ -79,6 +84,15 @@ class GemtextContent:
             The filtered line content.
         """
         return cls._filter(line)
+
+    @classmethod
+    def ansi_filter(cls, line: Line) -> str | Text:
+        """Filter a Gemtext line, affecting only ANSI escape sequences.
+
+        Returns:
+            The filtered line content.
+        """
+        return cls._purely_ansi_filter(line)
 
 
 ### content_filter.py ends here
