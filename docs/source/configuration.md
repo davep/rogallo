@@ -404,7 +404,7 @@ default).
 ```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with stripes" lines=30 columns=70 press="f8"}
 ```
 
-The setting itself is saved in the configuration file as the `strike_links`
+The setting itself is saved in the configuration file as the `stripe_links`
 configuration setting. It accepts `true` or `false` as valid values. It will
 be `false` (no stripes) by default:
 
