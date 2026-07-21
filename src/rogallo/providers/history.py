@@ -101,8 +101,8 @@ class HistorySearchCommands(CommandsProvider):
             set(
                 Historical(location)
                 for location in chain(
-                    self.navigation_history,
                     self.location_history,
+                    self.navigation_history,
                     (KnownHost(host) for host in self.known_hosts),
                 )
             )
