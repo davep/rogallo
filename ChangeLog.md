@@ -1,5 +1,13 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Prioritise showing locations from history rather than navigation history
+  when doing a history search.
+  ([#198](https://github.com/davep/rogallo/pull/198))
+
 ## v0.12.0
 
 **Released: 2026-07-20**
