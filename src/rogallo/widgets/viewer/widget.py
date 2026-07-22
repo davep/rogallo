@@ -120,6 +120,8 @@ class Viewer(Vertical, can_focus=False):
     """Keeps track of the jump progress."""
     _jump_timer: Timer | None = None
     """A timer to reset the jump progress after a short delay."""
+    _jump_map: var[dict[int, GemtextLink]] = var(dict)
+    """Keeps track of the jump numbers and their corresponding links."""
 
     def compose(self) -> ComposeResult:
         """Compose the viewer widget."""
@@ -161,6 +163,7 @@ class Viewer(Vertical, can_focus=False):
         self._status.mime_type = self.document.mime_type or ""
         with self.app.batch_update():
             await self._view.remove_children()
+            self._jump_map = {}
             await self._view.mount_all(
                 [
                     Static(
@@ -186,6 +189,7 @@ class Viewer(Vertical, can_focus=False):
                     link.normalise_uri(self.document.location)
                     link.visited = link.normalised_uri in visited_links
                     link.jump_number = jump_number + 1
+                    self._jump_map[link.jump_number] = link
         # This next bit of nonsense is because Textual fails to sort its
         # scrollbars out upon clearing down and remounting a new set of
         # children. So we have to force it to refresh and then scroll to the
@@ -222,11 +226,10 @@ class Viewer(Vertical, can_focus=False):
     def _watch__jump(self) -> None:
         """Watch for changes to the jump property and update the viewer."""
         if self._jump is not None:
-            for link in self._view.query(GemtextLink):
-                if link.jump_number == self._jump:
-                    link.focus(scroll_visible=True)
-                    return
-            self._jump = self._jump % 10 if self._jump > 9 else None
+            if (link := self._jump_map.get(self._jump)) is not None:
+                link.focus(scroll_visible=True)
+            else:
+                self._jump = self._jump % 10 if self._jump > 9 else None
 
     def take_control(self) -> None:
         """Take control of the UI."""
