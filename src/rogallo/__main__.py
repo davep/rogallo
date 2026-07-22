@@ -55,6 +55,13 @@ def get_args() -> Namespace:
         help="List commands that can have their bindings changed",
     )
 
+    # Add the 'diagnostics' command.
+    sub_parser.add_parser(
+        "diagnostics",
+        aliases=["diag"],
+        help="Show diagnostic information about the application",
+    )
+
     # Add the 'directories' command.
     sub_parser.add_parser(
         "directories",
@@ -115,6 +122,69 @@ def show_themes() -> None:
 
 
 ##############################################################################
+def show_dignoastics() -> None:
+    """Show diagnostic information about the application environment."""
+    from os import environ
+    from platform import (
+        python_compiler,
+        python_implementation,
+        python_version,
+        release,
+        system,
+        version,
+    )
+    from sys import executable as python_executable
+
+    from bagofstuff import __version__ as bagofstuff_version
+    from cryptography import __version__ as cryptography_version
+    from gemtext import __version__ as gemtext_version
+    from textual import __version__ as textual_version
+    from textual_enhanced import __version__ as textual_enhanced_version
+    from textual_fspicker import __version__ as textual_fspicker_version
+    from wasat import __version__ as wasat_version
+
+    print("# Libraries")
+    print(f"bagofstuff: {bagofstuff_version}")
+    print(f"cryptography: {cryptography_version}")
+    print(f"gemtext: {gemtext_version}")
+    print(f"rogallo: {__version__}")
+    print(f"textual: {textual_version}")
+    print(f"textual_enhanced: {textual_enhanced_version}")
+    print(f"textual_fspicker: {textual_fspicker_version}")
+    print(f"wasat: {wasat_version}")
+    print()
+    print("# Python")
+    print(f"Compiler: {python_compiler()}")
+    print(f"Executable: {python_executable}")
+    print(f"Implementation: {python_implementation()}")
+    print(f"Version: {python_version()}")
+    print()
+    print("# System")
+    print(f"Name: {system()}")
+    print(f"Release: {release()}")
+    print(f"Version: {version()}")
+    print()
+    print("# Terminal")
+    if not (terminal := (environ.get("TERM_PROGRAM") or environ.get("TERMINAL_NAME"))):
+        terminal = "*unknown*"
+        for tell, name in {
+            "ALACRITTY_WINDOW_ID": "Alacritty",
+            "GNOME_TERMINAL_SCREEN": "GNOME Terminal",
+            "INSIDE_EMACS": "GNU Emacs",
+            "JEDITERM_SOURCE_ARGS": "PyCharm",
+            "KITTY_PID": "Kitty",
+            "KONSOLE_VERSION": "Konsole",
+            "TERMINATOR_UUID": "Terminator",
+            "WT_SESSION": "Windows Terminal",
+            "XTERM_VERSION": "XTerm",
+        }.items():
+            if tell in environ:
+                terminal = f"{name} ({environ[tell]})"
+                break
+    print(f"Detected: {terminal}")
+
+
+##############################################################################
 def main() -> None:
     """Main entry point for the rogallo application."""
     match (args := get_args()).command:
@@ -122,6 +192,8 @@ def main() -> None:
             print(cache_dir())
             print(config_dir())
             print(data_dir())
+        case "diag" | "diagnostics":
+            show_dignoastics()
         case "license" | "licence":
             print(cleandoc(Rogallo.HELP_LICENSE))
         case "bindings":
