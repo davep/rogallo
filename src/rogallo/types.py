@@ -6,12 +6,16 @@ from pathlib import Path
 from typing import Final
 
 ##############################################################################
+# Port97 imports.
+from port79 import FingerURI
+
+##############################################################################
 # Wasat imports.
 from wasat import GeminiURI
 from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
-type GeminiLocation = Path | GeminiURI
+type GeminiLocation = Path | GeminiURI | FingerURI
 """The type of a location from Gemini content."""
 
 ##############################################################################
@@ -33,6 +37,8 @@ def short_location(location: GeminiLocation) -> str:
     Returns:
         A short string representation of the location.
     """
+    if isinstance(location, FingerURI):
+        return str(location)
     if isinstance(location, GeminiURI):
         return str(location).removeprefix(GEMINI_PREFIX)
     try:

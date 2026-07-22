@@ -9,6 +9,10 @@ from collections.abc import Iterator
 from gemtext import Gemtext, Line, Paragraph
 
 ##############################################################################
+# Port79 imports.
+from port79 import FingerURI
+
+##############################################################################
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
@@ -183,7 +187,7 @@ class Viewer(Vertical, can_focus=False):
                 visited_links = {
                     str(visit.location)
                     for visit in self.location_history
-                    if isinstance(visit.location, GeminiURI)
+                    if isinstance(visit.location, (FingerURI, GeminiURI))
                 }
                 for jump_number, link in enumerate(self._view.query(GemtextLink)):
                     link.normalise_uri(self.document.location)

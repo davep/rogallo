@@ -7,8 +7,14 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ##############################################################################
+# Port97 imports.
+from port79 import FingerURI
+from port79 import URIError as FingerURIError
+
+##############################################################################
 # Wasat imports.
-from wasat import GeminiURI, URIError
+from wasat import GeminiURI
+from wasat import URIError as GeminiURIError
 from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
@@ -19,6 +25,40 @@ from .types import GEMINI_EXTENSIONS, GEMINI_MIME_TYPE
 # Add Gemini MIME types to the mimetypes module.
 for extension in GEMINI_EXTENSIONS:
     mimetypes.add_type(GEMINI_MIME_TYPE, extension)
+
+
+##############################################################################
+def is_gemini_uri(uri: str) -> bool:
+    """Determine if a URI is a Gemini URI.
+
+    Args:
+        uri: The URI to check.
+
+    Returns:
+        `True` if the URI is a Gemini URI, `False` otherwise.
+    """
+    try:
+        _ = GeminiURI(uri)
+        return True
+    except GeminiURIError:
+        return False
+
+
+##############################################################################
+def is_finger_uri(uri: str) -> bool:
+    """Determine if a URI is a Finger URI.
+
+    Args:
+        uri: The URI to check.
+
+    Returns:
+        `True` if the URI is a Finger URI, `False` otherwise.
+    """
+    try:
+        _ = FingerURI(uri)
+        return True
+    except FingerURIError:
+        return False
 
 
 ##############################################################################
@@ -48,7 +88,7 @@ def is_likely_capsule(uri: str) -> bool:
         # Check if it's a straight-up Gemini URI.
         _ = GeminiURI(uri)
         return True
-    except URIError:
+    except GeminiURIError:
         # If it's not, check if it's likely a relative URI.
         return is_likely_page_relative(uri)
 

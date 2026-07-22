@@ -12,11 +12,16 @@ from json import dumps, loads
 from pathlib import Path
 
 ##############################################################################
+# Port79 imports.
+from port79 import FingerURI
+
+##############################################################################
 # Wasat imports.
 from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
+from ..preflight import is_finger_uri, is_gemini_uri
 from ..types import GeminiLocation
 from .locations import data_dir
 
@@ -38,7 +43,9 @@ class Bookmark:
         """The bookmark in a JSON-friendly format."""
         return {
             "title": self.title,
-            "type": "uri" if isinstance(self.location, GeminiURI) else "path",
+            "type": "uri"
+            if isinstance(self.location, (FingerURI, GeminiURI))
+            else "path",
             "location": str(self.location),
         }
 
@@ -52,9 +59,15 @@ class Bookmark:
         Returns:
             A fresh instance of a bookmark.
         """
+        maker: type[FingerURI | GeminiURI | Path] = Path
+        if data["type"] == "uri":
+            if is_gemini_uri(data["location"]):
+                maker = GeminiURI
+            elif is_finger_uri(data["location"]):
+                maker = FingerURI
         return cls(
             data.get("title", ""),
-            (GeminiURI if data["type"] == "uri" else Path)(data.get("location", "")),
+            maker(data.get("location", "")),
         )
 
     def __gt__(self, other: object, /) -> bool:
@@ -71,6 +84,8 @@ class Bookmark:
             return isinstance(self.location, Path) and self.location == other
         if isinstance(other, GeminiURI):
             return isinstance(self.location, GeminiURI) and self.location == other
+        if isinstance(other, FingerURI):
+            return isinstance(self.location, FingerURI) and self.location == other
         return NotImplemented
 
 

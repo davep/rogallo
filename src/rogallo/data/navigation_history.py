@@ -4,10 +4,15 @@
 # Python imports.
 from json import dumps, loads
 from pathlib import Path
+from typing import Any
 
 ##############################################################################
 # BagOfStuff imports.
 from bagofstuff.history import NavigableHistory
+
+##############################################################################
+# Port79 imports.
+from port79 import FingerURI
 
 ##############################################################################
 # Wasat imports.
@@ -15,6 +20,7 @@ from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
+from ..preflight import is_finger_uri, is_gemini_uri
 from ..types import GeminiLocation
 from .locations import data_dir
 
@@ -45,7 +51,9 @@ def save_naviagation_history(history: NavigationHistory) -> None:
         dumps(
             [
                 {
-                    "type": "uri" if isinstance(entry, GeminiURI) else "path",
+                    "type": "uri"
+                    if isinstance(entry, (FingerURI, GeminiURI))
+                    else "path",
                     "location": str(entry),
                 }
                 for entry in history
@@ -57,6 +65,24 @@ def save_naviagation_history(history: NavigationHistory) -> None:
 
 
 ##############################################################################
+def _maker(entry: dict[str, Any]) -> GeminiLocation:
+    """Make a GeminiLocation from a JSON entry.
+
+    Args:
+        entry: The JSON entry.
+
+    Returns:
+        The GeminiLocation.
+    """
+    if entry["type"] == "uri":
+        if is_gemini_uri(entry["location"]):
+            return GeminiURI(entry["location"])
+        elif is_finger_uri(entry["location"]):
+            return FingerURI(entry["location"])
+    return Path(entry["location"])
+
+
+##############################################################################
 def load_navigation_history() -> NavigationHistory:
     """Load the navigation history from storage.
 
@@ -64,10 +90,7 @@ def load_navigation_history() -> NavigationHistory:
         The navigation history.
     """
     return NavigationHistory(
-        [
-            (GeminiURI if entry["type"] == "uri" else Path)(entry["location"])
-            for entry in loads(history.read_text(encoding="utf-8"))
-        ]
+        [_maker(entry) for entry in loads(history.read_text(encoding="utf-8"))]
         if (history := navigation_history_file()).exists()
         else []
     )

@@ -92,7 +92,10 @@ class Configuration:
     """The time in seconds before the jump progress resets."""
 
     geminispace_link_icon: str = "⪢"
-    """The icon to use for links to geminispace:// URIs."""
+    """The icon to use for links to gemini:// URIs."""
+
+    fingerspace_link_icon: str = "☛"
+    """The icon to use for links to finger:// URIs."""
 
     otherspace_link_icon: str = "↗"
     """The icon to use for non-gemini URIs."""
