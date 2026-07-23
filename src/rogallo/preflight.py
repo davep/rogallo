@@ -184,8 +184,8 @@ def make_location(str: str) -> GeminiLocation:
         if is_finger_uri(str):
             return FingerURI(str)
         return path_from_uri(str)
-    except ValueError:
-        raise ValueError(f"Cannot make location from string: {str}")
+    except ValueError as error:
+        raise ValueError(f"Cannot make location from string: {str}") from error
 
 
 ### location_tests.py ends here

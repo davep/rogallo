@@ -21,7 +21,7 @@ from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
-from ..preflight import is_finger_uri, is_gemini_uri, make_location
+from ..preflight import make_location
 from ..types import GeminiLocation
 from .locations import data_dir
 

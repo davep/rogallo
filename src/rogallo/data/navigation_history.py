@@ -4,23 +4,14 @@
 # Python imports.
 from json import dumps, loads
 from pathlib import Path
-from typing import Any
 
 ##############################################################################
 # BagOfStuff imports.
 from bagofstuff.history import NavigableHistory
 
 ##############################################################################
-# Port79 imports.
-from port79 import FingerURI
-
-##############################################################################
-# Wasat imports.
-from wasat import GeminiURI
-
-##############################################################################
 # Local imports.
-from ..preflight import is_finger_uri, is_gemini_uri, make_location
+from ..preflight import make_location
 from ..types import GeminiLocation
 from .locations import data_dir
 

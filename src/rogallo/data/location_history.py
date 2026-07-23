@@ -13,16 +13,8 @@ from typing import Self
 from bagofstuff.history import RecencyHistory
 
 ##############################################################################
-# Port79 imports.
-from port79 import FingerURI
-
-##############################################################################
-# Wasat imports.
-from wasat import GeminiURI
-
-##############################################################################
 # Local imports.
-from ..preflight import is_finger_uri, is_gemini_uri, make_location
+from ..preflight import make_location
 from ..types import GeminiLocation
 from .locations import data_dir
 
