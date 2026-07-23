@@ -39,9 +39,9 @@ def is_gemini_uri(uri: str) -> bool:
     """
     try:
         _ = GeminiURI(uri)
-        return True
     except GeminiURIError:
         return False
+    return True
 
 
 ##############################################################################
@@ -56,9 +56,9 @@ def is_finger_uri(uri: str) -> bool:
     """
     try:
         _ = FingerURI(uri)
-        return True
     except FingerURIError:
         return False
+    return True
 
 
 ##############################################################################
