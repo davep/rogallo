@@ -87,10 +87,10 @@ def is_likely_capsule(uri: str) -> bool:
     try:
         # Check if it's a straight-up Gemini URI.
         _ = GeminiURI(uri)
-        return True
     except GeminiURIError:
         # If it's not, check if it's likely a relative URI.
         return is_likely_page_relative(uri)
+    return True
 
 
 ##############################################################################
