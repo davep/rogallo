@@ -15,7 +15,7 @@ from bagofstuff.history import RecencyHistory
 ##############################################################################
 # Local imports.
 from ..preflight import make_location
-from ..types import GeminiLocation
+from ..types import RogalloLocation
 from .locations import data_dir
 
 
@@ -24,7 +24,7 @@ from .locations import data_dir
 class LocationVisit:
     """A record of a visit to a location."""
 
-    location: GeminiLocation
+    location: RogalloLocation
     """The location that was visited."""
 
     timestamp: datetime = field(default_factory=datetime.now)

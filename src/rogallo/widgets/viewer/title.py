@@ -10,7 +10,7 @@ from textual.widgets import Label
 
 ##############################################################################
 # Local imports.
-from ...types import GeminiLocation
+from ...types import RogalloLocation
 
 
 ##############################################################################
@@ -36,7 +36,7 @@ class ViewerTitle(Horizontal):
     }
     """
 
-    location: var[GeminiLocation | None] = var(None, always_update=True)
+    location: var[RogalloLocation | None] = var(None, always_update=True)
     """The location to display."""
     needed_certificate: var[bool] = var(False)
     """Whether the location needed a certificate."""

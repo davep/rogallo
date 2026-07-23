@@ -15,8 +15,8 @@ from wasat import GeminiURI
 from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
-type GeminiLocation = Path | GeminiURI | FingerURI
-"""The type of a location from Gemini content."""
+type RogalloLocation = Path | GeminiURI | FingerURI
+"""The type of a location handled by Rogallo."""
 
 ##############################################################################
 GEMINI_MIME_TYPE: Final[str] = "text/gemini"
@@ -28,7 +28,7 @@ GEMINI_EXTENSIONS: Final[set[str]] = {".gmi", ".gmni", ".gemini"}
 
 
 ##############################################################################
-def short_location(location: GeminiLocation) -> str:
+def short_location(location: RogalloLocation) -> str:
     """Get a short string representation of a location.
 
     Args:

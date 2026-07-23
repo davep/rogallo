@@ -6,14 +6,14 @@ from typing import NamedTuple
 
 ##############################################################################
 # Local imports.
-from .types import GeminiLocation, is_gemini_mime_type
+from .types import RogalloLocation, is_gemini_mime_type
 
 
 ##############################################################################
 class Document(NamedTuple):
     """A named tuple representing details of the document."""
 
-    location: GeminiLocation | None = None
+    location: RogalloLocation | None = None
     """The source of the document.
 
     Note that this might not be the original location of the document if it
@@ -21,7 +21,7 @@ class Document(NamedTuple):
     of the document, see `original_location`.
     """
 
-    original_location: GeminiLocation | None = None
+    original_location: RogalloLocation | None = None
     """The original source of the document, if any.
 
     This will differ from the location if the document was redirected from

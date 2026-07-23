@@ -22,7 +22,7 @@ from wasat import GeminiURI
 ##############################################################################
 # Local imports.
 from ..preflight import make_location
-from ..types import GeminiLocation
+from ..types import RogalloLocation
 from .locations import data_dir
 
 
@@ -35,7 +35,7 @@ class Bookmark:
     title: str
     """The bookmark's title."""
 
-    location: GeminiLocation
+    location: RogalloLocation
     """The location of the bookmark."""
 
     @property

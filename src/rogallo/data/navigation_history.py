@@ -12,12 +12,12 @@ from bagofstuff.history import NavigableHistory
 ##############################################################################
 # Local imports.
 from ..preflight import make_location
-from ..types import GeminiLocation
+from ..types import RogalloLocation
 from .locations import data_dir
 
 
 ##############################################################################
-class NavigationHistory(NavigableHistory[GeminiLocation]):
+class NavigationHistory(NavigableHistory[RogalloLocation]):
     """The navigation history."""
 
 

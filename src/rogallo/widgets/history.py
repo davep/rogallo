@@ -27,7 +27,7 @@ from textual_enhanced.widgets import EnhancedOptionList
 from ..data import LocationHistory, LocationVisit
 from ..messages import OpenLocation
 from ..safe_escape import escape
-from ..types import GeminiLocation, short_location
+from ..types import RogalloLocation, short_location
 
 
 ##############################################################################
@@ -67,7 +67,7 @@ class HistoryOption(Option):
         """The position of the visit in the history."""
 
     @property
-    def location(self) -> GeminiLocation:
+    def location(self) -> RogalloLocation:
         """The location for this option."""
         return self._location
 

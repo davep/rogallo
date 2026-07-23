@@ -19,7 +19,7 @@ from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
 # Local imports.
-from .types import GEMINI_EXTENSIONS, GEMINI_MIME_TYPE, GeminiLocation
+from .types import GEMINI_EXTENSIONS, GEMINI_MIME_TYPE, RogalloLocation
 
 ##############################################################################
 # Add Gemini MIME types to the mimetypes module.
@@ -166,7 +166,7 @@ def is_likely_local_text_file(uri: str) -> bool:
 
 
 ##############################################################################
-def make_location(str: str) -> GeminiLocation:
+def make_location(str: str) -> RogalloLocation:
     """Make a location object from a string.
 
     Args:
