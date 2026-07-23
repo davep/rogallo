@@ -19,7 +19,7 @@ from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
 # Local imports.
-from .types import GEMINI_EXTENSIONS, GEMINI_MIME_TYPE
+from .types import GEMINI_EXTENSIONS, GEMINI_MIME_TYPE, GeminiLocation
 
 ##############################################################################
 # Add Gemini MIME types to the mimetypes module.
@@ -163,6 +163,29 @@ def is_likely_local_text_file(uri: str) -> bool:
     except ValueError:
         return False
     return mime_type is not None and mime_type.startswith("text/")
+
+
+##############################################################################
+def make_location(str: str) -> GeminiLocation:
+    """Make a location object from a string.
+
+    Args:
+        str: The string to make a location from.
+
+    Returns:
+        A location object.
+
+    Raises:
+        ValueError: If the string can't be turned into a location object.
+    """
+    try:
+        if is_gemini_uri(str):
+            return GeminiURI(str)
+        if is_finger_uri(str):
+            return FingerURI(str)
+        return path_from_uri(str)
+    except ValueError:
+        raise ValueError(f"Cannot make location from string: {str}")
 
 
 ### location_tests.py ends here

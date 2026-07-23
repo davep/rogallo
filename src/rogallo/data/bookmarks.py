@@ -21,7 +21,7 @@ from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
-from ..preflight import is_finger_uri, is_gemini_uri
+from ..preflight import is_finger_uri, is_gemini_uri, make_location
 from ..types import GeminiLocation
 from .locations import data_dir
 
@@ -43,9 +43,6 @@ class Bookmark:
         """The bookmark in a JSON-friendly format."""
         return {
             "title": self.title,
-            "type": "uri"
-            if isinstance(self.location, (FingerURI, GeminiURI))
-            else "path",
             "location": str(self.location),
         }
 
@@ -59,15 +56,9 @@ class Bookmark:
         Returns:
             A fresh instance of a bookmark.
         """
-        maker: type[FingerURI | GeminiURI | Path] = Path
-        if data["type"] == "uri":
-            if is_gemini_uri(data["location"]):
-                maker = GeminiURI
-            elif is_finger_uri(data["location"]):
-                maker = FingerURI
         return cls(
             data.get("title", ""),
-            maker(data.get("location", "")),
+            make_location(data.get("location", "")),
         )
 
     def __gt__(self, other: object, /) -> bool:
