@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Port79 imports.
-from port79 import FingerURI
+from port79 import FingerURI, URIError
 
 ##############################################################################
 # Textual imports.
@@ -35,7 +35,10 @@ class FingerCommand(InputCommand):
         """
         command, user = cls.split_command(text)
         if cls.is_command(command):
-            for_widget.post_message(OpenLocation(FingerURI.from_string(user)))
+            try:
+                for_widget.post_message(OpenLocation(FingerURI.from_string(user)))
+            except URIError as error:
+                for_widget.notify(str(error), title="Finger error", severity="error")
             return True
         return False
 
