@@ -48,7 +48,7 @@ class PaletteCommand(InputCommand):
             The help text formatted as Markdown table rows.
         """
         return tuple(
-            f"| `{command_name}` | | {command.__doc__} |"
+            f"| `{command_name}` | | | {command.__doc__} |"
             for command_name, command in cls.borrowed_commands().items()
         )
 

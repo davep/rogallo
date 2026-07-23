@@ -9,9 +9,8 @@ from pathlib import Path
 from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
 
-from port79 import Client as FingerClient
-
 ##############################################################################
+from port79 import Client as FingerClient
 from port79 import FingerURI, Port79Error
 from port79 import URIError as FingerURIError
 
@@ -652,13 +651,12 @@ class Main(EnhancedScreen[None]):
 
         try:
             self._command_line.working = True
-            response = await self._finger_client.request(uri)
             self.post_message(
                 OpenDocument(
                     document=Document(
                         location=uri,
                         original_location=uri,
-                        content=response.text,
+                        content=(await self._finger_client.request(uri)).text,
                         mime_type="text/plain",
                     ),
                     original_request=request,
