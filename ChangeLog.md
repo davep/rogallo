@@ -10,7 +10,7 @@
   ([#211](https://github.com/davep/rogallo/pull/211))
 - Added `!finger <user[@host]>` as a command line command.
   ([#211](https://github.com/davep/rogallo/pull/211))
-- Add support for using `$VISUAL` or `$EDITOR` to edit user input.
+- Added support for using `$VISUAL` or `$EDITOR` to edit user input.
   ([#212](https://github.com/davep/rogallo/pull/212))
 
 ## v1.0.0
