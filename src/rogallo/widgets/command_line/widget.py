@@ -32,14 +32,14 @@ from textual_enhanced.commands import Quit
 # Wasat imports.
 from wasat import GeminiURI
 
-from rogallo.widgets.command_line.open_directory import OpenDirectoryCommand
-
 ##############################################################################
 # Local imports.
 from ...data import Bookmarks, CommandLineHistory, LocationHistory, NavigationHistory
 from ...types import short_location
 from .base_command import InputCommand
+from .finger import FingerCommand
 from .general import ChangeThemeCommand, HelpCommand, QuitCommand, UnknownCommand
+from .open_directory import OpenDirectoryCommand
 from .open_file import OpenFileCommand
 from .open_gemini_uri import OpenGeminiURICommand
 from .open_other_uri import OpenOtherURICommand
@@ -51,6 +51,7 @@ COMMANDS: Final[tuple[type[InputCommand], ...]] = (
     QuitCommand,
     ChangeThemeCommand,
     PaletteCommand,
+    FingerCommand,
     UnknownCommand,
     OpenFileCommand,
     OpenDirectoryCommand,
@@ -113,8 +114,8 @@ class CommandLine(Vertical):
     a filename or a URL will open that file for viewing; entering a
     directory will open a file opening dialog starting at that location.
 
-    | Command | Aliases | Description |
-    | --      | --      | --          |
+    | Command | Aliases | Arguments | Description |
+    | --      | --      | --        | --          |
     {cli_commands}
 
     ### Special keys

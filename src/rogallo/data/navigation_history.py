@@ -10,17 +10,14 @@ from pathlib import Path
 from bagofstuff.history import NavigableHistory
 
 ##############################################################################
-# Wasat imports.
-from wasat import GeminiURI
-
-##############################################################################
 # Local imports.
-from ..types import GeminiLocation
+from ..preflight import make_location
+from ..types import RogalloLocation
 from .locations import data_dir
 
 
 ##############################################################################
-class NavigationHistory(NavigableHistory[GeminiLocation]):
+class NavigationHistory(NavigableHistory[RogalloLocation]):
     """The navigation history."""
 
 
@@ -45,7 +42,6 @@ def save_naviagation_history(history: NavigationHistory) -> None:
         dumps(
             [
                 {
-                    "type": "uri" if isinstance(entry, GeminiURI) else "path",
                     "location": str(entry),
                 }
                 for entry in history
@@ -65,7 +61,7 @@ def load_navigation_history() -> NavigationHistory:
     """
     return NavigationHistory(
         [
-            (GeminiURI if entry["type"] == "uri" else Path)(entry["location"])
+            make_location(entry["location"])
             for entry in loads(history.read_text(encoding="utf-8"))
         ]
         if (history := navigation_history_file()).exists()

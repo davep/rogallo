@@ -13,12 +13,9 @@ from typing import Self
 from bagofstuff.history import RecencyHistory
 
 ##############################################################################
-# Wasat imports.
-from wasat import GeminiURI
-
-##############################################################################
 # Local imports.
-from ..types import GeminiLocation
+from ..preflight import make_location
+from ..types import RogalloLocation
 from .locations import data_dir
 
 
@@ -27,7 +24,7 @@ from .locations import data_dir
 class LocationVisit:
     """A record of a visit to a location."""
 
-    location: GeminiLocation
+    location: RogalloLocation
     """The location that was visited."""
 
     timestamp: datetime = field(default_factory=datetime.now)
@@ -46,7 +43,6 @@ class LocationVisit:
             The visit as a JSON-serialisable dictionary.
         """
         return {
-            "type": "uri" if isinstance(self.location, GeminiURI) else "path",
             "location": str(self.location),
             "timestamp": self.timestamp.isoformat(),
         }
@@ -62,7 +58,7 @@ class LocationVisit:
             The visit.
         """
         return cls(
-            (GeminiURI if data["type"] == "uri" else Path)(data["location"]),
+            make_location(data["location"]),
             datetime.fromisoformat(data["timestamp"]),
         )
 

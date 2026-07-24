@@ -18,7 +18,7 @@ from wasat import GeminiURI
 # Local imports.
 from ..data import LocationHistory, LocationVisit, NavigationHistory
 from ..messages import OpenLocation
-from ..types import GeminiLocation
+from ..types import RogalloLocation
 
 
 ##############################################################################
@@ -32,7 +32,7 @@ class KnownHost(GeminiURI):
 class Historical:
     """Represents a historical location."""
 
-    location: GeminiLocation | LocationVisit | GeminiURI
+    location: RogalloLocation | LocationVisit | GeminiURI
     """The historical location."""
 
     @property
@@ -52,7 +52,7 @@ class Historical:
         return "From navigation history"
 
     @property
-    def target(self) -> GeminiLocation:
+    def target(self) -> RogalloLocation:
         """Get the target location."""
         if isinstance(self.location, LocationVisit):
             return self.location.location

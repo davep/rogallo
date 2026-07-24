@@ -10,6 +10,11 @@ from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
 
 ##############################################################################
+from port79 import Client as FingerClient
+from port79 import FingerURI, Port79Error
+from port79 import URIError as FingerURIError
+
+##############################################################################
 # Pyperclip imports.
 from pyperclip import PyperclipException
 from pyperclip import copy as copy_to_clipboard
@@ -34,18 +39,18 @@ from textual_enhanced.tools import add_key
 ##############################################################################
 # Textual file system picker imports.
 from textual_fspicker import FileOpen, Filters
+from wasat import Client as GeminiClient
 
 ##############################################################################
 # Wasat imports.
 from wasat import (
-    Client,
     ConnectionError,
     GeminiURI,
-    Response,
     SecurityError,
     StatusCode,
-    URIError,
 )
+from wasat import Response as GeminiResponse
+from wasat import URIError as GeminiURIError
 
 ##############################################################################
 # Local imports.
@@ -288,7 +293,7 @@ class Main(EnhancedScreen[None]):
         """The trusted MIME types."""
         self._last_user_input: InputContent | None = None
         """The last user input."""
-        self._client = Client(
+        self._gemini_client = GeminiClient(
             verify_mode="tofu",
             trust_store_path=trust_file(),
             client_cert_store_path=client_certificates_directory(),
@@ -297,6 +302,10 @@ class Main(EnhancedScreen[None]):
             max_redirects=load_configuration().maximum_redirects,
         )
         """The Gemini client."""
+        self._finger_client = FingerClient(
+            timeout=load_configuration().connection_timeout,
+        )
+        """The Finger client."""
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
@@ -326,10 +335,10 @@ class Main(EnhancedScreen[None]):
         self._bookmarks = load_bookmarks()
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
-        if self._client.trust_store:
+        if self._gemini_client.trust_store:
             self._command_line.known_hosts = [
                 GeminiURI.with_default_scheme(f"{host}:{port}")
-                for host, port in await self._client.trust_store.get_hosts()
+                for host, port in await self._gemini_client.trust_store.get_hosts()
             ]
             HistorySearchCommands.known_hosts = self._command_line.known_hosts
         self._history_visible = config.history_visible
@@ -352,7 +361,7 @@ class Main(EnhancedScreen[None]):
 
     async def on_unmount(self) -> None:
         """Called when the screen is unmounted."""
-        await self._client.close()
+        await self._gemini_client.close()
 
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
         """Check if an action is possible to perform right now.
@@ -465,7 +474,7 @@ class Main(EnhancedScreen[None]):
                         ),
                     )
                 )
-            except URIError as error:
+            except GeminiURIError as error:
                 self.notify(
                     f"Unable to create query for {location}:\n\n{error}",
                     severity="error",
@@ -489,7 +498,9 @@ class Main(EnhancedScreen[None]):
             self.notify("Client certificate request cancelled.", severity="warning")
             return
         try:
-            await self._client.client_cert_store.create_credentials(**certificate_data)
+            await self._gemini_client.client_cert_store.create_credentials(
+                **certificate_data
+            )
         except (ValueError, OSError, RuntimeError) as error:
             self.notify(
                 f"Unable to create client certificate for {location}:\n\n{error}",
@@ -499,7 +510,9 @@ class Main(EnhancedScreen[None]):
             return
         self.post_message(OpenLocation(location, allow_cached=False))
 
-    async def _handle_response(self, response: Response, request: OpenLocation) -> None:
+    async def _handle_response(
+        self, response: GeminiResponse, request: OpenLocation
+    ) -> None:
         """Handle a response from a Gemini request.
 
         Args:
@@ -612,7 +625,7 @@ class Main(EnhancedScreen[None]):
         # Otherwise, make a request to the capsule and handle the response.
         try:
             self._command_line.working = True
-            async with await self._client.request(uri) as response:
+            async with await self._gemini_client.request(uri) as response:
                 await self._handle_response(response, request)
         except ConnectionError as error:
             self._last_user_input = request.associated_input
@@ -626,6 +639,34 @@ class Main(EnhancedScreen[None]):
                 f"Error loading {uri}:\n\n{error}",
                 severity="error",
                 title="Security Error",
+            )
+        finally:
+            self._command_line.working = False
+
+    @work
+    async def _load_from_finger(self, request: OpenLocation) -> None:
+        """Load a document from a Finger URI."""
+        uri = request.location
+        assert isinstance(uri, FingerURI)
+
+        try:
+            self._command_line.working = True
+            self.post_message(
+                OpenDocument(
+                    document=Document(
+                        location=uri,
+                        original_location=uri,
+                        content=(await self._finger_client.request(uri)).text,
+                        mime_type="text/plain",
+                    ),
+                    original_request=request,
+                )
+            )
+        except Port79Error as error:
+            self.notify(
+                f"Error loading {uri}:\n\n{error}",
+                severity="error",
+                title="Finger Error",
             )
         finally:
             self._command_line.working = False
@@ -676,6 +717,8 @@ class Main(EnhancedScreen[None]):
         """
         if isinstance(message.location, GeminiURI):
             self._load_from_capsule(message)
+        elif isinstance(message.location, FingerURI):
+            self._load_from_finger(message)
         else:
             self._load_from_filesystem(message)
 
@@ -693,7 +736,16 @@ class Main(EnhancedScreen[None]):
                 OpenLocation(GeminiURI(message.uri), allow_cached=message.allow_cached)
             )
             return
-        except URIError:
+        except GeminiURIError:
+            pass
+
+        # Does it look like a Finger URI?
+        try:
+            self.post_message(
+                OpenLocation(FingerURI(message.uri), allow_cached=message.allow_cached)
+            )
+            return
+        except FingerURIError:
             pass
 
         # Perhaps it's a local text file?
@@ -770,6 +822,13 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the unsupported MIME type.
         """
+
+        if isinstance(message.location, FingerURI):
+            self.notify(
+                f"Unable to open {message.location}: Finger content is always text/plain",
+                severity="error",
+            )
+            return
 
         # If the MIME type isn't trusted, let's see what the user wants to
         # do about it.

@@ -47,8 +47,8 @@ from wasat import GeminiURI
 # Local imports.
 from ...data import load_configuration
 from ...messages import OpenURI
-from ...preflight import is_likely_capsule
-from ...types import GeminiLocation
+from ...preflight import is_finger_uri, is_likely_capsule
+from ...types import RogalloLocation
 from .content_filter import GemtextContent
 
 
@@ -266,12 +266,12 @@ class GemtextLink(Horizontal, can_focus=True):
         """
         super().__init__()
         assert isinstance(link, Link)
-        self._icon = (
-            _icon("geminispace_link_icon")
-            if is_likely_capsule(link.uri)
-            else _icon("otherspace_link_icon")
-        )
+        self._icon = _icon("otherspace_link_icon")
         """The icon to display for the link."""
+        if is_likely_capsule(link.uri):
+            self._icon = _icon("geminispace_link_icon")
+        elif is_finger_uri(link.uri):
+            self._icon = _icon("fingerspace_link_icon")
         self._link = link
         """The link data."""
         self._normalised_uri = link.uri
@@ -282,7 +282,7 @@ class GemtextLink(Horizontal, can_focus=True):
         """The normalised URI to use when opening the link."""
         return self._normalised_uri
 
-    def normalise_uri(self, base_uri: GeminiLocation | None) -> None:
+    def normalise_uri(self, base_uri: RogalloLocation | None) -> None:
         """Normalise the URI of the link against a base URI.
 
         Args:

@@ -15,6 +15,9 @@ class InputCommand:
     ALIASES = ""
     """Any aliases for the command for the help."""
 
+    ARGUMENTS = ""
+    """Any arguments for the command for the help."""
+
     @classmethod
     def help_text(cls) -> tuple[str, ...]:
         """Get the help text for the command.
@@ -22,7 +25,7 @@ class InputCommand:
         Returns:
             The help text formatted as Markdown table rows.
         """
-        return (f"| {cls.COMMAND} | {cls.ALIASES} | {cls.__doc__} |",)
+        return (f"| {cls.COMMAND} | {cls.ALIASES} | {cls.ARGUMENTS} | {cls.__doc__} |",)
 
     @classmethod
     def handle(cls, text: str, for_widget: Widget) -> bool:

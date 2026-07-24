@@ -6,13 +6,17 @@ from pathlib import Path
 from typing import Final
 
 ##############################################################################
+# Port97 imports.
+from port79 import FingerURI
+
+##############################################################################
 # Wasat imports.
 from wasat import GeminiURI
 from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
-type GeminiLocation = Path | GeminiURI
-"""The type of a location from Gemini content."""
+type RogalloLocation = Path | GeminiURI | FingerURI
+"""The type of a location handled by Rogallo."""
 
 ##############################################################################
 GEMINI_MIME_TYPE: Final[str] = "text/gemini"
@@ -24,7 +28,7 @@ GEMINI_EXTENSIONS: Final[set[str]] = {".gmi", ".gmni", ".gemini"}
 
 
 ##############################################################################
-def short_location(location: GeminiLocation) -> str:
+def short_location(location: RogalloLocation) -> str:
     """Get a short string representation of a location.
 
     Args:
@@ -33,6 +37,8 @@ def short_location(location: GeminiLocation) -> str:
     Returns:
         A short string representation of the location.
     """
+    if isinstance(location, FingerURI):
+        return str(location)
     if isinstance(location, GeminiURI):
         return str(location).removeprefix(GEMINI_PREFIX)
     try:

@@ -229,6 +229,7 @@ configuration file:
 Three main "icons" are used within a rendered document:
 
 - Links within a Gemini capsule
+- Finger links
 - Links outwith a Gemini capsule
 - List item bullet
 
@@ -237,6 +238,7 @@ these icons, you can modify these values in the configuration file:
 
 ```json
 "geminispace_link_icon": "\u2aa2",
+"fingerspace_link_icon": "\u261b",
 "otherspace_link_icon": "\u2197",
 "list_item_bullet_icon": "\u2022"
 ```

@@ -23,6 +23,7 @@ keywords = [
 dependencies = [
     "bagofstuff>=1.2.1",
     "gemtext>=1.0.0",
+    "port79>=0.2.0",
     "pyperclip>=1.11.0",
     "textual>=8.2.7",
     "textual-enhanced>=1.6.0",
