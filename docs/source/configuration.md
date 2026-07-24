@@ -466,4 +466,21 @@ Here's a sample of some of the themes:
 ```{.textual path="docs/screenshots/main_screenshot.py" title="dracula" lines=35 columns=90 press="f9,d,r,a,c,u,l,a,enter"}
 ```
 
+## User input editor
+
+Rogallo supports using your choice of external text editor to edit user
+input. By default the input dialog will look to see if `$VISUAL` or
+`$EDITOR` are set in the environment and, if they are, you can press
+<kbd>F3</kbd> when editing input to open your editor.
+
+If you would prefer to set a specific editor for Rogallo itself, you can set
+`external_editor` in the configuration file. By default it is `null` (in
+which case it will look for `$VISUAL` and then `$EDITOR`):
+
+```json
+"external_editor": null
+```
+
+Set it to the program to run to use that specific editor for Rogallo.
+
 [//]: # (configuration.md ends here)
