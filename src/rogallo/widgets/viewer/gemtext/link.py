@@ -72,7 +72,7 @@ class GemtextLink(Horizontal, can_focus=True):
         }
 
         &:hover {
-            background: $block-hover-background;
+            background: $block-hover-background !important;
         }
 
         &:focus {

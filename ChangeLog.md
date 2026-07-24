@@ -15,6 +15,8 @@
 - Added support for blending the background of some pre-formatted text
   blocks with the background of the viewer.
   ([#215](https://github.com/davep/rogallo/pull/215))
+- Fixed mouse hover effect not appearing on striped links.
+  ([#216](https://github.com/davep/rogallo/pull/216))
 
 ## v1.0.0
 
