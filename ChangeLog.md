@@ -7,9 +7,9 @@
 - Added a `diagnostics` CLI command to print out useful environmental
   information. ([#210](https://github.com/davep/rogallo/pull/210))
 - Added support for the `finger` protocol.
-  ([#212](https://github.com/davep/rogallo/pull/212))
+  ([#211](https://github.com/davep/rogallo/pull/211))
 - Added `!finger <user[@host]>` as a command line command.
-  ([#212](https://github.com/davep/rogallo/pull/212))
+  ([#211](https://github.com/davep/rogallo/pull/211))
 
 ## v1.0.0
 
