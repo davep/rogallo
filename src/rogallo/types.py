@@ -23,7 +23,11 @@ GEMINI_MIME_TYPE: Final[str] = "text/gemini"
 """The MIME type for Gemini content."""
 
 ##############################################################################
-GEMINI_EXTENSIONS: Final[set[str]] = {".gmi", ".gmni", ".gemini"}
+DEFAULT_GEMINI_EXTENSION: Final[str] = ".gmi"
+"""The default file extension for Gemini content."""
+
+##############################################################################
+GEMINI_EXTENSIONS: Final[set[str]] = {DEFAULT_GEMINI_EXTENSION, ".gmni", ".gemini"}
 """The set of file extensions for Gemini content."""
 
 
