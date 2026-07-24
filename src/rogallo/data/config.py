@@ -106,6 +106,9 @@ class Configuration:
     external_editor: str | None = None
     """The external editor to use for editing text content."""
 
+    blend_pre_formatted_with_background: list[str] = field(default_factory=lambda: [""])
+    """List of types of pre-formatted text to blend with the background."""
+
 
 ##############################################################################
 def configuration_file() -> Path:
