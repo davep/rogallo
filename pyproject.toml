@@ -1,6 +1,6 @@
 [project]
 name = "rogallo"
-version = "1.0.0"
+version = "1.1.0"
 description = "A terminal-based client for the Gemini Protocol"
 readme = "README.md"
 authors = [
@@ -30,7 +30,7 @@ dependencies = [
     "textual-fspicker>=1.0.1",
     "types-pygments>=2.20.0.20260518",
     "types-pyperclip>=1.11.0.20260508",
-    "wasat>=0.8.0",
+    "wasat>=1.0.1",
     "xdg-base-dirs>=6.0.2",
 ]
 classifiers = [

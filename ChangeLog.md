@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v1.1.0
 
-**Released: WiP**
+**Released: 2026-07-24**
 
 - Added a `diagnostics` CLI command to print out useful environmental
   information. ([#210](https://github.com/davep/rogallo/pull/210))
