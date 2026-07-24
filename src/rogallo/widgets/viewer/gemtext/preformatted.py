@@ -44,16 +44,32 @@ def _supported_language(language: str) -> bool:
 
 
 ##############################################################################
+@cache
+def _blended_types() -> set[str]:
+    """Get the set of preformatted types that should be blended with the background.
+
+    Returns:
+        The set of preformatted types that should be blended with the background.
+    """
+    return set(
+        alt_text.casefold()
+        for alt_text in load_configuration().blend_pre_formatted_with_background
+    )
+
+
+##############################################################################
 class GemtextPreformatted(Static):
     """A widget for displaying a Gemtext preformatted text block."""
 
     DEFAULT_CSS = """
     GemtextPreformatted {
         margin: 0 2;
-        background: black 35%;
         overflow: auto;
-        &:light {
-            background: white 35%;
+        &.--highlight {
+            background: black 35%;
+            &:light {
+                background: white 35%;
+            }
         }
     }
     """
@@ -67,7 +83,13 @@ class GemtextPreformatted(Static):
         assert isinstance(preformatted, PreFormatted)
         self._preformatted = preformatted
         """The Gemtext preformatted text to display."""
-        super().__init__()
+        super().__init__(
+            classes=(
+                ""
+                if preformatted.alt_text.casefold() in _blended_types()
+                else "--highlight"
+            )
+        )
         self.tooltip = (
             preformatted.alt_text
             if preformatted.has_alt_text

@@ -12,6 +12,9 @@
   ([#211](https://github.com/davep/rogallo/pull/211))
 - Added support for using `$VISUAL` or `$EDITOR` to edit user input.
   ([#212](https://github.com/davep/rogallo/pull/212))
+- Added support for blending the background of some pre-formatted text
+  blocks with the background of the viewer.
+  ([#215](https://github.com/davep/rogallo/pull/215))
 
 ## v1.0.0
 
