@@ -22,6 +22,7 @@ from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
+from ..data import load_configuration
 from ..types import DEFAULT_GEMINI_EXTENSION
 
 
@@ -113,7 +114,12 @@ class UserInput(ModalScreen[str | None]):
     @property
     def _external_editor(self) -> str | None:
         """The external editor to use, if any."""
-        return getenv("VISUAL") or getenv("EDITOR") or None
+        return (
+            load_configuration().external_editor
+            or getenv("VISUAL")
+            or getenv("EDITOR")
+            or None
+        )
 
     def _update_subtitle(self) -> None:
         """Update the subtitle of the input area."""

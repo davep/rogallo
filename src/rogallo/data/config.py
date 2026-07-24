@@ -103,6 +103,9 @@ class Configuration:
     list_item_bullet_icon: str = "•"
     """The icon to use for list item bullets."""
 
+    external_editor: str | None = None
+    """The external editor to use for editing text content."""
+
 
 ##############################################################################
 def configuration_file() -> Path:
