@@ -148,7 +148,7 @@ class UserInput(ModalScreen[str | None]):
 
     def action_edit_externally(self) -> None:
         """Edit the input in an external editor."""
-        if not bool(editor := self._external_editor):
+        if not (editor := self._external_editor):
             return
         with NamedTemporaryFile(
             mode="w+", delete=False, encoding="utf-8", suffix=DEFAULT_GEMINI_EXTENSION
