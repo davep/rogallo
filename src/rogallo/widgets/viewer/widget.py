@@ -35,9 +35,8 @@ from wasat import GeminiURI
 # Local imports.
 from ...data import LocationHistory, load_configuration
 from ...document import Document
-from .content_filter import GemtextContent
 from .document_view import DocumentView
-from .gemtext_blocks import GemtextLink, get_block_widget
+from .gemtext import GemtextContent, GemtextLink, get_block_widget
 from .status import ViewerStatus
 from .title import ViewerTitle
 
