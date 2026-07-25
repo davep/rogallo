@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added `port79` to the library version list output by the `diagnostics`
+  command. ([#220](https://github.com/davep/rogallo/pull/220))
+
 ## v1.1.0
 
 **Released: 2026-07-24**

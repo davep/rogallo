@@ -138,6 +138,7 @@ def show_dignoastics() -> None:
     from bagofstuff import __version__ as bagofstuff_version
     from cryptography import __version__ as cryptography_version
     from gemtext import __version__ as gemtext_version
+    from port79 import __version__ as port79_version
     from textual import __version__ as textual_version
     from textual_enhanced import __version__ as textual_enhanced_version
     from textual_fspicker import __version__ as textual_fspicker_version
@@ -147,6 +148,7 @@ def show_dignoastics() -> None:
     print(f"bagofstuff: {bagofstuff_version}")
     print(f"cryptography: {cryptography_version}")
     print(f"gemtext: {gemtext_version}")
+    print(f"port79: {port79_version}")
     print(f"rogallo: {__version__}")
     print(f"textual: {textual_version}")
     print(f"textual_enhanced: {textual_enhanced_version}")
