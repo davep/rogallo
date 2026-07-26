@@ -6,7 +6,7 @@ from typing import NamedTuple
 
 ##############################################################################
 # Local imports.
-from .types import RogalloLocation, is_gemini_mime_type
+from .types import RogalloLocation, is_gemini_mime_type, is_gopher_mime_type
 
 
 ##############################################################################
@@ -48,6 +48,11 @@ class Document(NamedTuple):
     def is_gemtext(self) -> bool:
         """`True` if the document is a Gemtext document, `False` otherwise."""
         return is_gemini_mime_type(self.mime_type)
+
+    @property
+    def is_gophermap(self) -> bool:
+        """`True` if the document is a Gophermap document, `False` otherwise."""
+        return is_gopher_mime_type(self.mime_type)
 
 
 ### document.py ends here
