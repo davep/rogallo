@@ -10,8 +10,6 @@ from gemtext import Gemtext, Line, Paragraph
 
 ##############################################################################
 # Gophermap imports.
-from gophermap import GopherMap, ItemType
-
 ##############################################################################
 # Port79 imports.
 from port70 import GopherURI
@@ -42,6 +40,7 @@ from ...data import LocationHistory, load_configuration
 from ...document import Document
 from .document_view import DocumentView
 from .gemtext import GemtextContent, GemtextLink, get_block_widget
+from .gopher import to_gemtext
 from .status import ViewerStatus
 from .title import ViewerTitle
 
@@ -164,33 +163,6 @@ class Viewer(Vertical, can_focus=False):
         if buffer:
             yield Paragraph("\n".join(buffer))
 
-    def _gophermap_to_gemtext(self, gophermap: str) -> Iterator[str]:
-        """Convert a gophermap to gemtext.
-
-        Args:
-            gophermap: The gophermap to convert.
-
-        Yields:
-            Lines of gemtext corresponding to the gophermap.
-        """
-        assert isinstance(self.document.location, GopherURI)
-        for item in GopherMap(gophermap).items:
-            match item.type:
-                case ItemType.MENU | ItemType.TEXT | ItemType.INDEX_SEARCH:
-                    yield (
-                        f"=> {GopherURI.with_default_scheme(f'{item.host}:{item.port}/{item.type}{item.selector}')} "
-                        f"{item.display_text}"
-                    )
-                case ItemType.HTML:
-                    yield f"=> {item.selector.removeprefix('URL:')} {item.display_text}"
-                case ItemType.INFO:
-                    yield item.display_text
-                case _:
-                    yield (
-                        f"```Unhandled Gopher item type\n{item.type.value} {item.selector} "
-                        f"{item.host}:{item.port} {item.display_text}\n```"
-                    )
-
     async def _watch_document(self) -> None:
         """Watch for changes to the document and update the viewer."""
         self._title.needed_certificate = self.document.needed_certificate
@@ -214,9 +186,7 @@ class Viewer(Vertical, can_focus=False):
                         Gemtext(
                             self.document.content
                             if self.document.is_gemtext
-                            else "\n".join(
-                                self._gophermap_to_gemtext(self.document.content)
-                            )
+                            else "\n".join(to_gemtext(self.document.content))
                         ).content
                     )
                 ]
