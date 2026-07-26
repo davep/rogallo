@@ -451,7 +451,12 @@ class Main(EnhancedScreen[None]):
         """
         if isinstance(mime_type, str):
             mime_type, _, _ = mime_type.partition(";")
-        return mime_type in load_configuration().displayable_content_types
+        return mime_type in {
+            "text/gemini",
+            "text/plain",
+            "text/gopher-menu",
+            *load_configuration().displayable_content_types,
+        }
 
     async def _handle_input_request(
         self, location: GeminiURI, prompt: str, sensitive: bool
@@ -696,6 +701,11 @@ class Main(EnhancedScreen[None]):
         uri = request.location
         assert isinstance(uri, GopherURI)
 
+        mime_type = ItemType(uri.item_type).mime_type
+        if not self._is_displayable(mime_type):
+            self.post_message(OpenUnsupportedMIMEType(uri, mime_type))
+            return
+
         try:
             self._command_line.working = True
             self.post_message(
@@ -704,7 +714,7 @@ class Main(EnhancedScreen[None]):
                         location=uri,
                         original_location=uri,
                         content=(await GopherClient().request(uri)).text,
-                        mime_type=ItemType(uri.item_type).mime_type,
+                        mime_type=mime_type,
                     ),
                     original_request=request,
                 )
@@ -881,8 +891,8 @@ class Main(EnhancedScreen[None]):
             message: The message containing the unsupported MIME type.
         """
 
-        # There's no reason why we should be here for Finger or Gopher URIs.
-        if isinstance(message.location, (FingerURI, GopherURI)):
+        # There's no reason why we should be here for Finger URIs.
+        if isinstance(message.location, FingerURI):
             self.notify(
                 f"Unexpected request to open {message.location}: please let Dave know",
                 severity="warning",
@@ -911,7 +921,7 @@ class Main(EnhancedScreen[None]):
         if open_uri:
             open_in_browser(
                 str(message.location)
-                if isinstance(message.location, GeminiURI)
+                if isinstance(message.location, (GeminiURI, GopherURI))
                 else message.location.resolve().as_uri()
             )
 
