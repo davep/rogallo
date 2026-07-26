@@ -1236,6 +1236,15 @@ wheels = [
 ]
 
 [[package]]
+name = "port70"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/b3/62/bd85f3865542c26d230138a484aae8d5a7614dbaa0b336102535c1d21dcb/port70-0.1.0.tar.gz", hash = "sha256:f40da13c10e051b463d2b0ff683e4a14a5ad7fcee0b95edeeeb475ff8e958789", size = 9324, upload-time = "2026-07-26T10:06:44.894Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/80/39/0752756fce42f14f0084ccdad18936a0bf65a307417660db4dc581885121/port70-0.1.0-py3-none-any.whl", hash = "sha256:6d8e777eb72cea7b352dc62f032df4e72985de775ec7a68c1cf2380c94cb9afa", size = 11592, upload-time = "2026-07-26T10:06:43.819Z" },
+]
+
+[[package]]
 name = "port79"
 version = "1.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1542,6 +1551,7 @@ source = { editable = "." }
 dependencies = [
     { name = "bagofstuff" },
     { name = "gemtext" },
+    { name = "port70" },
     { name = "port79" },
     { name = "pyperclip" },
     { name = "textual" },
@@ -1572,6 +1582,7 @@ dev = [
 requires-dist = [
     { name = "bagofstuff", specifier = ">=1.2.1" },
     { name = "gemtext", specifier = ">=1.0.0" },
+    { name = "port70", specifier = ">=0.1.0" },
     { name = "port79", specifier = ">=1.0.0" },
     { name = "pyperclip", specifier = ">=1.11.0" },
     { name = "textual", specifier = ">=8.2.7" },
