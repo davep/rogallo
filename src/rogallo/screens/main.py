@@ -10,6 +10,12 @@ from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
 
 ##############################################################################
+# Port70 imports.
+from port70 import GopherURI
+from port70 import URIError as GopherURIError
+
+##############################################################################
+# Port79 imports.
 from port79 import Client as FingerClient
 from port79 import FingerURI, Port79Error
 from port79 import URIError as FingerURIError
@@ -671,6 +677,13 @@ class Main(EnhancedScreen[None]):
         finally:
             self._command_line.working = False
 
+    @work
+    async def _load_from_gopher(self, request: OpenLocation) -> None:
+        """Load a document from a Gopher URI."""
+        self.notify(
+            "Loading Gopher content is not yet implemented.", severity="warning"
+        )
+
     @work(thread=True)
     def _load_from_filesystem(self, request: OpenLocation) -> None:
         """Load a document from the filesystem.
@@ -719,6 +732,8 @@ class Main(EnhancedScreen[None]):
             self._load_from_capsule(message)
         elif isinstance(message.location, FingerURI):
             self._load_from_finger(message)
+        elif isinstance(message.location, GopherURI):
+            self._load_from_gopher(message)
         else:
             self._load_from_filesystem(message)
 
@@ -746,6 +761,15 @@ class Main(EnhancedScreen[None]):
             )
             return
         except FingerURIError:
+            pass
+
+        # Does it look like a Gopher URI?
+        try:
+            self.post_message(
+                OpenLocation(GopherURI(message.uri), allow_cached=message.allow_cached)
+            )
+            return
+        except GopherURIError:
             pass
 
         # Perhaps it's a local text file?
@@ -823,10 +847,11 @@ class Main(EnhancedScreen[None]):
             message: The message containing the unsupported MIME type.
         """
 
-        if isinstance(message.location, FingerURI):
+        # There's no reason why we should be here for Finger or Gopher URIs.
+        if isinstance(message.location, (FingerURI, GopherURI)):
             self.notify(
-                f"Unable to open {message.location}: Finger content is always text/plain",
-                severity="error",
+                f"Unexpected request to open {message.location}: please let Dave know",
+                severity="warning",
             )
             return
 

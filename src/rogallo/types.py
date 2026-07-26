@@ -6,6 +6,10 @@ from pathlib import Path
 from typing import Final
 
 ##############################################################################
+# Port70 imports.
+from port70 import GopherURI
+
+##############################################################################
 # Port79 imports.
 from port79 import FingerURI
 
@@ -15,7 +19,7 @@ from wasat import GeminiURI
 from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
-type RogalloLocation = Path | GeminiURI | FingerURI
+type RogalloLocation = Path | GeminiURI | FingerURI | GopherURI
 """The type of a location handled by Rogallo."""
 
 ##############################################################################
@@ -41,7 +45,7 @@ def short_location(location: RogalloLocation) -> str:
     Returns:
         A short string representation of the location.
     """
-    if isinstance(location, FingerURI):
+    if isinstance(location, (FingerURI, GopherURI)):
         return str(location)
     if isinstance(location, GeminiURI):
         return str(location).removeprefix(GEMINI_PREFIX)
