@@ -97,6 +97,9 @@ class Configuration:
     fingerspace_link_icon: str = "☛"
     """The icon to use for links to finger:// URIs."""
 
+    gopherspace_link_icon: str = "○"
+    """The icon to use for links to gopher:// URIs."""
+
     otherspace_link_icon: str = "↗"
     """The icon to use for non-gemini URIs."""
 

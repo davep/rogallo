@@ -10,6 +10,10 @@ from urllib.parse import urlparse
 from gemtext import Line, Link
 
 ##############################################################################
+# Port70 imports.
+from port70 import GopherURI
+
+##############################################################################
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
@@ -31,7 +35,7 @@ from wasat import GeminiURI
 # Local imports.
 from ....data import load_configuration
 from ....messages import OpenURI
-from ....preflight import is_finger_uri, is_likely_capsule
+from ....preflight import is_finger_uri, is_gopher_uri, is_likely_capsule
 from ....types import RogalloLocation
 from .content_filter import GemtextContent
 from .icons import icon
@@ -122,6 +126,8 @@ class GemtextLink(Horizontal, can_focus=True):
             self._icon = icon("geminispace_link_icon")
         elif is_finger_uri(link.uri):
             self._icon = icon("fingerspace_link_icon")
+        elif is_gopher_uri(link.uri):
+            self._icon = icon("gopherspace_link_icon")
         self._link = link
         """The link data."""
         self._normalised_uri = link.uri
@@ -142,7 +148,7 @@ class GemtextLink(Horizontal, can_focus=True):
             return
         if urlparse(self._normalised_uri).scheme:
             return
-        if isinstance(base_uri, GeminiURI):
+        if isinstance(base_uri, (GeminiURI, GopherURI)):
             self._normalised_uri = str(base_uri.resolve(self._link.uri))
         elif isinstance(base_uri, Path):
             self._normalised_uri = (base_uri.parent / self._link.uri).resolve().as_uri()

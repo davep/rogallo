@@ -9,7 +9,12 @@ from collections.abc import Iterator
 from gemtext import Gemtext, Line, Paragraph
 
 ##############################################################################
+# Gophermap imports.
+from gophermap import GopherMap, ItemType
+
+##############################################################################
 # Port79 imports.
+from port70 import GopherURI
 from port79 import FingerURI
 
 ##############################################################################
@@ -159,6 +164,33 @@ class Viewer(Vertical, can_focus=False):
         if buffer:
             yield Paragraph("\n".join(buffer))
 
+    def _gophermap_to_gemtext(self, gophermap: str) -> Iterator[str]:
+        """Convert a gophermap to gemtext.
+
+        Args:
+            gophermap: The gophermap to convert.
+
+        Yields:
+            Lines of gemtext corresponding to the gophermap.
+        """
+        assert isinstance(self.document.location, GopherURI)
+        for item in GopherMap(gophermap).items:
+            match item.type:
+                case ItemType.MENU | ItemType.TEXT | ItemType.INDEX_SEARCH:
+                    yield (
+                        f"=> {GopherURI.with_default_scheme(f'{item.host}:{item.port}/{item.type}{item.selector}')} "
+                        f"{item.display_text}"
+                    )
+                case ItemType.HTML:
+                    yield f"=> {item.selector.removeprefix('URL:')} {item.display_text}"
+                case ItemType.INFO:
+                    yield item.display_text
+                case _:
+                    yield (
+                        f"```Unhandled Gopher item type\n{item.type.value} {item.selector} "
+                        f"{item.host}:{item.port} {item.display_text}\n```"
+                    )
+
     async def _watch_document(self) -> None:
         """Watch for changes to the document and update the viewer."""
         self._title.needed_certificate = self.document.needed_certificate
@@ -174,19 +206,28 @@ class Viewer(Vertical, can_focus=False):
                         markup=False,
                     )
                 ]
-                if not self.document.is_gemtext or self.view_source
+                if not (self.document.is_gemtext or self.document.is_gophermap)
+                or self.view_source
                 else [
                     get_block_widget(line)
                     for line in self._consolidate(
-                        Gemtext(self.document.content).content
+                        Gemtext(
+                            self.document.content
+                            if self.document.is_gemtext
+                            else "\n".join(
+                                self._gophermap_to_gemtext(self.document.content)
+                            )
+                        ).content
                     )
                 ]
             )
-            if self.document.is_gemtext and not self.view_source:
+            if (
+                self.document.is_gemtext or self.document.is_gophermap
+            ) and not self.view_source:
                 visited_links = {
                     str(visit.location)
                     for visit in self.location_history
-                    if isinstance(visit.location, (FingerURI, GeminiURI))
+                    if isinstance(visit.location, (FingerURI, GeminiURI, GopherURI))
                 }
                 for jump_number, link in enumerate(self._view.query(GemtextLink)):
                     link.normalise_uri(self.document.location)

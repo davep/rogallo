@@ -54,5 +54,10 @@ class Document(NamedTuple):
         """`True` if the document is a Gophermap document, `False` otherwise."""
         return is_gopher_mime_type(self.mime_type)
 
+    @property
+    def is_source(self) -> bool:
+        """`True` if the document is a source code document, `False` otherwise."""
+        return self.is_gemtext or self.is_gophermap
+
 
 ### document.py ends here

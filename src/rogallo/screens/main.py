@@ -10,6 +10,10 @@ from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
 
 ##############################################################################
+# Gophermap imports.
+from gophermap import ItemType
+
+##############################################################################
 # Port70 imports.
 from port70 import Client as GopherClient
 from port70 import GopherURI
@@ -413,7 +417,7 @@ class Main(EnhancedScreen[None]):
         if action == CopyDocumentToClipboard.action_name():
             return bool(self._viewer.document)
         if action == ToggleView.action_name():
-            return bool(self._viewer.document) and self._viewer.document.is_gemtext
+            return bool(self._viewer.document) and self._viewer.document.is_source
         if action == GoHome.action_name():
             return bool(load_configuration().home_page.strip())
         if action == AddLocationToBookmarks.action_name():
@@ -692,6 +696,38 @@ class Main(EnhancedScreen[None]):
         uri = request.location
         assert isinstance(uri, GopherURI)
 
+        # Try and work out the most appropriate MIME type.
+        # TODO: This should move to either Port70 or Gophermap, but for now
+        # it's here.
+        mime_type = GOPHER_MIME_TYPE
+        match uri.item_type:
+            case ItemType.BINARY:
+                mime_type = "application/octet-stream"
+            case ItemType.GIF:
+                mime_type = "image/gif"
+            case ItemType.IMAGE:
+                mime_type = "image/jpeg"
+            case ItemType.HTML:
+                mime_type = "text/html"
+            case ItemType.BINHEX:
+                mime_type = "application/mac-binhex40"
+            case ItemType.PDF:
+                mime_type = "application/pdf"
+            case ItemType.TEXT:
+                mime_type = "text/plain"
+            case ItemType.XML:
+                mime_type = "application/xml"
+            case ItemType.DOCUMENT:
+                mime_type = "application/msword"
+            case ItemType.AUDIO:
+                mime_type = "audio/mpeg"
+            case ItemType.UUENCODED:
+                mime_type = "application/x-uuencode"
+            case ItemType.CSO:
+                mime_type = "application/x-cso"
+            case ItemType.DOS_FILE:
+                mime_type = "application/x-dos"
+
         try:
             self._command_line.working = True
             self.post_message(
@@ -700,7 +736,7 @@ class Main(EnhancedScreen[None]):
                         location=uri,
                         original_location=uri,
                         content=(await GopherClient().request(uri)).text,
-                        mime_type=GOPHER_MIME_TYPE,
+                        mime_type=mime_type,
                     ),
                     original_request=request,
                 )
@@ -1114,7 +1150,7 @@ class Main(EnhancedScreen[None]):
 
     def action_toggle_view_command(self) -> None:
         """Toggle the view between rendered and source."""
-        if self._viewer.document.is_gemtext:
+        if self._viewer.document.is_source:
             self._viewer.view_source = not self._viewer.view_source
 
     def action_go_home_command(self) -> None:
