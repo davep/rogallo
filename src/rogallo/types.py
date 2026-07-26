@@ -6,6 +6,10 @@ from pathlib import Path
 from typing import Final
 
 ##############################################################################
+# Gophermap imports.
+from gophermap import ItemType
+
+##############################################################################
 # Port70 imports.
 from port70 import GopherURI
 
@@ -33,10 +37,6 @@ DEFAULT_GEMINI_EXTENSION: Final[str] = ".gmi"
 ##############################################################################
 GEMINI_EXTENSIONS: Final[set[str]] = {DEFAULT_GEMINI_EXTENSION, ".gmni", ".gemini"}
 """The set of file extensions for Gemini content."""
-
-##############################################################################
-GOPHER_MIME_TYPE: Final[str] = "application/gopher-menu"
-"""The MIME type for Gopher content."""
 
 
 ##############################################################################
@@ -82,7 +82,7 @@ def is_gopher_mime_type(mime_type: str | None) -> bool:
     Returns:
         True if the MIME type is a Gopher MIME type, False otherwise.
     """
-    return mime_type is not None and mime_type.startswith(GOPHER_MIME_TYPE)
+    return mime_type is not None and mime_type.startswith(ItemType.MENU.mime_type)
 
 
 ### types.py ends here

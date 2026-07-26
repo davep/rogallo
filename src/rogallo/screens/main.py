@@ -137,7 +137,7 @@ from ..preflight import (
     path_from_uri,
 )
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
-from ..types import GEMINI_EXTENSIONS, GOPHER_MIME_TYPE
+from ..types import GEMINI_EXTENSIONS
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .certificate import Certificate
 from .confirm_unsupported import ConfirmUnsupportedURI
@@ -696,38 +696,6 @@ class Main(EnhancedScreen[None]):
         uri = request.location
         assert isinstance(uri, GopherURI)
 
-        # Try and work out the most appropriate MIME type.
-        # TODO: This should move to either Port70 or Gophermap, but for now
-        # it's here.
-        mime_type = GOPHER_MIME_TYPE
-        match uri.item_type:
-            case ItemType.BINARY:
-                mime_type = "application/octet-stream"
-            case ItemType.GIF:
-                mime_type = "image/gif"
-            case ItemType.IMAGE:
-                mime_type = "image/jpeg"
-            case ItemType.HTML:
-                mime_type = "text/html"
-            case ItemType.BINHEX:
-                mime_type = "application/mac-binhex40"
-            case ItemType.PDF:
-                mime_type = "application/pdf"
-            case ItemType.TEXT:
-                mime_type = "text/plain"
-            case ItemType.XML:
-                mime_type = "application/xml"
-            case ItemType.DOCUMENT:
-                mime_type = "application/msword"
-            case ItemType.AUDIO:
-                mime_type = "audio/mpeg"
-            case ItemType.UUENCODED:
-                mime_type = "application/x-uuencode"
-            case ItemType.CSO:
-                mime_type = "application/x-cso"
-            case ItemType.DOS_FILE:
-                mime_type = "application/x-dos"
-
         try:
             self._command_line.working = True
             self.post_message(
@@ -736,7 +704,7 @@ class Main(EnhancedScreen[None]):
                         location=uri,
                         original_location=uri,
                         content=(await GopherClient().request(uri)).text,
-                        mime_type=mime_type,
+                        mime_type=ItemType(uri.item_type).mime_type,
                     ),
                     original_request=request,
                 )
