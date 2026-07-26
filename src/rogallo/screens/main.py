@@ -612,7 +612,7 @@ class Main(EnhancedScreen[None]):
         """Load a document from a Gemini URI.
 
         Args:
-            uri: The Gemini URI to load the document from.
+            request: The request to load the document from.
         """
         uri = request.location
         assert isinstance(uri, GeminiURI)
@@ -651,7 +651,11 @@ class Main(EnhancedScreen[None]):
 
     @work
     async def _load_from_finger(self, request: OpenLocation) -> None:
-        """Load a document from a Finger URI."""
+        """Load a document from a Finger URI.
+
+        Args:
+            request: The request to load the document from.
+        """
         uri = request.location
         assert isinstance(uri, FingerURI)
 
@@ -679,7 +683,11 @@ class Main(EnhancedScreen[None]):
 
     @work
     async def _load_from_gopher(self, request: OpenLocation) -> None:
-        """Load a document from a Gopher URI."""
+        """Load a document from a Gopher URI.
+
+        Args:
+            request: The request to load the document from.
+        """
         self.notify(
             "Loading Gopher content is not yet implemented.", severity="warning"
         )
