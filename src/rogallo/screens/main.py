@@ -11,6 +11,7 @@ from webbrowser import open as open_in_browser
 
 ##############################################################################
 # Port70 imports.
+from port70 import Client as GopherClient
 from port70 import GopherURI
 from port70 import URIError as GopherURIError
 
@@ -132,7 +133,7 @@ from ..preflight import (
     path_from_uri,
 )
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
-from ..types import GEMINI_EXTENSIONS
+from ..types import GEMINI_EXTENSIONS, GOPHER_MIME_TYPE
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .certificate import Certificate
 from .confirm_unsupported import ConfirmUnsupportedURI
@@ -688,9 +689,30 @@ class Main(EnhancedScreen[None]):
         Args:
             request: The request to load the document from.
         """
-        self.notify(
-            "Loading Gopher content is not yet implemented.", severity="warning"
-        )
+        uri = request.location
+        assert isinstance(uri, GopherURI)
+
+        try:
+            self._command_line.working = True
+            self.post_message(
+                OpenDocument(
+                    document=Document(
+                        location=uri,
+                        original_location=uri,
+                        content=(await GopherClient().request(uri)).text,
+                        mime_type=GOPHER_MIME_TYPE,
+                    ),
+                    original_request=request,
+                )
+            )
+        except GopherURIError as error:
+            self.notify(
+                f"Error loading {uri}:\n\n{error}",
+                severity="error",
+                title="Gopher Error",
+            )
+        finally:
+            self._command_line.working = False
 
     @work(thread=True)
     def _load_from_filesystem(self, request: OpenLocation) -> None:
