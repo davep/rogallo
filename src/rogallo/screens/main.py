@@ -454,7 +454,8 @@ class Main(EnhancedScreen[None]):
         return mime_type in {
             "text/gemini",
             "text/plain",
-            "text/gopher-menu",
+            ItemType.MENU.mime_type,
+            ItemType.INDEX_SEARCH.mime_type,
             *load_configuration().displayable_content_types,
         }
 
@@ -700,6 +701,16 @@ class Main(EnhancedScreen[None]):
         """
         uri = request.location
         assert isinstance(uri, GopherURI)
+
+        if uri.item_type == ItemType.INDEX_SEARCH and uri.query is None:
+            if search_query := await self.app.push_screen_wait(
+                ModalInput(
+                    title=f"Search {uri.host}:{uri.port}",
+                )
+            ):
+                uri = uri.with_query(search_query)
+            else:
+                return
 
         mime_type = ItemType(uri.item_type).mime_type
         if not self._is_displayable(mime_type):

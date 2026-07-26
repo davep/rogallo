@@ -82,7 +82,12 @@ def is_gopher_mime_type(mime_type: str | None) -> bool:
     Returns:
         True if the MIME type is a Gopher MIME type, False otherwise.
     """
-    return mime_type is not None and mime_type.startswith(ItemType.MENU.mime_type)
+    return mime_type is not None and mime_type.startswith(
+        (
+            ItemType.MENU.mime_type,
+            ItemType.INDEX_SEARCH.mime_type,
+        )
+    )
 
 
 ### types.py ends here
