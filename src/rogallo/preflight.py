@@ -7,7 +7,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ##############################################################################
-# Port97 imports.
+# Port79 imports.
 from port79 import FingerURI
 from port79 import URIError as FingerURIError
 
