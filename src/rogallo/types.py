@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Final
 
 ##############################################################################
-# Port97 imports.
+# Port79 imports.
 from port79 import FingerURI
 
 ##############################################################################
