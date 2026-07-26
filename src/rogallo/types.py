@@ -34,6 +34,10 @@ DEFAULT_GEMINI_EXTENSION: Final[str] = ".gmi"
 GEMINI_EXTENSIONS: Final[set[str]] = {DEFAULT_GEMINI_EXTENSION, ".gmni", ".gemini"}
 """The set of file extensions for Gemini content."""
 
+##############################################################################
+GOPHER_MIME_TYPE: Final[str] = "application/gopher-menu"
+"""The MIME type for Gopher content."""
+
 
 ##############################################################################
 def short_location(location: RogalloLocation) -> str:
@@ -66,6 +70,19 @@ def is_gemini_mime_type(mime_type: str | None) -> bool:
         True if the MIME type is a Gemini MIME type, False otherwise.
     """
     return mime_type is not None and mime_type.startswith(GEMINI_MIME_TYPE)
+
+
+##############################################################################
+def is_gopher_mime_type(mime_type: str | None) -> bool:
+    """Check if a MIME type is a Gopher MIME type.
+
+    Args:
+        mime_type: The MIME type to check.
+
+    Returns:
+        True if the MIME type is a Gopher MIME type, False otherwise.
+    """
+    return mime_type is not None and mime_type.startswith(GOPHER_MIME_TYPE)
 
 
 ### types.py ends here
