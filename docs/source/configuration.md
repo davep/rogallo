@@ -138,11 +138,11 @@ in the application. In the event that you need to expand this list, you can
 change the value of `displayable_content_types`:
 
 ```json
-"displayable_content_types": [
-    "text/gemini",
-    "text/plain"
-]
+"displayable_content_types": []
 ```
+
+Note that there is a hard-coded set of types that will always be handled;
+changing this value *adds* to that list.
 
 !!! important
 
