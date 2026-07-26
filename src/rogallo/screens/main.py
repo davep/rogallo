@@ -137,7 +137,7 @@ from ..preflight import (
     path_from_uri,
 )
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
-from ..types import GEMINI_EXTENSIONS
+from ..types import GEMINI_EXTENSIONS, GEMINI_MIME_TYPE
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .certificate import Certificate
 from .confirm_unsupported import ConfirmUnsupportedURI
@@ -452,10 +452,10 @@ class Main(EnhancedScreen[None]):
         if isinstance(mime_type, str):
             mime_type, _, _ = mime_type.partition(";")
         return mime_type in {
-            "text/gemini",
-            "text/plain",
+            GEMINI_MIME_TYPE,
             ItemType.MENU.mime_type,
             ItemType.INDEX_SEARCH.mime_type,
+            "text/plain",
             *load_configuration().displayable_content_types,
         }
 
@@ -702,16 +702,28 @@ class Main(EnhancedScreen[None]):
         uri = request.location
         assert isinstance(uri, GopherURI)
 
+        # If it's a search and we don't know what we're looking for (TODO:
+        # be sure that that last part is even a thing)), ask the user what
+        # they want to search for.
         if uri.item_type == ItemType.INDEX_SEARCH and uri.query is None:
             if search_query := await self.app.push_screen_wait(
                 ModalInput(
                     title=f"Search {uri.host}:{uri.port}",
+                    initial=(
+                        self._viewer.document.location.query
+                        if isinstance(self._viewer.document.location, GopherURI)
+                        else ""
+                    )
+                    or "",
                 )
             ):
                 uri = uri.with_query(search_query)
             else:
                 return
 
+        # While Gopher doesn't deal with MIME types, Rogallo does for the
+        # most part, so let's figure out the effective MIME type for what
+        # we're doing here.
         mime_type = ItemType(uri.item_type).mime_type
         if not self._is_displayable(mime_type):
             self.post_message(OpenUnsupportedMIMEType(uri, mime_type))
