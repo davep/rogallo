@@ -1237,11 +1237,11 @@ wheels = [
 
 [[package]]
 name = "port70"
-version = "0.1.0"
+version = "0.1.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/b3/62/bd85f3865542c26d230138a484aae8d5a7614dbaa0b336102535c1d21dcb/port70-0.1.0.tar.gz", hash = "sha256:f40da13c10e051b463d2b0ff683e4a14a5ad7fcee0b95edeeeb475ff8e958789", size = 9324, upload-time = "2026-07-26T10:06:44.894Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/52/4b/45e34bf3c9305a1a5a40a6fa061e9e1c56eeef808ddc5376f434f0ed132e/port70-0.1.1.tar.gz", hash = "sha256:633c84c563d0dce47cd98e5bdc7ef82d60f3519662865bcb3ae3a3f8a63d9738", size = 9352, upload-time = "2026-07-26T11:01:44.926Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/80/39/0752756fce42f14f0084ccdad18936a0bf65a307417660db4dc581885121/port70-0.1.0-py3-none-any.whl", hash = "sha256:6d8e777eb72cea7b352dc62f032df4e72985de775ec7a68c1cf2380c94cb9afa", size = 11592, upload-time = "2026-07-26T10:06:43.819Z" },
+    { url = "https://files.pythonhosted.org/packages/89/6b/c1ebfd226954527da00035f73cc5dd2b968c37981e42facd4c7ec809f234/port70-0.1.1-py3-none-any.whl", hash = "sha256:eee648624f767844420564196c794c6c7ed50158485dee79200a2bc66ecf2557", size = 11744, upload-time = "2026-07-26T11:01:43.855Z" },
 ]
 
 [[package]]
@@ -1582,7 +1582,7 @@ dev = [
 requires-dist = [
     { name = "bagofstuff", specifier = ">=1.2.1" },
     { name = "gemtext", specifier = ">=1.0.0" },
-    { name = "port70", specifier = ">=0.1.0" },
+    { name = "port70", specifier = ">=0.1.1" },
     { name = "port79", specifier = ">=1.0.0" },
     { name = "pyperclip", specifier = ">=1.11.0" },
     { name = "textual", specifier = ">=8.2.7" },
