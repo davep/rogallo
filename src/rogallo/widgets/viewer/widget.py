@@ -53,6 +53,7 @@ class Viewer(Vertical, can_focus=False):
 
         #document-wrapper {
             align-horizontal: center;
+            height: 1fr;
         }
 
         &.--has-content {
