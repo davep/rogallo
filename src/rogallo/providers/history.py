@@ -3,8 +3,10 @@
 ##############################################################################
 # Python imports.
 from dataclasses import dataclass
+from datetime import datetime
 from functools import total_ordering
 from itertools import chain
+from operator import attrgetter
 
 ##############################################################################
 # Textual enhanced imports.
@@ -58,14 +60,24 @@ class Historical:
             return self.location.location
         return self.location
 
+    @property
+    def key(self) -> tuple[datetime, str]:
+        """The sort key."""
+        return (
+            self.location.timestamp
+            if isinstance(self.location, LocationVisit)
+            else datetime.min,
+            self.name,
+        )
+
     def __gt__(self, value: object, /) -> bool:
         if isinstance(value, Historical):
-            return self.name.casefold() > value.name.casefold()
+            return self.name > value.name
         raise NotImplementedError
 
     def __eq__(self, value: object, /) -> bool:
         if isinstance(value, Historical):
-            return self.name.casefold() == value.name.casefold()
+            return self.name == value.name
         raise NotImplementedError
 
     def __str__(self) -> str:
@@ -105,7 +117,9 @@ class HistorySearchCommands(CommandsProvider):
                     self.navigation_history,
                     (KnownHost(host) for host in self.known_hosts),
                 )
-            )
+            ),
+            key=attrgetter("key"),
+            reverse=True,
         ):
             yield CommandHit(
                 location.name,

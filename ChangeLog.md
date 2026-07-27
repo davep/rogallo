@@ -6,6 +6,8 @@
 
 - Added support for the `gopher` protocol.
   ([#222](https://github.com/davep/rogallo/pull/222))
+- Make sure the order of items in the history search is most recent first.
+  ([#234](https://github.com/davep/rogallo/pull/234))
 
 ## v1.1.1
 
