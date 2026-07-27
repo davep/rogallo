@@ -8,6 +8,8 @@
   ([#222](https://github.com/davep/rogallo/pull/222))
 - Make sure the order of items in the history search is most recent first.
   ([#234](https://github.com/davep/rogallo/pull/234))
+- Fixed the view source state of the viewer being retained when navigating
+  to a new location. ([#235](https://github.com/davep/rogallo/pull/235))
 
 ## v1.1.1
 
