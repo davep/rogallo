@@ -179,7 +179,11 @@ class Viewer(Vertical, can_focus=False):
                         markup=False,
                     )
                 ]
-                if not (self.document.is_gemtext or self.document.is_gophermap)
+                if not (
+                    self.document.is_gemtext
+                    or self.document.is_gophermap
+                    or self.document.is_gopher_error
+                )
                 or self.view_source
                 else [
                     get_block_widget(line)
