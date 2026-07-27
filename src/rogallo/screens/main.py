@@ -711,11 +711,10 @@ class Main(EnhancedScreen[None]):
                 ModalInput(
                     title=f"Search {uri.host}:{uri.port}",
                     initial=(
-                        self._viewer.document.location.query
+                        self._viewer.document.location.query or ""
                         if isinstance(self._viewer.document.location, GopherURI)
                         else ""
-                    )
-                    or "",
+                    ),
                 )
             ):
                 uri = uri.with_query(search_query)
