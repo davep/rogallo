@@ -1246,11 +1246,11 @@ wheels = [
 
 [[package]]
 name = "port70"
-version = "0.1.1"
+version = "0.1.2"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/52/4b/45e34bf3c9305a1a5a40a6fa061e9e1c56eeef808ddc5376f434f0ed132e/port70-0.1.1.tar.gz", hash = "sha256:633c84c563d0dce47cd98e5bdc7ef82d60f3519662865bcb3ae3a3f8a63d9738", size = 9352, upload-time = "2026-07-26T11:01:44.926Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/41/fb/ec745b7e9a422f6acb0cb0778f8706af8b4d6a6d03c477e716bda0da7f92/port70-0.1.2.tar.gz", hash = "sha256:242fd5fdbb210fd76197d0a637aa7ddffa9a7271ddf5d007dfbc4547e8d28ecd", size = 9378, upload-time = "2026-07-27T09:09:56.185Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/89/6b/c1ebfd226954527da00035f73cc5dd2b968c37981e42facd4c7ec809f234/port70-0.1.1-py3-none-any.whl", hash = "sha256:eee648624f767844420564196c794c6c7ed50158485dee79200a2bc66ecf2557", size = 11744, upload-time = "2026-07-26T11:01:43.855Z" },
+    { url = "https://files.pythonhosted.org/packages/57/12/b63115abb8c38f351e3b88a4f3a32575a143eb01ed1cf28fc8cb4c969127/port70-0.1.2-py3-none-any.whl", hash = "sha256:7207f8b00a39ac22cb062474303161962dac5dcd98581d01964fbf2f543e14e5", size = 11765, upload-time = "2026-07-27T09:09:55.123Z" },
 ]
 
 [[package]]
