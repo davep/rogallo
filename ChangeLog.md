@@ -6,6 +6,8 @@
 
 - Added `port79` to the library version list output by the `diagnostics`
   command. ([#220](https://github.com/davep/rogallo/pull/220))
+- Fixed `cosy_link_jumps` not being loaded from configuration when Rogallo
+  starts up. ([#230](https://github.com/davep/rogallo/pull/230))
 
 ## v1.1.0
 
