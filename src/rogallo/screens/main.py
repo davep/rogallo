@@ -10,6 +10,17 @@ from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
 
 ##############################################################################
+# Gophermap imports.
+from gophermap import ItemType
+
+##############################################################################
+# Port70 imports.
+from port70 import Client as GopherClient
+from port70 import GopherURI, Port70Error
+from port70 import URIError as GopherURIError
+
+##############################################################################
+# Port79 imports.
 from port79 import Client as FingerClient
 from port79 import FingerURI, Port79Error
 from port79 import URIError as FingerURIError
@@ -126,7 +137,7 @@ from ..preflight import (
     path_from_uri,
 )
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
-from ..types import GEMINI_EXTENSIONS
+from ..types import GEMINI_EXTENSIONS, GEMINI_MIME_TYPE
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .certificate import Certificate
 from .confirm_unsupported import ConfirmUnsupportedURI
@@ -407,7 +418,7 @@ class Main(EnhancedScreen[None]):
         if action == CopyDocumentToClipboard.action_name():
             return bool(self._viewer.document)
         if action == ToggleView.action_name():
-            return bool(self._viewer.document) and self._viewer.document.is_gemtext
+            return bool(self._viewer.document) and self._viewer.document.is_source
         if action == GoHome.action_name():
             return bool(load_configuration().home_page.strip())
         if action == AddLocationToBookmarks.action_name():
@@ -441,7 +452,13 @@ class Main(EnhancedScreen[None]):
         """
         if isinstance(mime_type, str):
             mime_type, _, _ = mime_type.partition(";")
-        return mime_type in load_configuration().displayable_content_types
+        return mime_type in {
+            GEMINI_MIME_TYPE,
+            ItemType.MENU.mime_type,
+            ItemType.INDEX_SEARCH.mime_type,
+            "text/plain",
+            *load_configuration().displayable_content_types,
+        }
 
     async def _handle_input_request(
         self, location: GeminiURI, prompt: str, sensitive: bool
@@ -607,7 +624,7 @@ class Main(EnhancedScreen[None]):
         """Load a document from a Gemini URI.
 
         Args:
-            uri: The Gemini URI to load the document from.
+            request: The request to load the document from.
         """
         uri = request.location
         assert isinstance(uri, GeminiURI)
@@ -646,7 +663,11 @@ class Main(EnhancedScreen[None]):
 
     @work
     async def _load_from_finger(self, request: OpenLocation) -> None:
-        """Load a document from a Finger URI."""
+        """Load a document from a Finger URI.
+
+        Args:
+            request: The request to load the document from.
+        """
         uri = request.location
         assert isinstance(uri, FingerURI)
 
@@ -668,6 +689,64 @@ class Main(EnhancedScreen[None]):
                 f"Error loading {uri}:\n\n{error}",
                 severity="error",
                 title="Finger Error",
+            )
+        finally:
+            self._command_line.working = False
+
+    @work
+    async def _load_from_gopher(self, request: OpenLocation) -> None:
+        """Load a document from a Gopher URI.
+
+        Args:
+            request: The request to load the document from.
+        """
+        uri = request.location
+        assert isinstance(uri, GopherURI)
+
+        # If it's a search and we don't know what we're looking for (TODO:
+        # be sure that that last part is even a thing)), ask the user what
+        # they want to search for.
+        if ItemType(uri.item_type) is ItemType.INDEX_SEARCH and uri.query is None:
+            if search_query := await self.app.push_screen_wait(
+                ModalInput(
+                    title=f"Search {uri.host}:{uri.port}",
+                    initial=(
+                        self._viewer.document.location.query or ""
+                        if isinstance(self._viewer.document.location, GopherURI)
+                        else ""
+                    ),
+                )
+            ):
+                uri = uri.with_query(search_query)
+            else:
+                return
+
+        # While Gopher doesn't deal with MIME types, Rogallo does for the
+        # most part, so let's figure out the effective MIME type for what
+        # we're doing here.
+        mime_type = ItemType(uri.item_type).mime_type
+        if not self._is_displayable(mime_type):
+            self.post_message(OpenUnsupportedMIMEType(uri, mime_type))
+            return
+
+        try:
+            self._command_line.working = True
+            self.post_message(
+                OpenDocument(
+                    document=Document(
+                        location=uri,
+                        original_location=uri,
+                        content=(await GopherClient().request(uri)).text,
+                        mime_type=mime_type,
+                    ),
+                    original_request=request,
+                )
+            )
+        except Port70Error as error:
+            self.notify(
+                f"Error loading {uri}:\n\n{error}",
+                severity="error",
+                title="Gopher Error",
             )
         finally:
             self._command_line.working = False
@@ -720,6 +799,8 @@ class Main(EnhancedScreen[None]):
             self._load_from_capsule(message)
         elif isinstance(message.location, FingerURI):
             self._load_from_finger(message)
+        elif isinstance(message.location, GopherURI):
+            self._load_from_gopher(message)
         else:
             self._load_from_filesystem(message)
 
@@ -747,6 +828,15 @@ class Main(EnhancedScreen[None]):
             )
             return
         except FingerURIError:
+            pass
+
+        # Does it look like a Gopher URI?
+        try:
+            self.post_message(
+                OpenLocation(GopherURI(message.uri), allow_cached=message.allow_cached)
+            )
+            return
+        except GopherURIError:
             pass
 
         # Perhaps it's a local text file?
@@ -824,10 +914,11 @@ class Main(EnhancedScreen[None]):
             message: The message containing the unsupported MIME type.
         """
 
+        # There's no reason why we should be here for Finger URIs.
         if isinstance(message.location, FingerURI):
             self.notify(
-                f"Unable to open {message.location}: Finger content is always text/plain",
-                severity="error",
+                f"Unexpected request to open {message.location}: please let Dave know",
+                severity="warning",
             )
             return
 
@@ -853,7 +944,7 @@ class Main(EnhancedScreen[None]):
         if open_uri:
             open_in_browser(
                 str(message.location)
-                if isinstance(message.location, GeminiURI)
+                if isinstance(message.location, (GeminiURI, GopherURI))
                 else message.location.resolve().as_uri()
             )
 
@@ -1060,7 +1151,7 @@ class Main(EnhancedScreen[None]):
 
     def action_toggle_view_command(self) -> None:
         """Toggle the view between rendered and source."""
-        if self._viewer.document.is_gemtext:
+        if self._viewer.document.is_source:
             self._viewer.view_source = not self._viewer.view_source
 
     def action_go_home_command(self) -> None:

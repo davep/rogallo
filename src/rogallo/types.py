@@ -6,7 +6,15 @@ from pathlib import Path
 from typing import Final
 
 ##############################################################################
-# Port97 imports.
+# Gophermap imports.
+from gophermap import ItemType
+
+##############################################################################
+# Port70 imports.
+from port70 import GopherURI
+
+##############################################################################
+# Port79 imports.
 from port79 import FingerURI
 
 ##############################################################################
@@ -15,7 +23,7 @@ from wasat import GeminiURI
 from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
-type RogalloLocation = Path | GeminiURI | FingerURI
+type RogalloLocation = Path | GeminiURI | FingerURI | GopherURI
 """The type of a location handled by Rogallo."""
 
 ##############################################################################
@@ -41,7 +49,7 @@ def short_location(location: RogalloLocation) -> str:
     Returns:
         A short string representation of the location.
     """
-    if isinstance(location, FingerURI):
+    if isinstance(location, (FingerURI, GopherURI)):
         return str(location)
     if isinstance(location, GeminiURI):
         return str(location).removeprefix(GEMINI_PREFIX)
@@ -62,6 +70,24 @@ def is_gemini_mime_type(mime_type: str | None) -> bool:
         True if the MIME type is a Gemini MIME type, False otherwise.
     """
     return mime_type is not None and mime_type.startswith(GEMINI_MIME_TYPE)
+
+
+##############################################################################
+def is_gopher_mime_type(mime_type: str | None) -> bool:
+    """Check if a MIME type is a Gopher MIME type.
+
+    Args:
+        mime_type: The MIME type to check.
+
+    Returns:
+        True if the MIME type is a Gopher MIME type, False otherwise.
+    """
+    return mime_type is not None and mime_type.startswith(
+        (
+            ItemType.MENU.mime_type,
+            ItemType.INDEX_SEARCH.mime_type,
+        )
+    )
 
 
 ### types.py ends here

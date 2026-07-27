@@ -2,15 +2,21 @@
 
 ##############################################################################
 # Python imports.
-from typing import NamedTuple
+from dataclasses import dataclass
+from functools import cached_property
+
+##############################################################################
+# Gophermap imports.
+from gophermap import GopherMap, GopherMapError, ItemType
 
 ##############################################################################
 # Local imports.
-from .types import RogalloLocation, is_gemini_mime_type
+from .types import RogalloLocation, is_gemini_mime_type, is_gopher_mime_type
 
 
 ##############################################################################
-class Document(NamedTuple):
+@dataclass(frozen=True)
+class Document:
     """A named tuple representing details of the document."""
 
     location: RogalloLocation | None = None
@@ -48,6 +54,25 @@ class Document(NamedTuple):
     def is_gemtext(self) -> bool:
         """`True` if the document is a Gemtext document, `False` otherwise."""
         return is_gemini_mime_type(self.mime_type)
+
+    @property
+    def is_gophermap(self) -> bool:
+        """`True` if the document is a Gophermap document, `False` otherwise."""
+        return is_gopher_mime_type(self.mime_type)
+
+    @cached_property
+    def is_gopher_error(self) -> bool:
+        """`True` if the document is a Gopher error document, `False` otherwise."""
+        try:
+            items = GopherMap(self.content).items
+        except GopherMapError:
+            return False
+        return ItemType.ERROR in {item.type for item in items}
+
+    @property
+    def is_source(self) -> bool:
+        """`True` if the document is a source code document, `False` otherwise."""
+        return self.is_gemtext or self.is_gophermap or self.is_gopher_error
 
 
 ### document.py ends here

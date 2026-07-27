@@ -7,7 +7,12 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ##############################################################################
-# Port97 imports.
+# Port70 imports.
+from port70 import GopherURI
+from port70 import URIError as GopherURIError
+
+##############################################################################
+# Port79 imports.
 from port79 import FingerURI
 from port79 import URIError as FingerURIError
 
@@ -57,6 +62,23 @@ def is_finger_uri(uri: str) -> bool:
     try:
         _ = FingerURI(uri)
     except FingerURIError:
+        return False
+    return True
+
+
+##############################################################################
+def is_gopher_uri(uri: str) -> bool:
+    """Determine if a URI is a Gopher URI.
+
+    Args:
+        uri: The URI to check.
+
+    Returns:
+        `True` if the URI is a Gopher URI, `False` otherwise.
+    """
+    try:
+        _ = GopherURI(uri)
+    except GopherURIError:
         return False
     return True
 
@@ -183,6 +205,8 @@ def make_location(str: str) -> RogalloLocation:
             return GeminiURI(str)
         if is_finger_uri(str):
             return FingerURI(str)
+        if is_gopher_uri(str):
+            return GopherURI(str)
         return path_from_uri(str)
     except ValueError as error:
         raise ValueError(f"Cannot make location from string: {str}") from error

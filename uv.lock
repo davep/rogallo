@@ -664,6 +664,15 @@ wheels = [
 ]
 
 [[package]]
+name = "gophermap"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/19/f0/5c81e50c0a17b2d02b63894f7d5ef4b65d90fadcce110ad383e4146dd2d9/gophermap-0.1.1.tar.gz", hash = "sha256:d1d57bbcc51f0c6ab59c50f931ebef024a26a14d984d91a986d4dbd36411f615", size = 4826, upload-time = "2026-07-27T19:18:55.825Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ed/61/f15bda3d466fd6e6b8eab40f8597f81d5e3c3874adb2f0215cbcf1bb0a75/gophermap-0.1.1-py3-none-any.whl", hash = "sha256:7df2df086c8035689c5e525de31ca54314f8675efab3ea30007620e14a52304c", size = 6654, upload-time = "2026-07-27T19:18:54.783Z" },
+]
+
+[[package]]
 name = "identify"
 version = "2.6.19"
 source = { registry = "https://pypi.org/simple" }
@@ -1236,6 +1245,15 @@ wheels = [
 ]
 
 [[package]]
+name = "port70"
+version = "0.1.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/41/fb/ec745b7e9a422f6acb0cb0778f8706af8b4d6a6d03c477e716bda0da7f92/port70-0.1.2.tar.gz", hash = "sha256:242fd5fdbb210fd76197d0a637aa7ddffa9a7271ddf5d007dfbc4547e8d28ecd", size = 9378, upload-time = "2026-07-27T09:09:56.185Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/57/12/b63115abb8c38f351e3b88a4f3a32575a143eb01ed1cf28fc8cb4c969127/port70-0.1.2-py3-none-any.whl", hash = "sha256:7207f8b00a39ac22cb062474303161962dac5dcd98581d01964fbf2f543e14e5", size = 11765, upload-time = "2026-07-27T09:09:55.123Z" },
+]
+
+[[package]]
 name = "port79"
 version = "1.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1542,6 +1560,8 @@ source = { editable = "." }
 dependencies = [
     { name = "bagofstuff" },
     { name = "gemtext" },
+    { name = "gophermap" },
+    { name = "port70" },
     { name = "port79" },
     { name = "pyperclip" },
     { name = "textual" },
@@ -1572,6 +1592,8 @@ dev = [
 requires-dist = [
     { name = "bagofstuff", specifier = ">=1.2.1" },
     { name = "gemtext", specifier = ">=1.0.0" },
+    { name = "gophermap", specifier = ">=0.1.1" },
+    { name = "port70", specifier = ">=0.1.2" },
     { name = "port79", specifier = ">=1.0.0" },
     { name = "pyperclip", specifier = ">=1.11.0" },
     { name = "textual", specifier = ">=8.2.7" },

@@ -9,7 +9,10 @@ from collections.abc import Iterator
 from gemtext import Gemtext, Line, Paragraph
 
 ##############################################################################
+# Gophermap imports.
+##############################################################################
 # Port79 imports.
+from port70 import GopherURI
 from port79 import FingerURI
 
 ##############################################################################
@@ -37,6 +40,7 @@ from ...data import LocationHistory, load_configuration
 from ...document import Document
 from .document_view import DocumentView
 from .gemtext import GemtextContent, GemtextLink, get_block_widget
+from .gopher import to_gemtext
 from .status import ViewerStatus
 from .title import ViewerTitle
 
@@ -175,19 +179,30 @@ class Viewer(Vertical, can_focus=False):
                         markup=False,
                     )
                 ]
-                if not self.document.is_gemtext or self.view_source
+                if not (
+                    self.document.is_gemtext
+                    or self.document.is_gophermap
+                    or self.document.is_gopher_error
+                )
+                or self.view_source
                 else [
                     get_block_widget(line)
                     for line in self._consolidate(
-                        Gemtext(self.document.content).content
+                        Gemtext(
+                            self.document.content
+                            if self.document.is_gemtext
+                            else "\n".join(to_gemtext(self.document.content))
+                        ).content
                     )
                 ]
             )
-            if self.document.is_gemtext and not self.view_source:
+            if (
+                self.document.is_gemtext or self.document.is_gophermap
+            ) and not self.view_source:
                 visited_links = {
                     str(visit.location)
                     for visit in self.location_history
-                    if isinstance(visit.location, (FingerURI, GeminiURI))
+                    if isinstance(visit.location, (FingerURI, GeminiURI, GopherURI))
                 }
                 for jump_number, link in enumerate(self._view.query(GemtextLink)):
                     link.normalise_uri(self.document.location)

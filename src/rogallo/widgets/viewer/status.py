@@ -10,7 +10,7 @@ from textual.widgets import Label
 
 ##############################################################################
 # Local imports.
-from ...types import is_gemini_mime_type
+from ...types import is_gemini_mime_type, is_gopher_mime_type
 
 
 ##############################################################################
@@ -68,7 +68,10 @@ class ViewerStatus(Horizontal):
     def _watch_mime_type(self) -> None:
         """React to the MIME type changing."""
         self._mime_type.update(self.mime_type)
-        self._mime_type.set_class(is_gemini_mime_type(self.mime_type), "--gemini")
+        self._mime_type.set_class(
+            is_gemini_mime_type(self.mime_type) or is_gopher_mime_type(self.mime_type),
+            "--gemini",
+        )
 
     def on_resize(self) -> None:
         """Handle the widget being resized."""
