@@ -27,6 +27,8 @@ def to_gemtext(gophermap: str) -> Iterator[str]:
         match item.type:
             case ItemType.HTML:
                 yield f"=> {item.selector.removeprefix('URL:')} {item.display_text}"
+            case ItemType.ERROR:
+                yield f"# {item.display_text}"
             case ItemType.INFO:
                 yield item.display_text
             case _:
