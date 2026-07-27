@@ -6,8 +6,8 @@
 
 - Added support for the `gopher` protocol.
   ([#222](https://github.com/davep/rogallo/pull/222))
-- Make sure the order of items in the history search is most recent first.
-  ([#234](https://github.com/davep/rogallo/pull/234))
+- The order of items in the history search now ensures the most recent items
+  come first. ([#234](https://github.com/davep/rogallo/pull/234))
 - Fixed the view source state of the viewer being retained when navigating
   to a new location. ([#235](https://github.com/davep/rogallo/pull/235))
 
