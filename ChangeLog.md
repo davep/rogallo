@@ -8,6 +8,9 @@
   command. ([#220](https://github.com/davep/rogallo/pull/220))
 - Fixed `cosy_link_jumps` not being loaded from configuration when Rogallo
   starts up. ([#230](https://github.com/davep/rogallo/pull/230))
+- Fixed viewer status line being lost when `maximum_document_width` is set
+  to something other than `0`.
+  ([#231](https://github.com/davep/rogallo/pull/231))
 
 ## v1.1.0
 
