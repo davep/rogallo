@@ -665,11 +665,11 @@ wheels = [
 
 [[package]]
 name = "gophermap"
-version = "0.0.5"
+version = "0.1.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/f9/58/dc3c0e0ba1a6e14b4bc2e9bbab77d3fafe17e2e933d5035ff5b233d8c5ff/gophermap-0.0.5.tar.gz", hash = "sha256:5d7298899476382594036090f9802c98baeecb0099013010837d74e6eec85ea2", size = 4026, upload-time = "2026-07-27T09:41:46.453Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/79/40/dfaa5b6956e159d7560338e7855ea533e81771f8a1babb46679d13a72658/gophermap-0.1.0.tar.gz", hash = "sha256:6b499e1e9c372e43391f6fc5cb19fff5ab0b7bf6cbf7ff00df37cd453c04da9d", size = 4826, upload-time = "2026-07-27T18:21:48.58Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/13/62/c446a9ab04ccc77bce378c11f65418df21ccec8b0dd22beba2ba9e9520e9/gophermap-0.0.5-py3-none-any.whl", hash = "sha256:4c63c8fb82b2fb90af4fd21f474ea13e85ee6c66bcde2d61cc3e0c9ec0931a20", size = 5824, upload-time = "2026-07-27T09:41:45.519Z" },
+    { url = "https://files.pythonhosted.org/packages/f2/46/4daaefe4b2645be01a2175df02fe47b3ec9f61e1ab329a49c22327afe2cc/gophermap-0.1.0-py3-none-any.whl", hash = "sha256:ab2d0584137626c70a46f8794ab509824f2c7ed4d03f1c906ff76b69497452b1", size = 6657, upload-time = "2026-07-27T18:21:47.344Z" },
 ]
 
 [[package]]
@@ -1592,7 +1592,7 @@ dev = [
 requires-dist = [
     { name = "bagofstuff", specifier = ">=1.2.1" },
     { name = "gemtext", specifier = ">=1.0.0" },
-    { name = "gophermap", specifier = ">=0.0.5" },
+    { name = "gophermap", specifier = ">=0.1.0" },
     { name = "port70", specifier = ">=0.1.2" },
     { name = "port79", specifier = ">=1.0.0" },
     { name = "pyperclip", specifier = ">=1.11.0" },
