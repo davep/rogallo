@@ -456,6 +456,7 @@ class Main(EnhancedScreen[None]):
             GEMINI_MIME_TYPE,
             ItemType.MENU.mime_type,
             ItemType.INDEX_SEARCH.mime_type,
+            ItemType.UNKNOWN.mime_type,
             "text/plain",
             *load_configuration().displayable_content_types,
         }
