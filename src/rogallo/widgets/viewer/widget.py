@@ -164,8 +164,17 @@ class Viewer(Vertical, can_focus=False):
         if buffer:
             yield Paragraph("\n".join(buffer))
 
-    async def _watch_document(self) -> None:
-        """Watch for changes to the document and update the viewer."""
+    async def _watch_document(
+        self, old_document: Document, new_document: Document
+    ) -> None:
+        """Watch for changes to the document and update the viewer.
+
+        Args:
+            old_document: The old document.
+            new_document: The new document.
+        """
+        if old_document.location != new_document.location:
+            self.set_reactive(Viewer.view_source, False)
         self._title.needed_certificate = self.document.needed_certificate
         self._title.location = self.document.location
         self._status.mime_type = self.document.mime_type or ""
