@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added support for the `gopher` protocol.
+  ([#222](https://github.com/davep/rogallo/pull/222))
+
 ## v1.1.1
 
 **Released: 2026-07-27**
