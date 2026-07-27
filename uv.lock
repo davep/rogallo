@@ -1593,7 +1593,7 @@ requires-dist = [
     { name = "bagofstuff", specifier = ">=1.2.1" },
     { name = "gemtext", specifier = ">=1.0.0" },
     { name = "gophermap", specifier = ">=0.0.4" },
-    { name = "port70", specifier = ">=0.1.1" },
+    { name = "port70", specifier = ">=0.1.2" },
     { name = "port79", specifier = ">=1.0.0" },
     { name = "pyperclip", specifier = ">=1.11.0" },
     { name = "textual", specifier = ">=8.2.7" },
