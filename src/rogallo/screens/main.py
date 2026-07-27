@@ -706,7 +706,7 @@ class Main(EnhancedScreen[None]):
         # If it's a search and we don't know what we're looking for (TODO:
         # be sure that that last part is even a thing)), ask the user what
         # they want to search for.
-        if uri.item_type == ItemType.INDEX_SEARCH and uri.query is None:
+        if ItemType(uri.item_type) is ItemType.INDEX_SEARCH and uri.query is None:
             if search_query := await self.app.push_screen_wait(
                 ModalInput(
                     title=f"Search {uri.host}:{uri.port}",
