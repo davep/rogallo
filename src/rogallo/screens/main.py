@@ -16,7 +16,7 @@ from gophermap import ItemType
 ##############################################################################
 # Port70 imports.
 from port70 import Client as GopherClient
-from port70 import GopherURI
+from port70 import GopherURI, Port70Error
 from port70 import URIError as GopherURIError
 
 ##############################################################################
@@ -743,7 +743,7 @@ class Main(EnhancedScreen[None]):
                     original_request=request,
                 )
             )
-        except GopherURIError as error:
+        except Port70Error as error:
             self.notify(
                 f"Error loading {uri}:\n\n{error}",
                 severity="error",
