@@ -347,6 +347,7 @@ class Main(EnhancedScreen[None]):
         self._viewer.with_link_numbers = config.with_link_jumps
         self._viewer.handle_ansi_escape_sequences = config.handle_ansi_escape_sequences
         self._viewer.strip_emoji = config.strip_emoji
+        self._viewer.cosy_link_numbers = config.cosy_link_jumps
         if self._arguments.command == "open" and (
             location := getattr(self._arguments, "location", None)
         ):
