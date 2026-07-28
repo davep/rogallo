@@ -38,6 +38,8 @@ Protocol](https://geminiprotocol.net/). Key features include:
 - Choice of themes
 - Persistent user configuration across sessions
 - Fully responsive layout that adjusts dynamically to terminal resizing
+- Supports the `finger` protocol
+- Supports the `gopher` protocol
 
 ## Installing
 
