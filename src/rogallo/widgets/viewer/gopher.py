@@ -10,7 +10,7 @@ from gophermap import GopherMap, ItemType
 
 ##############################################################################
 # Port79 imports.
-from port70 import GopherURI
+from port70 import GopherURI, URIError
 
 
 ##############################################################################
@@ -32,10 +32,13 @@ def to_gemtext(gophermap: str) -> Iterator[str]:
             case ItemType.INFO:
                 yield item.display_text
             case _:
-                yield (
-                    f"=> {GopherURI.with_default_scheme(f'{item.host}:{item.port}/{item.type}{item.selector}')} "
-                    f"{item.display_text}"
-                )
+                try:
+                    yield (
+                        f"=> {GopherURI.with_default_scheme(f'{item.host}:{item.port}/{item.type}{item.selector}')}"
+                        f" {item.display_text}"
+                    )
+                except URIError:
+                    yield f"```\n{item.raw}\n```"
 
 
 ### gopher.py ends here
