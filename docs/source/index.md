@@ -26,6 +26,8 @@ Rogallo is a terminal-based client for browsing
 - Choice of themes
 - Persistent user configuration across sessions
 - Fully responsive layout that adjusts dynamically to terminal resizing
+- Supports the `finger` protocol
+- Supports the `gopher` protocol
 
 !!! note
 
