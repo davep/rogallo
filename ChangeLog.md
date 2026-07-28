@@ -1,6 +1,6 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v1.2.1
 
 **Released: 2026-07-28**
 
