@@ -12,6 +12,10 @@ from gophermap import GopherMap, ItemType
 # Port79 imports.
 from port70 import GopherURI, URIError
 
+##############################################################################
+# Local imports.
+from ...data import load_configuration
+
 
 ##############################################################################
 def to_gemtext(gophermap: str) -> Iterator[str]:
@@ -23,10 +27,17 @@ def to_gemtext(gophermap: str) -> Iterator[str]:
     Yields:
         The Gemtext representation of the Gophermap.
     """
+    badges = (
+        load_configuration().gopher_type_badges
+        if load_configuration().gopher_show_type_badges
+        else {}
+    )
     for item in GopherMap(gophermap).items:
+        if badge := badges.get(item.type, ""):
+            badge += " "
         match item.type:
             case ItemType.HTML:
-                yield f"=> {item.selector.removeprefix('URL:')} {item.display_text}"
+                yield f"=> {item.selector.removeprefix('URL:')} {badge}{item.display_text}"
             case ItemType.ERROR:
                 yield f"# {item.display_text}"
             case ItemType.INFO:
@@ -35,7 +46,7 @@ def to_gemtext(gophermap: str) -> Iterator[str]:
                 try:
                     yield (
                         f"=> {GopherURI.with_default_scheme(f'{item.host}:{item.port}/{item.type}{item.selector}')}"
-                        f" {item.display_text}"
+                        f" {badge}{item.display_text}"
                     )
                 except URIError:
                     yield f"```\n{item.raw}\n```"
