@@ -175,6 +175,72 @@ values. It will be `false` (don't remove) by default.
 "strip_emoji": false
 ```
 
+## Gopher item badges
+
+When showing Gopher maps Rogallo will optionally prefix lines with a "badge"
+related to the type of line. This can be turned off in the configuration
+file using the `gopher_show_type_badges` setting. Valid values are `true`
+(show badges) and `false` (don't show badges). It is `true` by default.
+
+```json
+"gopher_show_type_badges": true
+```
+
+You can also control what text is shown for which Gopher type. This is done
+with a type code to string mapping called `gopher_type_badges`. By default
+the values are various characters themed after the types:
+
+```json
+"gopher_type_badges": {
+    "0": "\ud83d\udcc4",
+    "1": "\ud83d\udcc1",
+    "2": "\ud83d\udcc7",
+    "3": "\u274c",
+    "4": "\ud83d\udce6",
+    "5": "\ud83d\udcbe",
+    "6": "\ud83d\udcdc",
+    "7": "\ud83d\udd0d",
+    "8": "\ud83d\udda5\ufe0f",
+    "9": "\ud83d\udce6",
+    "i": "\u2139\ufe0f",
+    "g": "\ud83d\uddbc\ufe0f",
+    "I": "\ud83d\uddbc\ufe0f",
+    "h": "\ud83c\udf10",
+    "d": "\ud83d\udcc4",
+    "s": "\ud83c\udfb5",
+    "P": "\ud83d\udcc4",
+    "X": "\ud83d\udcc4",
+    "unknown": "\u2753"
+}
+```
+
+If you wish to show different text, change the values for each of the item
+types. For example, if you wanted to use simple three-latter codes:
+
+```json
+"gopher_type_badges": {
+    "0": "(TXT)",
+    "1": "(DIR)",
+    "2": "(CSO)",
+    "3": "(ERR)",
+    "4": "(HQX)",
+    "5": "(DOS)",
+    "6": "(UUE)",
+    "7": "(FND)",
+    "8": "(TEL)",
+    "9": "(BIN)",
+    "i": "(INF)",
+    "g": "(GIF)",
+    "I": "(IMG)",
+    "h": "(WEB)",
+    "d": "(DOC)",
+    "s": "(SND)",
+    "P": "(PDF)",
+    "X": "(XML)",
+    "unknown": "(???)"
+}
+```
+
 ## Handling ANSI escape sequences
 
 Some Gemini capsules have content -- sometimes optional, sometimes mandatory
