@@ -1278,8 +1278,7 @@ class Main(EnhancedScreen[None]):
                 self._viewer.handle_ansi_escape_sequences
             )
 
-    @work
-    async def action_open_file_command(self) -> None:
+    def action_open_file_command(self) -> None:
         """Open a file."""
         self.post_message(OpenFromFileSystem())
 
