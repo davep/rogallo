@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added optional configurable support for gopher type badges.
+  ([#248](https://github.com/davep/rogallo/pull/248))
+
 ## v1.2.1
 
 **Released: 2026-07-28**
