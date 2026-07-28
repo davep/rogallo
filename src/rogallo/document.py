@@ -7,7 +7,7 @@ from functools import cached_property
 
 ##############################################################################
 # Gophermap imports.
-from gophermap import GopherMap, GopherMapError, ItemType
+from gophermap import GopherMap, ItemType
 
 ##############################################################################
 # Local imports.
@@ -63,11 +63,7 @@ class Document:
     @cached_property
     def is_gopher_error(self) -> bool:
         """`True` if the document is a Gopher error document, `False` otherwise."""
-        try:
-            items = GopherMap(self.content).items
-        except GopherMapError:
-            return False
-        return ItemType.ERROR in {item.type for item in items}
+        return ItemType.ERROR in {item.type for item in GopherMap(self.content).items}
 
     @property
     def is_source(self) -> bool:
