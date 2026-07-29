@@ -137,6 +137,15 @@ class Configuration:
     )
     """The badges to use for Gopher item types."""
 
+    aliases: dict[str, str] = field(
+        default_factory=lambda: {
+            "ken": "gemini://kennedy.gemi.dev/search?{q}",
+            "tlgs": "gemini://tlgs.one/search?{q}",
+            "fg": "gopher://gopher.floodgap.com/1/v2/vs?{q}",
+        }
+    )
+    """Aliases to use in the command line."""
+
 
 ##############################################################################
 def configuration_file() -> Path:

@@ -36,6 +36,7 @@ from wasat import GeminiURI
 # Local imports.
 from ...data import Bookmarks, CommandLineHistory, LocationHistory, NavigationHistory
 from ...types import short_location
+from .aliases import expand_aliases
 from .base_command import InputCommand
 from .finger import FingerCommand
 from .general import ChangeThemeCommand, HelpCommand, QuitCommand, UnknownCommand
@@ -248,7 +249,7 @@ class CommandLine(Vertical):
         Args:
             command: The command the user entered.
         """
-        if not (command := command.strip()):
+        if not (command := expand_aliases(command.strip())):
             return
         for candidate in COMMANDS:
             if candidate.handle(command, self):

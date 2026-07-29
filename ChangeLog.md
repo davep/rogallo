@@ -6,6 +6,8 @@
 
 - Added optional configurable support for gopher type badges.
   ([#248](https://github.com/davep/rogallo/pull/248))
+- Added support for command line aliases.
+  ([#254](https://github.com/davep/rogallo/pull/254))
 
 ## v1.2.1
 
