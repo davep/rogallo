@@ -34,8 +34,15 @@ from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
-from ...data import Bookmarks, CommandLineHistory, LocationHistory, NavigationHistory
+from ...data import (
+    Bookmarks,
+    CommandLineHistory,
+    LocationHistory,
+    NavigationHistory,
+    load_configuration,
+)
 from ...types import short_location
+from .aliases import expand_aliases
 from .base_command import InputCommand
 from .finger import FingerCommand
 from .general import ChangeThemeCommand, HelpCommand, QuitCommand, UnknownCommand
@@ -118,12 +125,26 @@ class CommandLine(Vertical):
     | --      | --      | --        | --          |
     {cli_commands}
 
+    ### User-supplied command aliases
+
+    | Alias | Expansion |
+    | --    | --        |
+    {aliases}
+
     ### Special keys
 
     Special keys while in the command line:
     """.format(
         cli_commands="\n    ".join(
             sorted(chain(*(command.help_text() for command in COMMANDS)))
+        ),
+        aliases="\n    ".join(
+            sorted(
+                f"| {alias} | {expansion} |"
+                for alias, expansion in load_configuration().aliases.items()
+            )
+            if load_configuration().aliases
+            else ["| (none) | (none) |"]
         ),
     )
 
@@ -248,7 +269,7 @@ class CommandLine(Vertical):
         Args:
             command: The command the user entered.
         """
-        if not (command := command.strip()):
+        if not (command := expand_aliases(command.strip())):
             return
         for candidate in COMMANDS:
             if candidate.handle(command, self):

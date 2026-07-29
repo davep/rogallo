@@ -10,6 +10,8 @@ from json import dumps, loads
 from pathlib import Path
 from typing import Final
 
+##############################################################################
+# GopherMap imports.
 from gophermap import ItemType
 
 ##############################################################################
@@ -136,6 +138,16 @@ class Configuration:
         }
     )
     """The badges to use for Gopher item types."""
+
+    aliases: dict[str, str] = field(
+        default_factory=lambda: {
+            "fg": "gopher://gopher.floodgap.com/1/v2/vs?{q}",
+            "gp": "gemini://gemi.dev/cgi-bin/wp.cgi/search?{q}",
+            "ken": "gemini://kennedy.gemi.dev/search?{q}",
+            "tlgs": "gemini://tlgs.one/search?{q}",
+        }
+    )
+    """Aliases to use in the command line."""
 
 
 ##############################################################################
