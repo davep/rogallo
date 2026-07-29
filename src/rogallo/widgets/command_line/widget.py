@@ -42,7 +42,7 @@ from ...data import (
     load_configuration,
 )
 from ...types import short_location
-from .aliases import expand_aliases
+from .aliases import AliasError, expand_aliases
 from .base_command import InputCommand
 from .finger import FingerCommand
 from .general import ChangeThemeCommand, HelpCommand, QuitCommand, UnknownCommand
@@ -269,7 +269,12 @@ class CommandLine(Vertical):
         Args:
             command: The command the user entered.
         """
-        if not (command := expand_aliases(command.strip())):
+        try:
+            command = expand_aliases(command.strip())
+        except AliasError as error:
+            self.notify(str(error), title="Error", severity="error")
+            return
+        if not command:
             return
         for candidate in COMMANDS:
             if candidate.handle(command, self):

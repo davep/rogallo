@@ -11,6 +11,11 @@ from ...data import load_configuration
 
 
 ##############################################################################
+class AliasError(Exception):
+    """An error raised when an alias is invalid."""
+
+
+##############################################################################
 def expand_aliases(command_line: str) -> str:
     """Expand command line aliases.
 
@@ -24,15 +29,17 @@ def expand_aliases(command_line: str) -> str:
     car, _, cdr = command_line.partition(" ")
     if car in aliases:
         cdr = cdr.strip()
-        command_line = Formatter().vformat(
-            aliases[car],
-            (),
-            {
-                "q": quote(cdr),
-                "qp": quote_plus(cdr),
-                "r": cdr,
-            },
-        )
+        try:
+            command_line = Formatter().format(
+                aliases[car],
+                q=quote(cdr),
+                qp=quote_plus(cdr),
+                r=cdr,
+            )
+        except KeyError as error:
+            raise AliasError(
+                f"Alias '{car}' uses an unknown parameter: {error}"
+            ) from error
     return command_line
 
 
