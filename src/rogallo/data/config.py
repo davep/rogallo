@@ -139,9 +139,10 @@ class Configuration:
 
     aliases: dict[str, str] = field(
         default_factory=lambda: {
+            "fg": "gopher://gopher.floodgap.com/1/v2/vs?{q}",
+            "gp": "gemini://gemi.dev/cgi-bin/wp.cgi/search?{q}",
             "ken": "gemini://kennedy.gemi.dev/search?{q}",
             "tlgs": "gemini://tlgs.one/search?{q}",
-            "fg": "gopher://gopher.floodgap.com/1/v2/vs?{q}",
         }
     )
     """Aliases to use in the command line."""
