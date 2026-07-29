@@ -10,6 +10,8 @@ from json import dumps, loads
 from pathlib import Path
 from typing import Final
 
+##############################################################################
+# GopherMap imports.
 from gophermap import ItemType
 
 ##############################################################################
