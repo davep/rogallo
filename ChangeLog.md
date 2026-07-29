@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Fixed a crash if an alias had an unknown parameter in its expansion.
+  ([#263](https://github.com/davep/rogallo/pull/263))
+
 ## v1.3.0
 
 **Released: 2026-07-29**
