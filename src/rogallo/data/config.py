@@ -8,7 +8,7 @@ from dataclasses import asdict, dataclass, field, fields
 from functools import cache
 from json import dumps, loads
 from pathlib import Path
-from typing import Final
+from typing import Final, Literal
 
 ##############################################################################
 # GopherMap imports.
@@ -65,6 +65,12 @@ class Configuration:
 
     cache_ttl: int = 3_600
     """The time-to-live for cached content, in seconds."""
+
+    capsule_certificate_verify_mode: Literal["ca", "tofu", "hybrid", "off"] = "hybrid"
+    """The certificate verification mode Gemini capsules.
+
+    One of: `ca`, `tofu`, `hybrid` or `off`.
+    """
 
     connection_timeout: int = 10
     """The connection timeout for network requests, in seconds."""
