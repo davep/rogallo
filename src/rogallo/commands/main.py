@@ -132,4 +132,11 @@ class ToggleANSIEscapeSequenceHandling(Command):
     ACTION = "toggle_ansi_escape_sequence_handling_command"
 
 
+##############################################################################
+class AboutThisPage(Command):
+    """Show information about the current page"""
+
+    BINDING_KEY = "f7"
+
+
 ### main.py ends here

@@ -11,7 +11,7 @@ from gophermap import GopherMap, ItemType
 
 ##############################################################################
 # Wasat imports.
-from wasat import VerificationMethod
+from wasat import ServerCertificate, VerificationMethod
 
 ##############################################################################
 # Local imports.
@@ -52,6 +52,9 @@ class Document:
 
     verification_method: VerificationMethod | None = None
     """The method used to verify the server, if any."""
+
+    server_certificate: ServerCertificate | None = None
+    """The server's certificate, if any."""
 
     def __bool__(self) -> bool:
         """Return `True` if the document has content, `False` otherwise."""

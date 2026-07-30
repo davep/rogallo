@@ -11,6 +11,8 @@
 - Added an icon to the top of the viewer to say if a server has been
   verified via CA or via TOFU.
   ([#264](https://github.com/davep/rogallo/pull/264))
+- Added a `AboutThisPage` command to show details about the currently-viewed
+  page. ([#266](https://github.com/davep/rogallo/pull/266))
 
 ## v1.3.0
 

@@ -68,6 +68,7 @@ from wasat import URIError as GeminiURIError
 from .. import __version__
 from ..cache import ContentCache
 from ..commands import (
+    AboutThisPage,
     AddLocationToBookmarks,
     Backward,
     ChangeCommandLineLocation,
@@ -139,6 +140,7 @@ from ..preflight import (
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
 from ..types import GEMINI_EXTENSIONS, GEMINI_MIME_TYPE
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
+from .about_page import AboutPage
 from .certificate import Certificate
 from .confirm_unsupported import ConfirmUnsupportedURI
 from .user_input import UserInput
@@ -234,6 +236,7 @@ class Main(EnhancedScreen[None]):
         Forward,
         Quit,
         # Everything else.
+        AboutThisPage,
         AddLocationToBookmarks,
         ChangeCommandLineLocation,
         ChangeTheme,
@@ -387,7 +390,7 @@ class Main(EnhancedScreen[None]):
         """
         if not self.is_mounted:
             return True
-        if action == JumpToDocument.action_name():
+        if action in (JumpToDocument.action_name(), AboutThisPage.action_name()):
             return bool(self._viewer.document)
         if action == JumpToCommandLine.action_name():
             return not self._command_line.has_control
@@ -579,6 +582,7 @@ class Main(EnhancedScreen[None]):
                             mime_type=response.mime_type,
                             needed_certificate=response.client_cert_used,
                             verification_method=response.verification_method,
+                            server_certificate=response.server_cert,
                         )
                     ),
                     original_request=request,
@@ -1282,6 +1286,11 @@ class Main(EnhancedScreen[None]):
     def action_open_file_command(self) -> None:
         """Open a file."""
         self.post_message(OpenFromFileSystem())
+
+    def action_about_this_page_command(self) -> None:
+        """Show information about the current page."""
+        if self._viewer.document.location:
+            self.app.push_screen(AboutPage(self._viewer.document))
 
 
 ### main.py ends here
