@@ -31,8 +31,17 @@ class ViewerTitle(Horizontal):
 
         #verification-method, #lock-icon {
             width: 2;
-            color: $text-success;
             padding-right: 1;
+        }
+
+        .--verified-ca, #lock-icon {
+            color: $text-success;
+        }
+        .--verified-tofu {
+            color: $text-warning;
+        }
+        .--verified-off, .--verified-none {
+            color: $text-error;
         }
 
         #location {
@@ -85,6 +94,9 @@ class ViewerTitle(Horizontal):
 
     def _watch_verification_method(self) -> None:
         """React to the verification_method changing."""
+        self._verification_method_icon.set_classes(
+            f"--verified-{str(self.verification_method).lower()}"
+        )
         match self.verification_method:
             case "ca":
                 self._verification_method_icon.update(
