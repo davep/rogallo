@@ -10,6 +10,10 @@ from functools import cached_property
 from gophermap import GopherMap, ItemType
 
 ##############################################################################
+# Wasat imports.
+from wasat import VerificationMethod
+
+##############################################################################
 # Local imports.
 from .types import RogalloLocation, is_gemini_mime_type, is_gopher_mime_type
 
@@ -45,6 +49,9 @@ class Document:
 
     needed_certificate: bool = False
     """Whether the document required a client certificate to access."""
+
+    verification_method: VerificationMethod | None = None
+    """The method used to verify the server, if any."""
 
     def __bool__(self) -> bool:
         """Return `True` if the document has content, `False` otherwise."""

@@ -6,6 +6,11 @@
 
 - Fixed a crash if an alias had an unknown parameter in its expansion.
   ([#263](https://github.com/davep/rogallo/pull/263))
+- Made improvements to how hosts are verified, using a hybrid CA falling
+  back to TOFU approach. ([#264](https://github.com/davep/rogallo/pull/264))
+- Added an icon to the top of the viewer to say if a server has been
+  verified via CA or via TOFU.
+  ([#264](https://github.com/davep/rogallo/pull/264))
 
 ## v1.3.0
 

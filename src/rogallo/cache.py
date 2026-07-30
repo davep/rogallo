@@ -85,6 +85,7 @@ class ContentCache(CacheManager):
                 original_location=GeminiURI(meta_data.get("original_location", uri)),
                 content=content_file.read_text(encoding="utf-8"),
                 mime_type=meta_data.get("mime_type"),
+                verification_method=meta_data.get("verification_method"),
                 from_cache=True,
             )
         except OSError:
@@ -117,6 +118,7 @@ class ContentCache(CacheManager):
                         "location": str(document.location),
                         "original_location": str(document.original_location),
                         "mime_type": document.mime_type,
+                        "verification_method": document.verification_method,
                         "cached_at": datetime.now().isoformat(),
                     },
                     indent=4,

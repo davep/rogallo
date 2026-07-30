@@ -8,7 +8,7 @@ from dataclasses import asdict, dataclass, field, fields
 from functools import cache
 from json import dumps, loads
 from pathlib import Path
-from typing import Final
+from typing import Final, Literal
 
 ##############################################################################
 # GopherMap imports.
@@ -66,6 +66,12 @@ class Configuration:
     cache_ttl: int = 3_600
     """The time-to-live for cached content, in seconds."""
 
+    capsule_certificate_verify_mode: Literal["ca", "tofu", "hybrid", "off"] = "hybrid"
+    """The certificate verification mode Gemini capsules.
+
+    One of: `ca`, `tofu`, `hybrid` or `off`.
+    """
+
     connection_timeout: int = 10
     """The connection timeout for network requests, in seconds."""
 
@@ -104,6 +110,21 @@ class Configuration:
 
     list_item_bullet_icon: str = "•"
     """The icon to use for list item bullets."""
+
+    client_certificate_used_icon: str = "⚿"
+    """The icon to use for indicating that a client certificate was used."""
+
+    verified_ca_icon: str = "⛉"
+    """The icon to use for indicating that a server was verified by a CA."""
+
+    verified_tofu_icon: str = "✓"
+    """The icon to use for indicating that a server was verified by TOFU."""
+
+    verified_off_icon: str = "✗"
+    """The icon to use for indicating that server was off."""
+
+    verified_none_icon: str = " "
+    """The icon to use for indicating that a server was not verified."""
 
     external_editor: str | None = None
     """The external editor to use for editing text content."""

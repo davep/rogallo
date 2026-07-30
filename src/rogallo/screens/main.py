@@ -305,7 +305,7 @@ class Main(EnhancedScreen[None]):
         self._last_user_input: InputContent | None = None
         """The last user input."""
         self._gemini_client = GeminiClient(
-            verify_mode="tofu",
+            verify_mode=load_configuration().capsule_certificate_verify_mode,
             trust_store_path=trust_file(),
             client_cert_store_path=client_certificates_directory(),
             connect_timeout=load_configuration().connection_timeout,
@@ -578,6 +578,7 @@ class Main(EnhancedScreen[None]):
                             content=await response.text(),
                             mime_type=response.mime_type,
                             needed_certificate=response.client_cert_used,
+                            verification_method=response.verification_method,
                         )
                     ),
                     original_request=request,
