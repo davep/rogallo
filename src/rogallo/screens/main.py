@@ -578,6 +578,7 @@ class Main(EnhancedScreen[None]):
                             content=await response.text(),
                             mime_type=response.mime_type,
                             needed_certificate=response.client_cert_used,
+                            verification_method=response.verification_method,
                         )
                     ),
                     original_request=request,

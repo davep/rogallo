@@ -9,6 +9,10 @@ from textual.reactive import var
 from textual.widgets import Label
 
 ##############################################################################
+# Wasat imports.
+from wasat import VerificationMethod
+
+##############################################################################
 # Local imports.
 from ...types import RogalloLocation
 
@@ -24,9 +28,10 @@ class ViewerTitle(Horizontal):
         height: 1;
         padding: 0 1;
 
-        #lock-icon {
-            width: 1;
+        #verification-method, #lock-icon {
+            width: 2;
             color: $text-success;
+            padding-right: 1;
         }
 
         #location {
@@ -38,9 +43,13 @@ class ViewerTitle(Horizontal):
 
     location: var[RogalloLocation | None] = var(None, always_update=True)
     """The location to display."""
+    verification_method: var[VerificationMethod | None] = var(None)
+    """The verification method used for the connection."""
     needed_certificate: var[bool] = var(False)
     """Whether the location needed a certificate."""
 
+    _verification_method_icon = query_one("#verification-method", Label)
+    """The label for the verification method."""
     _lock_icon = query_one("#lock-icon", Label)
     """The label for the lock icon."""
     _location_label = query_one("#location", Label)
@@ -48,6 +57,7 @@ class ViewerTitle(Horizontal):
 
     def compose(self) -> ComposeResult:
         """Compose the child widgets."""
+        yield Label(id="verification-method")
         yield Label(id="lock-icon")
         yield Label(id="location")
 
@@ -67,6 +77,16 @@ class ViewerTitle(Horizontal):
     def _watch_needed_certificate(self) -> None:
         """React to the needed_certificate changing."""
         self._lock_icon.update("\u26bf" if self.needed_certificate else " ")
+
+    def _watch_verification_method(self) -> None:
+        """React to the verification_method changing."""
+        match self.verification_method:
+            case "ca":
+                self._verification_method_icon.update("⛉")
+            case "tofu":
+                self._verification_method_icon.update("✓")
+            case _:
+                self._verification_method_icon.update(" ")
 
     def on_resize(self) -> None:
         """Handle the widget being resized."""
