@@ -4,6 +4,7 @@
 # Local imports.
 from .clipboard import CopyDocumentToClipboard, CopyLocationToClipboard
 from .main import (
+    AboutThisPage,
     AddLocationToBookmarks,
     ChangeCommandLineLocation,
     ClearCache,
@@ -29,6 +30,7 @@ from .search import SearchBookmarks, SearchHistory
 ##############################################################################
 # Exports.
 __all__ = [
+    "AboutThisPage",
     "AddLocationToBookmarks",
     "Backward",
     "ChangeCommandLineLocation",
