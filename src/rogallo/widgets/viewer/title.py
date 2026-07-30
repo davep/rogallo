@@ -14,6 +14,7 @@ from wasat import VerificationMethod
 
 ##############################################################################
 # Local imports.
+from ...data import load_configuration
 from ...types import RogalloLocation
 
 
@@ -76,17 +77,31 @@ class ViewerTitle(Horizontal):
 
     def _watch_needed_certificate(self) -> None:
         """React to the needed_certificate changing."""
-        self._lock_icon.update("\u26bf" if self.needed_certificate else " ")
+        self._lock_icon.update(
+            load_configuration().client_certificate_used_icon
+            if self.needed_certificate
+            else " "
+        )
 
     def _watch_verification_method(self) -> None:
         """React to the verification_method changing."""
         match self.verification_method:
             case "ca":
-                self._verification_method_icon.update("⛉")
+                self._verification_method_icon.update(
+                    load_configuration().verified_ca_icon
+                )
             case "tofu":
-                self._verification_method_icon.update("✓")
+                self._verification_method_icon.update(
+                    load_configuration().verified_tofu_icon
+                )
+            case "off":
+                self._verification_method_icon.update(
+                    load_configuration().verified_off_icon
+                )
             case _:
-                self._verification_method_icon.update(" ")
+                self._verification_method_icon.update(
+                    load_configuration().verified_none_icon
+                )
 
     def on_resize(self) -> None:
         """Handle the widget being resized."""

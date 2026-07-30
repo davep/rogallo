@@ -111,6 +111,21 @@ class Configuration:
     list_item_bullet_icon: str = "•"
     """The icon to use for list item bullets."""
 
+    client_certificate_used_icon: str = "⚿"
+    """The icon to use for indicating that a client certificate was used."""
+
+    verified_ca_icon: str = "⛉"
+    """The icon to use for indicating that a server was verified by a CA."""
+
+    verified_tofu_icon: str = "✓"
+    """The icon to use for indicating that a server was verified by TOFU."""
+
+    verified_off_icon: str = "✗"
+    """The icon to use for indicating that server was off."""
+
+    verified_none_icon: str = " "
+    """The icon to use for indicating that a server was not verified."""
+
     external_editor: str | None = None
     """The external editor to use for editing text content."""
 
