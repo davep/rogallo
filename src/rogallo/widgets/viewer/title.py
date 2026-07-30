@@ -4,6 +4,7 @@
 # Textual imports.
 from textual.app import ComposeResult
 from textual.containers import Horizontal
+from textual.events import Click
 from textual.getters import query_one
 from textual.reactive import var
 from textual.widgets import Label
@@ -14,6 +15,7 @@ from wasat import VerificationMethod
 
 ##############################################################################
 # Local imports.
+from ...commands import AboutThisPage
 from ...data import load_configuration
 from ...types import RogalloLocation
 
@@ -32,6 +34,10 @@ class ViewerTitle(Horizontal):
         #verification-method, #lock-icon {
             width: 2;
             padding-right: 1;
+        }
+
+        #verification-method {
+            pointer: pointer;
         }
 
         .--verified-ca, #lock-icon {
@@ -118,6 +124,11 @@ class ViewerTitle(Horizontal):
     def on_resize(self) -> None:
         """Handle the widget being resized."""
         self.location = self.location
+
+    async def on_click(self, event: Click) -> None:
+        """Handle the widget being clicked."""
+        if event.widget is self._verification_method_icon:
+            await self.screen.run_action(AboutThisPage.action_name())
 
 
 ### title.py ends here
