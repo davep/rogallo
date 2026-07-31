@@ -12,6 +12,8 @@ nav:
   - "UI":
       - ui.md
       - command-line.md
+      - sidebar.md
+      - viewer.md
   - "Configuration": configuration.md
   - "License": license.md
   - "Change Log": changelog.md
