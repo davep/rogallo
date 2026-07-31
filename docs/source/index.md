@@ -36,14 +36,6 @@ Key features for the Gemini protocol support include:
 - Support for redirections ([`3x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#redirection))
 - A flexible capsule certificate verification approach, handling both CA-signed and self-signed certificates
 
-!!! note
-
-    Rogallo is primarily designed to browse online content. However, in this
-    documentation, you will mainly see it browsing files in the local
-    filesystem. This is because the screenshots are generated when the
-    documentation is generated, and so visiting `gemini://`, `gopher://`
-    or `finger://` locations would be slow and brittle.
-
 ## Installing
 
 ### pipx
