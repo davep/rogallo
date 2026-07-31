@@ -12,11 +12,15 @@ from wasat import GeminiURI
 
 from rogallo.data import (
     Bookmark,
+    CommandLineHistory,
     Configuration,
     LocationHistory,
     LocationVisit,
+    NavigationHistory,
     save_bookmarks,
+    save_command_history,
     save_location_history,
+    save_naviagation_history,
     update_configuration,
 )
 from rogallo.rogallo import Rogallo
@@ -87,16 +91,24 @@ def fake_history() -> None:
 
 ##############################################################################
 # Create the Rogallo app with the specified command line arguments.
-def make_app(viewing: str = "features", **config_overrides: Any) -> Rogallo:
-    fake_history()
+def make_app(
+    viewing: str = "features", with_fake_history: bool = True, **config_overrides: Any
+) -> Rogallo:
+    save_naviagation_history(NavigationHistory([]))
+    save_command_history(CommandLineHistory([]))
+    if with_fake_history:
+        fake_history()
+    else:
+        save_location_history(LocationHistory([]))
     with update_configuration() as config:
         # Spin up a default configuration.
         defaults = Configuration()
         for prop in fields(Configuration):
             setattr(config, prop.name, getattr(defaults, prop.name))
         # Override some details that are better for the docs.
-        config.home_page = "gemini://localhost/features.gmi"
+        config.home_page = "gemini://localhost/"
         config.theme = "textual-mono"
+        config.cache_ttl = 1
         # Then apply any overrides that were passed in.
         for prop, value in config_overrides.items():
             setattr(config, prop, value)
@@ -106,6 +118,8 @@ def make_app(viewing: str = "features", **config_overrides: Any) -> Rogallo:
             location=f"gemini://localhost/{viewing}.gmi",
             theme=None,
         )
+        if viewing
+        else Namespace(command="", theme=None)
     )
 
 

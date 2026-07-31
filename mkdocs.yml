@@ -9,6 +9,9 @@ nav:
       - gemini.md
       - gopher.md
       - finger.md
+  - "UI":
+      - ui.md
+      - command-line.md
   - "Configuration": configuration.md
   - "License": license.md
   - "Change Log": changelog.md
