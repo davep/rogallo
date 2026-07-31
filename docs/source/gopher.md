@@ -6,10 +6,10 @@ Rogallo has support for visiting Gopher servers. Much like when [visiting a
 Gemini server](./gemini.md), you can type in the URI of the location you
 wish to visit. Gopher URIs begin with `gopher://`.
 
-```{.textual path="docs/screenshots/empty_screenshot.py" title="Entering a Gopher URI" lines=30 columns=90 press="g,o,p,h,e,r,:,/,/,l,o,c,a,l,h,,o,s,t"}
+```{.textual path="docs/screenshots/empty_screenshot.py" title="Entering a Gopher URI" lines=30 columns=90 press="g,o,p,h,e,r,:,/,/,l,o,c,a,l,h,o,s,t"}
 ```
 
-```{.textual path="docs/screenshots/empty_screenshot.py" title="After pressing Enter" lines=30 columns=90 press="g,o,p,h,e,r,:,/,/,l,o,c,a,l,h,,o,s,t,:,7,0,7,0,enter"}
+```{.textual path="docs/screenshots/empty_screenshot.py" title="After pressing Enter" lines=30 columns=90 press="g,o,p,h,e,r,:,/,/,l,o,c,a,l,h,o,s,t,:,7,0,7,0,enter"}
 ```
 
 !!! note

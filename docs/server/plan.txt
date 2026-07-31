@@ -1,3 +1,12 @@
-User Plan
----------
-Working on smolweb client & server testing!
+Login: davep                            Name: Dave Pearson
+Directory: /home/davep                 Shell: /bin/emacs
+Last login Tue Jun 24 09:25:41 2026 UTC
+No Mail.
+
+Project:
+  Rogallo: https://rogallo.davep.dev/
+
+Plan:
+  Currently building gemini://tilde.team/~davep/
+
+Pronouns: he/him
