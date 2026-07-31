@@ -32,6 +32,7 @@ features include:
 Key features for the Gemini protocol support include:
 
 - Support for user input ([`1x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#input-expected)), including masked inputs for sensitive fields
+    - Optionally use your own choice of text editor to compose the input
 - Support for in-application generation of self-signed [client certificates](https://geminiprotocol.net/docs/protocol-specification.gmi#client-certificates), with persistent per-capsule management
 - Support for redirections ([`3x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#redirection))
 - A flexible capsule certificate verification approach, handling both CA-signed and self-signed certificates
