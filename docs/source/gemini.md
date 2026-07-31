@@ -33,4 +33,17 @@ Hit <kbd>Enter</kbd> and the site's content will be loaded.
 ```{.textual path="docs/screenshots/empty_screenshot.py" title="A loaded Gemini page" lines=30 columns=90 press="g,e,m,i,n,i,:,/,/,l,o,c,a,l,h,,o,s,t,/,enter"}
 ```
 
+Because Rogallo is, first and foremost, a Gemini browser, you don't *have*
+to type out `gemini://` every time. You can just enter the host and path and
+Rogallo will attempt to treat this as a `gemini://` URI.
+
+```{.textual path="docs/screenshots/empty_screenshot.py" title="Entering a non-prefixed location" lines=30 columns=90 press="l,o,c,a,l,h,,o,s,t"}
+```
+
+```{.textual path="docs/screenshots/empty_screenshot.py" title="After entering the location" lines=30 columns=90 press="l,o,c,a,l,h,,o,s,t,enter"}
+```
+
+!!! note
+    The resulting URI is still `gemini://localhost/`
+
 [//]: # (gemini.md ends here)
