@@ -1,0 +1,19 @@
+# smolserve sample configuration
+
+[general]
+host = "127.0.0.1"
+
+[gemini]
+enabled = true
+port = 1965
+root = "./docs/server/public_gemini"
+
+[gopher]
+enabled = true
+port = 7070
+root = "./docs/server/public_gopher"
+
+[finger]
+enabled = true
+port = 7979
+plan_file = "./docs/server/plan.txt"

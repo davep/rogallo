@@ -1,0 +1,8 @@
+# Welcome to smolserve Gemini Server!
+
+This is a sample Gemtext document served by smolserve.
+
+## Features
+* Simple Gemini protocol support
+* Automatic directory listings
+* Local testing environment

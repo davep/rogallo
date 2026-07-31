@@ -15,6 +15,7 @@ lint     := $(ruff) check
 fmt      := $(ruff) format
 mypy     := $(run) mypy
 spell    := $(run) codespell
+smol     := $(run) smolserve --config $(docs)server/smolserve.toml exec --
 mkdocs   := $(run) mkdocs
 
 ##############################################################################
@@ -91,11 +92,11 @@ checkall: spellcheck codestyle lint stricttypecheck test # Check all the things
 # Documentation.
 .PHONY: docs
 docs:                           # Generate the system documentation
-	$(mkdocs) build
+	$(smol) $(mkdocs) build
 
 .PHONY: rtfm
 rtfm:                           # Locally read the library documentation
-	$(mkdocs) serve --livereload
+	$(smol) $(mkdocs) serve --livereload
 
 .PHONY: publishdocs
 publishdocs: clean-docs	# Set up the docs for publishing
