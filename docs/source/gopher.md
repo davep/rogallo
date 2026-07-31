@@ -22,7 +22,10 @@ wish to visit. Gopher URIs begin with `gopher://`.
 
 ## Supported item types
 
-Rogallo has direct support for the following Gopher item types:
+Rogallo has direct support for a number of Gopher item types. These types
+will be handled by or rendered in Rogallo itself. Any other type will be
+turned into the most appropriate URI and passed to the operating system to
+be handled by other tools.
 
 ### `0` - Text
 
