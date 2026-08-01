@@ -107,7 +107,7 @@ So, given the above example, the expansions would be:
 
 - `{q}` -> `this%20is%20a%20test%20search`
 - `{qp}` -> `this+is+a+test+search`
-- `{r}` -> `this is a test`
+- `{r}` -> `this is a test search`
 
 While the default set of aliases all expand into URIs, which perform
 searches with search engines, this isn't the only application. For example,
