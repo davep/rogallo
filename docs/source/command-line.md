@@ -120,6 +120,17 @@ server, you could have:
 
 ## History and completion
 
-TODO
+Rogallo's command line has a simple history system. As you type commands,
+they are recorded in the command line history and are kept available between
+sessions. You can use the <kbd>Up</kbd> and <kbd>Down</kbd> keys to navigate
+through the command history.
+
+The command line also has a simple suggested completion system too. If you
+type in some text that is the start if a previously-entered input, or
+matches known commands, etc, a dimmed completion will be suggested. Press
+<kbd>Right</kbd> to accept the suggestion.
+
+```{.textual path="docs/screenshots/main_screenshot.py" title="Showing a suggested completion" lines=40 columns=85 press="/,g,e,m"}
+```
 
 [//]: # (command-line.md ends here)
