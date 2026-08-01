@@ -74,6 +74,48 @@ Commands start with a `!`. The commands include:
 
 ## Aliases
 
-TODO
+Rogallo supports a simple form of aliases for its command line. Primarily
+they're useful for defining things such as performing searches using popular
+Gemini and Gopher search engines. Aliases are defined in the [configuration
+file](./configuration.md), like this:
+
+```json
+"aliases": {
+    "fg": "gopher://gopher.floodgap.com/1/v2/vs?{q}",
+    "gp": "gemini://gemi.dev/cgi-bin/wp.cgi/search?{q}",
+    "ken": "gemini://kennedy.gemi.dev/search?{q}",
+    "tlgs": "gemini://tlgs.one/search?{q}"
+}
+```
+
+As you may notice, a form of template label is used. The substitution is
+always whatever follows the command input into the command line. So if you
+were to type in :
+
+```
+ken this is a test search
+```
+
+`ken` would be matched as a command alias, and the template label would be
+some form of `this is a test search`. The available template labels are:
+
+- `{q}` - The string, quoted. Spaces become `%20`, etc.
+- `{qp}` - As above, but spaces specifically become `+` rather than `%20`.
+- `{r}` - The raw, unquoted, version of the text.
+
+So, given the above example, the expansions would be:
+
+- `{q}` -> `this%20is%20a%20test%20search`
+- `{qp}` -> `this+is+a+test+search`
+- `{r}` -> `this is a test`
+
+While the default set of aliases all expand into URIs, which perform
+searches with search engines, this isn't the only application. For example,
+if you preferred to type `whois` rather than `!finger` to call on a finger
+server, you could have:
+
+```json
+"whois": "!finger {r}"
+```
 
 [//]: # (command-line.md ends here)
