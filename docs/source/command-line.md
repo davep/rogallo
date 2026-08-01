@@ -118,4 +118,8 @@ server, you could have:
 "whois": "!finger {r}"
 ```
 
+## History and completion
+
+TODO
+
 [//]: # (command-line.md ends here)
