@@ -28,6 +28,7 @@ from ..commands import (
     JumpToDocument,
     JumpToSidebar,
     OpenFile,
+    PipeDocument,
     Reload,
     SearchBookmarks,
     SearchHistory,
@@ -71,6 +72,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(JumpToDocument)
         yield JumpToSidebar()
         yield OpenFile()
+        yield from self.maybe(PipeDocument)
         yield Quit()
         yield from self.maybe(Reload)
         yield from self.maybe(SearchBookmarks)
