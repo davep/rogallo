@@ -7,4 +7,7 @@ interface.
 - [The sidebar](./sidebar.md)
 - [The viewer](./viewer.md)
 
+You may also with to customise the look of Rogallo. This can be done by
+creating your own [custom themes](./custom-themes.md).
+
 [//]: # (ui.md ends here)
