@@ -41,7 +41,7 @@ os.environ["XDG_DATA_HOME"] = str(docs_build_dir / "data")
 save_bookmarks(
     [
         Bookmark("The Gemini Protocol", GeminiURI("gemini://geminiprotocol.net/")),
-        Bookmark("davep", GeminiURI("gemini://davep.gemcities.com/")),
+        Bookmark("davep", GeminiURI("gemini://tilde.team/~davep/")),
         Bookmark("Station", GeminiURI("gemini://station.martinrue.com/")),
         Bookmark("AstroBotany", GeminiURI("gemini://astrobotany.mozz.us/")),
     ]
@@ -57,7 +57,7 @@ def fake_history() -> None:
                 reversed(
                     [
                         LocationVisit(
-                            GeminiURI(location),
+                            GeminiURI.with_default_scheme(location),
                             datetime.now()
                             - timedelta(
                                 hours=position,
@@ -67,19 +67,20 @@ def fake_history() -> None:
                         )
                         for position, location in enumerate(
                             [
-                                "gemini://tlgs.one/",
-                                "gemini://lagrange-point.space/",
-                                "gemini://station.martinrue.com/davep",
-                                "gemini://station.martinrue.com/",
-                                "gemini://theunixzoo.co.uk/",
-                                "gemini://astrobotany.mozz.us/app/pond",
-                                "gemini://astrobotany.mozz.us/",
-                                "gemini://station.martinrue.com/davep/notifications",
-                                "gemini://station.martinrue.com/davep/followers",
-                                "gemini://station.martinrue.com/davep/",
-                                "gemini://geminiprotocol.net/",
-                                "gemini://geminiprotocol.net/docs/",
-                                "gemini://geminiprotocol.net/docs/gemtext-specification.gmi",
+                                "tlgs.one/",
+                                "lagrange-point.space/",
+                                "station.martinrue.com/davep",
+                                "station.martinrue.com/",
+                                "theunixzoo.co.uk/",
+                                "redterminal.org/",
+                                "astrobotany.mozz.us/app/pond",
+                                "astrobotany.mozz.us/",
+                                "station.martinrue.com/davep/notifications",
+                                "station.martinrue.com/davep/followers",
+                                "station.martinrue.com/davep/",
+                                "geminiprotocol.net/",
+                                "geminiprotocol.net/docs/",
+                                "geminiprotocol.net/docs/gemtext-specification.gmi",
                             ]
                         )
                     ]
