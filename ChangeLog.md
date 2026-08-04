@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Gopher items of type 8 are now turned into `telnet:` URIs.
+  ([#271](https://github.com/davep/rogallo/pull/271))
+
 ## v1.4.0
 
 **Released: 2026-07-31**
