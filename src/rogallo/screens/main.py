@@ -6,6 +6,7 @@ from argparse import Namespace
 from functools import partial
 from mimetypes import guess_type
 from pathlib import Path
+from subprocess import CalledProcessError, run
 from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
 
@@ -83,6 +84,7 @@ from ..commands import (
     JumpToDocument,
     JumpToSidebar,
     OpenFile,
+    PipeDocument,
     Reload,
     SearchBookmarks,
     SearchHistory,
@@ -250,6 +252,7 @@ class Main(EnhancedScreen[None]):
         JumpToDocument,
         JumpToSidebar,
         OpenFile,
+        PipeDocument,
         Reload,
         SetHome,
         SetHomeToCurrentLocation,
@@ -418,7 +421,10 @@ class Main(EnhancedScreen[None]):
             SetHomeToCurrentLocation.action_name(),
         ):
             return bool(self._viewer.document.location)
-        if action == CopyDocumentToClipboard.action_name():
+        if action in (
+            CopyDocumentToClipboard.action_name(),
+            PipeDocument.action_name(),
+        ):
             return bool(self._viewer.document)
         if action == ToggleView.action_name():
             return bool(self._viewer.document) and self._viewer.document.is_source
@@ -1291,6 +1297,37 @@ class Main(EnhancedScreen[None]):
         """Show information about the current page."""
         if self._viewer.document.location:
             self.app.push_screen(AboutPage(self._viewer.document))
+
+    @work
+    async def action_pipe_document_command(self) -> None:
+        """Pipe the current document to a command."""
+        if self._viewer.document and (
+            command := await self.app.push_screen_wait(
+                ModalInput(
+                    "Shell command/pipeline to pipe the document through",
+                    title="Pipe the document through a command",
+                )
+            )
+        ):
+            try:
+                with self.app.suspend():
+                    run(
+                        command,
+                        input=self._viewer.document.content,
+                        text=True,
+                        shell=True,
+                        encoding="utf-8",
+                    )
+            except CalledProcessError as error:
+                self.notify(
+                    f"Command failed with exit code {error.returncode}",
+                    severity="error",
+                )
+            except BrokenPipeError:
+                self.notify(
+                    "Process closed pipe before input was fully written",
+                    severity="warning",
+                )
 
 
 ### main.py ends here

@@ -139,4 +139,11 @@ class AboutThisPage(Command):
     BINDING_KEY = "f7"
 
 
+##############################################################################
+class PipeDocument(Command):
+    """Pipe the current document to an external command"""
+
+    BINDING_KEY = "ctrl+shift+p"
+
+
 ### main.py ends here
