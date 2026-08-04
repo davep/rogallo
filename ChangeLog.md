@@ -9,6 +9,8 @@
 - Added a `PipeDocument` command to pipe the "source" of the current
   document through a shell command or pipeline.
   ([#272](https://github.com/davep/rogallo/pull/272))
+- Added support for loading and using custom themes.
+  ([#273](https://github.com/davep/rogallo/pull/273))
 
 ## v1.4.0
 
