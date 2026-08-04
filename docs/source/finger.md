@@ -35,6 +35,6 @@ line](./command-line.md). The parameter it takes is the more traditional
 ```{.textual path="docs/screenshots/empty_screenshot.py" title="Using the finger command" lines=30 columns=90 press="!,f,i,n,g,e,r, ,d,a,v,e,p,@,l,o,c,a,l,h,o,s,t"}
 ```
 
-Note that this *expects* that the finger server is listening on port 70.
+Note that this *expects* that the finger server is listening on port 79.
 
 [//]: # (finger.md ends here)
