@@ -2,10 +2,11 @@
 
 ##############################################################################
 # Python imports.
+from collections.abc import Iterator
 from dataclasses import fields
 from json import JSONDecodeError, loads
 from pathlib import Path
-from typing import Final, Iterator
+from typing import Final
 
 ##############################################################################
 # Textual imports.
