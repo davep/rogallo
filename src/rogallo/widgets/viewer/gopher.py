@@ -3,6 +3,8 @@
 ##############################################################################
 # Python imports.
 from collections.abc import Iterator
+from socket import getservbyname
+from typing import Final
 
 ##############################################################################
 # Gophermap imports.
@@ -15,6 +17,10 @@ from port70 import GopherURI, URIError
 ##############################################################################
 # Local imports.
 from ...data import load_configuration
+
+##############################################################################
+TELNET: Final[int] = getservbyname("telnet", "tcp")
+"""Port number for the Telnet service."""
 
 
 ##############################################################################
@@ -38,6 +44,9 @@ def to_gemtext(gophermap: str) -> Iterator[str]:
         match item.type:
             case ItemType.HTML:
                 yield f"=> {item.selector.removeprefix('URL:')} {badge}{item.display_text}"
+            case ItemType.TELNET:
+                port = "" if item.port == TELNET else f":{item.port}"
+                yield f"=> telnet://{item.host}{port}/{item.selector} {badge}{item.display_text}"
             case ItemType.ERROR:
                 yield f"# {item.display_text}"
             case ItemType.INFO:

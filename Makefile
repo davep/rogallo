@@ -15,7 +15,8 @@ lint     := $(ruff) check
 fmt      := $(ruff) format
 mypy     := $(run) mypy
 spell    := $(run) codespell
-smol     := $(run) smolserve --config $(docs)server/smolserve.toml exec --
+smol     := $(run) smolserve --config $(docs)server/smolserve.toml
+smolexec := $(smol) exec --
 mkdocs   := $(run) mkdocs
 
 ##############################################################################
@@ -35,6 +36,10 @@ debug:				# Run the code with Textual devtools enabled
 .PHONY: console
 console:			# Run the textual console
 	$(run) textual console
+
+.PHONY: testserver
+testserver:			# Run the test server for use in the browser
+	$(smol)
 
 ##############################################################################
 # Setup/update packages the system requires.
@@ -92,11 +97,11 @@ checkall: spellcheck codestyle lint stricttypecheck test # Check all the things
 # Documentation.
 .PHONY: docs
 docs:                           # Generate the system documentation
-	$(smol) $(mkdocs) build
+	$(smolexec) $(mkdocs) build
 
 .PHONY: rtfm
 rtfm:                           # Locally read the library documentation
-	$(smol) $(mkdocs) serve --livereload
+	$(smolexec) $(mkdocs) serve --livereload
 
 .PHONY: publishdocs
 publishdocs: clean-docs	# Set up the docs for publishing
