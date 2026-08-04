@@ -1,0 +1,22 @@
+# Welcome to the Rogallo Documentation!
+
+This is a sample of some Gemtext, served by a Gemini Capsule.
+
+## Places to go from here
+
+There are many places you can go from here, if you want to explore Geminispace. You could drop in on Dave's little capsule:
+
+=> gemini://tilde.team/~davep/
+
+Or you could read all about the Gemini Protocol:
+
+=> gemini://geminiprotocol.net/
+
+Other locations worth a first visit are:
+
+=> gemini://astrobotany.mozz.us/ AstroBotany
+=> gemini://station.martinrue.com/ Station
+=> gemini://lagrange-point.space/ Lagrange Point
+
+And so many more!
+

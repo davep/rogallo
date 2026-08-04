@@ -4,20 +4,22 @@
 ```
 
 Rogallo is a terminal-based client for browsing
-[Geminispace](https://geminiprotocol.net/). Its key features include:
+[Geminispace](https://geminiprotocol.net/),
+[Gopherspace](https://en.wikipedia.org/wiki/Gopher_(protocol)), and
+[Fingerspace](https://en.wikipedia.org/wiki/Finger_(protocol)). Its key
+features include:
 
+- Support for the `gemini` protocol
+- Support for the `gopher` protocol
+- Support for the `finger` protocol
 - A bookmark facility (with search)
 - A location history facility (with search)
 - A backward/forward navigation facility
-- Support for setting a home page
-- Support for user input ([`1x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#input-expected)), including masked inputs for sensitive fields
-- Support for in-application generation of self-signed [client certificates](https://geminiprotocol.net/docs/protocol-specification.gmi#client-certificates), with persistent per-capsule management
-- Support for redirections ([`3x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#redirection))
 - Copy-to-clipboard support for URIs or page contents
+- Support for setting a home page
 - Designed to work on macOS, GNU/Linux and Windows (and likely on other operating systems that support modern Python)
 - Mouse support
 - A view source facility
-- A trust-on-first-use (TOFU) trust facility
 - Has in-application help screens
 - Has an easy-to-use command palette
 - Hands unknown MIME types off to the operating system
@@ -26,16 +28,14 @@ Rogallo is a terminal-based client for browsing
 - Choice of themes
 - Persistent user configuration across sessions
 - Fully responsive layout that adjusts dynamically to terminal resizing
-- Supports the `finger` protocol
-- Supports the `gopher` protocol
 
-!!! note
+Key features for the Gemini protocol support include:
 
-    Rogallo is primarily designed to browse content on Gemini capsules.
-    However, in this documentation, you will mainly see it browsing files in
-    the local filesystem. This is because the screenshots are generated when
-    the documentation is generated, and so visiting `gemini://...` locations
-    would be slow and brittle.
+- Support for user input ([`1x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#input-expected)), including masked inputs for sensitive fields
+    - Optionally use your own choice of text editor to compose the input
+- Support for in-application generation of self-signed [client certificates](https://geminiprotocol.net/docs/protocol-specification.gmi#client-certificates), with persistent per-capsule management
+- Support for redirections ([`3x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#redirection))
+- A flexible capsule certificate verification approach, handling both CA-signed and self-signed certificates
 
 ## Installing
 
@@ -127,8 +127,9 @@ rogallo licence
 ### `open`
 
 The open command can be used to open either a Gemtext file in the local
-filesystem, or a connection to content on a Gemini capsule (normally a URI
-starting with `gemini://`).
+filesystem, or a connection to content on a supported remote service
+(normally a URI starting with either `gemini://`, `gopher://` or
+`finger://`).
 
 ```sh
 rogallo open --help

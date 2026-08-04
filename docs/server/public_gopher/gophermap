@@ -1,0 +1,18 @@
+iWelcome to the Rogallo Documentation!
+i-------------------------------------
+i
+iThis is a sample Gopher map.
+i
+0About Rogallo	/about.txt
+1Rogallo documentation	/docs
+PRogallo manual	/missing.pdf
+7Search the manual	/search	localhost	7070
+2Rogallo support numbers	query	example.com	2323
+IPhoto of a Rogallo wing	/missing.jpeg
+0About Gopher	/missing.txt
+gMy avatar	/missing.gif
+5Some MS-DOS file	/missing.exe
+sTalking about Rogallo	/missing.wav
+hMy blog	URL:https://blog.davep.org/
+8Rogallo over telnet		example.com	23
+.

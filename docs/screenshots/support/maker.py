@@ -12,11 +12,15 @@ from wasat import GeminiURI
 
 from rogallo.data import (
     Bookmark,
+    CommandLineHistory,
     Configuration,
     LocationHistory,
     LocationVisit,
+    NavigationHistory,
     save_bookmarks,
+    save_command_history,
     save_location_history,
+    save_naviagation_history,
     update_configuration,
 )
 from rogallo.rogallo import Rogallo
@@ -37,7 +41,7 @@ os.environ["XDG_DATA_HOME"] = str(docs_build_dir / "data")
 save_bookmarks(
     [
         Bookmark("The Gemini Protocol", GeminiURI("gemini://geminiprotocol.net/")),
-        Bookmark("davep", GeminiURI("gemini://davep.gemcities.com/")),
+        Bookmark("davep", GeminiURI("gemini://tilde.team/~davep/")),
         Bookmark("Station", GeminiURI("gemini://station.martinrue.com/")),
         Bookmark("AstroBotany", GeminiURI("gemini://astrobotany.mozz.us/")),
     ]
@@ -53,7 +57,7 @@ def fake_history() -> None:
                 reversed(
                     [
                         LocationVisit(
-                            GeminiURI(location),
+                            GeminiURI.with_default_scheme(location),
                             datetime.now()
                             - timedelta(
                                 hours=position,
@@ -63,19 +67,20 @@ def fake_history() -> None:
                         )
                         for position, location in enumerate(
                             [
-                                "gemini://tlgs.one/",
-                                "gemini://lagrange-point.space/",
-                                "gemini://station.martinrue.com/davep",
-                                "gemini://station.martinrue.com/",
-                                "gemini://theunixzoo.co.uk/",
-                                "gemini://astrobotany.mozz.us/app/pond",
-                                "gemini://astrobotany.mozz.us/",
-                                "gemini://station.martinrue.com/davep/notifications",
-                                "gemini://station.martinrue.com/davep/followers",
-                                "gemini://station.martinrue.com/davep/",
-                                "gemini://geminiprotocol.net/",
-                                "gemini://geminiprotocol.net/docs/",
-                                "gemini://geminiprotocol.net/docs/gemtext-specification.gmi",
+                                "tlgs.one/",
+                                "lagrange-point.space/",
+                                "station.martinrue.com/davep",
+                                "station.martinrue.com/",
+                                "theunixzoo.co.uk/",
+                                "redterminal.org/",
+                                "astrobotany.mozz.us/app/pond",
+                                "astrobotany.mozz.us/",
+                                "station.martinrue.com/davep/notifications",
+                                "station.martinrue.com/davep/followers",
+                                "station.martinrue.com/davep/",
+                                "geminiprotocol.net/",
+                                "geminiprotocol.net/docs/",
+                                "geminiprotocol.net/docs/gemtext-specification.gmi",
                             ]
                         )
                     ]
@@ -87,25 +92,35 @@ def fake_history() -> None:
 
 ##############################################################################
 # Create the Rogallo app with the specified command line arguments.
-def make_app(viewing: str = "features", **config_overrides: Any) -> Rogallo:
-    fake_history()
+def make_app(
+    viewing: str = "features", with_fake_history: bool = True, **config_overrides: Any
+) -> Rogallo:
+    save_naviagation_history(NavigationHistory([]))
+    save_command_history(CommandLineHistory([]))
+    if with_fake_history:
+        fake_history()
+    else:
+        save_location_history(LocationHistory([]))
     with update_configuration() as config:
         # Spin up a default configuration.
         defaults = Configuration()
         for prop in fields(Configuration):
             setattr(config, prop.name, getattr(defaults, prop.name))
         # Override some details that are better for the docs.
-        config.home_page = str(docs_dir / "examples/features.gmi")
+        config.home_page = "gemini://localhost/"
         config.theme = "textual-mono"
+        config.cache_ttl = 1
         # Then apply any overrides that were passed in.
         for prop, value in config_overrides.items():
             setattr(config, prop, value)
     return Rogallo(
         Namespace(
             command="open",
-            location=str(docs_dir / f"examples/{viewing}.gmi"),
+            location=f"gemini://localhost/{viewing}.gmi",
             theme=None,
         )
+        if viewing
+        else Namespace(command="", theme=None)
     )
 
 

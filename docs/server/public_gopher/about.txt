@@ -1,0 +1,7 @@
+About Rogallo
+=============
+
+Here is some text about Rogallo, as served via Gopher.
+
+Rogallo is a terminal-based client for the Gemini, Gopher and Finger
+protocols.

@@ -4,6 +4,16 @@ repo_url: https://github.com/davep/rogallo
 
 nav:
   - "Getting Started": index.md
+  - "Protocols":
+      - protocols.md
+      - gemini.md
+      - gopher.md
+      - finger.md
+  - "UI":
+      - ui.md
+      - command-line.md
+      - sidebar.md
+      - viewer.md
   - "Configuration": configuration.md
   - "License": license.md
   - "Change Log": changelog.md
