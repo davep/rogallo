@@ -108,4 +108,16 @@ theme.
     themes, this means you've made a mistake, perhaps resulting in invalid
     JSON. Review your file, fix any problems, and try again.
 
+As an example, if we load up Rogallo and select the theme example given
+above, we should see:
+
+```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo in white" lines=35 columns=90 press="f9,t,e,r,m,i,n,a,l,-,w,h,i,t,e,enter"}
+```
+
+Or if you selected a similar theme, made to make Rogallo look like it was
+running on an amber terminal:
+
+```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo in amber" lines=35 columns=90 press="f9,t,e,r,m,i,n,a,l,-,a,m,b,e,r,enter"}
+```
+
 [//]: # (custom-themes.md ends here)

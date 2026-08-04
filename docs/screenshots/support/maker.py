@@ -4,6 +4,7 @@ import os
 from argparse import Namespace
 from dataclasses import fields
 from datetime import datetime, timedelta
+from json import dumps
 from pathlib import Path
 from random import randint
 from typing import Any
@@ -23,6 +24,7 @@ from rogallo.data import (
     save_naviagation_history,
     update_configuration,
 )
+from rogallo.data.themes import themes_dir
 from rogallo.rogallo import Rogallo
 
 ##############################################################################
@@ -45,6 +47,102 @@ save_bookmarks(
         Bookmark("Station", GeminiURI("gemini://station.martinrue.com/")),
         Bookmark("AstroBotany", GeminiURI("gemini://astrobotany.mozz.us/")),
     ]
+)
+
+##############################################################################
+# Create some sample custom themes.
+themes_dir().mkdir(parents=True, exist_ok=True)
+(themes_dir() / "white.json").write_text(
+    dumps(
+        {
+            "name": "terminal-white",
+            "primary": "#E0E8F0",
+            "secondary": "#A0ACB8",
+            "accent": "#FFFFFF",
+            "foreground": "#D0D8E0",
+            "background": "#000000",
+            "surface": "#0C0F12",
+            "panel": "#161B20",
+            "success": "#E0E8F0",
+            "warning": "#F0F0D0",
+            "error": "#5A3838",
+            "dark": True,
+            "luminosity_spread": 0.15,
+            "text_alpha": 0.95,
+            "variables": {
+                "border": "#E0E8F0",
+                "border-blurred": "#3A4450",
+                "block-cursor-foreground": "#000000",
+                "block-cursor-background": "#E0E8F0",
+                "block-cursor-text-style": "none",
+                "input-cursor-foreground": "#000000",
+                "input-cursor-background": "#FFFFFF",
+                "input-selection-background": "#A0ACB8 40%",
+                "input-selection-foreground": "#000000",
+                "screen-selection-background": "#A0ACB8 40%",
+                "screen-selection-foreground": "#D0D8E0",
+                "footer-background": "#0C0F12",
+                "footer-key-foreground": "#E0E8F0",
+                "footer-description-foreground": "#D0D8E0",
+                "button-color-foreground": "#000000",
+                "button-focus-text-style": "reverse",
+                "foreground-muted": "#3A4450",
+                "scrollbar": "#A0ACB8",
+                "scrollbar-hover": "#E0E8F0",
+                "scrollbar-active": "#FFFFFF",
+                "scrollbar-background": "#000000",
+                "scrollbar-background-hover": "#0C0F12",
+                "scrollbar-background-active": "#161B20",
+                "scrollbar-corner-color": "#000000",
+            },
+        }
+    )
+)
+(themes_dir() / "amber.json").write_text(
+    dumps(
+        {
+            "name": "terminal-amber",
+            "primary": "#FFB000",
+            "secondary": "#C88200",
+            "accent": "#FFC947",
+            "foreground": "#FFC107",
+            "background": "#000000",
+            "surface": "#140E00",
+            "panel": "#241800",
+            "success": "#FFB000",
+            "warning": "#FFDC00",
+            "error": "#593800",
+            "dark": True,
+            "luminosity_spread": 0.15,
+            "text_alpha": 0.95,
+            "variables": {
+                "border": "#FFB000",
+                "border-blurred": "#4D3300",
+                "block-cursor-foreground": "#000000",
+                "block-cursor-background": "#FFB000",
+                "block-cursor-text-style": "none",
+                "input-cursor-foreground": "#000000",
+                "input-cursor-background": "#FFC947",
+                "input-selection-background": "#C88200 40%",
+                "input-selection-foreground": "#000000",
+                "screen-selection-background": "#C88200 40%",
+                "screen-selection-foreground": "#FFC107",
+                "footer-background": "#140E00",
+                "footer-key-foreground": "#FFB000",
+                "footer-description-foreground": "#FFC107",
+                "button-color-foreground": "#000000",
+                "button-focus-text-style": "reverse",
+                "foreground-muted": "#4D3300",
+                "scrollbar": "#C88200",
+                "scrollbar-hover": "#FFB000",
+                "scrollbar-active": "#FFC947",
+                "scrollbar-background": "#000000",
+                "scrollbar-background-hover": "#140E00",
+                "scrollbar-background-active": "#241800",
+                "scrollbar-corner-color": "#000000",
+            },
+        }
+    )
 )
 
 
