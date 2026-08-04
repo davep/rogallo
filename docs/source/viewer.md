@@ -31,7 +31,7 @@ eventually navigate you out of the viewer and on to other widgets in the
 user interface, there are some other keys that let you move between links
 and stay within the viewer:
 
-- <kbd>←</kbd>, <kbd>shift</kbd>+<kbd>↑</kbd>, <kbd>L</kbd> - All navigate
+- <kbd>←</kbd>, <kbd>Shift</kbd>+<kbd>↑</kbd>, <kbd>L</kbd> - All navigate
   to the previous link.
 - <kbd>→</kbd>, <kbd>Shift</kbd>+<kbd>↓</kbd>, <kbd>l</kbd> - All navigate
   to the next link.
