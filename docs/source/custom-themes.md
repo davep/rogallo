@@ -120,4 +120,10 @@ running on an amber terminal:
 ```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo in amber" lines=35 columns=90 press="f9,t,e,r,m,i,n,a,l,-,a,m,b,e,r,enter"}
 ```
 
+## Sharing themes
+
+If you'd like to share a theme you've made, please feel free to post a
+screenshot, the JSON, and any other details, [in the themes discussion
+group](https://github.com/davep/rogallo/discussions/categories/custom-themes).
+
 [//]: # (custom-themes.md ends here)
