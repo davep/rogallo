@@ -40,48 +40,7 @@ theme](https://textual.textualize.io/guide/design/#theme-variables). An
 example could be this:
 
 ```json
-{
-  "name": "terminal-white",
-  "primary": "#E0E8F0",
-  "secondary": "#A0ACB8",
-  "accent": "#FFFFFF",
-  "foreground": "#D0D8E0",
-  "background": "#000000",
-  "surface": "#0C0F12",
-  "panel": "#161B20",
-  "success": "#E0E8F0",
-  "warning": "#F0F0D0",
-  "error": "#5A3838",
-  "dark": true,
-  "luminosity_spread": 0.15,
-  "text_alpha": 0.95,
-  "variables": {
-    "border": "#E0E8F0",
-    "border-blurred": "#3A4450",
-    "block-cursor-foreground": "#000000",
-    "block-cursor-background": "#E0E8F0",
-    "block-cursor-text-style": "none",
-    "input-cursor-foreground": "#000000",
-    "input-cursor-background": "#FFFFFF",
-    "input-selection-background": "#A0ACB8 40%",
-    "input-selection-foreground": "#000000",
-    "screen-selection-background": "#A0ACB8 40%",
-    "screen-selection-foreground": "#D0D8E0",
-    "footer-background": "#0C0F12",
-    "footer-key-foreground": "#E0E8F0",
-    "footer-description-foreground": "#D0D8E0",
-    "button-color-foreground": "#000000",
-    "button-focus-text-style": "reverse",
-    "foreground-muted": "#3A4450",
-    "scrollbar": "#A0ACB8",
-    "scrollbar-hover": "#E0E8F0",
-    "scrollbar-active": "#FFFFFF",
-    "scrollbar-background": "#000000",
-    "scrollbar-background-hover": "#0C0F12",
-    "scrollbar-background-active": "#161B20",
-    "scrollbar-corner-color": "#000000"
-  }
-}
+--8<-- "docs/build/config/rogallo/themes/white.json"
 ```
 
 !!! note
@@ -111,14 +70,31 @@ theme.
 As an example, if we load up Rogallo and select the theme example given
 above, we should see:
 
-```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo in white" lines=35 columns=90 press="f9,t,e,r,m,i,n,a,l,-,w,h,i,t,e,enter"}
-```
+=== "Using a white-on-black theme"
 
-Or if you selected a similar theme, made to make Rogallo look like it was
+    ```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo in white" lines=35 columns=90 press="f9,t,e,r,m,i,n,a,l,-,w,h,i,t,e,enter"}
+    ```
+
+=== "white.json"
+
+    ```json
+    --8<-- "docs/build/config/rogallo/themes/white.json"
+    ```
+
+Or, if you selected a similar theme, made to make Rogallo look like it was
 running on an amber terminal:
 
-```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo in amber" lines=35 columns=90 press="f9,t,e,r,m,i,n,a,l,-,a,m,b,e,r,enter"}
-```
+=== "Using an amber screen theme"
+
+    ```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo in amber" lines=35 columns=90 press="f9,t,e,r,m,i,n,a,l,-,a,m,b,e,r,enter"}
+    ```
+
+=== "amber.json"
+
+    ```json
+    --8<-- "docs/build/config/rogallo/themes/amber.json"
+    ```
+
 
 ## Sharing themes
 

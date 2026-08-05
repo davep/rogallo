@@ -95,7 +95,8 @@ themes_dir().mkdir(parents=True, exist_ok=True)
                 "scrollbar-background-active": "#161B20",
                 "scrollbar-corner-color": "#000000",
             },
-        }
+        },
+        indent=4,
     )
 )
 (themes_dir() / "amber.json").write_text(
@@ -141,7 +142,8 @@ themes_dir().mkdir(parents=True, exist_ok=True)
                 "scrollbar-background-active": "#241800",
                 "scrollbar-corner-color": "#000000",
             },
-        }
+        },
+        indent=4,
     )
 )
 
