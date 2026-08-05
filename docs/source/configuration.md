@@ -58,7 +58,7 @@ The setting itself is saved in the configuration file as
 be `false` (not visible) by default:
 
 ```json
-"bookmarks_visble": false
+"bookmarks_visible": false
 ```
 
 ## Connection settings
@@ -275,7 +275,7 @@ which takes `true` or `false` as valid values. It will be `false` (not
 visible) by default:
 
 ```json
-"history_visble": false
+"history_visible": false
 ```
 
 ## Home page
