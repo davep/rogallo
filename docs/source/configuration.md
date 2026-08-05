@@ -167,9 +167,9 @@ you can run the command and the content will look more like this:
 ```{.textual path="docs/screenshots/emoji_screenshot.py" title="Cleaned of emoji" lines=30 columns=80 press="f6"}
 ```
 
-The setting itself itself is saved in the configuration file as the
-`strip_emoji` configuration setting. It accepts `true` or `false` as valid
-values. It will be `false` (don't remove) by default.
+The setting itself is saved in the configuration file as the `strip_emoji`
+configuration setting. It accepts `true` or `false` as valid values. It will
+be `false` (don't remove) by default.
 
 ```json
 "strip_emoji": false
