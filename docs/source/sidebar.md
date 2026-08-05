@@ -2,13 +2,12 @@
 
 ## Introduction
 
-Rogallo can optionally show a sidebar widget, which contains either your
-bookmarks or your location history. By default the sidebar isn't visible, it
-shows on a toggle basis, depending on where focus is and what's currently
-visible. If it isn't visible and you run either of `ToggleBookmarksManager`
-(bound to <kbd>Shift</kbd>+<kbd>F3</kbd> by default) or
-`ToggleHistoryManager` (bound to <kbd>Shift</kbd>+<kbd>F2</kbd> by default)
-it will appear.
+Rogallo can optionally show a sidebar widget containing either your bookmarks or
+your location history. By default, the sidebar is hidden. It operates on a
+toggle basis depending on focus and current visibility. If it is hidden, running
+either `ToggleBookmarksManager` (bound to <kbd>Shift</kbd>+<kbd>F3</kbd> by default)
+or `ToggleHistoryManager` (bound to <kbd>Shift</kbd>+<kbd>F2</kbd> by default)
+will open it.
 
 ```{.textual path="docs/screenshots/main_screenshot.py" title="The bookmarks manager" lines=40 columns=80 press="shift+f3"}
 ```
@@ -18,18 +17,13 @@ it will appear.
 
 ## Bookmarks manager
 
-The bookmarks manager can be used to view, edit and remove your bookmarks.
-Calling the `ToggleBookmarksManager` command will do one of the following
-things:
+The bookmarks manager allows you to view, edit, and remove your bookmarks.
+Calling the `ToggleBookmarksManager` command operates as a contextual toggle:
 
-- If the sidebar isn't open, it will be opened and the bookmark manager will
-  be shown.
-- If the sidebar is open but doesn't have focus, focus will be moved to the
-  sidebar and the bookmarks will be shown.
-- If the sidebar is open and it has focus and the bookmarks aren't shown,
-  the content will swap to the bookmarks.
-- If the sidebar is open and focused and the bookmarks are shown, the
-  sidebar will be closed.
+- **Sidebar closed**: Opens the sidebar showing the bookmarks manager.
+- **Sidebar open (unfocused)**: Focuses the sidebar and displays the bookmarks manager.
+- **Sidebar open (focused on history)**: Switches the sidebar display to the bookmarks manager.
+- **Sidebar open (focused on bookmarks)**: Closes the sidebar.
 
 While bookmarks are visible and focused the following keys perform the
 following actions:
@@ -39,17 +33,13 @@ following actions:
 
 ## History manager
 
-The history manager can be used to view and delete your history. Calling the
-`ToggleHistoryManager` command will do one of the following things:
+The history manager allows you to view and delete your browsing history.
+Calling the `ToggleHistoryManager` command operates as a contextual toggle:
 
-- If the sidebar isn't open, it will be opened and the history manager will
-  be shown.
-- If the sidebar is open but doesn't have focus, focus will be moved to the
-  sidebar and the history will be shown.
-- If the sidebar is open and it has focus and the history isn't shown, the
-  content will swap to the history.
-- If the sidebar is open and focused and the history is shown, the sidebar
-  will be closed.
+- **Sidebar closed**: Opens the sidebar showing the history manager.
+- **Sidebar open (unfocused)**: Focuses the sidebar and displays the history manager.
+- **Sidebar open (focused on bookmarks)**: Switches the sidebar display to the history manager.
+- **Sidebar open (focused on history)**: Closes the sidebar.
 
 While history is visible and focused the following keys perform the
 following actions:
