@@ -38,15 +38,11 @@ example could be this:
 --8<-- "docs/build/config/rogallo/themes/white.json"
 ```
 
-!!! note
+!!! tip "Getting help with making a theme"
 
-    As of the time of writing, some of the theming support in Textual
-    remains sparsely documented. As such it's part guesswork, part
-    code-reading, that is needed to create a workable theme. If you are
-    trying to create a theme and are struggling with some aspect of it,
+    If you are trying to create a theme and are struggling with some aspect of it,
     please don't hesitate to [drop into the Q&A section of discussions and
-    ask for
-    help](https://github.com/davep/rogallo/discussions/categories/q-a). If I
+    ask for help](https://github.com/davep/rogallo/discussions/categories/q-a). If I
     can figure out how to do it, I'll let you know (and likely improve the
     documentation).
 
@@ -56,7 +52,7 @@ Once you've created one or more theme files in the theme directory, just use
 the `ChangeTheme` command (bound to <kbd>F9</kbd> by default) and pick the
 theme.
 
-!!! danger "Missing theme"
+!!! danger "If you made a theme but it's missing"
 
     If you've created a theme and it doesn't show in the list of available
     themes, this means you've made a mistake, perhaps resulting in invalid
