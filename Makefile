@@ -105,7 +105,7 @@ rtfm:                           # Locally read the library documentation
 
 .PHONY: publishdocs
 publishdocs: clean-docs	# Set up the docs for publishing
-	$(mkdocs) gh-deploy
+	$(smolexec) $(mkdocs) gh-deploy
 
 ##############################################################################
 # Package/publish.
