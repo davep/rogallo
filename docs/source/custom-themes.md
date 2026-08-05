@@ -92,7 +92,7 @@ running on an amber terminal:
 
 Another option might be a classic green screen:
 
-=== "Using an green screen theme"
+=== "Using a green screen theme"
 
     ```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo in green" lines=35 columns=90 press="f9,t,e,r,m,i,n,a,l,-,g,r,e,e,n,enter"}
     ```
@@ -101,6 +101,19 @@ Another option might be a classic green screen:
 
     ```json
     --8<-- "docs/build/config/rogallo/themes/green.json"
+    ```
+
+Or how about something that invokes the age of microcomputers?
+
+=== "Using a theme inspired by the CBM64"
+
+    ```{.textual path="docs/screenshots/main_screenshot.py" title="Micro colourful" lines=35 columns=90 press="f9,m,i,c,r,o,-,c,b,m,6,4,enter"}
+    ```
+
+=== "cbm64.json"
+
+    ```json
+    --8<-- "docs/build/config/rogallo/themes/cbm64.json"
     ```
 
 ## Sharing themes

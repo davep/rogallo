@@ -51,7 +51,7 @@ save_bookmarks(
 ##############################################################################
 # Create some sample custom themes.
 themes_dir().mkdir(parents=True, exist_ok=True)
-for theme in ("white", "amber", "green"):
+for theme in ("white", "amber", "green", "cbm64"):
     (themes_dir() / Path(theme).with_suffix(".json")).write_text(
         (
             Path(__file__).parent.parent.parent.parent
