@@ -14,6 +14,7 @@ nav:
       - command-line.md
       - sidebar.md
       - viewer.md
+      - custom-themes.md
   - "Configuration": configuration.md
   - "License": license.md
   - "Change Log": changelog.md
@@ -22,6 +23,8 @@ markdown_extensions:
   - admonition
   - pymdownx.snippets
   - markdown.extensions.attr_list
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.superfences:
       custom_fences:
         - name: textual

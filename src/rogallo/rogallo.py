@@ -18,6 +18,7 @@ from textual_enhanced.app import EnhancedApp
 from . import __version__
 from .data import (
     load_configuration,
+    load_themes,
     update_configuration,
 )
 from .screens import Main
@@ -61,6 +62,8 @@ class Rogallo(EnhancedApp[None]):
         self._arguments = arguments
         """The command line arguments passed to the application."""
         super().__init__()
+        for theme in load_themes():
+            self.register_theme(theme)
         configuration = load_configuration()
         if configuration.theme is not None:
             try:

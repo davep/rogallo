@@ -28,6 +28,7 @@ features include:
 - Choice of themes
 - Persistent user configuration across sessions
 - Fully responsive layout that adjusts dynamically to terminal resizing
+- Support for user-supplied custom UI themes
 
 Key features for the Gemini protocol support include:
 
@@ -146,7 +147,7 @@ Shows a list of all of the themes that are available.
 rogallo themes
 ```
 ```bash exec="on" result="text"
-rogallo themes
+rogallo themes | grep -v "\(terminal\|micro\)-"
 ```
 
 Use the `--theme` switch to set a theme from the command line.

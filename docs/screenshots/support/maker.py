@@ -23,6 +23,7 @@ from rogallo.data import (
     save_naviagation_history,
     update_configuration,
 )
+from rogallo.data.themes import themes_dir
 from rogallo.rogallo import Rogallo
 
 ##############################################################################
@@ -46,6 +47,18 @@ save_bookmarks(
         Bookmark("AstroBotany", GeminiURI("gemini://astrobotany.mozz.us/")),
     ]
 )
+
+##############################################################################
+# Create some sample custom themes.
+themes_dir().mkdir(parents=True, exist_ok=True)
+for theme in ("white", "amber", "green", "cbm64"):
+    (themes_dir() / Path(theme).with_suffix(".json")).write_text(
+        (
+            Path(__file__).parent.parent.parent.parent
+            / "example-themes"
+            / Path(theme).with_suffix(".json")
+        ).read_text()
+    )
 
 
 ##############################################################################
