@@ -18,17 +18,12 @@ where the [configuration file lives](./configuration.md). For example:
 ~/.config/rogallo/themes$ ls -1
 amber.json
 cbm64.json
-cga.json
-cobalt.json
+cyan.json
 green.json
-inverted-white.json
-olive.json
-organge.json
-plasma.json
-rainbow.json
 speccy.json
+teletext.json
 turbo.json
-vic20.json
+white-inverted.json
 white.json
 ```
 
