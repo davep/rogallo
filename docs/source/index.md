@@ -28,6 +28,7 @@ features include:
 - Choice of themes
 - Persistent user configuration across sessions
 - Fully responsive layout that adjusts dynamically to terminal resizing
+- Support for user-supplied custom UI themes
 
 Key features for the Gemini protocol support include:
 
