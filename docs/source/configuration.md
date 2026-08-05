@@ -91,7 +91,7 @@ before it is considered stale. This is an integer number of seconds, set to
 ```
 
 If you would prefer to not use a cache at all, this can be turned off via
-the `with_cache` setting. Value values are `true` and `false`, set to `true`
+the `with_cache` setting. Valid values are `true` and `false`, set to `true`
 by default.
 
 ```json
