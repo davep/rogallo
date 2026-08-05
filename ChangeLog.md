@@ -11,6 +11,9 @@
   ([#272](https://github.com/davep/rogallo/pull/272))
 - Added support for loading and using custom themes.
   ([#273](https://github.com/davep/rogallo/pull/273))
+- Renamed `bookmarks_visble` to `bookmarks_visible` in the configuration
+  file. Technically a breaking change but mostly not noticeable.
+  ([#275](https://github.com/davep/rogallo/pull/275))
 
 ## v1.4.0
 

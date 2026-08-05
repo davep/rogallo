@@ -45,7 +45,7 @@ class Configuration:
     history_visible: bool = False
     """Should the history panel be visible by default?"""
 
-    bookmarks_visble: bool = False
+    bookmarks_visible: bool = False
     """Should the bookmarks panel be visible by default?"""
 
     show_link_tooltips: bool = True

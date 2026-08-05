@@ -7,8 +7,8 @@ server.
 
 ## `finger://` URIs
 
-Rogallo will handle the any valid `finger://` URI, either as a link to be
-following from content returned by a [Gemini](./gemini.md) or
+Rogallo will handle any valid `finger://` URI, either as a link to be
+followed from content returned by a [Gemini](./gemini.md) or
 [Gopher](./gopher.md) server, or as entered in the [command
 line](./command-line.md).
 

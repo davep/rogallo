@@ -3,8 +3,8 @@
 The way that Rogallo works can be configured using a configuration file.
 This section will describe what can be configured and how.
 
-The location of the configuration file will depend on how your operating
-system and its settings; but by default it is looked for in
+The location of the configuration file will depend on your operating system
+and its settings; but by default it is looked for in
 [`$XDG_CONFIG_HOME`](https://specifications.freedesktop.org/basedir-spec/latest/),
 in a `rogallo` subdirectory. Mostly this will translate to the file being
 called `~/.config/rogallo/configuration.json`.
@@ -23,7 +23,7 @@ that sites can do all sorts of wonderfully colourful things:
 ```
 
 If you would prefer that ANSI escape sequences *aren't* processed, and
-instead a are stripped from the content, you can use the `Toggle ANSI Escape
+instead are stripped from the content, you can use the `Toggle ANSI Escape
 Sequence Handling` command
 ([`ToggleANSIEscapeSequenceHandling`](#bindable-commands), bound to
 <kbd>Shift</kbd>+<kbd>F6</kbd> by default).
@@ -58,7 +58,7 @@ The setting itself is saved in the configuration file as
 be `false` (not visible) by default:
 
 ```json
-"bookmarks_visble": false
+"bookmarks_visible": false
 ```
 
 ## Connection settings
@@ -91,7 +91,7 @@ before it is considered stale. This is an integer number of seconds, set to
 ```
 
 If you would prefer to not use a cache at all, this can be turned off via
-the `with_cache` setting. Value values are `true` and `false`, set to `true`
+the `with_cache` setting. Valid values are `true` and `false`, set to `true`
 by default.
 
 ```json
@@ -167,9 +167,9 @@ you can run the command and the content will look more like this:
 ```{.textual path="docs/screenshots/emoji_screenshot.py" title="Cleaned of emoji" lines=30 columns=80 press="f6"}
 ```
 
-The setting itself itself is saved in the configuration file as the
-`strip_emoji` configuration setting. It accepts `true` or `false` as valid
-values. It will be `false` (don't remove) by default.
+The setting itself is saved in the configuration file as the `strip_emoji`
+configuration setting. It accepts `true` or `false` as valid values. It will
+be `false` (don't remove) by default.
 
 ```json
 "strip_emoji": false
@@ -241,26 +241,6 @@ types. For example, if you wanted to use simple three-latter codes:
 }
 ```
 
-## Handling ANSI escape sequences
-
-Some Gemini capsules have content -- sometimes optional, sometimes mandatory
--- which makes use of ANSI escape sequences to add colour to a document.
-Rogallo supports this and will accept and correctly render the sequences.
-
-If you would prefer that Rogallo *didn't* handle server-supplied escape
-sequences you can turn it off with the `handle_ansi_escape_sequences`
-setting. It takes `true` and `false` as valid values, and is `true` by
-default.
-
-```json
-"handle_ansi_escape_sequences": true
-```
-
-!!! note
-
-    Turning this off and visiting sites that still deliver escape sequences
-    will have unpredictable results.
-
 ## History manager visible
 
 Rogallo has a sidebar that displays the history manager. By default it isn't
@@ -275,13 +255,13 @@ which takes `true` or `false` as valid values. It will be `false` (not
 visible) by default:
 
 ```json
-"history_visble": false
+"history_visible": false
 ```
 
 ## Home page
 
 Rogallo has a home page setting. This can be set using the `Set Home`
-command ([`SetHome`](#bindable-commands) command, bound to
+command ([`SetHome`](#bindable-commands), bound to
 <kbd>Alt</kbd>+<kbd>h</kbd> by default). This sets the currently-visited
 page as the home page. If you wish you can also modify it in the
 configuration file:
@@ -382,7 +362,7 @@ If anyone finds this distracting, you can turn the labels off with the
 ```
 
 The setting itself is saved in the configuration file as the
-`with_link_jumps`configuration setting. It accepts `true` or `false` as
+`with_link_jumps` configuration setting. It accepts `true` or `false` as
 valid values. It will be `true` (with labels) by default.
 
 ```json
@@ -468,11 +448,11 @@ of text.
 ```
 
 If this feels too cluttered it can be turned off with the
-`show_preformat_tooltips` setting. Valid values a `true` and `false`, with
+`show_preformat_tooltips` setting. Valid values are `true` and `false`, with
 `true` (show the tooltips) being the default.
 
 ```json
-"show_preformat_tooltips": true,
+"show_preformat_tooltips": true
 ```
 
 ## Striped links

@@ -46,7 +46,7 @@ Commands start with a `!`. The commands include:
 - `!clear_cache`: Clear the cache for all content
 - `!copy_document_to_clipboard`: Copy the current document to the clipboard
 - `!copy_location_to_clipboard`: Copy the current location to the clipboard.
-- `!finger <user>@<host>`: Perform user information looking with the finger protocol
+- `!finger <user>@<host>`: Perform user information lookups with the finger protocol
 - `!forward`: Move forward through history
 - `!go_home`: Go to the home page
 - `!go_to_parent`: Go to the parent directory
@@ -88,22 +88,23 @@ file](./configuration.md), like this:
 }
 ```
 
-As you may notice, a form of template label is used. The substitution is
-always whatever follows the command input into the command line. So if you
-were to type in :
+Aliases can include template variables (`{q}`, `{qp}`, `{r}`) that are
+dynamically replaced by any text typed after the alias name. For example, if
+you enter:
 
 ```
 ken this is a test search
 ```
 
-`ken` would be matched as a command alias, and the template label would be
-some form of `this is a test search`. The available template labels are:
+`ken` is matched as the alias, and the template variable in the alias definition is replaced using the trailing query string.
 
-- `{q}` - The string, quoted. Spaces become `%20`, etc.
-- `{qp}` - As above, but spaces specifically become `+` rather than `%20`.
-- `{r}` - The raw, unquoted, version of the text.
+The available template variables are:
 
-So, given the above example, the expansions would be:
+- `{q}` - The URL-quoted query string (spaces become `%20`).
+- `{qp}` - The URL-quoted query string using pluses for spaces (spaces become `+`).
+- `{r}` - The raw, unquoted query string.
+
+Given the example above, the template variables expand as follows:
 
 - `{q}` -> `this%20is%20a%20test%20search`
 - `{qp}` -> `this+is+a+test+search`
@@ -126,7 +127,7 @@ sessions. You can use the <kbd>Up</kbd> and <kbd>Down</kbd> keys to navigate
 through the command history.
 
 The command line also has a simple suggested completion system too. If you
-type in some text that is the start if a previously-entered input, or
+type in some text that is the start of a previously-entered input, or
 matches known commands, etc, a dimmed completion will be suggested. Press
 <kbd>Right</kbd> to accept the suggestion.
 

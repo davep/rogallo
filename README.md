@@ -12,34 +12,37 @@
 
 ## Introduction
 
-Rogallo is a terminal-based client for [the Gemini
-Protocol](https://geminiprotocol.net/). Key features include:
+Rogallo is a terminal-based client for browsing
+[Geminispace](https://geminiprotocol.net/),
+[Gopherspace](https://en.wikipedia.org/wiki/Gopher_(protocol)), and
+[Fingerspace](https://en.wikipedia.org/wiki/Finger_(protocol)). Its key
+features include:
 
-- A bookmark facility (with search)
-- A location history facility (with search)
-- A backward/forward navigation facility
-- Support for setting a home page
-- Support for user input (`1x` responses), including masked inputs for
-  sensitive fields
-- Support for in-application generation of self-signed client certificates,
-  with persistent per-capsule management
-- Support for redirections (`3x` responses)
-- Copy-to-clipboard support for URIs or page contents
-- Designed to work on macOS, GNU/Linux and Windows (and likely on other
-  operating systems that support modern Python)
-- Mouse support
-- A view source facility
-- A trust-on-first-use (TOFU) trust facility
-- Has in-application help screens
-- Has an easy-to-use command palette
-- Hands unknown MIME types off to the operating system
-- Optional support (on by default) for ANSI escape sequences in pages
-- Support for viewing local Gemtext files
-- Choice of themes
-- Persistent user configuration across sessions
+- Support for the `gemini`, `gopher`, and `finger` protocols
+- Bookmarks management with search
+- Location history tracking with search
+- Backward and forward page navigation
+- Copy-to-clipboard support for URIs or page content
+- Configurable home page
+- Full mouse navigation and interaction support
+- Built-in source viewer
+- Context-sensitive help screens
+- Command palette for quick command discovery and execution
+- Automatic handoff of unknown MIME types to the operating system
+- Optional rendering (on by default) of ANSI escape sequences in pages
+- Local [Gemtext](https://geminiprotocol.net/docs/gemtext-specification.gmi) file viewing
+- Built-in theme selection, plus support for user-supplied custom UI themes
+- Persistent configuration across sessions
 - Fully responsive layout that adjusts dynamically to terminal resizing
-- Supports the `finger` protocol
-- Supports the `gopher` protocol
+- Cross-platform support for macOS, GNU/Linux, Windows, and other operating systems running modern Python
+
+Key features for Gemini protocol support include:
+
+- User input handling ([`1x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#input-expected)), including masked inputs for sensitive fields
+    - Optional external text editor integration for composing inputs
+- In-application generation of self-signed [client certificates](https://geminiprotocol.net/docs/protocol-specification.gmi#client-certificates), with persistent per-capsule management
+- Redirection handling ([`3x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#redirection))
+- Flexible capsule certificate verification for both CA-signed and self-signed certificates
 
 ## Installing
 
@@ -84,6 +87,7 @@ remove those directories too.
 
 Expanding for the common locations, the files normally created are:
 
+- `~/.cache/rogallo/*` -- The document cache.
 - `~/.config/rogallo/configuration.json` -- The configuration file.
 - `~/.local/share/rogallo/*` -- The locally-held data.
 
