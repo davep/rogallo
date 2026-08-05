@@ -23,7 +23,7 @@ that sites can do all sorts of wonderfully colourful things:
 ```
 
 If you would prefer that ANSI escape sequences *aren't* processed, and
-instead a are stripped from the content, you can use the `Toggle ANSI Escape
+instead are stripped from the content, you can use the `Toggle ANSI Escape
 Sequence Handling` command
 ([`ToggleANSIEscapeSequenceHandling`](#bindable-commands), bound to
 <kbd>Shift</kbd>+<kbd>F6</kbd> by default).
@@ -261,7 +261,7 @@ visible) by default:
 ## Home page
 
 Rogallo has a home page setting. This can be set using the `Set Home`
-command ([`SetHome`](#bindable-commands) command, bound to
+command ([`SetHome`](#bindable-commands), bound to
 <kbd>Alt</kbd>+<kbd>h</kbd> by default). This sets the currently-visited
 page as the home page. If you wish you can also modify it in the
 configuration file:
@@ -362,7 +362,7 @@ If anyone finds this distracting, you can turn the labels off with the
 ```
 
 The setting itself is saved in the configuration file as the
-`with_link_jumps`configuration setting. It accepts `true` or `false` as
+`with_link_jumps` configuration setting. It accepts `true` or `false` as
 valid values. It will be `true` (with labels) by default.
 
 ```json
@@ -452,7 +452,7 @@ If this feels too cluttered it can be turned off with the
 `true` (show the tooltips) being the default.
 
 ```json
-"show_preformat_tooltips": true,
+"show_preformat_tooltips": true
 ```
 
 ## Striped links
