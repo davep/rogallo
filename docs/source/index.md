@@ -146,7 +146,7 @@ Shows a list of all of the themes that are available.
 rogallo themes
 ```
 ```bash exec="on" result="text"
-rogallo themes
+rogallo themes | grep -v "\(terminal\|micro\)-"
 ```
 
 Use the `--theme` switch to set a theme from the command line.
