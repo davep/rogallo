@@ -18,34 +18,31 @@ Rogallo is a terminal-based client for browsing
 [Fingerspace](https://en.wikipedia.org/wiki/Finger_(protocol)). Its key
 features include:
 
-- Support for the `gemini` protocol
-- Support for the `gopher` protocol
-- Support for the `finger` protocol
-- A bookmark facility (with search)
-- A location history facility (with search)
-- A backward/forward navigation facility
-- Copy-to-clipboard support for URIs or page contents
-- Support for setting a home page
-- Designed to work on macOS, GNU/Linux and Windows (and likely on other operating systems that support modern Python)
-- Mouse support
-- A view source facility
-- Has in-application help screens
-- Has an easy-to-use command palette
-- Hands unknown MIME types off to the operating system
-- Optional support (on by default) for ANSI escape sequences in pages
-- Support for viewing local [Gemtext](https://geminiprotocol.net/docs/gemtext-specification.gmi) files
-- Choice of themes
-- Persistent user configuration across sessions
+- Support for the `gemini`, `gopher`, and `finger` protocols
+- Bookmarks management with search
+- Location history tracking with search
+- Backward and forward page navigation
+- Copy-to-clipboard support for URIs or page content
+- Configurable home page
+- Full mouse navigation and interaction support
+- Built-in source viewer
+- Context-sensitive help screens
+- Command palette for quick command discovery and execution
+- Automatic handoff of unknown MIME types to the operating system
+- Optional rendering (on by default) of ANSI escape sequences in pages
+- Local [Gemtext](https://geminiprotocol.net/docs/gemtext-specification.gmi) file viewing
+- Built-in theme selection, plus support for user-supplied custom UI themes
+- Persistent configuration across sessions
 - Fully responsive layout that adjusts dynamically to terminal resizing
-- Support for user-supplied custom UI themes
+- Cross-platform support for macOS, GNU/Linux, Windows, and other operating systems running modern Python
 
-Key features for the Gemini protocol support include:
+Key features for Gemini protocol support include:
 
-- Support for user input ([`1x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#input-expected)), including masked inputs for sensitive fields
-    - Optionally use your own choice of text editor to compose the input
-- Support for in-application generation of self-signed [client certificates](https://geminiprotocol.net/docs/protocol-specification.gmi#client-certificates), with persistent per-capsule management
-- Support for redirections ([`3x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#redirection))
-- A flexible capsule certificate verification approach, handling both CA-signed and self-signed certificates
+- User input handling ([`1x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#input-expected)), including masked inputs for sensitive fields
+    - Optional external text editor integration for composing inputs
+- In-application generation of self-signed [client certificates](https://geminiprotocol.net/docs/protocol-specification.gmi#client-certificates), with persistent per-capsule management
+- Redirection handling ([`3x` responses](https://geminiprotocol.net/docs/protocol-specification.gmi#redirection))
+- Flexible capsule certificate verification for both CA-signed and self-signed certificates
 
 ## Installing
 
