@@ -16,7 +16,7 @@ from .base_command import InputCommand
 
 ##############################################################################
 class FingerCommand(InputCommand):
-    """Perform user information looking with the finger protocol"""
+    """Perform user information lookups with the finger protocol"""
 
     COMMAND = "`!finger`"
     ALIASES = "`!f`"

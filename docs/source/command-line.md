@@ -46,7 +46,7 @@ Commands start with a `!`. The commands include:
 - `!clear_cache`: Clear the cache for all content
 - `!copy_document_to_clipboard`: Copy the current document to the clipboard
 - `!copy_location_to_clipboard`: Copy the current location to the clipboard.
-- `!finger <user>@<host>`: Perform user information looking with the finger protocol
+- `!finger <user>@<host>`: Perform user information lookups with the finger protocol
 - `!forward`: Move forward through history
 - `!go_home`: Go to the home page
 - `!go_to_parent`: Go to the parent directory
