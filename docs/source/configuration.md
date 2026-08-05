@@ -241,26 +241,6 @@ types. For example, if you wanted to use simple three-latter codes:
 }
 ```
 
-## Handling ANSI escape sequences
-
-Some Gemini capsules have content -- sometimes optional, sometimes mandatory
--- which makes use of ANSI escape sequences to add colour to a document.
-Rogallo supports this and will accept and correctly render the sequences.
-
-If you would prefer that Rogallo *didn't* handle server-supplied escape
-sequences you can turn it off with the `handle_ansi_escape_sequences`
-setting. It takes `true` and `false` as valid values, and is `true` by
-default.
-
-```json
-"handle_ansi_escape_sequences": true
-```
-
-!!! note
-
-    Turning this off and visiting sites that still deliver escape sequences
-    will have unpredictable results.
-
 ## History manager visible
 
 Rogallo has a sidebar that displays the history manager. By default it isn't
