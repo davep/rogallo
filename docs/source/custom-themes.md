@@ -95,6 +95,18 @@ running on an amber terminal:
     --8<-- "docs/build/config/rogallo/themes/amber.json"
     ```
 
+Another option might be a classic green screen:
+
+=== "Using an green screen theme"
+
+    ```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo in green" lines=35 columns=90 press="f9,t,e,r,m,i,n,a,l,-,g,r,e,e,n,enter"}
+    ```
+
+=== "green.json"
+
+    ```json
+    --8<-- "docs/build/config/rogallo/themes/green.json"
+    ```
 
 ## Sharing themes
 
