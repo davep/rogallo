@@ -90,6 +90,7 @@ remove those directories too.
 
 Expanding for the common locations, the files normally created are:
 
+- `~/.cache/rogallo/*` -- The document cache.
 - `~/.config/rogallo/configuration.json` -- The configuration file.
 - `~/.local/share/rogallo/*` -- The locally-held data.
 
