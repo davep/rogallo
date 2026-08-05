@@ -126,7 +126,7 @@ sessions. You can use the <kbd>Up</kbd> and <kbd>Down</kbd> keys to navigate
 through the command history.
 
 The command line also has a simple suggested completion system too. If you
-type in some text that is the start if a previously-entered input, or
+type in some text that is the start of a previously-entered input, or
 matches known commands, etc, a dimmed completion will be suggested. Press
 <kbd>Right</kbd> to accept the suggestion.
 
