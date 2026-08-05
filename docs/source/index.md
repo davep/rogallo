@@ -173,7 +173,7 @@ rogallo --version
 A great way to get to know Rogallo is to read the help screen. Once in the
 application you can see this by pressing <kbd>F1</kbd>.
 
-```{.textual path="docs/screenshots/main_screenshot.py" title="The Rogallo help sceeen" press="f1" lines=50 columns=120}
+```{.textual path="docs/screenshots/main_screenshot.py" title="The Rogallo help screen" press="f1" lines=50 columns=120}
 ```
 
 The help will adapt to which part of the screen has focus, providing extra
