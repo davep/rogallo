@@ -88,22 +88,23 @@ file](./configuration.md), like this:
 }
 ```
 
-As you may notice, a form of template label is used. The substitution is
-always whatever follows the command input into the command line. So if you
-were to type in :
+Aliases can include template variables (`{q}`, `{qp}`, `{r}`) that are
+dynamically replaced by any text typed after the alias name. For example, if
+you enter:
 
 ```
 ken this is a test search
 ```
 
-`ken` would be matched as a command alias, and the template label would be
-some form of `this is a test search`. The available template labels are:
+`ken` is matched as the alias, and the template variable in the alias definition is replaced using the trailing query string.
 
-- `{q}` - The string, quoted. Spaces become `%20`, etc.
-- `{qp}` - As above, but spaces specifically become `+` rather than `%20`.
-- `{r}` - The raw, unquoted, version of the text.
+The available template variables are:
 
-So, given the above example, the expansions would be:
+- `{q}` - The URL-quoted query string (spaces become `%20`).
+- `{qp}` - The URL-quoted query string using pluses for spaces (spaces become `+`).
+- `{r}` - The raw, unquoted query string.
+
+Given the example above, the template variables expand as follows:
 
 - `{q}` -> `this%20is%20a%20test%20search`
 - `{qp}` -> `this+is+a+test+search`
