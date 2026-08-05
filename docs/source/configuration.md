@@ -468,7 +468,7 @@ of text.
 ```
 
 If this feels too cluttered it can be turned off with the
-`show_preformat_tooltips` setting. Valid values a `true` and `false`, with
+`show_preformat_tooltips` setting. Valid values are `true` and `false`, with
 `true` (show the tooltips) being the default.
 
 ```json
