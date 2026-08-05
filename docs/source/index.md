@@ -75,7 +75,7 @@ Once installed run the `rogallo` command.
 
 Once you've installed Rogallo using one of the [above methods](#installing),
 you can run the application using the `rogallo` command. A number of command
-line commands and switches available:
+line commands and switches are available:
 
 ```sh
 rogallo --help
