@@ -3,8 +3,8 @@
 The way that Rogallo works can be configured using a configuration file.
 This section will describe what can be configured and how.
 
-The location of the configuration file will depend on how your operating
-system and its settings; but by default it is looked for in
+The location of the configuration file will depend on your operating system
+and its settings; but by default it is looked for in
 [`$XDG_CONFIG_HOME`](https://specifications.freedesktop.org/basedir-spec/latest/),
 in a `rogallo` subdirectory. Mostly this will translate to the file being
 called `~/.config/rogallo/configuration.json`.
