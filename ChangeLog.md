@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Fixed Gopher client not using the configured connection timeout.
+  ([#288](https://github.com/davep/rogallo/pull/288))
+
 ## v1.5.0
 
 **Released: 2026-08-05**

@@ -323,6 +323,9 @@ class Main(EnhancedScreen[None]):
             timeout=load_configuration().connection_timeout,
         )
         """The Finger client."""
+        self._gopher_client = GopherClient(
+            timeout=load_configuration().connection_timeout,
+        )
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
@@ -747,7 +750,7 @@ class Main(EnhancedScreen[None]):
                     document=Document(
                         location=uri,
                         original_location=uri,
-                        content=(await GopherClient().request(uri)).text,
+                        content=(await self._gopher_client.request(uri)).text,
                         mime_type=mime_type,
                     ),
                     original_request=request,
