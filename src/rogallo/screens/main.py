@@ -326,6 +326,7 @@ class Main(EnhancedScreen[None]):
         self._gopher_client = GopherClient(
             timeout=load_configuration().connection_timeout,
         )
+        """The Gopher client."""
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
