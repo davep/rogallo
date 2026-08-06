@@ -17,7 +17,7 @@ mypy     := $(run) mypy
 spell    := $(run) codespell
 smol     := $(run) smolserve --config $(docs)server/smolserve.toml
 smolexec := $(smol) exec --
-mkdocs   := $(run) mkdocs
+mkdocs   := $(smolexec) mkdocs
 
 ##############################################################################
 # Local "interactive testing" of the code.
@@ -97,15 +97,15 @@ checkall: spellcheck codestyle lint stricttypecheck test # Check all the things
 # Documentation.
 .PHONY: docs
 docs:                           # Generate the system documentation
-	$(smolexec) $(mkdocs) build
+	$(mkdocs) build
 
 .PHONY: rtfm
 rtfm:                           # Locally read the library documentation
-	$(smolexec) $(mkdocs) serve --livereload
+	$(mkdocs) serve --livereload
 
 .PHONY: publishdocs
 publishdocs: clean-docs	# Set up the docs for publishing
-	$(smolexec) $(mkdocs) gh-deploy
+	$(mkdocs) gh-deploy
 
 ##############################################################################
 # Package/publish.
