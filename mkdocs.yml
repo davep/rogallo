@@ -34,6 +34,10 @@ markdown_extensions:
           class: bash
           validator: !!python/name:markdown_exec.validator
           format: !!python/name:markdown_exec.formatter
+        - name: python
+          class: python
+          validator: !!python/name:markdown_exec.validator
+          format: !!python/name:markdown_exec.formatter
 
 theme:
   name: material
