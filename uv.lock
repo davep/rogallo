@@ -1711,7 +1711,7 @@ dev = [
     { name = "pytest", specifier = ">=9.1.0" },
     { name = "pytest-cov", specifier = ">=7.1.0" },
     { name = "ruff", specifier = ">=0.15.17" },
-    { name = "smolserve", specifier = ">=0.0.3" },
+    { name = "smolserve", specifier = ">=0.0.4" },
     { name = "textual-dev", specifier = ">=1.8.0" },
 ]
 
@@ -1751,14 +1751,14 @@ wheels = [
 
 [[package]]
 name = "smolserve"
-version = "0.0.3"
+version = "0.0.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cryptography" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/3e/3d/6cbc3c95cb66a515d193ea8a46e73c2eb09fe63d1e716dfc4d089c40ca5a/smolserve-0.0.3.tar.gz", hash = "sha256:2f5b72f8bfa6d8bbe1d6b9c3d609a25fa49dee1a939724aad1d3ac2efe3bd8df", size = 12692, upload-time = "2026-08-04T08:09:06.897Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/be/47/7dd460c8660b82ed3134e93984dbacd619545b38c8c89f138402a3026798/smolserve-0.0.4.tar.gz", hash = "sha256:92f1b410d73a3683a215c623c288357bb2bf2152230a35adc59a3d9036fb383e", size = 13592, upload-time = "2026-08-07T19:43:25.331Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/64/01/a830487debdb7def076bd5af769c34c7360ef95f2622537cf33af1e6f73a/smolserve-0.0.3-py3-none-any.whl", hash = "sha256:1169be6b037c8b06e6a2692b8f4e6be043e4b884772b7ce94e965efc7e25507c", size = 16764, upload-time = "2026-08-04T08:09:05.708Z" },
+    { url = "https://files.pythonhosted.org/packages/85/35/6161d404b06c097e4bd40c4549b2dd06c534c277bb1098b22db736f1f67c/smolserve-0.0.4-py3-none-any.whl", hash = "sha256:983a140c7b65323a373880c229c68c0c4f673044cebce2cf31d0548d5a2bf285", size = 19448, upload-time = "2026-08-07T19:43:24.118Z" },
 ]
 
 [[package]]
