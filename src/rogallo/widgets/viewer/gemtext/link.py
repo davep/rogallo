@@ -35,12 +35,10 @@ from textual_enhanced.binding import HelpfulBinding
 # Wasat imports.
 from wasat import GeminiURI
 
-from rogallo.messages.opening import OpenLocation
-
 ##############################################################################
 # Local imports.
 from ....data import load_configuration
-from ....messages import OpenURI
+from ....messages import OpenLocation, OpenURI
 from ....preflight import (
     is_finger_uri,
     is_gopher_uri,
