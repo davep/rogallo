@@ -145,14 +145,14 @@ class GemtextLink(Horizontal, can_focus=True):
 
     def _best_icon(self) -> str:
         """Get the best icon for the link based on its URI."""
-        if is_likely_capsule(self.normalised_uri):
-            return icon("geminispace_link_icon")
-        elif is_finger_uri(self.normalised_uri):
-            return icon("fingerspace_link_icon")
-        elif is_gopher_uri(self.normalised_uri):
-            return icon("gopherspace_link_icon")
-        elif is_spartan_uri(self.normalised_uri):
-            return icon("spartanspace_link_icon")
+        for checker, icon_name in (
+            (is_likely_capsule, "geminispace_link_icon"),
+            (is_finger_uri, "fingerspace_link_icon"),
+            (is_gopher_uri, "gopherspace_link_icon"),
+            (is_spartan_uri, "spartanspace_link_icon"),
+        ):
+            if checker(self.normalised_uri):
+                return icon(icon_name)
         return icon("otherspace_link_icon")
 
     def normalise_uri(self, base_uri: RogalloLocation | None) -> None:
