@@ -200,17 +200,21 @@ class GemtextLink(Horizontal, can_focus=True):
                 )
             yield Label(id="jump", markup=False)
 
+    def _navigate_to_uri(self) -> None:
+        """Navigate to the normalised URI."""
+        self.post_message(OpenURI(self._normalised_uri, allow_cached=False))
+
     @on(Click)
     def _action_open_link(self) -> None:
         """Open the link."""
-        self.post_message(OpenURI(self._normalised_uri, allow_cached=False))
+        self._navigate_to_uri()
 
 
 class SpartanPromptLink(GemtextLink):
     """A widget for displaying a Gemtext link that is a Spartan prompt."""
 
-    def _action_open_link(self) -> None:
-        """Open the link."""
+    def _navigate_to_uri(self) -> None:
+        """Navigate to the normalised URI."""
         self.post_message(
             OpenLocation(
                 SpartanURINeedingData(self._normalised_uri),
