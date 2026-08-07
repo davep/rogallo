@@ -6,6 +6,8 @@
 
 - Fixed Gopher client not using the configured connection timeout.
   ([#288](https://github.com/davep/rogallo/pull/288))
+- Added support for the `spartan` protocol.
+  ([#289](https://github.com/davep/rogallo/pull/289))
 
 ## v1.5.0
 
