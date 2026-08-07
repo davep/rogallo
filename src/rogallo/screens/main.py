@@ -841,7 +841,7 @@ class Main(EnhancedScreen[None]):
         attached_data: str | None = None
         if isinstance(uri, SpartanURINeedingData) and not (
             attached_data := await self.app.push_screen_wait(
-                UserInput(uri, prompt="Spartan request requires data.")
+                UserInput(uri, prompt="Spartan request requires data")
             )
         ):
             return
