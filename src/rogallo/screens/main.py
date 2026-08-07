@@ -30,11 +30,11 @@ from port79 import URIError as FingerURIError
 # Pyperclip imports.
 from pyperclip import PyperclipException
 from pyperclip import copy as copy_to_clipboard
-from sybaritic import Client as SpartanClient
-from sybaritic import Response as SpartanResponse
 
 ##############################################################################
 # Sybaritic imports.
+from sybaritic import Client as SpartanClient
+from sybaritic import Response as SpartanResponse
 from sybaritic import SpartanURI, SybariticError
 from sybaritic import URIError as SpartanURIError
 
