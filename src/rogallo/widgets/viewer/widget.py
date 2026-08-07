@@ -9,8 +9,6 @@ from collections.abc import Iterator
 from gemtext import Gemtext, Line, Paragraph
 
 ##############################################################################
-# Gophermap imports.
-##############################################################################
 # Port79 imports.
 from port70 import GopherURI
 from port79 import FingerURI
