@@ -31,6 +31,7 @@ from port79 import URIError as FingerURIError
 from pyperclip import PyperclipException
 from pyperclip import copy as copy_to_clipboard
 from sybaritic import Client as SpartanClient
+from sybaritic import Response as SpartanResponse
 
 ##############################################################################
 # Sybaritic imports.
@@ -146,7 +147,7 @@ from ..preflight import (
     path_from_uri,
 )
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
-from ..types import GEMINI_EXTENSIONS, GEMINI_MIME_TYPE
+from ..types import GEMINI_EXTENSIONS, GEMINI_MIME_TYPE, SpartanURINeedingData
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .about_page import AboutPage
 from .certificate import Certificate
@@ -483,7 +484,7 @@ class Main(EnhancedScreen[None]):
             *load_configuration().displayable_content_types,
         }
 
-    async def _handle_input_request(
+    async def _handle_capsule_input_request(
         self, location: GeminiURI, prompt: str, sensitive: bool
     ) -> None:
         """Handle a request for input from a Gemini request.
@@ -565,7 +566,7 @@ class Main(EnhancedScreen[None]):
 
         # Handle a request for user input.
         if response.status.is_input:
-            await self._handle_input_request(
+            await self._handle_capsule_input_request(
                 uri,
                 response.meta.strip(),
                 response.status is StatusCode.SENSITIVE_INPUT,
@@ -776,6 +777,36 @@ class Main(EnhancedScreen[None]):
         finally:
             self._command_line.working = False
 
+    async def _handle_spartan_response(
+        self, response: SpartanResponse, request: OpenLocation
+    ) -> None:
+        """Handle a response from a Spartan request.
+
+        Args:
+            response: The response to handle.
+            request: The original request that generated the response.
+        """
+        assert isinstance(request.location, SpartanURI)
+        uri = request.location
+
+        # Handle a successful response.
+        if self._is_displayable(response.mime_type):
+            self.post_message(
+                OpenDocument(
+                    document=self._cache.add_document(
+                        Document(
+                            location=uri,
+                            original_location=request.location,
+                            content=await response.text(),
+                            mime_type=response.mime_type,
+                        )
+                    ),
+                    original_request=request,
+                )
+            )
+        else:
+            self.post_message(OpenUnsupportedMIMEType(uri, response.mime_type))
+
     @work
     async def _load_from_spartan(self, request: OpenLocation) -> None:
         """Load a document from a Spartan URI.
@@ -786,20 +817,37 @@ class Main(EnhancedScreen[None]):
         uri = request.location
         assert isinstance(uri, SpartanURI)
 
+        # If a cached copy of the document exists and the request allows it,
+        # use that instead of making a network request.
+        if (
+            not isinstance(uri, SpartanURINeedingData)
+            and request.allow_cached
+            and (cached_document := self._cache.get_document(uri))
+        ):
+            self.post_message(
+                OpenDocument(
+                    document=cached_document,
+                    original_request=request,
+                )
+            )
+            return
+
+        # If we're looking at a Spartan request that needs data. Let's ask
+        # the user for it.
+        attached_data: str | None = None
+        if isinstance(uri, SpartanURINeedingData) and not (
+            attached_data := await self.app.push_screen_wait(
+                UserInput(uri, prompt="Spartan request requires data.")
+            )
+        ):
+            return
+
         try:
             self._command_line.working = True
-            async with await self._spartan_cient.request(uri) as response:
-                self.post_message(
-                    OpenDocument(
-                        document=Document(
-                            location=uri,
-                            original_location=uri,
-                            content=await response.text(),
-                            mime_type=response.mime_type,
-                        ),
-                        original_request=request,
-                    )
-                )
+            async with await self._spartan_cient.request(
+                uri, data=attached_data
+            ) as response:
+                await self._handle_spartan_response(response, request)
         except SybariticError as error:
             self.notify(
                 f"Error loading {uri}:\n\n{error}",

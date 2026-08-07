@@ -44,6 +44,11 @@ GEMINI_EXTENSIONS: Final[set[str]] = {DEFAULT_GEMINI_EXTENSION, ".gmni", ".gemin
 
 
 ##############################################################################
+class SpartanURINeedingData(SpartanURI):
+    """A SpartanURI that requires data to be sent with the request."""
+
+
+##############################################################################
 def short_location(location: RogalloLocation) -> str:
     """Get a short string representation of a location.
 

@@ -12,6 +12,10 @@ from shutil import rmtree
 from bagofstuff.cache import CacheManager
 
 ##############################################################################
+# Sybaritic imports.
+from sybaritic import SpartanURI
+
+##############################################################################
 # Wasat imports.
 from wasat import GeminiURI
 
@@ -20,6 +24,15 @@ from wasat import GeminiURI
 from .data import load_configuration
 from .data.locations import cache_dir
 from .document import Document
+from .preflight import make_location
+
+##############################################################################
+_CACHEABLE_URI_TYPES = (GeminiURI, SpartanURI)
+"""The types of URIs that can be cached."""
+
+##############################################################################
+type CachableURI = GeminiURI | SpartanURI
+"""A URI that can be cached."""
 
 
 ##############################################################################
@@ -34,7 +47,7 @@ class ContentCache(CacheManager):
         self._ttl = load_configuration().cache_ttl
         """The time-to-live for cached content, in seconds."""
 
-    def _cache_files(self, uri: GeminiURI) -> tuple[Path, Path]:
+    def _cache_files(self, uri: CachableURI) -> tuple[Path, Path]:
         """Get the paths to the cache files.
 
         Args:
@@ -46,7 +59,7 @@ class ContentCache(CacheManager):
         cache_path = self.get(uri=uri)
         return cache_path.with_suffix(".meta"), cache_path.with_suffix(".content")
 
-    def get_document(self, uri: GeminiURI) -> Document | None:
+    def get_document(self, uri: CachableURI) -> Document | None:
         """Get a cached copy of a document for a given URI.
 
         Args:
@@ -82,7 +95,9 @@ class ContentCache(CacheManager):
         try:
             return Document(
                 location=uri,
-                original_location=GeminiURI(meta_data.get("original_location", uri)),
+                original_location=make_location(
+                    meta_data.get("original_location", uri)
+                ),
                 content=content_file.read_text(encoding="utf-8"),
                 mime_type=meta_data.get("mime_type"),
                 verification_method=meta_data.get("verification_method"),
@@ -103,7 +118,7 @@ class ContentCache(CacheManager):
 
         if (
             self._disabled
-            or not isinstance(document.location, GeminiURI)
+            or not isinstance(document.location, _CACHEABLE_URI_TYPES)
             or document.needed_certificate
         ):
             return document

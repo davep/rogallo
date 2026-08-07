@@ -35,6 +35,8 @@ from textual_enhanced.binding import HelpfulBinding
 # Wasat imports.
 from wasat import GeminiURI
 
+from rogallo.messages.opening import OpenLocation
+
 ##############################################################################
 # Local imports.
 from ....data import load_configuration
@@ -45,7 +47,7 @@ from ....preflight import (
     is_likely_capsule,
     is_spartan_uri,
 )
-from ....types import RogalloLocation
+from ....types import RogalloLocation, SpartanURINeedingData
 from .content_filter import GemtextContent
 from .icons import icon
 
@@ -202,6 +204,20 @@ class GemtextLink(Horizontal, can_focus=True):
     def _action_open_link(self) -> None:
         """Open the link."""
         self.post_message(OpenURI(self._normalised_uri, allow_cached=False))
+
+
+class SpartanPromptLink(GemtextLink):
+    """A widget for displaying a Gemtext link that is a Spartan prompt."""
+
+    def _action_open_link(self) -> None:
+        """Open the link."""
+        self.post_message(
+            OpenLocation(
+                SpartanURINeedingData(self._normalised_uri),
+                allow_cached=False,
+                do_not_record_in_history=True,
+            )
+        )
 
 
 ### link.py ends here
