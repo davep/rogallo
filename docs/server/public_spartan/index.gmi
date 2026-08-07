@@ -14,4 +14,4 @@ Or you could read all about the Spartan Protocol:
 
 Spartan also has support for a special input line type, like this:
 
-=: Leave a comment!
+=: ./ Leave a comment!
