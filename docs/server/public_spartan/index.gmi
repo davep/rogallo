@@ -1,0 +1,17 @@
+# Welcome to the Rogallo Documentation!
+
+This is a sample of some Gemtext, served by a Spartan server.
+
+## Places to go from here
+
+There are many places you can go from here, if you want to explore Spartanspace. You could drop in on Dave's little server:
+
+=> spartan://tilde.team/~davep/
+
+Or you could read all about the Spartan Protocol:
+
+=> gemini://spartan.mozz.us/
+
+Spartan also has support for a special input line type, like this:
+
+=: Leave a comment!
