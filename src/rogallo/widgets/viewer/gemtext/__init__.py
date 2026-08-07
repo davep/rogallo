@@ -48,7 +48,7 @@ def get_block_widget(line: Line) -> GemtextWidget:
     Returns:
         The widget class for the given Gemtext line.
     """
-    return _BLOCKS[type(line)](line)
+    return _BLOCKS.get(type(line), GemtextParagraph)(line)
 
 
 ##############################################################################
