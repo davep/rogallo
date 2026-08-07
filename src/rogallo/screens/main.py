@@ -621,6 +621,10 @@ class Main(EnhancedScreen[None]):
         """
         if (location := request.document.location) is None:
             return
+        if isinstance(location, SpartanURINeedingData):
+            # Spartan URIs that need data are not remembered in history
+            # because they're not useful locations without the data.
+            return
         self._location_history.add(LocationVisit(location))
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
