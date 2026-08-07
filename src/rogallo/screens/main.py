@@ -30,6 +30,12 @@ from port79 import URIError as FingerURIError
 # Pyperclip imports.
 from pyperclip import PyperclipException
 from pyperclip import copy as copy_to_clipboard
+from sybaritic import Client as SpartanClient
+
+##############################################################################
+# Sybaritic imports.
+from sybaritic import SpartanURI, SybariticError
+from sybaritic import URIError as SpartanURIError
 
 ##############################################################################
 # Textual imports.
@@ -327,6 +333,10 @@ class Main(EnhancedScreen[None]):
             timeout=load_configuration().connection_timeout,
         )
         """The Gopher client."""
+        self._spartan_cient = SpartanClient(
+            timeout=load_configuration().connection_timeout,
+        )
+        """The Spartan client."""
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
@@ -541,7 +551,7 @@ class Main(EnhancedScreen[None]):
             return
         self.post_message(OpenLocation(location, allow_cached=False))
 
-    async def _handle_response(
+    async def _handle_capsule_response(
         self, response: GeminiResponse, request: OpenLocation
     ) -> None:
         """Handle a response from a Gemini request.
@@ -659,7 +669,7 @@ class Main(EnhancedScreen[None]):
         try:
             self._command_line.working = True
             async with await self._gemini_client.request(uri) as response:
-                await self._handle_response(response, request)
+                await self._handle_capsule_response(response, request)
         except ConnectionError as error:
             self._last_user_input = request.associated_input
             self.notify(
@@ -766,6 +776,39 @@ class Main(EnhancedScreen[None]):
         finally:
             self._command_line.working = False
 
+    @work
+    async def _load_from_spartan(self, request: OpenLocation) -> None:
+        """Load a document from a Spartan URI.
+
+        Args:
+            request: The request to load the document from.
+        """
+        uri = request.location
+        assert isinstance(uri, SpartanURI)
+
+        try:
+            self._command_line.working = True
+            async with await self._spartan_cient.request(uri) as response:
+                self.post_message(
+                    OpenDocument(
+                        document=Document(
+                            location=uri,
+                            original_location=uri,
+                            content=await response.text(),
+                            mime_type=response.mime_type,
+                        ),
+                        original_request=request,
+                    )
+                )
+        except SybariticError as error:
+            self.notify(
+                f"Error loading {uri}:\n\n{error}",
+                severity="error",
+                title="Spartan Error",
+            )
+        finally:
+            self._command_line.working = False
+
     @work(thread=True)
     def _load_from_filesystem(self, request: OpenLocation) -> None:
         """Load a document from the filesystem.
@@ -816,6 +859,8 @@ class Main(EnhancedScreen[None]):
             self._load_from_finger(message)
         elif isinstance(message.location, GopherURI):
             self._load_from_gopher(message)
+        elif isinstance(message.location, SpartanURI):
+            self._load_from_spartan(message)
         else:
             self._load_from_filesystem(message)
 
@@ -827,32 +872,22 @@ class Main(EnhancedScreen[None]):
             message: The message containing the URI to open.
         """
 
-        # Does it look like a Gemini URI?
-        try:
-            self.post_message(
-                OpenLocation(GeminiURI(message.uri), allow_cached=message.allow_cached)
-            )
-            return
-        except GeminiURIError:
-            pass
-
-        # Does it look like a Finger URI?
-        try:
-            self.post_message(
-                OpenLocation(FingerURI(message.uri), allow_cached=message.allow_cached)
-            )
-            return
-        except FingerURIError:
-            pass
-
-        # Does it look like a Gopher URI?
-        try:
-            self.post_message(
-                OpenLocation(GopherURI(message.uri), allow_cached=message.allow_cached)
-            )
-            return
-        except GopherURIError:
-            pass
+        # Work through the supported URI types.
+        for uri_type, uri_error in (
+            (GeminiURI, GeminiURIError),
+            (FingerURI, FingerURIError),
+            (GopherURI, GopherURIError),
+            (SpartanURI, SpartanURIError),
+        ):
+            try:
+                self.post_message(
+                    OpenLocation(
+                        uri_type(message.uri), allow_cached=message.allow_cached
+                    )
+                )
+                return
+            except uri_error:
+                pass
 
         # Perhaps it's a local text file?
         if is_likely_local_text_file(message.uri):
@@ -959,7 +994,7 @@ class Main(EnhancedScreen[None]):
         if open_uri:
             open_in_browser(
                 str(message.location)
-                if isinstance(message.location, (GeminiURI, GopherURI))
+                if isinstance(message.location, (GeminiURI, GopherURI, SpartanURI))
                 else message.location.resolve().as_uri()
             )
 

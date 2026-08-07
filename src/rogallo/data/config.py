@@ -105,6 +105,9 @@ class Configuration:
     gopherspace_link_icon: str = "○"
     """The icon to use for links to gopher:// URIs."""
 
+    spartanspace_link_icon: str = "⪧"
+    """The icon to use for links to spartan:// URIs."""
+
     otherspace_link_icon: str = "↗"
     """The icon to use for non-gemini URIs."""
 

@@ -17,6 +17,11 @@ from port79 import FingerURI
 from port79 import URIError as FingerURIError
 
 ##############################################################################
+# Sybaritic imports.
+from sybaritic import SpartanURI
+from sybaritic import URIError as SpartanURIError
+
+##############################################################################
 # Wasat imports.
 from wasat import GeminiURI
 from wasat import URIError as GeminiURIError
@@ -79,6 +84,23 @@ def is_gopher_uri(uri: str) -> bool:
     try:
         _ = GopherURI(uri)
     except GopherURIError:
+        return False
+    return True
+
+
+##############################################################################
+def is_spartan_uri(uri: str) -> bool:
+    """Determine if a URI is a Spartan URI.
+
+    Args:
+        uri: The URI to check.
+
+    Returns:
+        `True` if the URI is a Spartan URI, `False` otherwise.
+    """
+    try:
+        _ = SpartanURI(uri)
+    except SpartanURIError:
         return False
     return True
 
@@ -207,6 +229,8 @@ def make_location(str: str) -> RogalloLocation:
             return FingerURI(str)
         if is_gopher_uri(str):
             return GopherURI(str)
+        if is_spartan_uri(str):
+            return SpartanURI(str)
         return path_from_uri(str)
     except ValueError as error:
         raise ValueError(f"Cannot make location from string: {str}") from error

@@ -18,12 +18,16 @@ from port70 import GopherURI
 from port79 import FingerURI
 
 ##############################################################################
+# Sybaritic imports.
+from sybaritic import SpartanURI
+
+##############################################################################
 # Wasat imports.
 from wasat import GeminiURI
 from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
-type RogalloLocation = Path | GeminiURI | FingerURI | GopherURI
+type RogalloLocation = Path | GeminiURI | FingerURI | GopherURI | SpartanURI
 """The type of a location handled by Rogallo."""
 
 ##############################################################################
@@ -49,7 +53,7 @@ def short_location(location: RogalloLocation) -> str:
     Returns:
         A short string representation of the location.
     """
-    if isinstance(location, (FingerURI, GopherURI)):
+    if isinstance(location, (FingerURI, GopherURI, SpartanURI)):
         return str(location)
     if isinstance(location, GeminiURI):
         return str(location).removeprefix(GEMINI_PREFIX)
