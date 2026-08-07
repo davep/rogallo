@@ -12,6 +12,8 @@ Or you could read all about the Spartan Protocol:
 
 => gemini://spartan.mozz.us/
 
+## Spartan's input line type
+
 Spartan also has support for a special input line type, like this:
 
 =: ./ Leave a comment!
