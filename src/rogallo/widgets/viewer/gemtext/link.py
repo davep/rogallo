@@ -104,8 +104,8 @@ class GemtextLink(Horizontal, can_focus=True):
     HELP = """
     ## Link
 
-    This is a link to either another Gemini document, or an external
-    resource that will be handled by your system.
+    This is a link to either another document, or an external resource that
+    will be handled by your system.
     """
 
     BINDINGS = [HelpfulBinding("enter", "open_link", "Open link", show=False)]
