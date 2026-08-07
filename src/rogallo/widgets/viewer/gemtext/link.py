@@ -120,7 +120,7 @@ class GemtextLink(Horizontal, can_focus=True):
 
     _jump_link = query_one("#jump", Label)
     """The jump link label."""
-    _icon_label = query_one("#icon", Label)
+    _icon = query_one("#icon", Label)
     """The icon label."""
 
     def __init__(self, link: Line) -> None:
@@ -131,14 +131,6 @@ class GemtextLink(Horizontal, can_focus=True):
         """
         super().__init__()
         assert isinstance(link, Link)
-        if is_likely_capsule(link.uri):
-            self._icon = icon("geminispace_link_icon")
-        elif is_finger_uri(link.uri):
-            self._icon = icon("fingerspace_link_icon")
-        elif is_gopher_uri(link.uri):
-            self._icon = icon("gopherspace_link_icon")
-        elif is_spartan_uri(link.uri):
-            self._icon = icon("spartanspace_link_icon")
         self._link = link
         """The link data."""
         self._normalised_uri = link.uri
@@ -176,7 +168,7 @@ class GemtextLink(Horizontal, can_focus=True):
         elif isinstance(base_uri, Path):
             self._normalised_uri = (base_uri.parent / self._link.uri).resolve().as_uri()
         if self.is_mounted:
-            self._icon_label.update(self._best_icon())
+            self._icon.update(self._best_icon())
 
     def _watch__normalised_uri(self) -> None:
         """Watch for changes to the normalised URI."""
