@@ -210,6 +210,7 @@ class GemtextLink(Horizontal, can_focus=True):
         self._navigate_to_uri()
 
 
+##############################################################################
 class SpartanPromptLink(GemtextLink):
     """A widget for displaying a Gemtext link that is a Spartan prompt."""
 
