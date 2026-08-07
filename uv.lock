@@ -1689,7 +1689,7 @@ requires-dist = [
     { name = "port70", specifier = ">=0.1.2" },
     { name = "port79", specifier = ">=1.0.0" },
     { name = "pyperclip", specifier = ">=1.11.0" },
-    { name = "sybaritic", specifier = ">=0.1.0" },
+    { name = "sybaritic", specifier = ">=0.1.1" },
     { name = "textual", specifier = ">=8.2.7" },
     { name = "textual-enhanced", specifier = ">=1.6.0" },
     { name = "textual-fspicker", specifier = ">=1.0.1" },
@@ -1763,11 +1763,11 @@ wheels = [
 
 [[package]]
 name = "sybaritic"
-version = "0.1.0"
+version = "0.1.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/b9/ff/7a4bbcc5f4ed98c80a5c92b409a8da582d41c7b54b1254c1fa5a1b00d374/sybaritic-0.1.0.tar.gz", hash = "sha256:6507994dcfd1462217560bbe88aeda0d22a70c3824876946f601b4cc7c77a548", size = 11588, upload-time = "2026-08-07T18:08:07.663Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/06/8e/573d5f6cf539969ef50b2d61a8f839ce8c19ff714c32926eae3f3eb51506/sybaritic-0.1.1.tar.gz", hash = "sha256:85ff830198ff9b91958d04009317520b69341731279edb04534d9d7b180e353a", size = 11870, upload-time = "2026-08-07T18:52:32.52Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/80/b2/a71f2df8066b4c4da227c0208a74ce89504d83dbf1cf2940594fa6c7150e/sybaritic-0.1.0-py3-none-any.whl", hash = "sha256:9b8d7b9f9dae97be7be177d867c526a612ba0513369fad96a498d7c97775a4aa", size = 14448, upload-time = "2026-08-07T18:08:06.589Z" },
+    { url = "https://files.pythonhosted.org/packages/03/c7/f9473af9630e939f9f44011af1b2714dabaf91daf384f062c4fd10a11507/sybaritic-0.1.1-py3-none-any.whl", hash = "sha256:eef8899fcf51258d1e3b1530d12d70edc8d8a73e6833f59d25d7fe72d5d3dd2d", size = 14746, upload-time = "2026-08-07T18:52:31.418Z" },
 ]
 
 [[package]]
