@@ -14,6 +14,10 @@ from port70 import GopherURI
 from port79 import FingerURI
 
 ##############################################################################
+# Rich imports.
+from rich.text import Text
+
+##############################################################################
 # Sybaritic imports.
 from sybaritic import SpartanURI
 
@@ -180,13 +184,44 @@ class Viewer(Vertical, can_focus=False):
         """
         return [
             Static(
-                highlight(document.content, language=language, theme=HighlightTheme)
-                if not self.view_source
-                and (language := language_from_document(document))
-                else self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}"),
+                Text.from_ansi(document.content)
+                if "\x1b[" in document.content
+                else highlight(
+                    document.content,
+                    language=language_from_document(document),
+                    theme=HighlightTheme,
+                ),
                 markup=False,
             )
         ]
+
+    def _build_content(self) -> list[Widget]:
+        """Build the content for the viewer.
+
+        Returns:
+            The content for the viewer based on the current document.
+        """
+        if self.document.is_renderable_as_gemtext:
+            if self.view_source:
+                return [
+                    Static(
+                        self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}")
+                    )
+                ]
+            return [
+                get_block_widget(line)
+                for line in self._consolidate(
+                    Gemtext(
+                        self.document.content
+                        if self.document.is_gemtext
+                        else "\n".join(to_gemtext(self.document.content)),
+                        with_spartan_support=isinstance(
+                            self.document.location, SpartanURI
+                        ),
+                    ).content
+                )
+            ]
+        return self._best_presentation_for(self.document)
 
     async def _watch_document(
         self, old_document: Document, new_document: Document
@@ -203,31 +238,10 @@ class Viewer(Vertical, can_focus=False):
         self._title.needed_certificate = self.document.needed_certificate
         self._title.location = self.document.location
         self._status.mime_type = self.document.mime_type or ""
+        self._jump_map = {}
         with self.app.batch_update():
             await self._view.remove_children()
-            self._jump_map = {}
-            await self._view.mount_all(
-                self._best_presentation_for(self.document)
-                if not (
-                    self.document.is_gemtext
-                    or self.document.is_gophermap
-                    or self.document.is_gopher_error
-                )
-                or self.view_source
-                else [
-                    get_block_widget(line)
-                    for line in self._consolidate(
-                        Gemtext(
-                            self.document.content
-                            if self.document.is_gemtext
-                            else "\n".join(to_gemtext(self.document.content)),
-                            with_spartan_support=isinstance(
-                                self.document.location, SpartanURI
-                            ),
-                        ).content
-                    )
-                ]
-            )
+            await self._view.mount_all(self._build_content())
             if (
                 self.document.is_gemtext or self.document.is_gophermap
             ) and not self.view_source:

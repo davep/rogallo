@@ -1,5 +1,14 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Handle text files that contain ANSI escape sequences.
+  ([#300](https://github.com/davep/rogallo/pull/300))
+- Fixed gopher errors being detected in files that aren't gopher responses.
+  ([#300](https://github.com/davep/rogallo/pull/300))
+
 ## v1.6.0
 
 **Released: 2026-08-08**
