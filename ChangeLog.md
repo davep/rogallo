@@ -11,6 +11,9 @@
 - All `text/*` MIME types are now considered to be something that can be
   displayed within Rogallo.
   ([#293](https://github.com/davep/rogallo/pull/293))
+- Added optional syntax highlighting when visiting a non-Gemtext/Gopher
+  document whose content can be inferred.
+  ([#296](https://github.com/davep/rogallo/pull/296))
 
 ## v1.5.0
 
