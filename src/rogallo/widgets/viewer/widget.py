@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from collections.abc import Iterator
+from typing import Final
 
 ##############################################################################
 # Gemtext imports.
@@ -22,10 +23,13 @@ from sybaritic import SpartanURI
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, Vertical
+from textual.content import Content
 from textual.events import DescendantBlur, DescendantFocus, Key
 from textual.getters import query_one
+from textual.highlight import HighlightTheme, highlight
 from textual.reactive import var
 from textual.timer import Timer
+from textual.widget import Widget
 from textual.widgets import Static
 
 ##############################################################################
@@ -43,6 +47,7 @@ from ...document import Document
 from .document_view import DocumentView
 from .gemtext import GemtextContent, GemtextLink, get_block_widget
 from .gopher import to_gemtext
+from .languages import supported_language
 from .status import ViewerStatus
 from .title import ViewerTitle
 
@@ -166,6 +171,33 @@ class Viewer(Vertical, can_focus=False):
         if buffer:
             yield Paragraph("\n".join(buffer))
 
+    _TEXT_X: Final[str] = "text/x-"
+    """The prefix for text mime types whose language we might be able to guess."""
+
+    def _best_presentation_for(self, document: Document) -> list[Widget]:
+        """Get the best presentation for the document.
+
+        Args:
+            document: The document to get the best presentation for.
+
+        Returns:
+            The best presentation for the document.
+        """
+        content: str | Content
+        if (
+            document.mime_type
+            and document.mime_type.startswith(self._TEXT_X)
+            and supported_language(
+                language := document.mime_type.removeprefix(self._TEXT_X).strip()
+            )
+        ):
+            content = highlight(
+                document.content, language=language, theme=HighlightTheme
+            )
+        else:
+            content = self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}")
+        return [Static(content, markup=False)]
+
     async def _watch_document(
         self, old_document: Document, new_document: Document
     ) -> None:
@@ -185,12 +217,7 @@ class Viewer(Vertical, can_focus=False):
             await self._view.remove_children()
             self._jump_map = {}
             await self._view.mount_all(
-                [
-                    Static(
-                        self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}"),
-                        markup=False,
-                    )
-                ]
+                self._best_presentation_for(self.document)
                 if not (
                     self.document.is_gemtext
                     or self.document.is_gophermap

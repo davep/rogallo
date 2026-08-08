@@ -9,11 +9,6 @@ from functools import cache
 from gemtext import Line, PreFormatted
 
 ##############################################################################
-# Pygments imports.
-from pygments.lexers import get_lexer_by_name
-from pygments.util import ClassNotFound
-
-##############################################################################
 # Textual imports.
 from textual.app import ComposeResult
 from textual.highlight import HighlightTheme, highlight
@@ -22,25 +17,8 @@ from textual.widgets import Label, Static
 ##############################################################################
 # Local imports.
 from ....data import load_configuration
+from ..languages import supported_language
 from .content_filter import GemtextContent
-
-
-##############################################################################
-@cache
-def _supported_language(language: str) -> bool:
-    """Check if a language is supported by Pygments.
-
-    Args:
-        language: The language to check.
-
-    Returns:
-        True if the language is supported; False otherwise.
-    """
-    try:
-        _ = get_lexer_by_name(language)
-        return True
-    except ClassNotFound:
-        return False
 
 
 ##############################################################################
@@ -107,7 +85,7 @@ class GemtextPreformatted(Static):
                 theme=HighlightTheme,
             )
             if self._preformatted.has_alt_text
-            and _supported_language(self._preformatted.alt_text)
+            and supported_language(self._preformatted.alt_text)
             else text,
             markup=False,
         )
