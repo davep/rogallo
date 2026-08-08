@@ -181,7 +181,8 @@ class Viewer(Vertical, can_focus=False):
         return [
             Static(
                 highlight(document.content, language=language, theme=HighlightTheme)
-                if (language := language_from_document(document))
+                if not self.view_source
+                and (language := language_from_document(document))
                 else self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}"),
                 markup=False,
             )
