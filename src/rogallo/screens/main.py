@@ -452,14 +452,14 @@ class Main(EnhancedScreen[None]):
         if action == GoToParent.action_name():
             return (
                 bool(self._viewer.document.location)
-                and isinstance(self._viewer.document.location, GeminiURI)
+                and isinstance(self._viewer.document.location, (GeminiURI, SpartanURI))
                 and self._viewer.document.location.parent
                 != self._viewer.document.location
             )
         if action == GoToRoot.action_name():
             return (
                 bool(self._viewer.document.location)
-                and isinstance(self._viewer.document.location, GeminiURI)
+                and isinstance(self._viewer.document.location, (GeminiURI, SpartanURI))
                 and self._viewer.document.location.root
                 != self._viewer.document.location
             )
@@ -1359,7 +1359,9 @@ class Main(EnhancedScreen[None]):
     def action_go_to_parent_command(self) -> None:
         """Go to the parent of the current document's location."""
         if (
-            isinstance(location := self._viewer.document.location, GeminiURI)
+            isinstance(
+                location := self._viewer.document.location, (GeminiURI, SpartanURI)
+            )
             and location.parent != location
         ):
             self.post_message(OpenLocation(location.parent))
@@ -1367,7 +1369,9 @@ class Main(EnhancedScreen[None]):
     def action_go_to_root_command(self) -> None:
         """Go to the root of the current document's location."""
         if (
-            isinstance(location := self._viewer.document.location, GeminiURI)
+            isinstance(
+                location := self._viewer.document.location, (GeminiURI, SpartanURI)
+            )
             and location.root != location
         ):
             self.post_message(OpenLocation(location.root))
