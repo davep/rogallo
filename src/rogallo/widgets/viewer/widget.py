@@ -195,6 +195,34 @@ class Viewer(Vertical, can_focus=False):
             )
         ]
 
+    def _build_content(self) -> list[Widget]:
+        """Build the content for the viewer.
+
+        Returns:
+            The content for the viewer based on the current document.
+        """
+        if self.document.is_renderable_as_gemtext:
+            if self.view_source:
+                return [
+                    Static(
+                        self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}")
+                    )
+                ]
+            return [
+                get_block_widget(line)
+                for line in self._consolidate(
+                    Gemtext(
+                        self.document.content
+                        if self.document.is_gemtext
+                        else "\n".join(to_gemtext(self.document.content)),
+                        with_spartan_support=isinstance(
+                            self.document.location, SpartanURI
+                        ),
+                    ).content
+                )
+            ]
+        return self._best_presentation_for(self.document)
+
     async def _watch_document(
         self, old_document: Document, new_document: Document
     ) -> None:
@@ -211,33 +239,9 @@ class Viewer(Vertical, can_focus=False):
         self._title.location = self.document.location
         self._status.mime_type = self.document.mime_type or ""
         self._jump_map = {}
-        content: list[Widget]
-        if self.document.is_renderable_as_gemtext:
-            if self.view_source:
-                content = [
-                    Static(
-                        self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}")
-                    )
-                ]
-            else:
-                content = [
-                    get_block_widget(line)
-                    for line in self._consolidate(
-                        Gemtext(
-                            self.document.content
-                            if self.document.is_gemtext
-                            else "\n".join(to_gemtext(self.document.content)),
-                            with_spartan_support=isinstance(
-                                self.document.location, SpartanURI
-                            ),
-                        ).content
-                    )
-                ]
-        else:
-            content = self._best_presentation_for(self.document)
         with self.app.batch_update():
             await self._view.remove_children()
-            await self._view.mount_all(content)
+            await self._view.mount_all(self._build_content())
             if (
                 self.document.is_gemtext or self.document.is_gophermap
             ) and not self.view_source:
