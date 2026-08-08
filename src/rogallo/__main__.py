@@ -141,6 +141,7 @@ def show_dignoastics() -> None:
     from gophermap import __version__ as gophermap_version
     from port70 import __version__ as port70_version
     from port79 import __version__ as port79_version
+    from sybaritic import __version__ as sybaritic_version
     from textual import __version__ as textual_version
     from textual_enhanced import __version__ as textual_enhanced_version
     from textual_fspicker import __version__ as textual_fspicker_version
@@ -154,6 +155,7 @@ def show_dignoastics() -> None:
     print(f"port70: {port70_version}")
     print(f"port79: {port79_version}")
     print(f"rogallo: {__version__}")
+    print(f"sybaritic: {sybaritic_version}")
     print(f"textual: {textual_version}")
     print(f"textual_enhanced: {textual_enhanced_version}")
     print(f"textual_fspicker: {textual_fspicker_version}")

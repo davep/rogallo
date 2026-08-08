@@ -8,6 +8,10 @@ from subprocess import run
 from tempfile import NamedTemporaryFile
 
 ##############################################################################
+# Sybaritic imports.
+from sybaritic import SpartanURI
+
+##############################################################################
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
@@ -63,7 +67,11 @@ class UserInput(ModalScreen[str | None]):
     """The input text area."""
 
     def __init__(
-        self, location: GeminiURI, prompt: str, sensitive: bool, default: str = ""
+        self,
+        location: GeminiURI | SpartanURI,
+        prompt: str,
+        sensitive: bool = False,
+        default: str = "",
     ) -> None:
         """Initialise the object.
 
@@ -107,9 +115,12 @@ class UserInput(ModalScreen[str | None]):
         return self._input.text
 
     @property
-    def _current_query(self) -> GeminiURI:
-        """The current query in the input area."""
-        return self._location.with_query(self._current_text)
+    def _input_is_too_long(self) -> bool:
+        """Whether the input is too long."""
+        return (
+            isinstance(self._location, GeminiURI)
+            and self._location.with_query(self._current_text).is_too_long
+        )
 
     @property
     def _external_editor(self) -> str | None:
@@ -128,15 +139,17 @@ class UserInput(ModalScreen[str | None]):
             footer += " | F3: $EDITOR"
         if not self._input.text:
             self._input.border_subtitle = footer
-        elif self._current_query.is_too_long:
+        elif self._input_is_too_long:
             self._input.border_subtitle = "Input is too long!"
+        elif isinstance(self._location, GeminiURI):
+            self._input.border_subtitle = f"{footer} ({self._location.with_query(self._current_text).bytes_left} left)"
         else:
-            self._input.border_subtitle = f"{footer} ({self._current_query.bytes_left})"
+            self._input.border_subtitle = f"{footer} ({len(self._current_text)} used)"
 
     @on(TextArea.Changed)
     def _limit_check(self) -> None:
         """Check if the input is too long."""
-        self._input.set_class(self._current_query.is_too_long, "--too-long")
+        self._input.set_class(self._input_is_too_long, "--too-long")
         self._update_subtitle()
 
     def on_mount(self) -> None:
@@ -145,7 +158,7 @@ class UserInput(ModalScreen[str | None]):
 
     def action_submit(self) -> None:
         """Accept the input."""
-        if not self._current_query.is_too_long:
+        if not self._input_is_too_long:
             self.dismiss(self._current_text)
 
     def action_escape(self) -> None:

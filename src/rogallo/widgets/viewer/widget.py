@@ -9,11 +9,13 @@ from collections.abc import Iterator
 from gemtext import Gemtext, Line, Paragraph
 
 ##############################################################################
-# Gophermap imports.
-##############################################################################
 # Port79 imports.
 from port70 import GopherURI
 from port79 import FingerURI
+
+##############################################################################
+# Sybaritic imports.
+from sybaritic import SpartanURI
 
 ##############################################################################
 # Textual imports.
@@ -201,7 +203,10 @@ class Viewer(Vertical, can_focus=False):
                         Gemtext(
                             self.document.content
                             if self.document.is_gemtext
-                            else "\n".join(to_gemtext(self.document.content))
+                            else "\n".join(to_gemtext(self.document.content)),
+                            with_spartan_support=isinstance(
+                                self.document.location, SpartanURI
+                            ),
                         ).content
                     )
                 ]

@@ -14,6 +14,10 @@ from gemtext import Line, Link
 from port70 import GopherURI
 
 ##############################################################################
+# Sybaritic imports.
+from sybaritic import SpartanURI
+
+##############################################################################
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
@@ -34,9 +38,14 @@ from wasat import GeminiURI
 ##############################################################################
 # Local imports.
 from ....data import load_configuration
-from ....messages import OpenURI
-from ....preflight import is_finger_uri, is_gopher_uri, is_likely_capsule
-from ....types import RogalloLocation
+from ....messages import OpenLocation, OpenURI
+from ....preflight import (
+    is_finger_uri,
+    is_gopher_uri,
+    is_likely_capsule,
+    is_spartan_uri,
+)
+from ....types import RogalloLocation, SpartanURINeedingData
 from .content_filter import GemtextContent
 from .icons import icon
 
@@ -95,8 +104,8 @@ class GemtextLink(Horizontal, can_focus=True):
     HELP = """
     ## Link
 
-    This is a link to either another Gemini document, or an external
-    resource that will be handled by your system.
+    This is a link to either another document, or an external resource that
+    will be handled by your system.
     """
 
     BINDINGS = [HelpfulBinding("enter", "open_link", "Open link", show=False)]
@@ -111,6 +120,8 @@ class GemtextLink(Horizontal, can_focus=True):
 
     _jump_link = query_one("#jump", Label)
     """The jump link label."""
+    _icon = query_one("#icon", Label)
+    """The icon label."""
 
     def __init__(self, link: Line) -> None:
         """Initialize a Gemtext link widget.
@@ -120,14 +131,6 @@ class GemtextLink(Horizontal, can_focus=True):
         """
         super().__init__()
         assert isinstance(link, Link)
-        self._icon = icon("otherspace_link_icon")
-        """The icon to display for the link."""
-        if is_likely_capsule(link.uri):
-            self._icon = icon("geminispace_link_icon")
-        elif is_finger_uri(link.uri):
-            self._icon = icon("fingerspace_link_icon")
-        elif is_gopher_uri(link.uri):
-            self._icon = icon("gopherspace_link_icon")
         self._link = link
         """The link data."""
         self._normalised_uri = link.uri
@@ -137,6 +140,18 @@ class GemtextLink(Horizontal, can_focus=True):
     def normalised_uri(self) -> str:
         """The normalised URI to use when opening the link."""
         return self._normalised_uri
+
+    def _best_icon(self) -> str:
+        """Get the best icon for the link based on its URI."""
+        for checker, icon_name in (
+            (is_likely_capsule, "geminispace_link_icon"),
+            (is_finger_uri, "fingerspace_link_icon"),
+            (is_gopher_uri, "gopherspace_link_icon"),
+            (is_spartan_uri, "spartanspace_link_icon"),
+        ):
+            if checker(self.normalised_uri):
+                return icon(icon_name)
+        return icon("otherspace_link_icon")
 
     def normalise_uri(self, base_uri: RogalloLocation | None) -> None:
         """Normalise the URI of the link against a base URI.
@@ -148,10 +163,12 @@ class GemtextLink(Horizontal, can_focus=True):
             return
         if urlparse(self._normalised_uri).scheme:
             return
-        if isinstance(base_uri, (GeminiURI, GopherURI)):
+        if isinstance(base_uri, (GeminiURI, GopherURI, SpartanURI)):
             self._normalised_uri = str(base_uri.resolve(self._link.uri))
         elif isinstance(base_uri, Path):
             self._normalised_uri = (base_uri.parent / self._link.uri).resolve().as_uri()
+        if self.is_mounted:
+            self._icon.update(self._best_icon())
 
     def _watch__normalised_uri(self) -> None:
         """Watch for changes to the normalised URI."""
@@ -170,7 +187,7 @@ class GemtextLink(Horizontal, can_focus=True):
 
     def compose(self) -> ComposeResult:
         """Compose the Gemtext link widget."""
-        yield Label(self._icon, id="icon")
+        yield Label(self._best_icon(), id="icon")
         with HorizontalGroup():
             with HorizontalGroup(id="text-wrap"):
                 yield Label(
@@ -181,10 +198,29 @@ class GemtextLink(Horizontal, can_focus=True):
                 )
             yield Label(id="jump", markup=False)
 
+    def _navigate_to_uri(self) -> None:
+        """Navigate to the normalised URI."""
+        self.post_message(OpenURI(self._normalised_uri, allow_cached=False))
+
     @on(Click)
     def _action_open_link(self) -> None:
         """Open the link."""
-        self.post_message(OpenURI(self._normalised_uri, allow_cached=False))
+        self._navigate_to_uri()
+
+
+##############################################################################
+class SpartanPromptLink(GemtextLink):
+    """A widget for displaying a Gemtext link that is a Spartan prompt."""
+
+    def _navigate_to_uri(self) -> None:
+        """Navigate to the normalised URI."""
+        self.post_message(
+            OpenLocation(
+                SpartanURINeedingData(self._normalised_uri),
+                allow_cached=False,
+                do_not_record_in_history=True,
+            )
+        )
 
 
 ### link.py ends here

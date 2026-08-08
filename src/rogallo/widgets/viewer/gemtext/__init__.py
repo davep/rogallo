@@ -6,10 +6,19 @@ from typing import Final
 
 ##############################################################################
 # Gemtext imports.
-from gemtext import Heading, Line, Link, ListItem, Paragraph, PreFormatted, Quote
+from gemtext import (
+    Heading,
+    Line,
+    Link,
+    ListItem,
+    Paragraph,
+    PreFormatted,
+    Quote,
+    SpartanPrompt,
+)
 
 from .content_filter import GemtextContent
-from .link import GemtextLink
+from .link import GemtextLink, SpartanPromptLink
 from .list_item import GemtextListItem
 from .preformatted import GemtextPreformatted
 
@@ -33,6 +42,7 @@ _BLOCKS: Final[
     Quote: GemtextQuote,
     PreFormatted: GemtextPreformatted,
     Heading: GemtextHeading,
+    SpartanPrompt: SpartanPromptLink,
     Link: GemtextLink,
 }
 """Mapping of Gemtext line types to viewer block types."""
@@ -48,7 +58,7 @@ def get_block_widget(line: Line) -> GemtextWidget:
     Returns:
         The widget class for the given Gemtext line.
     """
-    return _BLOCKS[type(line)](line)
+    return _BLOCKS.get(type(line), GemtextParagraph)(line)
 
 
 ##############################################################################
