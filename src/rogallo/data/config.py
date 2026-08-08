@@ -176,6 +176,9 @@ class Configuration:
     guess_language_for_syntax_highlighting_text_documents: bool = True
     """Whether to guess the language for syntax highlighting of text documents."""
 
+    second_guess_language_for_syntax_highlighting_text_documents: bool = True
+    """Should we try and guess the actual content of a text/plain document when syntax highlighting?"""
+
 
 ##############################################################################
 def configuration_file() -> Path:

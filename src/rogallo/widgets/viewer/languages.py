@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from functools import cache
+from typing import Final
 
 ##############################################################################
 # Pygments imports.
@@ -34,6 +35,13 @@ def supported_language(language: str) -> bool:
 
 
 ##############################################################################
+_MIME_SWAPS: Final[dict[str, str]] = {
+    "text/markdown": "text/x-markdown",
+}
+"""Mapping of MIME types to their Pygments equivalents."""
+
+
+##############################################################################
 def language_from_document(document: Document) -> str | None:
     """Try and work out the language of a document.
 
@@ -43,15 +51,28 @@ def language_from_document(document: Document) -> str | None:
     Returns:
         The language of the document, or None if it could not be determined.
     """
+    # If we're looking at a plain text document, and if the user is cool
+    # with second-guessing the content, None out the type to force guessing.
+    if (
+        (mime_type := document.mime_type_sans_parameters) == "text/plain"
+        and load_configuration().guess_language_for_syntax_highlighting_text_documents
+        and load_configuration().second_guess_language_for_syntax_highlighting_text_documents
+    ):
+        mime_type = None
+
     # Try and work out from the MIME type first.
-    if document.mime_type is not None:
+    if mime_type is not None:
         try:
-            return get_lexer_for_mimetype(document.mime_type).name.lower()
+            return get_lexer_for_mimetype(
+                _MIME_SWAPS.get(mime_type, mime_type)
+            ).name.lower()
         except ClassNotFound:
             pass
+
     # Allow not guessing.
     if not load_configuration().guess_language_for_syntax_highlighting_text_documents:
         return None
+
     # Failing that, see if we can work out a good guess from the content.
     try:
         return guess_lexer(document.content).name.lower()
