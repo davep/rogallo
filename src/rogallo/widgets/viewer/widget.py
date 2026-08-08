@@ -22,7 +22,6 @@ from sybaritic import SpartanURI
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, Vertical
-from textual.content import Content
 from textual.events import DescendantBlur, DescendantFocus, Key
 from textual.getters import query_one
 from textual.highlight import HighlightTheme, highlight
@@ -179,14 +178,14 @@ class Viewer(Vertical, can_focus=False):
         Returns:
             The best presentation for the document.
         """
-        content: str | Content
-        if language := language_from_document(document):
-            content = highlight(
-                document.content, language=language, theme=HighlightTheme
+        return [
+            Static(
+                highlight(document.content, language=language, theme=HighlightTheme)
+                if (language := language_from_document(document))
+                else self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}"),
+                markup=False,
             )
-        else:
-            content = self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}")
-        return [Static(content, markup=False)]
+        ]
 
     async def _watch_document(
         self, old_document: Document, new_document: Document
