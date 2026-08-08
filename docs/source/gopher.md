@@ -12,14 +12,6 @@ wish to visit. Gopher URIs begin with `gopher://`.
 ```{.textual path="docs/screenshots/empty_screenshot.py" title="After pressing Enter" lines=30 columns=90 press="g,o,p,h,e,r,:,/,/,l,o,c,a,l,h,o,s,t,:,7,0,7,0,enter"}
 ```
 
-!!! note
-
-    There is a small cheat in the above example. You'll notice the `7070` in
-    the URI in the second screenshot. This is simply down to that being the
-    port of the server used to generate this documentation. Under normal
-    circumstances you would not need to enter the port (which is `70` by
-    default, for Gopher).
-
 ## Supported item types
 
 Rogallo has direct support for a number of Gopher item types. These types
