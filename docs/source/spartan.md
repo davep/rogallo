@@ -12,14 +12,6 @@ location you wish to visit. Spartan URIs begin with `spartan://`.
 ```{.textual path="docs/screenshots/empty_screenshot.py" title="After pressing Enter" lines=30 columns=90 press="s,p,a,r,t,a,n,:,/,/,l,o,c,a,l,h,o,s,t,:,3,0,0,0,enter"}
 ```
 
-!!! note
-
-    There is a small cheat in the above example. You'll notice the `3000` in
-    the URI in the second screenshot. This is simply down to that being the
-    port of the server used to generate this documentation. Under normal
-    circumstances you would not need to enter the port (which is `300` by
-    default, for Spartan).
-
 ## `spartan://` URIs
 
 Rogallo will handle any valid `spartan://` URI, either as a link to be

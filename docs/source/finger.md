@@ -18,14 +18,6 @@ the [command line](./command-line.md).
 ```{.textual path="docs/screenshots/empty_screenshot.py" title="After pressing Enter" lines=30 columns=90 press="f,i,n,g,e,r,:,/,/,l,o,c,a,l,h,o,s,t,:,7,9,7,9,/,d,a,v,e,p,enter"}
 ```
 
-!!! note
-
-    There is a small cheat in the above example. You'll notice the `7979` in
-    the URI in the second screenshot. This is simply down to that being the
-    port of the server used to generate this documentation. Under normal
-    circumstances you would not need to enter the port (which is `79` by
-    default, for Finger).
-
 ## Finger command
 
 There is also support for a `!finger` command in the [command

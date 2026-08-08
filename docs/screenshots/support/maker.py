@@ -8,6 +8,9 @@ from pathlib import Path
 from random import randint
 from typing import Any
 
+import port70.uri
+import port79.uri
+import sybaritic.uri
 from wasat import GeminiURI
 
 from rogallo.data import (
@@ -25,6 +28,13 @@ from rogallo.data import (
 )
 from rogallo.data.themes import themes_dir
 from rogallo.rogallo import Rogallo
+
+##############################################################################
+# Patch the ports for Gopher, Finger and Spartan so the screenshots don't
+# show non-standard ports.
+port70.uri.GOPHER_DEFAULT_PORT = 7070
+port79.uri.FINGER_DEFAULT_PORT = 7979
+sybaritic.uri.SPARTAN_DEFAULT_PORT = 3000
 
 ##############################################################################
 # Work our the root of the documentation directory and the build directory.
