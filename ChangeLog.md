@@ -8,6 +8,9 @@
   ([#288](https://github.com/davep/rogallo/pull/288))
 - Added support for the `spartan` protocol.
   ([#289](https://github.com/davep/rogallo/pull/289))
+- All `text/*` MIME types are now considered to be something that can be
+  displayed within Rogallo.
+  ([#293](https://github.com/davep/rogallo/pull/293))
 
 ## v1.5.0
 
