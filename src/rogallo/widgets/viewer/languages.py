@@ -36,6 +36,7 @@ def supported_language(language: str) -> bool:
 
 ##############################################################################
 _MIME_SWAPS: Final[dict[str, str]] = {
+    "application/octet-stream": "text/plain",
     "text/markdown": "text/x-markdown",
 }
 """Mapping of MIME types to their Pygments equivalents."""
@@ -51,17 +52,9 @@ def language_from_document(document: Document) -> str | None:
     Returns:
         The language of the document, or None if it could not be determined.
     """
-    # If we're looking at a plain text document, and if the user is cool
-    # with second-guessing the content, None out the type to force guessing.
-    if (
-        (mime_type := document.mime_type_sans_parameters) == "text/plain"
-        and load_configuration().guess_language_for_syntax_highlighting_text_documents
-        and load_configuration().second_guess_language_for_syntax_highlighting_text_documents
-    ):
-        mime_type = None
 
     # Try and work out from the MIME type first.
-    if mime_type is not None:
+    if (mime_type := document.mime_type_sans_parameters) is not None:
         try:
             return get_lexer_for_mimetype(
                 _MIME_SWAPS.get(mime_type, mime_type)
