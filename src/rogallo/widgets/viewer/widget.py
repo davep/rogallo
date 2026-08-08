@@ -182,18 +182,14 @@ class Viewer(Vertical, can_focus=False):
         Returns:
             The best presentation for the document.
         """
-        # If it looks like the document has ANSI escape sequences in it,
-        # then we just dump it out as-is. There's no point in trying to
-        # highlight it.
         return [
             Static(
                 Text.from_ansi(document.content)
-                if "\x1b[" in document.content and not self.view_source
-                else (
-                    highlight(document.content, language=language, theme=HighlightTheme)
-                    if not self.view_source
-                    and (language := language_from_document(document))
-                    else self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}")
+                if "\x1b[" in document.content
+                else highlight(
+                    document.content,
+                    language=language_from_document(document),
+                    theme=HighlightTheme,
                 ),
                 markup=False,
             )
@@ -214,13 +210,17 @@ class Viewer(Vertical, can_focus=False):
         self._title.needed_certificate = self.document.needed_certificate
         self._title.location = self.document.location
         self._status.mime_type = self.document.mime_type or ""
-        with self.app.batch_update():
-            await self._view.remove_children()
-            self._jump_map = {}
-            await self._view.mount_all(
-                self._best_presentation_for(self.document)
-                if not self.document.is_renderable_as_gemtext or self.view_source
-                else [
+        self._jump_map = {}
+        content: list[Widget]
+        if self.document.is_renderable_as_gemtext:
+            if self.view_source:
+                content = [
+                    Static(
+                        self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}")
+                    )
+                ]
+            else:
+                content = [
                     get_block_widget(line)
                     for line in self._consolidate(
                         Gemtext(
@@ -233,7 +233,11 @@ class Viewer(Vertical, can_focus=False):
                         ).content
                     )
                 ]
-            )
+        else:
+            content = self._best_presentation_for(self.document)
+        with self.app.batch_update():
+            await self._view.remove_children()
+            await self._view.mount_all(content)
             if (
                 self.document.is_gemtext or self.document.is_gophermap
             ) and not self.view_source:
