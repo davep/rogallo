@@ -14,6 +14,10 @@ from port70 import GopherURI
 from port79 import FingerURI
 
 ##############################################################################
+# Rich imports.
+from rich.text import Text
+
+##############################################################################
 # Sybaritic imports.
 from sybaritic import SpartanURI
 
@@ -178,12 +182,19 @@ class Viewer(Vertical, can_focus=False):
         Returns:
             The best presentation for the document.
         """
+        # If it looks like the document has ANSI escape sequences in it,
+        # then we just dump it out as-is. There's no point in trying to
+        # highlight it.
         return [
             Static(
-                highlight(document.content, language=language, theme=HighlightTheme)
-                if not self.view_source
-                and (language := language_from_document(document))
-                else self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}"),
+                Text.from_ansi(document.content)
+                if "\x1b[" in document.content
+                else (
+                    highlight(document.content, language=language, theme=HighlightTheme)
+                    if not self.view_source
+                    and (language := language_from_document(document))
+                    else self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}")
+                ),
                 markup=False,
             )
         ]
