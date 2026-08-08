@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## v1.6.2
+
+**Released: 2026-08-08**
+
+- Fixed a crash when viewing source of a Gemtext page that contains ANSI
+  escape sequences. ([#303](https://github.com/davep/rogallo/pull/303))
+
 ## v1.6.1
 
 **Released: 2026-08-08**
