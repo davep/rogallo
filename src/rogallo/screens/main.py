@@ -793,6 +793,15 @@ class Main(EnhancedScreen[None]):
         assert isinstance(request.location, SpartanURI)
         uri = response.uri or response.requested_uri or request.location
 
+        # Handle any non-successful response.
+        if not response.status.is_success:
+            self.notify(
+                f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
+                severity="error",
+                title="Request Error",
+            )
+            return
+
         # Handle a successful response.
         if self._is_displayable(response.mime_type):
             self.post_message(
