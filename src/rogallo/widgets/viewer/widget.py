@@ -188,7 +188,7 @@ class Viewer(Vertical, can_focus=False):
         return [
             Static(
                 Text.from_ansi(document.content)
-                if "\x1b[" in document.content
+                if "\x1b[" in document.content and not self.view_source
                 else (
                     highlight(document.content, language=language, theme=HighlightTheme)
                     if not self.view_source
@@ -219,12 +219,7 @@ class Viewer(Vertical, can_focus=False):
             self._jump_map = {}
             await self._view.mount_all(
                 self._best_presentation_for(self.document)
-                if not (
-                    self.document.is_gemtext
-                    or self.document.is_gophermap
-                    or self.document.is_gopher_error
-                )
-                or self.view_source
+                if not self.document.is_renderable_as_gemtext or self.view_source
                 else [
                     get_block_widget(line)
                     for line in self._consolidate(

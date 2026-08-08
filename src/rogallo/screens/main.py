@@ -442,7 +442,10 @@ class Main(EnhancedScreen[None]):
         ):
             return bool(self._viewer.document)
         if action == ToggleView.action_name():
-            return bool(self._viewer.document) and self._viewer.document.is_source
+            return (
+                bool(self._viewer.document)
+                and self._viewer.document.is_renderable_as_gemtext
+            )
         if action == GoHome.action_name():
             return bool(load_configuration().home_page.strip())
         if action == AddLocationToBookmarks.action_name():
@@ -1261,7 +1264,7 @@ class Main(EnhancedScreen[None]):
 
     def action_toggle_view_command(self) -> None:
         """Toggle the view between rendered and source."""
-        if self._viewer.document.is_source:
+        if self._viewer.document.is_renderable_as_gemtext:
             self._viewer.view_source = not self._viewer.view_source
 
     def action_go_home_command(self) -> None:

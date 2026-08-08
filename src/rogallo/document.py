@@ -84,7 +84,7 @@ class Document:
         return ItemType.ERROR in {item.type for item in GopherMap(self.content).items}
 
     @property
-    def is_source(self) -> bool:
+    def is_renderable_as_gemtext(self) -> bool:
         """`True` if the document is a source code document, `False` otherwise."""
         return self.is_gemtext or self.is_gophermap or self.is_gopher_error
 
