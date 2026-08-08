@@ -23,9 +23,9 @@ def supported_language(language: str) -> bool:
     """
     try:
         _ = get_lexer_by_name(language)
-        return True
     except ClassNotFound:
         return False
+    return True
 
 
 ### languages.py ends here
