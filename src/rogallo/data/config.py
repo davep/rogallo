@@ -173,6 +173,9 @@ class Configuration:
     )
     """Aliases to use in the command line."""
 
+    guess_language_for_syntax_highlighting_text_documents: bool = True
+    """Whether to guess the language for syntax highlighting of text documents."""
+
 
 ##############################################################################
 def configuration_file() -> Path:

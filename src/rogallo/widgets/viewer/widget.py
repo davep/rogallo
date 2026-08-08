@@ -3,7 +3,6 @@
 ##############################################################################
 # Python imports.
 from collections.abc import Iterator
-from typing import Final
 
 ##############################################################################
 # Gemtext imports.
@@ -47,7 +46,7 @@ from ...document import Document
 from .document_view import DocumentView
 from .gemtext import GemtextContent, GemtextLink, get_block_widget
 from .gopher import to_gemtext
-from .languages import supported_language
+from .languages import language_from_document
 from .status import ViewerStatus
 from .title import ViewerTitle
 
@@ -171,9 +170,6 @@ class Viewer(Vertical, can_focus=False):
         if buffer:
             yield Paragraph("\n".join(buffer))
 
-    _TEXT_X: Final[str] = "text/x-"
-    """The prefix for text mime types whose language we might be able to guess."""
-
     def _best_presentation_for(self, document: Document) -> list[Widget]:
         """Get the best presentation for the document.
 
@@ -184,13 +180,7 @@ class Viewer(Vertical, can_focus=False):
             The best presentation for the document.
         """
         content: str | Content
-        if (
-            document.mime_type
-            and document.mime_type.startswith(self._TEXT_X)
-            and supported_language(
-                language := document.mime_type.removeprefix(self._TEXT_X).strip()
-            )
-        ):
+        if language := language_from_document(document):
             content = highlight(
                 document.content, language=language, theme=HighlightTheme
             )
