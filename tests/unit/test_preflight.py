@@ -5,12 +5,37 @@
 from pathlib import Path
 
 ##############################################################################
+# Port70 imports.
+from port70 import GopherURI
+
+##############################################################################
+# Port79 imports.
+from port79 import FingerURI
+
+##############################################################################
 # Pytest imports.
 from pytest import mark, raises
 
 ##############################################################################
+# Sybaritic imports.
+from sybaritic import SpartanURI
+
+##############################################################################
+# Wasat imports.
+from wasat import GeminiURI
+
+##############################################################################
 # Local imports.
-from rogallo.preflight import is_likely_capsule, is_likely_page_relative, path_from_uri
+from rogallo.preflight import (
+    is_finger_uri,
+    is_gemini_uri,
+    is_gopher_uri,
+    is_likely_capsule,
+    is_likely_page_relative,
+    is_spartan_uri,
+    make_location,
+    path_from_uri,
+)
 
 
 ##############################################################################
@@ -78,6 +103,61 @@ def test_path_from_uri_invalid(uri: str) -> None:
     """Test the path_from_uri function with an invalid URI."""
     with raises(ValueError):
         _ = path_from_uri(uri)
+
+
+##############################################################################
+@mark.parametrize(
+    "uri, expected",
+    [
+        ("finger://example.com", (True, False, False, False)),
+        ("gopher://example.com", (False, True, False, False)),
+        ("spartan://example.com", (False, False, True, False)),
+        ("gemini://example.com", (False, False, False, True)),
+        ("http://example.com", (False, False, False, False)),
+        ("ftp://example.com", (False, False, False, False)),
+        ("//example.com", (False, False, False, False)),
+        ("example.com", (False, False, False, False)),
+    ],
+)
+def test_is_uri_checkers(uri: str, expected: tuple[bool, bool, bool, bool]) -> None:
+    """Test the URI checker functions."""
+    assert (
+        is_finger_uri(uri),
+        is_gopher_uri(uri),
+        is_spartan_uri(uri),
+        is_gemini_uri(uri),
+    ) == expected
+
+
+##############################################################################
+@mark.parametrize(
+    "uri, expected_type",
+    [
+        ("finger://example.com", FingerURI),
+        ("gopher://example.com", GopherURI),
+        ("spartan://example.com", SpartanURI),
+        ("gemini://example.com", GeminiURI),
+        ("/tmp/test.gmi", Path),
+        ("relative/path/to/file.txt", Path),
+    ],
+)
+def test_make_location(
+    uri: str,
+    expected_type: type[GeminiURI]
+    | type[FingerURI]
+    | type[GopherURI]
+    | type[SpartanURI]
+    | type[Path],
+) -> None:
+    """Test the make_location function."""
+    assert isinstance(make_location(uri), expected_type)
+
+
+##############################################################################
+def test_uri_checker_exception() -> None:
+    """Test that make_location raises ValueError for unknown URIs."""
+    with raises(ValueError):
+        make_location("https://example.com")
 
 
 ### test_preflight.py ends here
