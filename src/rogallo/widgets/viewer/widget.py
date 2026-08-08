@@ -205,7 +205,8 @@ class Viewer(Vertical, can_focus=False):
             if self.view_source:
                 return [
                     Static(
-                        self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}")
+                        self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}"),
+                        markup=False,
                     )
                 ]
             return [
