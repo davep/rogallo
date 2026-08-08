@@ -10,6 +10,10 @@ from functools import cached_property
 from gophermap import GopherMap, ItemType
 
 ##############################################################################
+# Port70 imports.
+from port70 import GopherURI
+
+##############################################################################
 # Wasat imports.
 from wasat import ServerCertificate, VerificationMethod
 
@@ -81,7 +85,7 @@ class Document:
     @cached_property
     def is_gopher_error(self) -> bool:
         """`True` if the document is a Gopher error document, `False` otherwise."""
-        return self.is_gophermap and ItemType.ERROR in {
+        return isinstance(self.location, GopherURI) and ItemType.ERROR in {
             item.type for item in GopherMap(self.content).items
         }
 
