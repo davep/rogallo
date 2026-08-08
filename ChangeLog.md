@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v1.6.1
 
-**Released: WiP**
+**Released: 2026-08-08**
 
 - Handle text files that contain ANSI escape sequences.
   ([#300](https://github.com/davep/rogallo/pull/300))
