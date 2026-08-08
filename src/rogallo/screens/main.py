@@ -791,7 +791,7 @@ class Main(EnhancedScreen[None]):
             request: The original request that generated the response.
         """
         assert isinstance(request.location, SpartanURI)
-        uri = request.location
+        uri = response.uri or response.requested_uri or request.location
 
         # Handle a successful response.
         if self._is_displayable(response.mime_type):
