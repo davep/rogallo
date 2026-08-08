@@ -81,7 +81,9 @@ class Document:
     @cached_property
     def is_gopher_error(self) -> bool:
         """`True` if the document is a Gopher error document, `False` otherwise."""
-        return ItemType.ERROR in {item.type for item in GopherMap(self.content).items}
+        return self.is_gophermap and ItemType.ERROR in {
+            item.type for item in GopherMap(self.content).items
+        }
 
     @property
     def is_renderable_as_gemtext(self) -> bool:
