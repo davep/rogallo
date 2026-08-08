@@ -147,7 +147,7 @@ from ..preflight import (
     path_from_uri,
 )
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
-from ..types import GEMINI_EXTENSIONS, GEMINI_MIME_TYPE, SpartanURINeedingData
+from ..types import GEMINI_EXTENSIONS, SpartanURINeedingData
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .about_page import AboutPage
 from .certificate import Certificate
@@ -474,13 +474,12 @@ class Main(EnhancedScreen[None]):
         Returns:
             `True` if the MIME type is displayable, `False` otherwise.
         """
-        if isinstance(mime_type, str):
-            mime_type, _, _ = mime_type.partition(";")
-        return mime_type in {
-            GEMINI_MIME_TYPE,
+        if mime_type is None:
+            return False
+        mime_type, _, _ = mime_type.partition(";")
+        return mime_type.startswith("text/") or mime_type in {
             ItemType.MENU.mime_type,
             ItemType.INDEX_SEARCH.mime_type,
-            "text/plain",
             *load_configuration().displayable_content_types,
         }
 
