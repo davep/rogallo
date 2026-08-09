@@ -19,7 +19,8 @@ from wasat import ServerCertificate, VerificationMethod
 
 ##############################################################################
 # Local imports.
-from .types import RogalloLocation, is_gemini_mime_type, is_gopher_mime_type
+from .mime_checks import is_gemini_mime_type, is_gopher_mime_type
+from .types import RogalloLocation
 
 
 ##############################################################################

@@ -6,10 +6,6 @@ from pathlib import Path
 from typing import Final
 
 ##############################################################################
-# Gophermap imports.
-from gophermap import ItemType
-
-##############################################################################
 # Port70 imports.
 from port70 import GopherURI
 
@@ -66,37 +62,6 @@ def short_location(location: RogalloLocation) -> str:
         return (Path("~") / location.relative_to(Path.home())).as_posix()
     except ValueError:
         return location.as_posix()
-
-
-##############################################################################
-def is_gemini_mime_type(mime_type: str | None) -> bool:
-    """Check if a MIME type is a Gemini MIME type.
-
-    Args:
-        mime_type: The MIME type to check.
-
-    Returns:
-        True if the MIME type is a Gemini MIME type, False otherwise.
-    """
-    return mime_type is not None and mime_type.startswith(GEMINI_MIME_TYPE)
-
-
-##############################################################################
-def is_gopher_mime_type(mime_type: str | None) -> bool:
-    """Check if a MIME type is a Gopher MIME type.
-
-    Args:
-        mime_type: The MIME type to check.
-
-    Returns:
-        True if the MIME type is a Gopher MIME type, False otherwise.
-    """
-    return mime_type is not None and mime_type.startswith(
-        (
-            ItemType.MENU.mime_type,
-            ItemType.INDEX_SEARCH.mime_type,
-        )
-    )
 
 
 ### types.py ends here
