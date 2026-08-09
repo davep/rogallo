@@ -41,7 +41,7 @@ from ...data import (
     NavigationHistory,
     load_configuration,
 )
-from ...types import short_location
+from ...presentation import short_location
 from .aliases import AliasError, expand_aliases
 from .base_command import InputCommand
 from .finger import FingerCommand
