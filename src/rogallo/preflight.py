@@ -191,6 +191,26 @@ def is_likely_local_file(uri: str) -> bool:
 
 
 ##############################################################################
+def is_likely_local_file_of_type(uri: str, mime_type: str) -> bool:
+    """Determine if a URI is likely a local file of a given type.
+
+    Args:
+        uri: The URI to check.
+        mime_type: The MIME type to check for.
+
+    Returns:
+        `True` if the URI is likely a local text file, `False` otherwise.
+    """
+    if not is_likely_local_file(uri):
+        return False
+    try:
+        guessed_mime_type, _ = mimetypes.guess_type(path_from_uri(uri))
+    except ValueError:
+        return False
+    return guessed_mime_type is not None and guessed_mime_type.startswith(mime_type)
+
+
+##############################################################################
 def is_likely_local_text_file(uri: str) -> bool:
     """Determine if a URI is likely a local text file.
 
@@ -200,13 +220,20 @@ def is_likely_local_text_file(uri: str) -> bool:
     Returns:
         `True` if the URI is likely a local text file, `False` otherwise.
     """
-    if not is_likely_local_file(uri):
-        return False
-    try:
-        mime_type, _ = mimetypes.guess_type(path_from_uri(uri))
-    except ValueError:
-        return False
-    return mime_type is not None and mime_type.startswith("text/")
+    return is_likely_local_file_of_type(uri, "text/")
+
+
+##############################################################################
+def is_likely_local_gemtext_file(uri: str) -> bool:
+    """Determine if a URI is likely a local Gemtext file.
+
+    Args:
+        uri: The URI to check.
+
+    Returns:
+        `True` if the URI is likely a local Gemtext file, `False` otherwise.
+    """
+    return is_likely_local_file_of_type(uri, GEMINI_MIME_TYPE)
 
 
 ##############################################################################
