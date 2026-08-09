@@ -10,7 +10,7 @@ from textual.widgets import Label
 
 ##############################################################################
 # Local imports.
-from ...types import is_gemini_mime_type, is_gopher_mime_type
+from ...mime_checks import is_gemini_mime_type, is_gopher_mime_type
 
 
 ##############################################################################

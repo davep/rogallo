@@ -26,8 +26,9 @@ from textual_enhanced.widgets import EnhancedOptionList
 # Local imports.
 from ..data import LocationHistory, LocationVisit
 from ..messages import OpenLocation
+from ..presentation import short_location
 from ..safe_escape import escape
-from ..types import RogalloLocation, short_location
+from ..types import RogalloLocation
 
 
 ##############################################################################

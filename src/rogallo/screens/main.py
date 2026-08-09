@@ -141,6 +141,7 @@ from ..messages import (
     OpenUnsupportedURI,
     OpenURI,
 )
+from ..mime_checks import is_displayable_mime_type
 from ..preflight import (
     is_likely_local_text_file,
     is_likely_schemeless_capsule,
@@ -469,24 +470,6 @@ class Main(EnhancedScreen[None]):
             )
         return True
 
-    def _is_displayable(self, mime_type: str | None) -> bool:
-        """Check if a MIME type is displayable.
-
-        Args:
-            mime_type: The MIME type to check.
-
-        Returns:
-            `True` if the MIME type is displayable, `False` otherwise.
-        """
-        if mime_type is None:
-            return False
-        mime_type, _, _ = mime_type.partition(";")
-        return mime_type.startswith("text/") or mime_type in {
-            ItemType.MENU.mime_type,
-            ItemType.INDEX_SEARCH.mime_type,
-            *load_configuration().displayable_content_types,
-        }
-
     async def _handle_capsule_input_request(
         self, location: GeminiURI, prompt: str, sensitive: bool
     ) -> None:
@@ -595,7 +578,7 @@ class Main(EnhancedScreen[None]):
         self._last_user_input = None
 
         # Handle a successful response.
-        if self._is_displayable(response.mime_type):
+        if is_displayable_mime_type(response.mime_type):
             self.post_message(
                 OpenDocument(
                     document=self._cache.add_document(
@@ -758,7 +741,7 @@ class Main(EnhancedScreen[None]):
         # most part, so let's figure out the effective MIME type for what
         # we're doing here.
         mime_type = ItemType(uri.item_type).mime_type
-        if not self._is_displayable(mime_type):
+        if not is_displayable_mime_type(mime_type):
             self.post_message(OpenUnsupportedMIMEType(uri, mime_type))
             return
 
@@ -806,7 +789,7 @@ class Main(EnhancedScreen[None]):
             return
 
         # Handle a successful response.
-        if self._is_displayable(response.mime_type):
+        if is_displayable_mime_type(response.mime_type):
             self.post_message(
                 OpenDocument(
                     document=self._cache.add_document(
@@ -882,7 +865,7 @@ class Main(EnhancedScreen[None]):
         """
         assert isinstance(request.location, Path)
         mime_type = guess_type(request.location)[0] or "application/octet-stream"
-        if not self._is_displayable(mime_type):
+        if not is_displayable_mime_type(mime_type):
             self.post_message(OpenUnsupportedMIMEType(request.location, mime_type))
             return
         try:

@@ -25,8 +25,8 @@ from textual_enhanced.widgets import EnhancedOptionList
 # Local imports.
 from ..data.bookmarks import Bookmark, Bookmarks
 from ..messages import OpenLocation
+from ..presentation import short_location
 from ..safe_escape import escape
-from ..types import short_location
 
 
 ##############################################################################
