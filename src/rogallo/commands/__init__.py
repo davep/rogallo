@@ -6,16 +6,20 @@ from .clipboard import CopyDocumentToClipboard, CopyLocationToClipboard
 from .main import (
     AboutThisPage,
     AddLocationToBookmarks,
-    ChangeCommandLineLocation,
     ClearCache,
-    GoHome,
-    JumpToCommandLine,
-    JumpToDocument,
-    JumpToSidebar,
     PipeDocument,
     Reload,
     SetHome,
     SetHomeToCurrentLocation,
+    ToggleView,
+)
+from .navigation import Backward, Forward, GoHome, GoToParent, GoToRoot, OpenFile
+from .search import SearchBookmarks, SearchHistory
+from .ui import (
+    ChangeCommandLineLocation,
+    JumpToCommandLine,
+    JumpToDocument,
+    JumpToSidebar,
     StripeLinks,
     ToggleANSIEscapeSequenceHandling,
     ToggleBookmarksManager,
@@ -23,10 +27,7 @@ from .main import (
     ToggleEmojiRemoval,
     ToggleHistoryManager,
     ToggleLinkNumbers,
-    ToggleView,
 )
-from .navigation import Backward, Forward, GoToParent, GoToRoot, OpenFile
-from .search import SearchBookmarks, SearchHistory
 
 ##############################################################################
 # Exports.

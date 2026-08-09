@@ -42,4 +42,11 @@ class OpenFile(Command):
     BINDING_KEY = "ctrl+o"
 
 
+##############################################################################
+class GoHome(Command):
+    """Go to the home page"""
+
+    BINDING_KEY = "ctrl+h"
+
+
 ### navigation.py ends here
