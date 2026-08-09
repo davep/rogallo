@@ -35,7 +35,6 @@ from pyperclip import copy as copy_to_clipboard
 # Sybaritic imports.
 from sybaritic import Client as SpartanClient
 from sybaritic import Response as SpartanResponse
-from sybaritic import ResponseError as SpartanResponseError
 from sybaritic import SpartanURI, SybariticError
 from sybaritic import URIError as SpartanURIError
 
@@ -69,7 +68,6 @@ from wasat import (
     SecurityError,
     StatusCode,
 )
-from wasat import ProtocolError as GeminiProtocolError
 from wasat import Response as GeminiResponse
 from wasat import URIError as GeminiURIError
 
@@ -149,6 +147,7 @@ from ..preflight import (
     path_from_uri,
 )
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
+from ..text_decoder import decode_text
 from ..types import GEMINI_EXTENSIONS, SpartanURINeedingData
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .about_page import AboutPage
@@ -556,23 +555,6 @@ class Main(EnhancedScreen[None]):
             return
         self.post_message(OpenLocation(location, allow_cached=False))
 
-    @staticmethod
-    async def _text_from(response: GeminiResponse | SpartanResponse) -> str:
-        """Get the text from a response, handling encoding errors.
-
-        Args:
-            response: The response to get the text from.
-
-        Returns:
-            The text from the response.
-        """
-        try:
-            return await response.text()
-        except (GeminiProtocolError, SpartanResponseError):
-            # If the server didn't specify an encoding or specified an
-            # invalid encoding, let's try latin-1 as a fallback.
-            return await response.text(encoding="latin-1")
-
     async def _handle_capsule_response(
         self, response: GeminiResponse, request: OpenLocation
     ) -> None:
@@ -620,7 +602,7 @@ class Main(EnhancedScreen[None]):
                         Document(
                             location=uri,
                             original_location=request.location,
-                            content=await self._text_from(response),
+                            content=await decode_text(response),
                             mime_type=response.mime_type,
                             needed_certificate=response.client_cert_used,
                             verification_method=response.verification_method,
@@ -831,7 +813,7 @@ class Main(EnhancedScreen[None]):
                         Document(
                             location=uri,
                             original_location=request.location,
-                            content=await self._text_from(response),
+                            content=await decode_text(response),
                             mime_type=response.mime_type,
                         )
                     ),
