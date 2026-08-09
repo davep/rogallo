@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added simple encoding fallback so that ISO-8859-1 text files can be
+  downloaded. ([#304](https://github.com/davep/rogallo/pull/304))
+
 ## v1.6.2
 
 **Released: 2026-08-08**

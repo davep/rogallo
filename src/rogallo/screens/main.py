@@ -58,10 +58,10 @@ from textual_enhanced.tools import add_key
 ##############################################################################
 # Textual file system picker imports.
 from textual_fspicker import FileOpen, Filters
-from wasat import Client as GeminiClient
 
 ##############################################################################
 # Wasat imports.
+from wasat import Client as GeminiClient
 from wasat import (
     ConnectionError,
     GeminiURI,
@@ -147,6 +147,7 @@ from ..preflight import (
     path_from_uri,
 )
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
+from ..text_decoder import decode_text
 from ..types import GEMINI_EXTENSIONS, SpartanURINeedingData
 from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from .about_page import AboutPage
@@ -601,7 +602,7 @@ class Main(EnhancedScreen[None]):
                         Document(
                             location=uri,
                             original_location=request.location,
-                            content=await response.text(),
+                            content=await decode_text(response),
                             mime_type=response.mime_type,
                             needed_certificate=response.client_cert_used,
                             verification_method=response.verification_method,
@@ -812,7 +813,7 @@ class Main(EnhancedScreen[None]):
                         Document(
                             location=uri,
                             original_location=request.location,
-                            content=await response.text(),
+                            content=await decode_text(response),
                             mime_type=response.mime_type,
                         )
                     ),
