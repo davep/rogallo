@@ -591,16 +591,12 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message the location open request.
         """
-        if isinstance(message.location, GeminiURI):
-            self._load_from_gemini(message)
-        elif isinstance(message.location, FingerURI):
-            self._load_from_finger(message)
-        elif isinstance(message.location, GopherURI):
-            self._load_from_gopher(message)
-        elif isinstance(message.location, SpartanURI):
-            self._load_from_spartan(message)
-        else:
-            self._load_from_filesystem(message)
+        {
+            FingerURI: self._load_from_finger,
+            GeminiURI: self._load_from_gemini,
+            GopherURI: self._load_from_gopher,
+            SpartanURI: self._load_from_spartan,
+        }.get(type(message.location), self._load_from_filesystem)(message)
 
     @on(OpenURI)
     def open_uri(self, message: OpenURI) -> None:
