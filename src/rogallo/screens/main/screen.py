@@ -22,7 +22,7 @@ from port70 import GopherURI, Port70Error
 ##############################################################################
 # Port79 imports.
 from port79 import Client as FingerClient
-from port79 import FingerURI, Port79Error
+from port79 import FingerURI
 
 ##############################################################################
 # Pyperclip imports.
@@ -32,8 +32,7 @@ from pyperclip import copy as copy_to_clipboard
 ##############################################################################
 # Sybaritic imports.
 from sybaritic import Client as SpartanClient
-from sybaritic import Response as SpartanResponse
-from sybaritic import SpartanURI, SybariticError
+from sybaritic import SpartanURI
 
 ##############################################################################
 # Textual imports.
@@ -142,12 +141,14 @@ from ..about_page import AboutPage
 from ..certificate import Certificate
 from ..confirm_unsupported import ConfirmUnsupportedURI
 from ..user_input import UserInput
+from .finger import handle_finger_request
 from .local_messages import (
     CopyToClipboard,
     OpenDocument,
     OpenUnsupportedMIMEType,
     OpenUnsupportedURI,
 )
+from .spartan import handle_spartan_request
 from .text_decoder import decode_text
 from .uri_resolver import uri_resolver
 
@@ -679,28 +680,9 @@ class Main(EnhancedScreen[None]):
         Args:
             request: The request to load the document from.
         """
-        uri = request.location
-        assert isinstance(uri, FingerURI)
-
         try:
             self._command_line.working = True
-            self.post_message(
-                OpenDocument(
-                    document=Document(
-                        location=uri,
-                        original_location=uri,
-                        content=(await self._finger_client.request(uri)).text,
-                        mime_type="text/plain",
-                    ),
-                    original_request=request,
-                )
-            )
-        except Port79Error as error:
-            self.notify(
-                f"Error loading {uri}:\n\n{error}",
-                severity="error",
-                title="Finger Error",
-            )
+            await handle_finger_request(request, self._finger_client, self)
         finally:
             self._command_line.working = False
 
@@ -762,45 +744,6 @@ class Main(EnhancedScreen[None]):
         finally:
             self._command_line.working = False
 
-    async def _handle_spartan_response(
-        self, response: SpartanResponse, request: OpenLocation
-    ) -> None:
-        """Handle a response from a Spartan request.
-
-        Args:
-            response: The response to handle.
-            request: The original request that generated the response.
-        """
-        assert isinstance(request.location, SpartanURI)
-        uri = response.uri or response.requested_uri or request.location
-
-        # Handle any non-successful response.
-        if not response.status.is_success:
-            self.notify(
-                f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
-                severity="error",
-                title="Request Error",
-            )
-            return
-
-        # Handle a successful response.
-        if is_displayable_mime_type(response.mime_type):
-            self.post_message(
-                OpenDocument(
-                    document=self._cache.add_document(
-                        Document(
-                            location=uri,
-                            original_location=request.location,
-                            content=await decode_text(response),
-                            mime_type=response.mime_type,
-                        )
-                    ),
-                    original_request=request,
-                )
-            )
-        else:
-            self.post_message(OpenUnsupportedMIMEType(uri, response.mime_type))
-
     @work
     async def _load_from_spartan(self, request: OpenLocation) -> None:
         """Load a document from a Spartan URI.
@@ -808,45 +751,10 @@ class Main(EnhancedScreen[None]):
         Args:
             request: The request to load the document from.
         """
-        uri = request.location
-        assert isinstance(uri, SpartanURI)
-
-        # If a cached copy of the document exists and the request allows it,
-        # use that instead of making a network request.
-        if (
-            not isinstance(uri, SpartanURINeedingData)
-            and request.allow_cached
-            and (cached_document := self._cache.get_document(uri))
-        ):
-            self.post_message(
-                OpenDocument(
-                    document=cached_document,
-                    original_request=request,
-                )
-            )
-            return
-
-        # If we're looking at a Spartan request that needs data. Let's ask
-        # the user for it.
-        attached_data: str | None = None
-        if isinstance(uri, SpartanURINeedingData) and not (
-            attached_data := await self.app.push_screen_wait(
-                UserInput(uri, prompt="Spartan request requires data")
-            )
-        ):
-            return
-
         try:
             self._command_line.working = True
-            async with await self._spartan_cient.request(
-                uri, data=attached_data
-            ) as response:
-                await self._handle_spartan_response(response, request)
-        except SybariticError as error:
-            self.notify(
-                f"Error loading {uri}:\n\n{error}",
-                severity="error",
-                title="Spartan Error",
+            await handle_spartan_request(
+                request, self._spartan_cient, self, self._cache
             )
         finally:
             self._command_line.working = False
