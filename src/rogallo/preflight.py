@@ -173,6 +173,34 @@ def path_from_uri(uri: str) -> Path:
 
 
 ##############################################################################
+def local_index_from_uri(uri: str) -> Path:
+    """Get the local index file from a URI.
+
+    Args:
+        uri: The URI to get the local index file from.
+
+    Returns:
+        The local index file from the URI.
+
+    Note:
+        If the URI is a local directory, this function will look for an index
+        file with one of the known Gemini extensions. If it finds one, it will
+        return that file. If it doesn't find one, it will return the directory
+        itself.
+
+    Raises:
+        ValueError: If the URI is not a local directory.
+    """
+    if not is_local_directory(uri):
+        raise ValueError(f"URI is not a local directory: {uri}")
+    root = path_from_uri(uri)
+    for extension in GEMINI_EXTENSIONS:
+        if (candidate := (root / "index").with_suffix(extension)).is_file():
+            return candidate
+    return root
+
+
+##############################################################################
 def is_local_file(uri: str) -> bool:
     """Determine if a URI is a local file.
 
@@ -191,6 +219,27 @@ def is_local_file(uri: str) -> bool:
     except ValueError:
         return False
     return candidate.is_file()
+
+
+##############################################################################
+def is_local_directory(uri: str) -> bool:
+    """Determine if a URI is a local directory.
+
+    Args:
+        uri: The URI to check.
+
+    Returns:
+        `True` if the URI is likely a directory, `False` otherwise.
+
+    Notes:
+        The URI is considered to be a local directory if it can be turned into a
+        [`Path`][pathlib.Path] and that path is a directory that exists.
+    """
+    try:
+        candidate = path_from_uri(uri)
+    except ValueError:
+        return False
+    return candidate.is_dir()
 
 
 ##############################################################################
