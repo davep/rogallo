@@ -144,7 +144,9 @@ from ..messages import (
 from ..mime_checks import is_displayable_mime_type
 from ..preflight import (
     is_likely_schemeless_capsule,
+    is_local_directory,
     is_local_text_file,
+    local_index_from_uri,
     path_from_uri,
 )
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
@@ -939,6 +941,19 @@ class Main(EnhancedScreen[None]):
         # Perhaps it's a local text file?
         if is_local_text_file(message.uri):
             self.post_message(OpenLocation(path_from_uri(message.uri)))
+            return
+
+        # Before we give up on the filesystem, let's see if it's a
+        # directory.
+        if is_local_directory(message.uri):
+            self.post_message(
+                # Open as a file...
+                OpenLocation(candidate)
+                # ...if we could find a a candidate index file in the directory...
+                if (candidate := local_index_from_uri(message.uri)).is_file()
+                # ...otherwise kick off the file picker to let the user choose a file.
+                else OpenFromFileSystem(candidate)
+            )
             return
 
         # It's not an obvious Gemini URI, and it's not a file in the local
