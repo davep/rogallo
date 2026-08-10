@@ -4,6 +4,7 @@
 # Python imports.
 from argparse import Namespace
 from functools import partial
+from pathlib import Path
 from subprocess import CalledProcessError, run
 from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
@@ -683,9 +684,9 @@ class Main(EnhancedScreen[None]):
         # based on the MIME type, let's do it.
         if open_uri:
             open_in_browser(
-                str(message.location)
-                if isinstance(message.location, (GeminiURI, GopherURI, SpartanURI))
-                else message.location.resolve().as_uri()
+                message.location.resolve().as_uri()
+                if isinstance(message.location, Path)
+                else str(message.location)
             )
 
     @on(OpenFromFileSystem)
