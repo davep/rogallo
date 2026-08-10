@@ -4,8 +4,6 @@
 # Python imports.
 from argparse import Namespace
 from functools import partial
-from mimetypes import guess_type
-from pathlib import Path
 from subprocess import CalledProcessError, run
 from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
@@ -139,6 +137,7 @@ from ..about_page import AboutPage
 from ..certificate import Certificate
 from ..confirm_unsupported import ConfirmUnsupportedURI
 from ..user_input import UserInput
+from .filesystem import handle_filesystem_request
 from .finger import handle_finger_request
 from .gopher import handle_gopher_request
 from .local_messages import (
@@ -732,35 +731,7 @@ class Main(EnhancedScreen[None]):
         Args:
             request: The request to load the document from.
         """
-        assert isinstance(request.location, Path)
-        mime_type = guess_type(request.location)[0] or "application/octet-stream"
-        if not is_displayable_mime_type(mime_type):
-            self.post_message(OpenUnsupportedMIMEType(request.location, mime_type))
-            return
-        try:
-            self.post_message(
-                OpenDocument(
-                    document=Document(
-                        location=request.location,
-                        original_location=request.location,
-                        content=request.location.read_text(encoding="utf-8"),
-                        mime_type=mime_type,
-                    ),
-                    original_request=request,
-                )
-            )
-        except OSError as error:
-            self.notify(
-                f"Error loading {request.location}:\n\n{error}",
-                severity="error",
-                title="Filesystem Error",
-            )
-        except UnicodeDecodeError as error:
-            self.notify(
-                f"Error loading {request.location}:\n\n{error}\n\nLikely not a text file.",
-                severity="error",
-                title="Decode Error",
-            )
+        handle_filesystem_request(request, self)
 
     @on(OpenLocation)
     def open_location(self, message: OpenLocation) -> None:
