@@ -76,9 +76,11 @@ def uri_resolver(
             else OpenFromFileSystem(candidate)
         )
 
-    # It's not an obvious Gemini URI, and it's not a file in the local
-    # filesystem. Before we pass it off to the system browser, let's see
-    # it could look like a Gemini URI if we add the scheme.
+    # It's not an obvious supported-protocol URI, and it's not a file in the
+    # local filesystem. Before we pass it off to the system browser, let's
+    # see it could look like a Gemini URI if we add the scheme. Note that
+    # this means that we give priority to `gemini://` over any other
+    # protocol when it comes to the user entering `example.com` alone.
     if is_likely_schemeless_capsule(request.uri):
         return OpenLocation(
             GeminiURI.with_default_scheme(request.uri),
