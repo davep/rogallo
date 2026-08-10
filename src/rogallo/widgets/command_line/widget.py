@@ -4,10 +4,9 @@
 # Python future imports.
 from __future__ import annotations
 
-from collections.abc import Iterator
-
 ##############################################################################
 # Python imports.
+from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass
 from itertools import chain, cycle
