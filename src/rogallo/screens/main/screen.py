@@ -682,7 +682,11 @@ class Main(EnhancedScreen[None]):
         """
         try:
             self._command_line.working = True
-            await handle_finger_request(request, self._finger_client, self)
+            await handle_finger_request(
+                request=request,
+                client=self._finger_client,
+                screen=self,
+            )
         finally:
             self._command_line.working = False
 
@@ -754,7 +758,10 @@ class Main(EnhancedScreen[None]):
         try:
             self._command_line.working = True
             await handle_spartan_request(
-                request, self._spartan_cient, self, self._cache
+                request=request,
+                client=self._spartan_cient,
+                screen=self,
+                cache=self._cache,
             )
         finally:
             self._command_line.working = False
