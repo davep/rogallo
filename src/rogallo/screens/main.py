@@ -143,8 +143,8 @@ from ..messages import (
 )
 from ..mime_checks import is_displayable_mime_type
 from ..preflight import (
-    is_likely_local_text_file,
     is_likely_schemeless_capsule,
+    is_local_text_file,
     path_from_uri,
 )
 from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
@@ -937,7 +937,7 @@ class Main(EnhancedScreen[None]):
                 pass
 
         # Perhaps it's a local text file?
-        if is_likely_local_text_file(message.uri):
+        if is_local_text_file(message.uri):
             self.post_message(OpenLocation(path_from_uri(message.uri)))
             return
 

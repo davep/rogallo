@@ -43,6 +43,7 @@ from ....preflight import (
     is_finger_uri,
     is_gopher_uri,
     is_likely_capsule,
+    is_local_gemtext_file,
     is_spartan_uri,
 )
 from ....types import RogalloLocation, SpartanURINeedingData
@@ -148,6 +149,7 @@ class GemtextLink(Horizontal, can_focus=True):
             (is_finger_uri, "fingerspace_link_icon"),
             (is_gopher_uri, "gopherspace_link_icon"),
             (is_spartan_uri, "spartanspace_link_icon"),
+            (is_local_gemtext_file, "geminispace_link_icon"),
         ):
             if checker(self.normalised_uri):
                 return icon(icon_name)

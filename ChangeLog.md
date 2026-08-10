@@ -6,6 +6,9 @@
 
 - Added simple encoding fallback so that ISO-8859-1 text files can be
   downloaded. ([#304](https://github.com/davep/rogallo/pull/304))
+- Fixed the icon shown for Gemtext links to other Gemtext files that are
+  linked to with a `file:` URI.
+  ([#310](https://github.com/davep/rogallo/pull/310))
 
 ## v1.6.2
 
