@@ -91,6 +91,7 @@ from ...commands import (
     ToggleHistoryManager,
     ToggleLinkNumbers,
     ToggleView,
+    ViewChangeLog,
 )
 from ...data import (
     Bookmark,
@@ -253,6 +254,7 @@ class Main(EnhancedScreen[None]):
         ToggleHistoryManager,
         ToggleLinkNumbers,
         ToggleView,
+        ViewChangeLog,
     ]
 
     BINDINGS = Command.bindings(*COMMAND_MESSAGES)
@@ -1062,6 +1064,10 @@ class Main(EnhancedScreen[None]):
                     "Process closed pipe before input was fully written",
                     severity="warning",
                 )
+
+    def action_view_change_log_command(self) -> None:
+        """View the change log."""
+        self.post_message(OpenURI("gemini://tilde.team/~davep/rogallo/changelog.gmi"))
 
 
 ### main.py ends here

@@ -12,6 +12,7 @@ from .main import (
     SetHome,
     SetHomeToCurrentLocation,
     ToggleView,
+    ViewChangeLog,
 )
 from .navigation import Backward, Forward, GoHome, GoToParent, GoToRoot, OpenFile
 from .search import SearchBookmarks, SearchHistory
@@ -61,6 +62,7 @@ __all__ = [
     "ToggleHistoryManager",
     "ToggleLinkNumbers",
     "ToggleView",
+    "ViewChangeLog",
 ]
 
 
