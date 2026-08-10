@@ -11,7 +11,6 @@ from textual.message import Message
 
 ##############################################################################
 # Local imports.
-from ..document import Document
 from ..input_content import InputContent
 from ..types import RogalloLocation
 
@@ -40,37 +39,6 @@ class OpenLocation(Message):
     """Whether to allow opening the location from cache."""
     associated_input: InputContent | None = None
     """The input content associated with this location, if any."""
-
-
-##############################################################################
-@dataclass
-class OpenDocument(Message):
-    """Open the given document for viewing."""
-
-    document: Document
-    """The document to open."""
-    original_request: OpenLocation
-    """The original request that led to this text being opened."""
-
-
-##############################################################################
-@dataclass
-class OpenUnsupportedURI(Message):
-    """Open the given location in an external application."""
-
-    uri: str
-    """The unsupported URI to open."""
-
-
-##############################################################################
-@dataclass
-class OpenUnsupportedMIMEType(Message):
-    """Open the given location in an external application."""
-
-    location: RogalloLocation
-    """The unsupported location to open."""
-    mime_type: str
-    """The unsupported MIME type of the location."""
 
 
 ##############################################################################

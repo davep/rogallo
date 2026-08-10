@@ -18,13 +18,11 @@ from gophermap import ItemType
 # Port70 imports.
 from port70 import Client as GopherClient
 from port70 import GopherURI, Port70Error
-from port70 import URIError as GopherURIError
 
 ##############################################################################
 # Port79 imports.
 from port79 import Client as FingerClient
 from port79 import FingerURI, Port79Error
-from port79 import URIError as FingerURIError
 
 ##############################################################################
 # Pyperclip imports.
@@ -36,7 +34,6 @@ from pyperclip import copy as copy_to_clipboard
 from sybaritic import Client as SpartanClient
 from sybaritic import Response as SpartanResponse
 from sybaritic import SpartanURI, SybariticError
-from sybaritic import URIError as SpartanURIError
 
 ##############################################################################
 # Textual imports.
@@ -73,9 +70,9 @@ from wasat import URIError as GeminiURIError
 
 ##############################################################################
 # Local imports.
-from .. import __version__
-from ..cache import ContentCache
-from ..commands import (
+from ... import __version__
+from ...cache import ContentCache
+from ...commands import (
     AboutThisPage,
     AddLocationToBookmarks,
     Backward,
@@ -106,7 +103,7 @@ from ..commands import (
     ToggleLinkNumbers,
     ToggleView,
 )
-from ..data import (
+from ...data import (
     Bookmark,
     Bookmarks,
     CommandLineHistory,
@@ -130,33 +127,29 @@ from ..data import (
     trust_file,
     update_configuration,
 )
-from ..document import Document
-from ..input_content import InputContent
-from ..messages import (
-    CopyToClipboard,
-    OpenDocument,
+from ...document import Document
+from ...input_content import InputContent
+from ...messages import (
     OpenFromFileSystem,
     OpenLocation,
-    OpenUnsupportedMIMEType,
-    OpenUnsupportedURI,
     OpenURI,
 )
-from ..mime_checks import is_displayable_mime_type
-from ..preflight import (
-    is_likely_schemeless_capsule,
-    is_local_directory,
-    is_local_text_file,
-    local_index_from_uri,
-    path_from_uri,
+from ...mime_checks import is_displayable_mime_type
+from ...providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
+from ...types import GEMINI_EXTENSIONS, SpartanURINeedingData
+from ...widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
+from ..about_page import AboutPage
+from ..certificate import Certificate
+from ..confirm_unsupported import ConfirmUnsupportedURI
+from ..user_input import UserInput
+from .local_messages import (
+    CopyToClipboard,
+    OpenDocument,
+    OpenUnsupportedMIMEType,
+    OpenUnsupportedURI,
 )
-from ..providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
-from ..text_decoder import decode_text
-from ..types import GEMINI_EXTENSIONS, SpartanURINeedingData
-from ..widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
-from .about_page import AboutPage
-from .certificate import Certificate
-from .confirm_unsupported import ConfirmUnsupportedURI
-from .user_input import UserInput
+from .text_decoder import decode_text
+from .uri_resolver import uri_resolver
 
 
 ##############################################################################
@@ -920,56 +913,7 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the URI to open.
         """
-
-        # Work through the supported URI types.
-        for uri_type, uri_error in (
-            (GeminiURI, GeminiURIError),
-            (FingerURI, FingerURIError),
-            (GopherURI, GopherURIError),
-            (SpartanURI, SpartanURIError),
-        ):
-            try:
-                self.post_message(
-                    OpenLocation(
-                        uri_type(message.uri), allow_cached=message.allow_cached
-                    )
-                )
-                return
-            except uri_error:
-                pass
-
-        # Perhaps it's a local text file?
-        if is_local_text_file(message.uri):
-            self.post_message(OpenLocation(path_from_uri(message.uri)))
-            return
-
-        # Before we give up on the filesystem, let's see if it's a
-        # directory.
-        if is_local_directory(message.uri):
-            self.post_message(
-                # Open as a file...
-                OpenLocation(candidate)
-                # ...if we could find a a candidate index file in the directory...
-                if (candidate := local_index_from_uri(message.uri)).is_file()
-                # ...otherwise kick off the file picker to let the user choose a file.
-                else OpenFromFileSystem(candidate)
-            )
-            return
-
-        # It's not an obvious Gemini URI, and it's not a file in the local
-        # filesystem. Before we pass it off to the system browser, let's see
-        # it could look like a Gemini URI if we add the scheme.
-        if is_likely_schemeless_capsule(message.uri):
-            self.post_message(
-                OpenLocation(
-                    GeminiURI.with_default_scheme(message.uri),
-                    allow_cached=message.allow_cached,
-                )
-            )
-            return
-
-        # Otherwise, try to open it in the system browser.
-        self.post_message(OpenUnsupportedURI(message.uri))
+        self.post_message(uri_resolver(message))
 
     @on(OpenUnsupportedURI)
     @work

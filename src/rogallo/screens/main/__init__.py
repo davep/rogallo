@@ -1,20 +1,11 @@
-"""Provides application-wide messages."""
+"""Provides the main screen."""
 
 ##############################################################################
 # Local imports.
-from .opening import (
-    OpenFromFileSystem,
-    OpenLocation,
-    OpenURI,
-)
+from .screen import Main
 
 ##############################################################################
 # Exports.
-__all__ = [
-    "OpenFromFileSystem",
-    "OpenLocation",
-    "OpenURI",
-]
-
+__all__ = ["Main"]
 
 ### __init__.py ends here
