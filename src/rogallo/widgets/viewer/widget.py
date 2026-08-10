@@ -183,7 +183,7 @@ class Viewer(Vertical, can_focus=False):
             The best presentation for the document.
         """
         widget: Widget
-        if document.mime_type in ("text/markdown", "text/x-markdown"):
+        if document.mime_type_sans_parameters in ("text/markdown", "text/x-markdown"):
             widget = Markdown(document.content)
         else:
             widget = Static(
