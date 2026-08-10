@@ -685,7 +685,7 @@ class Main(EnhancedScreen[None]):
             await handle_finger_request(
                 request=request,
                 client=self._finger_client,
-                screen=self,
+                owner=self,
             )
         finally:
             self._command_line.working = False
@@ -760,7 +760,7 @@ class Main(EnhancedScreen[None]):
             await handle_spartan_request(
                 request=request,
                 client=self._spartan_cient,
-                screen=self,
+                owner=self,
                 cache=self._cache,
             )
         finally:

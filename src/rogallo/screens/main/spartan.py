@@ -6,7 +6,7 @@ from sybaritic import Client, Response, SpartanURI, SybariticError
 
 ##############################################################################
 # Textual imports.
-from textual.screen import Screen
+from textual.widget import Widget
 
 ##############################################################################
 # Local imports.
@@ -22,14 +22,14 @@ from .text_decoder import decode_text
 
 ##############################################################################
 async def _handle_response(
-    response: Response, request: OpenLocation, screen: Screen[None], cache: ContentCache
+    response: Response, request: OpenLocation, owner: Widget, cache: ContentCache
 ) -> None:
     """Handle a response from a Spartan request.
 
     Args:
         response: The response to handle.
         request: The original request that generated the response.
-        screen: The screen to post messages to.
+        owner: The widget that owns the request.
         cache: The content cache to use for caching documents.
     """
     assert isinstance(request.location, SpartanURI)
@@ -37,7 +37,7 @@ async def _handle_response(
 
     # Handle any non-successful response.
     if not response.status.is_success:
-        screen.notify(
+        owner.notify(
             f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
             severity="error",
             title="Request Error",
@@ -46,7 +46,7 @@ async def _handle_response(
 
     # Handle a successful response.
     if is_displayable_mime_type(response.mime_type):
-        screen.post_message(
+        owner.post_message(
             OpenDocument(
                 document=cache.add_document(
                     Document(
@@ -60,19 +60,19 @@ async def _handle_response(
             )
         )
     else:
-        screen.post_message(OpenUnsupportedMIMEType(uri, response.mime_type))
+        owner.post_message(OpenUnsupportedMIMEType(uri, response.mime_type))
 
 
 ##############################################################################
 async def handle_spartan_request(
-    request: OpenLocation, client: Client, screen: Screen[None], cache: ContentCache
+    request: OpenLocation, client: Client, owner: Widget, cache: ContentCache
 ) -> None:
     """Handle a Spartan request.
 
     Args:
         request: The Spartan request to handle.
         client: The client to use for the request.
-        screen: The screen to post messages to.
+        owner: The widget that owns the request.
         cache: The content cache to use for caching documents.
     """
 
@@ -86,7 +86,7 @@ async def handle_spartan_request(
         and request.allow_cached
         and (cached_document := cache.get_document(uri))
     ):
-        screen.post_message(
+        owner.post_message(
             OpenDocument(
                 document=cached_document,
                 original_request=request,
@@ -98,7 +98,7 @@ async def handle_spartan_request(
     # the user for it.
     attached_data: str | None = None
     if isinstance(uri, SpartanURINeedingData) and not (
-        attached_data := await screen.app.push_screen_wait(
+        attached_data := await owner.app.push_screen_wait(
             UserInput(uri, prompt="Spartan request requires data")
         )
     ):
@@ -106,9 +106,9 @@ async def handle_spartan_request(
 
     try:
         async with await client.request(uri, data=attached_data) as response:
-            await _handle_response(response, request, screen, cache)
+            await _handle_response(response, request, owner, cache)
     except SybariticError as error:
-        screen.notify(
+        owner.notify(
             f"Error loading {uri}:\n\n{error}",
             severity="error",
             title="Spartan Error",

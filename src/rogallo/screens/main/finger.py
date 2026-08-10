@@ -6,7 +6,7 @@ from port79 import Client, FingerURI, Port79Error
 
 ##############################################################################
 # Textual imports.
-from textual.screen import Screen
+from textual.widget import Widget
 
 ##############################################################################
 # Local imports.
@@ -17,7 +17,7 @@ from .local_messages import OpenDocument
 
 ##############################################################################
 async def handle_finger_request(
-    request: OpenLocation, client: Client, screen: Screen[None]
+    request: OpenLocation, client: Client, owner: Widget
 ) -> None:
     """Handle a finger request.
 
@@ -30,7 +30,7 @@ async def handle_finger_request(
     assert isinstance(uri, FingerURI)
 
     try:
-        screen.post_message(
+        owner.post_message(
             OpenDocument(
                 document=Document(
                     location=uri,
@@ -42,7 +42,7 @@ async def handle_finger_request(
             )
         )
     except Port79Error as error:
-        screen.notify(
+        owner.notify(
             f"Error loading {uri}:\n\n{error}",
             severity="error",
             title="Finger Error",
