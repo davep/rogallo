@@ -9,6 +9,8 @@
 - Fixed the icon shown for Gemtext links to other Gemtext files that are
   linked to with a `file:` URI.
   ([#310](https://github.com/davep/rogallo/pull/310))
+- Improved support for navigating Gemtext files found in the local
+  filesystem. ([#310](https://github.com/davep/rogallo/pull/310))
 
 ## v1.6.2
 
