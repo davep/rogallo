@@ -1,6 +1,6 @@
 [project]
 name = "rogallo"
-version = "1.6.2"
+version = "1.7.0"
 description = "A terminal-based client for the Gemini Protocol"
 readme = "README.md"
 authors = [
@@ -114,7 +114,7 @@ dev = [
     "pytest>=9.1.0",
     "pytest-cov>=7.1.0",
     "ruff>=0.15.17",
-    "smolserve>=0.0.4",
+    "smolserve>=1.0.0",
     "textual-dev>=1.8.0",
 ]
 
