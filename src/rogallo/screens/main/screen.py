@@ -12,12 +12,10 @@ from webbrowser import open as open_in_browser
 
 ##############################################################################
 # Gophermap imports.
-from gophermap import ItemType
-
 ##############################################################################
 # Port70 imports.
 from port70 import Client as GopherClient
-from port70 import GopherURI, Port70Error
+from port70 import GopherURI
 
 ##############################################################################
 # Port79 imports.
@@ -142,6 +140,7 @@ from ..certificate import Certificate
 from ..confirm_unsupported import ConfirmUnsupportedURI
 from ..user_input import UserInput
 from .finger import handle_finger_request
+from .gopher import handle_gopher_request
 from .local_messages import (
     CopyToClipboard,
     OpenDocument,
@@ -697,53 +696,13 @@ class Main(EnhancedScreen[None]):
         Args:
             request: The request to load the document from.
         """
-        uri = request.location
-        assert isinstance(uri, GopherURI)
-
-        # If it's a search and we don't know what we're looking for (TODO:
-        # be sure that that last part is even a thing)), ask the user what
-        # they want to search for.
-        if ItemType(uri.item_type) is ItemType.INDEX_SEARCH and uri.query is None:
-            if search_query := await self.app.push_screen_wait(
-                ModalInput(
-                    title=f"Search {uri.host}:{uri.port}",
-                    initial=(
-                        self._viewer.document.location.query or ""
-                        if isinstance(self._viewer.document.location, GopherURI)
-                        else ""
-                    ),
-                )
-            ):
-                uri = uri.with_query(search_query)
-            else:
-                return
-
-        # While Gopher doesn't deal with MIME types, Rogallo does for the
-        # most part, so let's figure out the effective MIME type for what
-        # we're doing here.
-        mime_type = ItemType(uri.item_type).mime_type
-        if not is_displayable_mime_type(mime_type):
-            self.post_message(OpenUnsupportedMIMEType(uri, mime_type))
-            return
-
         try:
             self._command_line.working = True
-            self.post_message(
-                OpenDocument(
-                    document=Document(
-                        location=uri,
-                        original_location=uri,
-                        content=(await self._gopher_client.request(uri)).text,
-                        mime_type=mime_type,
-                    ),
-                    original_request=request,
-                )
-            )
-        except Port70Error as error:
-            self.notify(
-                f"Error loading {uri}:\n\n{error}",
-                severity="error",
-                title="Gopher Error",
+            await handle_gopher_request(
+                request=request,
+                current_document=self._viewer.document,
+                client=self._gopher_client,
+                owner=self,
             )
         finally:
             self._command_line.working = False
