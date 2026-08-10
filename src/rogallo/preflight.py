@@ -165,7 +165,6 @@ def path_from_uri(uri: str) -> Path:
     Raises:
         ValueError: If the URI can't be turned into a [`Path`][pathlib.Path].
     """
-
     if (parsed := urlparse(uri)).scheme.lower() == "file":
         return Path(parsed.path).resolve()
     elif not parsed.scheme and not parsed.netloc:
@@ -174,14 +173,18 @@ def path_from_uri(uri: str) -> Path:
 
 
 ##############################################################################
-def is_likely_local_file(uri: str) -> bool:
-    """Determine if a URI is likely a local file.
+def is_local_file(uri: str) -> bool:
+    """Determine if a URI is a local file.
 
     Args:
         uri: The URI to check.
 
     Returns:
-        `True` if the URI is likely a local file, `False` otherwise.
+        `True` if the URI is likely a file, `False` otherwise.
+
+    Notes:
+        The URI is considered to be a local file if it can be turned into a
+        [`Path`][pathlib.Path] and that path is a file that exists.
     """
     try:
         candidate = path_from_uri(uri)
@@ -191,8 +194,8 @@ def is_likely_local_file(uri: str) -> bool:
 
 
 ##############################################################################
-def is_likely_local_file_of_type(uri: str, mime_type: str) -> bool:
-    """Determine if a URI is likely a local file of a given type.
+def is_local_file_of_type(uri: str, mime_type: str) -> bool:
+    """Determine if a URI is a local file of a given MIME type.
 
     Args:
         uri: The URI to check.
@@ -200,8 +203,13 @@ def is_likely_local_file_of_type(uri: str, mime_type: str) -> bool:
 
     Returns:
         `True` if the URI is likely a local text file, `False` otherwise.
+
+    Notes:
+        The URI is only considered to be a local file if it can be turned
+        into a [`Path`][pathlib.Path] and that path is a file that exists,
+        and the MIME type of that file starts with the given `mime_type`.
     """
-    if not is_likely_local_file(uri):
+    if not is_local_file(uri):
         return False
     try:
         guessed_mime_type, _ = mimetypes.guess_type(path_from_uri(uri))
@@ -211,29 +219,39 @@ def is_likely_local_file_of_type(uri: str, mime_type: str) -> bool:
 
 
 ##############################################################################
-def is_likely_local_text_file(uri: str) -> bool:
-    """Determine if a URI is likely a local text file.
+def is_local_text_file(uri: str) -> bool:
+    """Determine if a URI is local text file.
 
     Args:
         uri: The URI to check.
 
     Returns:
-        `True` if the URI is likely a local text file, `False` otherwise.
+        `True` if the URI is a local text file, `False` otherwise.
+
+    Notes:
+        The URI is considered to be a local text file if it can be turned
+        into a [`Path`][pathlib.Path] and that path is a file that exists,
+        and the MIME type of that file starts with "text/".
     """
-    return is_likely_local_file_of_type(uri, "text/")
+    return is_local_file_of_type(uri, "text/")
 
 
 ##############################################################################
-def is_likely_local_gemtext_file(uri: str) -> bool:
-    """Determine if a URI is likely a local Gemtext file.
+def is_local_gemtext_file(uri: str) -> bool:
+    """Determine if a URI is a local Gemtext file.
 
     Args:
         uri: The URI to check.
 
     Returns:
-        `True` if the URI is likely a local Gemtext file, `False` otherwise.
+        `True` if the URI is a local Gemtext file, `False` otherwise.
+
+    Notes:
+        The URI is considered to be a local Gemtext file if it can be turned
+        into a [`Path`][pathlib.Path] and that path is a file that exists
+        and the MIME type comes back as the Gemini MIME type.
     """
-    return is_likely_local_file_of_type(uri, GEMINI_MIME_TYPE)
+    return is_local_file_of_type(uri, GEMINI_MIME_TYPE)
 
 
 ##############################################################################
