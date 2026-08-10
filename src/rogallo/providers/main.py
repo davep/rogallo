@@ -42,6 +42,7 @@ from ..commands import (
     ToggleHistoryManager,
     ToggleLinkNumbers,
     ToggleView,
+    ViewChangeLog,
 )
 
 
@@ -87,6 +88,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(ToggleHistoryManager)
         yield ToggleLinkNumbers()
         yield from self.maybe(ToggleView)
+        yield ViewChangeLog()
 
 
 ### main.py ends here

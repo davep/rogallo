@@ -61,4 +61,11 @@ class PipeDocument(Command):
     BINDING_KEY = "ctrl+shift+p"
 
 
+##############################################################################
+class ViewChangeLog(Command):
+    """View the Rogallo ChangeLog"""
+
+    BINDING_KEY = "ctrl+shift+l"
+
+
 ### main.py ends here

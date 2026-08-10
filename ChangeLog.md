@@ -11,6 +11,8 @@
   ([#310](https://github.com/davep/rogallo/pull/310))
 - Improved support for navigating Gemtext files found in the local
   filesystem. ([#310](https://github.com/davep/rogallo/pull/310))
+- Added a `ViewChangeLog` command to open and view the Rogallo ChangeLog as
+  a Gemini document. ([#318](https://github.com/davep/rogallo/pull/318))
 
 ## v1.6.2
 
