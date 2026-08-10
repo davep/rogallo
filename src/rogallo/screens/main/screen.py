@@ -509,8 +509,7 @@ class Main(EnhancedScreen[None]):
         Args:
             request: The request to load the document from.
         """
-        try:
-            self._command_line.working = True
+        with self._command_line.busy_spinner():
             await handle_gemini_request(
                 request=request,
                 client=self._gemini_client,
@@ -519,8 +518,6 @@ class Main(EnhancedScreen[None]):
                 set_last_input=self._set_last_input,
                 get_last_input=self._get_last_input,
             )
-        finally:
-            self._command_line.working = False
 
     @work
     async def _load_from_finger(self, request: OpenLocation) -> None:
@@ -529,15 +526,12 @@ class Main(EnhancedScreen[None]):
         Args:
             request: The request to load the document from.
         """
-        try:
-            self._command_line.working = True
+        with self._command_line.busy_spinner():
             await handle_finger_request(
                 request=request,
                 client=self._finger_client,
                 owner=self,
             )
-        finally:
-            self._command_line.working = False
 
     @work
     async def _load_from_gopher(self, request: OpenLocation) -> None:
@@ -546,16 +540,13 @@ class Main(EnhancedScreen[None]):
         Args:
             request: The request to load the document from.
         """
-        try:
-            self._command_line.working = True
+        with self._command_line.busy_spinner():
             await handle_gopher_request(
                 request=request,
                 current_document=self._viewer.document,
                 client=self._gopher_client,
                 owner=self,
             )
-        finally:
-            self._command_line.working = False
 
     @work
     async def _load_from_spartan(self, request: OpenLocation) -> None:
@@ -564,16 +555,13 @@ class Main(EnhancedScreen[None]):
         Args:
             request: The request to load the document from.
         """
-        try:
-            self._command_line.working = True
+        with self._command_line.busy_spinner():
             await handle_spartan_request(
                 request=request,
                 client=self._spartan_cient,
                 owner=self,
                 cache=self._cache,
             )
-        finally:
-            self._command_line.working = False
 
     @work(thread=True)
     def _load_from_filesystem(self, request: OpenLocation) -> None:
