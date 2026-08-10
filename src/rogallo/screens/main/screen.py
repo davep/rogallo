@@ -4,25 +4,21 @@
 # Python imports.
 from argparse import Namespace
 from functools import partial
-from mimetypes import guess_type
-from pathlib import Path
 from subprocess import CalledProcessError, run
 from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
 
 ##############################################################################
 # Gophermap imports.
-from gophermap import ItemType
-
 ##############################################################################
 # Port70 imports.
 from port70 import Client as GopherClient
-from port70 import GopherURI, Port70Error
+from port70 import GopherURI
 
 ##############################################################################
 # Port79 imports.
 from port79 import Client as FingerClient
-from port79 import FingerURI, Port79Error
+from port79 import FingerURI
 
 ##############################################################################
 # Pyperclip imports.
@@ -32,8 +28,7 @@ from pyperclip import copy as copy_to_clipboard
 ##############################################################################
 # Sybaritic imports.
 from sybaritic import Client as SpartanClient
-from sybaritic import Response as SpartanResponse
-from sybaritic import SpartanURI, SybariticError
+from sybaritic import SpartanURI
 
 ##############################################################################
 # Textual imports.
@@ -59,14 +54,7 @@ from textual_fspicker import FileOpen, Filters
 ##############################################################################
 # Wasat imports.
 from wasat import Client as GeminiClient
-from wasat import (
-    ConnectionError,
-    GeminiURI,
-    SecurityError,
-    StatusCode,
-)
-from wasat import Response as GeminiResponse
-from wasat import URIError as GeminiURIError
+from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
@@ -127,28 +115,24 @@ from ...data import (
     trust_file,
     update_configuration,
 )
-from ...document import Document
 from ...input_content import InputContent
-from ...messages import (
-    OpenFromFileSystem,
-    OpenLocation,
-    OpenURI,
-)
-from ...mime_checks import is_displayable_mime_type
+from ...messages import OpenFromFileSystem, OpenLocation, OpenURI
 from ...providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
 from ...types import GEMINI_EXTENSIONS, SpartanURINeedingData
 from ...widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
 from ..about_page import AboutPage
-from ..certificate import Certificate
 from ..confirm_unsupported import ConfirmUnsupportedURI
-from ..user_input import UserInput
+from .filesystem import handle_filesystem_request
+from .finger import handle_finger_request
+from .gemini import handle_gemini_request
+from .gopher import handle_gopher_request
 from .local_messages import (
     CopyToClipboard,
     OpenDocument,
     OpenUnsupportedMIMEType,
     OpenUnsupportedURI,
 )
-from .text_decoder import decode_text
+from .spartan import handle_spartan_request
 from .uri_resolver import uri_resolver
 
 
@@ -393,6 +377,22 @@ class Main(EnhancedScreen[None]):
         """Called when the screen is unmounted."""
         await self._gemini_client.close()
 
+    def _set_last_input(self, input_content: InputContent | None) -> None:
+        """Set the last user input.
+
+        Args:
+            input_content: The last user input.
+        """
+        self._last_user_input = input_content
+
+    def _get_last_input(self) -> InputContent | None:
+        """Get the last user input.
+
+        Returns:
+            The last user input.
+        """
+        return self._last_user_input
+
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
         """Check if an action is possible to perform right now.
 
@@ -465,134 +465,6 @@ class Main(EnhancedScreen[None]):
             )
         return True
 
-    async def _handle_capsule_input_request(
-        self, location: GeminiURI, prompt: str, sensitive: bool
-    ) -> None:
-        """Handle a request for input from a Gemini request.
-
-        Args:
-            location: The location making the request.
-            sensitive: Whether the input is sensitive.
-        """
-        initial_input = ""
-        if self._last_user_input and self._last_user_input == InputContent(
-            location=location, prompt=prompt, sensitive=sensitive
-        ):
-            initial_input = self._last_user_input.content
-        if user_input := await self.app.push_screen_wait(
-            UserInput(
-                location, prompt=prompt, sensitive=sensitive, default=initial_input
-            )
-        ):
-            try:
-                self.post_message(
-                    OpenLocation(
-                        location=location.with_query(user_input),
-                        allow_cached=False,
-                        associated_input=InputContent(
-                            location=location,
-                            prompt=prompt,
-                            sensitive=sensitive,
-                            content=user_input,
-                        ),
-                    )
-                )
-            except GeminiURIError as error:
-                self.notify(
-                    f"Unable to create query for {location}:\n\n{error}",
-                    severity="error",
-                    title="Input Error",
-                )
-
-    async def _handle_client_certificate_request(
-        self, location: GeminiURI, request_reason: str
-    ) -> None:
-        """Handle a request for a client certificate from a Gemini request.
-
-        Args:
-            location: The location making the request.
-            request_reason: The reason for the client certificate request.
-        """
-        if (
-            certificate_data := await self.app.push_screen_wait(
-                Certificate(location, request_reason)
-            )
-        ) is None:
-            self.notify("Client certificate request cancelled.", severity="warning")
-            return
-        try:
-            await self._gemini_client.client_cert_store.create_credentials(
-                **certificate_data
-            )
-        except (ValueError, OSError, RuntimeError) as error:
-            self.notify(
-                f"Unable to create client certificate for {location}:\n\n{error}",
-                severity="error",
-                title="Client Certificate Error",
-            )
-            return
-        self.post_message(OpenLocation(location, allow_cached=False))
-
-    async def _handle_capsule_response(
-        self, response: GeminiResponse, request: OpenLocation
-    ) -> None:
-        """Handle a response from a Gemini request.
-
-        Args:
-            response: The response to handle.
-            request: The original request that generated the response.
-        """
-        assert isinstance(request.location, GeminiURI)
-        uri = response.uri or response.requested_uri or request.location
-
-        # Handle a request for user input.
-        if response.status.is_input:
-            await self._handle_capsule_input_request(
-                uri,
-                response.meta.strip(),
-                response.status is StatusCode.SENSITIVE_INPUT,
-            )
-            return
-
-        # Handle a request for a client certificate.
-        if response.status.is_client_certificate_required:
-            await self._handle_client_certificate_request(uri, response.meta.strip())
-            return
-
-        # Handle any other non-successful response.
-        if not response.status.is_success:
-            self._last_user_input = request.associated_input
-            self.notify(
-                f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
-                severity="error",
-                title="Request Error",
-            )
-            return
-
-        # Clear out any saved input.
-        self._last_user_input = None
-
-        # Handle a successful response.
-        if is_displayable_mime_type(response.mime_type):
-            self.post_message(
-                OpenDocument(
-                    document=self._cache.add_document(
-                        Document(
-                            location=uri,
-                            original_location=request.location,
-                            content=await decode_text(response),
-                            mime_type=response.mime_type,
-                            needed_certificate=response.client_cert_used,
-                            verification_method=response.verification_method,
-                            server_certificate=response.server_cert,
-                        )
-                    ),
-                    original_request=request,
-                )
-            )
-        else:
-            self.post_message(OpenUnsupportedMIMEType(uri, response.mime_type))
-
     def _maybe_remember_location(self, request: OpenDocument) -> None:
         """Remember a location in the history.
 
@@ -631,46 +503,21 @@ class Main(EnhancedScreen[None]):
         self._viewer.take_control()
 
     @work
-    async def _load_from_capsule(self, request: OpenLocation) -> None:
+    async def _load_from_gemini(self, request: OpenLocation) -> None:
         """Load a document from a Gemini URI.
 
         Args:
             request: The request to load the document from.
         """
-        uri = request.location
-        assert isinstance(uri, GeminiURI)
-
-        # If a cached copy of the document exists and the request allows it,
-        # use that instead of making a network request.
-        if request.allow_cached and (cached_document := self._cache.get_document(uri)):
-            self.post_message(
-                OpenDocument(
-                    document=cached_document,
-                    original_request=request,
-                )
+        with self._command_line.busy_spinner():
+            await handle_gemini_request(
+                request=request,
+                client=self._gemini_client,
+                owner=self,
+                cache=self._cache,
+                set_last_input=self._set_last_input,
+                get_last_input=self._get_last_input,
             )
-            return
-
-        # Otherwise, make a request to the capsule and handle the response.
-        try:
-            self._command_line.working = True
-            async with await self._gemini_client.request(uri) as response:
-                await self._handle_capsule_response(response, request)
-        except ConnectionError as error:
-            self._last_user_input = request.associated_input
-            self.notify(
-                f"Error loading {uri}:\n\n{error}",
-                severity="error",
-                title="Connection Error",
-            )
-        except SecurityError as error:
-            self.notify(
-                f"Error loading {uri}:\n\n{error}",
-                severity="error",
-                title="Security Error",
-            )
-        finally:
-            self._command_line.working = False
 
     @work
     async def _load_from_finger(self, request: OpenLocation) -> None:
@@ -679,30 +526,12 @@ class Main(EnhancedScreen[None]):
         Args:
             request: The request to load the document from.
         """
-        uri = request.location
-        assert isinstance(uri, FingerURI)
-
-        try:
-            self._command_line.working = True
-            self.post_message(
-                OpenDocument(
-                    document=Document(
-                        location=uri,
-                        original_location=uri,
-                        content=(await self._finger_client.request(uri)).text,
-                        mime_type="text/plain",
-                    ),
-                    original_request=request,
-                )
+        with self._command_line.busy_spinner():
+            await handle_finger_request(
+                request=request,
+                client=self._finger_client,
+                owner=self,
             )
-        except Port79Error as error:
-            self.notify(
-                f"Error loading {uri}:\n\n{error}",
-                severity="error",
-                title="Finger Error",
-            )
-        finally:
-            self._command_line.working = False
 
     @work
     async def _load_from_gopher(self, request: OpenLocation) -> None:
@@ -711,95 +540,13 @@ class Main(EnhancedScreen[None]):
         Args:
             request: The request to load the document from.
         """
-        uri = request.location
-        assert isinstance(uri, GopherURI)
-
-        # If it's a search and we don't know what we're looking for (TODO:
-        # be sure that that last part is even a thing)), ask the user what
-        # they want to search for.
-        if ItemType(uri.item_type) is ItemType.INDEX_SEARCH and uri.query is None:
-            if search_query := await self.app.push_screen_wait(
-                ModalInput(
-                    title=f"Search {uri.host}:{uri.port}",
-                    initial=(
-                        self._viewer.document.location.query or ""
-                        if isinstance(self._viewer.document.location, GopherURI)
-                        else ""
-                    ),
-                )
-            ):
-                uri = uri.with_query(search_query)
-            else:
-                return
-
-        # While Gopher doesn't deal with MIME types, Rogallo does for the
-        # most part, so let's figure out the effective MIME type for what
-        # we're doing here.
-        mime_type = ItemType(uri.item_type).mime_type
-        if not is_displayable_mime_type(mime_type):
-            self.post_message(OpenUnsupportedMIMEType(uri, mime_type))
-            return
-
-        try:
-            self._command_line.working = True
-            self.post_message(
-                OpenDocument(
-                    document=Document(
-                        location=uri,
-                        original_location=uri,
-                        content=(await self._gopher_client.request(uri)).text,
-                        mime_type=mime_type,
-                    ),
-                    original_request=request,
-                )
+        with self._command_line.busy_spinner():
+            await handle_gopher_request(
+                request=request,
+                current_document=self._viewer.document,
+                client=self._gopher_client,
+                owner=self,
             )
-        except Port70Error as error:
-            self.notify(
-                f"Error loading {uri}:\n\n{error}",
-                severity="error",
-                title="Gopher Error",
-            )
-        finally:
-            self._command_line.working = False
-
-    async def _handle_spartan_response(
-        self, response: SpartanResponse, request: OpenLocation
-    ) -> None:
-        """Handle a response from a Spartan request.
-
-        Args:
-            response: The response to handle.
-            request: The original request that generated the response.
-        """
-        assert isinstance(request.location, SpartanURI)
-        uri = response.uri or response.requested_uri or request.location
-
-        # Handle any non-successful response.
-        if not response.status.is_success:
-            self.notify(
-                f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
-                severity="error",
-                title="Request Error",
-            )
-            return
-
-        # Handle a successful response.
-        if is_displayable_mime_type(response.mime_type):
-            self.post_message(
-                OpenDocument(
-                    document=self._cache.add_document(
-                        Document(
-                            location=uri,
-                            original_location=request.location,
-                            content=await decode_text(response),
-                            mime_type=response.mime_type,
-                        )
-                    ),
-                    original_request=request,
-                )
-            )
-        else:
-            self.post_message(OpenUnsupportedMIMEType(uri, response.mime_type))
 
     @work
     async def _load_from_spartan(self, request: OpenLocation) -> None:
@@ -808,48 +555,13 @@ class Main(EnhancedScreen[None]):
         Args:
             request: The request to load the document from.
         """
-        uri = request.location
-        assert isinstance(uri, SpartanURI)
-
-        # If a cached copy of the document exists and the request allows it,
-        # use that instead of making a network request.
-        if (
-            not isinstance(uri, SpartanURINeedingData)
-            and request.allow_cached
-            and (cached_document := self._cache.get_document(uri))
-        ):
-            self.post_message(
-                OpenDocument(
-                    document=cached_document,
-                    original_request=request,
-                )
+        with self._command_line.busy_spinner():
+            await handle_spartan_request(
+                request=request,
+                client=self._spartan_cient,
+                owner=self,
+                cache=self._cache,
             )
-            return
-
-        # If we're looking at a Spartan request that needs data. Let's ask
-        # the user for it.
-        attached_data: str | None = None
-        if isinstance(uri, SpartanURINeedingData) and not (
-            attached_data := await self.app.push_screen_wait(
-                UserInput(uri, prompt="Spartan request requires data")
-            )
-        ):
-            return
-
-        try:
-            self._command_line.working = True
-            async with await self._spartan_cient.request(
-                uri, data=attached_data
-            ) as response:
-                await self._handle_spartan_response(response, request)
-        except SybariticError as error:
-            self.notify(
-                f"Error loading {uri}:\n\n{error}",
-                severity="error",
-                title="Spartan Error",
-            )
-        finally:
-            self._command_line.working = False
 
     @work(thread=True)
     def _load_from_filesystem(self, request: OpenLocation) -> None:
@@ -858,35 +570,7 @@ class Main(EnhancedScreen[None]):
         Args:
             request: The request to load the document from.
         """
-        assert isinstance(request.location, Path)
-        mime_type = guess_type(request.location)[0] or "application/octet-stream"
-        if not is_displayable_mime_type(mime_type):
-            self.post_message(OpenUnsupportedMIMEType(request.location, mime_type))
-            return
-        try:
-            self.post_message(
-                OpenDocument(
-                    document=Document(
-                        location=request.location,
-                        original_location=request.location,
-                        content=request.location.read_text(encoding="utf-8"),
-                        mime_type=mime_type,
-                    ),
-                    original_request=request,
-                )
-            )
-        except OSError as error:
-            self.notify(
-                f"Error loading {request.location}:\n\n{error}",
-                severity="error",
-                title="Filesystem Error",
-            )
-        except UnicodeDecodeError as error:
-            self.notify(
-                f"Error loading {request.location}:\n\n{error}\n\nLikely not a text file.",
-                severity="error",
-                title="Decode Error",
-            )
+        handle_filesystem_request(request, self)
 
     @on(OpenLocation)
     def open_location(self, message: OpenLocation) -> None:
@@ -895,10 +579,10 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message the location open request.
         """
-        if isinstance(message.location, GeminiURI):
-            self._load_from_capsule(message)
-        elif isinstance(message.location, FingerURI):
+        if isinstance(message.location, FingerURI):
             self._load_from_finger(message)
+        elif isinstance(message.location, GeminiURI):
+            self._load_from_gemini(message)
         elif isinstance(message.location, GopherURI):
             self._load_from_gopher(message)
         elif isinstance(message.location, SpartanURI):

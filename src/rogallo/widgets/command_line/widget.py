@@ -4,8 +4,11 @@
 # Python future imports.
 from __future__ import annotations
 
+from collections.abc import Iterator
+
 ##############################################################################
 # Python imports.
+from contextlib import contextmanager
 from dataclasses import dataclass
 from itertools import chain, cycle
 from typing import Final
@@ -248,6 +251,15 @@ class CommandLine(Vertical):
     def has_control(self) -> bool:
         """Does the command line have control of the input?"""
         return self._input.has_focus
+
+    @contextmanager
+    def busy_spinner(self) -> Iterator[None]:
+        """A context manager to show a busy spinner while doing something."""
+        self.working = True
+        try:
+            yield
+        finally:
+            self.working = False
 
     @dataclass
     class CommandExecuted(Message):
