@@ -32,7 +32,7 @@ from textual.highlight import HighlightTheme, highlight
 from textual.reactive import var
 from textual.timer import Timer
 from textual.widget import Widget
-from textual.widgets import Static
+from textual.widgets import Markdown, Static
 
 ##############################################################################
 # Textual enhanced imports.
@@ -182,8 +182,11 @@ class Viewer(Vertical, can_focus=False):
         Returns:
             The best presentation for the document.
         """
-        return [
-            Static(
+        widget: Widget
+        if document.mime_type in ("text/markdown", "text/x-markdown"):
+            widget = Markdown(document.content)
+        else:
+            widget = Static(
                 Text.from_ansi(document.content)
                 if "\x1b[" in document.content
                 else highlight(
@@ -193,7 +196,7 @@ class Viewer(Vertical, can_focus=False):
                 ),
                 markup=False,
             )
-        ]
+        return [widget]
 
     def _build_content(self) -> list[Widget]:
         """Build the content for the viewer.

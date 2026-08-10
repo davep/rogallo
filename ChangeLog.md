@@ -1,5 +1,13 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: 2026-08-10**
+
+- Viewing `text/markdown` or `text/x-markdown` documents now uses full
+  Markdown presentation in the viewer.
+  ([#320](https://github.com/davep/rogallo/pull/320))
+
 ## v1.7.0
 
 **Released: 2026-08-10**
