@@ -50,6 +50,7 @@ from wasat import GeminiURI
 # Local imports.
 from ...data import LocationHistory, load_configuration
 from ...document import Document
+from ...types import GEMINI_MIME_TYPE
 from .document_view import DocumentView
 from .gemtext import GemtextContent, GemtextLink, get_block_widget
 from .gopher import to_gemtext
@@ -177,6 +178,20 @@ class Viewer(Vertical, can_focus=False):
         if buffer:
             yield Paragraph("\n".join(buffer))
 
+    @property
+    def can_view_source(self) -> bool:
+        """Whether the viewer can view the source of the document.
+
+        Returns:
+            Whether the viewer can view the source of the document.
+        """
+        return self.document.mime_type_sans_parameters in (
+            GEMINI_MIME_TYPE,
+            "text/markdown",
+            "text/x-markdown",
+            "text/html",
+        )
+
     def _gemtext_widgets(
         self, content: str, with_spartan_support: bool = False
     ) -> list[Widget]:
@@ -208,10 +223,14 @@ class Viewer(Vertical, can_focus=False):
         Returns:
             The best presentation for the document.
         """
-        if document.mime_type_sans_parameters in ("text/markdown", "text/x-markdown"):
-            return [Markdown(document.content)]
-        if document.mime_type_sans_parameters == "text/html":
-            return self._gemtext_widgets(html_to_gemtext(document.content))
+        if not self.view_source:
+            if document.mime_type_sans_parameters in (
+                "text/markdown",
+                "text/x-markdown",
+            ):
+                return [Markdown(document.content)]
+            if document.mime_type_sans_parameters == "text/html":
+                return self._gemtext_widgets(html_to_gemtext(document.content))
         return [
             Static(
                 Text.from_ansi(document.content)
