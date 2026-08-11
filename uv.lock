@@ -726,6 +726,15 @@ wheels = [
 ]
 
 [[package]]
+name = "html2gemtext"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/2d/1d/7e842b0402c03eeb1b1c39bfd0dfe6d80feaeaf6f8689d10feceb6f9d74e/html2gemtext-0.1.0.tar.gz", hash = "sha256:84360f629c25c797d96921a2662a83777f09bf93e7f8cd876d37358567c66ab2", size = 5165, upload-time = "2026-08-11T18:38:30.353Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/22/c8/90e64e7bcd5fe382981a3dbe795f03909520c04cb2ccbf1da2046b3343e2/html2gemtext-0.1.0-py3-none-any.whl", hash = "sha256:f13e3c9ff41edcdc8e2fa058deb5dbbe788b37eefbe1f27002f3add28c74bd72", size = 6621, upload-time = "2026-08-11T18:38:29.265Z" },
+]
+
+[[package]]
 name = "identify"
 version = "2.6.19"
 source = { registry = "https://pypi.org/simple" }
@@ -1652,6 +1661,7 @@ dependencies = [
     { name = "bagofstuff" },
     { name = "gemtext" },
     { name = "gophermap" },
+    { name = "html2gemtext" },
     { name = "port70" },
     { name = "port79" },
     { name = "pyperclip" },
@@ -1686,6 +1696,7 @@ requires-dist = [
     { name = "bagofstuff", specifier = ">=1.2.1" },
     { name = "gemtext", specifier = ">=1.1.0" },
     { name = "gophermap", specifier = ">=0.2.0" },
+    { name = "html2gemtext", specifier = ">=0.1.0" },
     { name = "port70", specifier = ">=0.1.2" },
     { name = "port79", specifier = ">=1.0.0" },
     { name = "pyperclip", specifier = ">=1.11.0" },
