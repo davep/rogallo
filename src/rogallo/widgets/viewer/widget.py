@@ -9,6 +9,10 @@ from collections.abc import Iterator
 from gemtext import Gemtext, Line, Paragraph
 
 ##############################################################################
+# html2gemtext imports.
+from html2gemtext import html_to_gemtext
+
+##############################################################################
 # Port79 imports.
 from port70 import GopherURI
 from port79 import FingerURI
@@ -173,6 +177,28 @@ class Viewer(Vertical, can_focus=False):
         if buffer:
             yield Paragraph("\n".join(buffer))
 
+    def _gemtext_widgets(
+        self, content: str, with_spartan_support: bool = False
+    ) -> list[Widget]:
+        """Build a list of widgets to display the Gemtext content.
+
+        Args:
+            content: The content to convert.
+            with_spartan_support: Whether to support Spartan links.
+
+        Returns:
+            The widgets for the Gemtext content.
+        """
+        return [
+            get_block_widget(line)
+            for line in self._consolidate(
+                Gemtext(
+                    content,
+                    with_spartan_support=with_spartan_support,
+                ).content
+            )
+        ]
+
     def _best_presentation_for(self, document: Document) -> list[Widget]:
         """Get the best presentation for the document.
 
@@ -182,11 +208,12 @@ class Viewer(Vertical, can_focus=False):
         Returns:
             The best presentation for the document.
         """
-        widget: Widget
         if document.mime_type_sans_parameters in ("text/markdown", "text/x-markdown"):
-            widget = Markdown(document.content)
-        else:
-            widget = Static(
+            return [Markdown(document.content)]
+        if document.mime_type_sans_parameters == "text/html":
+            return self._gemtext_widgets(html_to_gemtext(document.content))
+        return [
+            Static(
                 Text.from_ansi(document.content)
                 if "\x1b[" in document.content
                 else highlight(
@@ -196,7 +223,7 @@ class Viewer(Vertical, can_focus=False):
                 ),
                 markup=False,
             )
-        return [widget]
+        ]
 
     def _build_content(self) -> list[Widget]:
         """Build the content for the viewer.
@@ -212,19 +239,12 @@ class Viewer(Vertical, can_focus=False):
                         markup=False,
                     )
                 ]
-            return [
-                get_block_widget(line)
-                for line in self._consolidate(
-                    Gemtext(
-                        self.document.content
-                        if self.document.is_gemtext
-                        else "\n".join(to_gemtext(self.document.content)),
-                        with_spartan_support=isinstance(
-                            self.document.location, SpartanURI
-                        ),
-                    ).content
-                )
-            ]
+            return self._gemtext_widgets(
+                self.document.content
+                if self.document.is_gemtext
+                else "\n".join(to_gemtext(self.document.content)),
+                with_spartan_support=isinstance(self.document.location, SpartanURI),
+            )
         return self._best_presentation_for(self.document)
 
     async def _watch_document(
