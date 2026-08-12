@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-**Released: 2026-08-10**
+**Released: WiP**
 
 - Viewing `text/markdown` or `text/x-markdown` documents now uses full
   Markdown presentation in the viewer.
