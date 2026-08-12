@@ -103,7 +103,7 @@ class ContentCache(CacheManager):
 
         # Just return the document if the cache is disabled or the document
         # should avoid being cached.
-        if self._disabled or document.location is None or document.avoid_cache:
+        if self._disabled or document.avoid_cache or document.location is None:
             return document
 
         meta_data_file, content_file = self._cache_files(document.location)
