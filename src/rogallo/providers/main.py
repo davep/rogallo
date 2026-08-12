@@ -24,6 +24,7 @@ from ..commands import (
     GoHome,
     GoToParent,
     GoToRoot,
+    HandOffToOperatingSystem,
     JumpToCommandLine,
     JumpToDocument,
     JumpToSidebar,
@@ -68,6 +69,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(GoHome)
         yield from self.maybe(GoToParent)
         yield from self.maybe(GoToRoot)
+        yield from self.maybe(HandOffToOperatingSystem)
         yield Help()
         yield from self.maybe(JumpToCommandLine)
         yield from self.maybe(JumpToDocument)
