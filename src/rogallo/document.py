@@ -7,7 +7,7 @@ from functools import cached_property
 
 ##############################################################################
 # Gophermap imports.
-from gophermap import GopherMap, ItemType
+from gophermap import GopherMap
 
 ##############################################################################
 # Port70 imports.
@@ -86,9 +86,9 @@ class Document:
     @cached_property
     def is_gopher_error(self) -> bool:
         """`True` if the document is a Gopher error document, `False` otherwise."""
-        return isinstance(self.location, GopherURI) and ItemType.ERROR in {
-            item.type for item in GopherMap(self.content).items
-        }
+        return isinstance(self.location, GopherURI) and GopherMap.is_likely_error(
+            self.content
+        )
 
     @property
     def is_renderable_as_gemtext(self) -> bool:

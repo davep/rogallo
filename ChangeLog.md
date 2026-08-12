@@ -17,6 +17,8 @@
   current document to the operating system, allowing it to be opened in
   whatever application is configured in the environment to handle it.
   ([#326](https://github.com/davep/rogallo/pull/326))
+- Fixed a false positive when detecting an error response from a Gopher
+  server. ([#328](https://github.com/davep/rogallo/pull/328))
 
 ## v1.7.0
 
