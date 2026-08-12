@@ -68,4 +68,11 @@ class ViewChangeLog(Command):
     BINDING_KEY = "ctrl+shift+l"
 
 
+##############################################################################
+class HandOffToOperatingSystem(Command):
+    """Hand off the current location to the operating system"""
+
+    BINDING_KEY = "ctrl+shift+o"
+
+
 ### main.py ends here

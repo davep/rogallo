@@ -13,6 +13,10 @@
 - The `ToggleView` command now also toggles the Markdown and HTML views
   between their richer presentations and their raw source view.
   ([#320](https://github.com/davep/rogallo/pull/320))
+- Added a `HandOffToOperatingSystem` command which hands the URI of the
+  current document to the operating system, allowing it to be opened in
+  whatever application is configured in the environment to handle it.
+  ([#326](https://github.com/davep/rogallo/pull/326))
 
 ## v1.7.0
 

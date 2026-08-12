@@ -73,6 +73,7 @@ from ...commands import (
     GoHome,
     GoToParent,
     GoToRoot,
+    HandOffToOperatingSystem,
     JumpToCommandLine,
     JumpToDocument,
     JumpToSidebar,
@@ -238,6 +239,7 @@ class Main(EnhancedScreen[None]):
         GoHome,
         GoToParent,
         GoToRoot,
+        HandOffToOperatingSystem,
         JumpToCommandLine,
         JumpToDocument,
         JumpToSidebar,
@@ -431,8 +433,9 @@ class Main(EnhancedScreen[None]):
         ):
             return len(self._bookmarks) > 0 or None
         if action in (
-            Reload.action_name(),
             CopyLocationToClipboard.action_name(),
+            HandOffToOperatingSystem.action_name(),
+            Reload.action_name(),
             SetHomeToCurrentLocation.action_name(),
         ):
             return bool(self._viewer.document.location)
@@ -1065,6 +1068,11 @@ class Main(EnhancedScreen[None]):
     def action_view_change_log_command(self) -> None:
         """View the change log."""
         self.post_message(OpenURI("gemini://tilde.team/~davep/rogallo/changelog.gmi"))
+
+    def action_hand_off_to_operating_system_command(self) -> None:
+        """Hand off the current document's location to the operating system."""
+        if self._viewer.document.location:
+            open_in_browser(str(self._viewer.document.location))
 
 
 ### main.py ends here
