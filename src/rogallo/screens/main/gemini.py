@@ -186,6 +186,7 @@ async def _handle_response(
                         needed_certificate=response.client_cert_used,
                         verification_method=response.verification_method,
                         server_certificate=response.server_cert,
+                        avoid_cache=response.client_cert_used,
                     )
                 ),
                 original_request=request,

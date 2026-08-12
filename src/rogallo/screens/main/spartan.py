@@ -54,6 +54,7 @@ async def _handle_response(
                         original_location=request.location,
                         content=await decode_text(response),
                         mime_type=response.mime_type,
+                        avoid_cache=isinstance(uri, SpartanURINeedingData),
                     )
                 ),
                 original_request=request,

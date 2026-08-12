@@ -55,6 +55,9 @@ class Document:
     needed_certificate: bool = False
     """Whether the document required a client certificate to access."""
 
+    avoid_cache: bool = False
+    """Whether the document should avoid being cached."""
+
     verification_method: VerificationMethod | None = None
     """The method used to verify the server, if any."""
 

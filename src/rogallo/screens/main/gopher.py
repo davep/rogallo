@@ -94,6 +94,7 @@ async def handle_gopher_request(
                         original_location=uri,
                         content=(await client.request(uri)).text,
                         mime_type=mime_type,
+                        avoid_cache=ItemType(uri.item_type) is ItemType.INDEX_SEARCH,
                     )
                 ),
                 original_request=request,
