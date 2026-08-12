@@ -1,5 +1,19 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: 2026-08-10**
+
+- Viewing `text/markdown` or `text/x-markdown` documents now uses full
+  Markdown presentation in the viewer.
+  ([#320](https://github.com/davep/rogallo/pull/320))
+- Viewing `text/html` documents now converts the HTML to Gemtext and
+  displays it using the Gemtext view.
+  ([#320](https://github.com/davep/rogallo/pull/320))
+- The `ToggleView` command now also toggles the Markdown and HTML views
+  between their richer presentations and their raw source view.
+  ([#320](https://github.com/davep/rogallo/pull/320))
+
 ## v1.7.0
 
 **Released: 2026-08-10**

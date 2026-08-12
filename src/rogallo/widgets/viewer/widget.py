@@ -9,6 +9,10 @@ from collections.abc import Iterator
 from gemtext import Gemtext, Line, Paragraph
 
 ##############################################################################
+# html2gemtext imports.
+from html2gemtext import html_to_gemtext
+
+##############################################################################
 # Port79 imports.
 from port70 import GopherURI
 from port79 import FingerURI
@@ -32,7 +36,7 @@ from textual.highlight import HighlightTheme, highlight
 from textual.reactive import var
 from textual.timer import Timer
 from textual.widget import Widget
-from textual.widgets import Static
+from textual.widgets import Markdown, Static
 
 ##############################################################################
 # Textual enhanced imports.
@@ -46,6 +50,7 @@ from wasat import GeminiURI
 # Local imports.
 from ...data import LocationHistory, load_configuration
 from ...document import Document
+from ...types import GEMINI_MIME_TYPE
 from .document_view import DocumentView
 from .gemtext import GemtextContent, GemtextLink, get_block_widget
 from .gopher import to_gemtext
@@ -173,6 +178,55 @@ class Viewer(Vertical, can_focus=False):
         if buffer:
             yield Paragraph("\n".join(buffer))
 
+    _WITH_SOURCE_MIME_TYPES = frozenset(
+        {
+            GEMINI_MIME_TYPE,
+            "text/markdown",
+            "text/x-markdown",
+            "text/html",
+        }
+    )
+    """The MIME types that can be viewed as source."""
+
+    @property
+    def can_view_source(self) -> bool:
+        """Whether the viewer can view the source of the document.
+
+        Returns:
+            Whether the viewer can view the source of the document.
+        """
+        return self.document.mime_type_sans_parameters in self._WITH_SOURCE_MIME_TYPES
+
+    def _gemtext_widgets(
+        self, content: str, with_spartan_support: bool = False
+    ) -> list[Widget]:
+        """Build a list of widgets to display the Gemtext content.
+
+        Args:
+            content: The content to convert.
+            with_spartan_support: Whether to support Spartan links.
+
+        Returns:
+            The widgets for the Gemtext content.
+        """
+        return [
+            get_block_widget(line)
+            for line in self._consolidate(
+                Gemtext(
+                    content,
+                    with_spartan_support=with_spartan_support,
+                ).content
+            )
+        ]
+
+    _MARKDOWN_MIME_TYPES = frozenset(
+        {
+            "text/markdown",
+            "text/x-markdown",
+        }
+    )
+    """The MIME types that can be viewed as Markdown."""
+
     def _best_presentation_for(self, document: Document) -> list[Widget]:
         """Get the best presentation for the document.
 
@@ -182,6 +236,11 @@ class Viewer(Vertical, can_focus=False):
         Returns:
             The best presentation for the document.
         """
+        if not self.view_source:
+            if document.mime_type_sans_parameters in self._MARKDOWN_MIME_TYPES:
+                return [Markdown(document.content)]
+            if document.mime_type_sans_parameters == "text/html":
+                return self._gemtext_widgets(html_to_gemtext(document.content))
         return [
             Static(
                 Text.from_ansi(document.content)
@@ -209,19 +268,12 @@ class Viewer(Vertical, can_focus=False):
                         markup=False,
                     )
                 ]
-            return [
-                get_block_widget(line)
-                for line in self._consolidate(
-                    Gemtext(
-                        self.document.content
-                        if self.document.is_gemtext
-                        else "\n".join(to_gemtext(self.document.content)),
-                        with_spartan_support=isinstance(
-                            self.document.location, SpartanURI
-                        ),
-                    ).content
-                )
-            ]
+            return self._gemtext_widgets(
+                self.document.content
+                if self.document.is_gemtext
+                else "\n".join(to_gemtext(self.document.content)),
+                with_spartan_support=isinstance(self.document.location, SpartanURI),
+            )
         return self._best_presentation_for(self.document)
 
     async def _watch_document(
