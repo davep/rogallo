@@ -718,11 +718,11 @@ wheels = [
 
 [[package]]
 name = "gophermap"
-version = "0.2.0"
+version = "1.0.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/57/d4/5869c763a6c29d538a47cfa0ead086fbc4e58622a3b37934afc673df0bd3/gophermap-0.2.0.tar.gz", hash = "sha256:1d5a670afa029b390c1222bb490655def44174114d9cbe1f07c8013fe9f5f410", size = 4833, upload-time = "2026-07-28T15:32:03.156Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7a/88/939341e120d0baa4ac8a0578678e0d87c512e8a9c03f6f95ad3eab938139/gophermap-1.0.0.tar.gz", hash = "sha256:77149f40a8523353adbfea35305b3bb7020abcb5ee5b43bdffefa103e9904498", size = 5468, upload-time = "2026-08-12T13:57:09.278Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/20/87/87232782f12ba3fee9f87b5a967cd442ff6a3c6fca4f088450ac94400dbb/gophermap-0.2.0-py3-none-any.whl", hash = "sha256:21ecc6dcf14775a40f82610fa56d22e1931d451dc4a105074e0c906bef6372c4", size = 6657, upload-time = "2026-07-28T15:32:02.244Z" },
+    { url = "https://files.pythonhosted.org/packages/5f/a9/d25c0de72d2026ffb2c0caab98d042e92f5465553ffa70f39e163bf0de3f/gophermap-1.0.0-py3-none-any.whl", hash = "sha256:1cbed106a881aa282a19d344263e310ce17effa9f306e0860d5390794694e6e5", size = 7356, upload-time = "2026-08-12T13:57:08.141Z" },
 ]
 
 [[package]]
@@ -1365,7 +1365,7 @@ wheels = [
 
 [[package]]
 name = "pre-commit"
-version = "4.6.1"
+version = "4.6.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cfgv" },
@@ -1374,9 +1374,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "virtualenv" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/25/3a/ddb78f32a0814e66b18a099377a106a2dcdce92d86a034d69d65df9b256e/pre_commit-4.6.1.tar.gz", hash = "sha256:03e809865c7d178b9979d06c761fcbfe6808fdaded8581a745bb110e52050421", size = 198646, upload-time = "2026-07-21T20:56:58.225Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/74/89/1f3e8e1fc3e97de0fa963495832f581f025f29471602a309e48808244292/pre_commit-4.6.2.tar.gz", hash = "sha256:8f5d7bfb021ecdbcd9d49d89847082dd24172ccde534390081a679ad046e2441", size = 198670, upload-time = "2026-08-10T22:07:18.421Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fb/49/bc925106abcdac498074f2cbe6137e94e09f418dd2b7775df5b577dc0313/pre_commit-4.6.1-py2.py3-none-any.whl", hash = "sha256:0e3b2942510d1fb34eec167a3ec57331bf8442122f1153a9fb8b58f5c49b2717", size = 226186, upload-time = "2026-07-21T20:56:57.064Z" },
+    { url = "https://files.pythonhosted.org/packages/45/e2/bbb7129c9e7999a6b8ee9cca3b66486c25c423ab5a75f34071798b74ce94/pre_commit-4.6.2-py2.py3-none-any.whl", hash = "sha256:e2dde9a75d3bce11bd3831c26d134df00a2803c1d818be6a0383c3dcda25dc4e", size = 226202, upload-time = "2026-08-10T22:07:16.942Z" },
 ]
 
 [[package]]
@@ -1695,7 +1695,7 @@ dev = [
 requires-dist = [
     { name = "bagofstuff", specifier = ">=1.2.1" },
     { name = "gemtext", specifier = ">=1.1.0" },
-    { name = "gophermap", specifier = ">=0.2.0" },
+    { name = "gophermap", specifier = ">=1.0.0" },
     { name = "html2gemtext", specifier = ">=0.1.0" },
     { name = "port70", specifier = ">=0.1.2" },
     { name = "port79", specifier = ">=1.0.0" },
@@ -1902,7 +1902,7 @@ wheels = [
 
 [[package]]
 name = "virtualenv"
-version = "21.7.3"
+version = "21.7.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "distlib" },
@@ -1910,9 +1910,9 @@ dependencies = [
     { name = "platformdirs" },
     { name = "python-discovery" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9c/10/8b7a5454efc032be50c1c5641467dbb5d31314500205212b2aa66d3c8af4/virtualenv-21.7.3.tar.gz", hash = "sha256:5e9e287f5c808070eea3b40403d3368248e64b24f1b60bd9a36e85ac841d2c3e", size = 5525482, upload-time = "2026-08-08T14:43:20.286Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2d/dc/a6eb1ddfa7f1e390fa599b078453c97edb3f6f846b34fb4eac3e8ea16401/virtualenv-21.7.4.tar.gz", hash = "sha256:c9d960c95fa458171e58222a5ccab7465298e4b6559977865e627c4719f1e825", size = 5345511, upload-time = "2026-08-10T22:54:33.316Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/77/2a/83d779d2dfb61f101d7b1c10073d18984e37262d8b4f171c99911a952430/virtualenv-21.7.3-py3-none-any.whl", hash = "sha256:26dfda3c34f29bf1a3ca167426a67658d59979b9954e705aef60a5f724ce1773", size = 5504590, upload-time = "2026-08-08T14:43:18.57Z" },
+    { url = "https://files.pythonhosted.org/packages/40/4c/eb2f52aeeaf30dbd073d315a251a63ae2b8263171ec4428c135140cb0802/virtualenv-21.7.4-py3-none-any.whl", hash = "sha256:376ec93cd6aab3044fa395d7db226db38043b7b5748948044b2a87168525e843", size = 5324444, upload-time = "2026-08-10T22:54:31.515Z" },
 ]
 
 [[package]]
