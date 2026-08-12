@@ -51,4 +51,39 @@ To jump to that link, simply type its number.
 ```{.textual path="docs/screenshots/stripes_screenshot.py" title="A highlighted link after typing its number" lines=30 columns=70 press="5"}
 ```
 
+## Configuration
+
+### Filtering out pre-formatted text
+
+Because pre-formatted text can be used to generate site logos and similar,
+this can sometimes mean that you're faced with viewing the same ASCII art
+over and over again, that uses up vertical space, and means it takes longer
+to get to the content of a site. With this in mind Rogallo has a facility
+for hiding specific pre-formatted text. It is based on the idea that such
+pre-formatted blocks will have alt-text, and that we will normally only want
+to do it for a specific URI. As an example: suppose I wanted to hide *my*
+avatar image on [Station](gemini://station.martinrue.com/), and also the
+site logo to save some space, I can set the following in the configuration
+file:
+
+```json
+"hide_preformatted": [
+    [
+        "gemini://station.martinrue.com/",
+        "Station logo"
+    ],
+    [
+        "gemini://station.martinrue.com/davep",
+        "User image"
+    ]
+]
+```
+
+As you can see, the filters are defined as a list of lists. The first value
+in each is the URI to match. This will match *that location and all below
+it*. So in the above `gemini://station.martinrue.com/` would match that
+location, and also `gemini://station.martinrue.com/davep` and
+`gemini://station.martinrue.com/example-user` and so on. The second value is
+the alt-text for the pre-formatted text.
+
 [//]: # (viewer.md ends here)

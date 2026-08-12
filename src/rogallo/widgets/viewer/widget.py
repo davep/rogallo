@@ -3,10 +3,11 @@
 ##############################################################################
 # Python imports.
 from collections.abc import Iterator
+from functools import cached_property
 
 ##############################################################################
 # Gemtext imports.
-from gemtext import Gemtext, Line, Paragraph
+from gemtext import Gemtext, Line, Paragraph, PreFormatted
 
 ##############################################################################
 # html2gemtext imports.
@@ -197,6 +198,23 @@ class Viewer(Vertical, can_focus=False):
         """
         return self.document.mime_type_sans_parameters in self._WITH_SOURCE_MIME_TYPES
 
+    @cached_property
+    def _hidden_pre_alt_text(self) -> set[tuple[str, str]]:
+        """Get the set of preformatted types that should be hidden.
+
+        Returns:
+            The set of preformatted types that should be hidden.
+        """
+        cleaned = (
+            entry
+            for entry in load_configuration().hide_preformatted
+            if len(entry) == 2 and all(isinstance(element, str) for element in entry)
+        )
+        return set(
+            (uri_prefix.casefold(), alt_text.casefold())
+            for uri_prefix, alt_text in cleaned
+        )
+
     def _gemtext_widgets(
         self, content: str, with_spartan_support: bool = False
     ) -> list[Widget]:
@@ -209,6 +227,15 @@ class Viewer(Vertical, can_focus=False):
         Returns:
             The widgets for the Gemtext content.
         """
+        current_location = (
+            str(self.document.location).casefold() if self.document.location else ""
+        )
+        # Get the set of alt_texts to ignore based on the current location.
+        alt_text_to_ignore = {
+            alt_text
+            for uri_prefix, alt_text in self._hidden_pre_alt_text
+            if self.document.location and current_location.startswith(uri_prefix)
+        }
         return [
             get_block_widget(line)
             for line in self._consolidate(
@@ -216,6 +243,12 @@ class Viewer(Vertical, can_focus=False):
                     content,
                     with_spartan_support=with_spartan_support,
                 ).content
+            )
+            # Filter out any preformatted blocks that have an alt text we
+            # should ignore.
+            if not (
+                isinstance(line, PreFormatted)
+                and line.alt_text.casefold() in alt_text_to_ignore
             )
         ]
 

@@ -19,6 +19,9 @@
   ([#326](https://github.com/davep/rogallo/pull/326))
 - Fixed a false positive when detecting an error response from a Gopher
   server. ([#328](https://github.com/davep/rogallo/pull/328))
+- Added `hide_preformatted` to the configuration file. Allows you to hide
+  specific pre-formatted blocks at specific locations.
+  ([#329](https://github.com/davep/rogallo/pull/329))
 
 ## v1.7.0
 

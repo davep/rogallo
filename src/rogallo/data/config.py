@@ -135,6 +135,9 @@ class Configuration:
     blend_pre_formatted_with_background: list[str] = field(default_factory=lambda: [""])
     """List of types of pre-formatted text to blend with the background."""
 
+    hide_preformatted: list[tuple[str, str]] = field(default_factory=list)
+    """List of (URI-prefix, alt-text) tuples of pre-formatted text to hide."""
+
     gopher_show_type_badges: bool = True
     """Whether to show badges for Gopher item types."""
 
