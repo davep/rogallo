@@ -178,6 +178,16 @@ class Viewer(Vertical, can_focus=False):
         if buffer:
             yield Paragraph("\n".join(buffer))
 
+    _WITH_SOURCE_MIME_TYPES = frozenset(
+        {
+            GEMINI_MIME_TYPE,
+            "text/markdown",
+            "text/x-markdown",
+            "text/html",
+        }
+    )
+    """The MIME types that can be viewed as source."""
+
     @property
     def can_view_source(self) -> bool:
         """Whether the viewer can view the source of the document.
@@ -185,12 +195,7 @@ class Viewer(Vertical, can_focus=False):
         Returns:
             Whether the viewer can view the source of the document.
         """
-        return self.document.mime_type_sans_parameters in (
-            GEMINI_MIME_TYPE,
-            "text/markdown",
-            "text/x-markdown",
-            "text/html",
-        )
+        return self.document.mime_type_sans_parameters in self._WITH_SOURCE_MIME_TYPES
 
     def _gemtext_widgets(
         self, content: str, with_spartan_support: bool = False
@@ -214,6 +219,14 @@ class Viewer(Vertical, can_focus=False):
             )
         ]
 
+    _MARKDOWN_MIME_TYPES = frozenset(
+        {
+            "text/markdown",
+            "text/x-markdown",
+        }
+    )
+    """The MIME types that can be viewed as Markdown."""
+
     def _best_presentation_for(self, document: Document) -> list[Widget]:
         """Get the best presentation for the document.
 
@@ -224,10 +237,7 @@ class Viewer(Vertical, can_focus=False):
             The best presentation for the document.
         """
         if not self.view_source:
-            if document.mime_type_sans_parameters in (
-                "text/markdown",
-                "text/x-markdown",
-            ):
+            if document.mime_type_sans_parameters in self._MARKDOWN_MIME_TYPES:
                 return [Markdown(document.content)]
             if document.mime_type_sans_parameters == "text/html":
                 return self._gemtext_widgets(html_to_gemtext(document.content))
