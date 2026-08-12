@@ -7,7 +7,7 @@ from functools import cached_property
 
 ##############################################################################
 # Gophermap imports.
-from gophermap import GopherMap, ItemType
+from gophermap import GopherMap
 
 ##############################################################################
 # Port70 imports.
