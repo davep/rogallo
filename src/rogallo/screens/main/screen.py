@@ -549,6 +549,7 @@ class Main(EnhancedScreen[None]):
                 current_document=self._viewer.document,
                 client=self._gopher_client,
                 owner=self,
+                cache=self._cache,
             )
 
     @work

@@ -18,6 +18,7 @@ from textual_enhanced.dialogs import ModalInput
 
 ##############################################################################
 # Local imports.
+from ...cache import ContentCache
 from ...document import Document
 from ...messages import OpenLocation
 from ...mime_checks import is_displayable_mime_type
@@ -26,7 +27,11 @@ from .local_messages import OpenDocument, OpenUnsupportedMIMEType
 
 ##############################################################################
 async def handle_gopher_request(
-    request: OpenLocation, current_document: Document, client: Client, owner: Widget
+    request: OpenLocation,
+    current_document: Document,
+    client: Client,
+    owner: Widget,
+    cache: ContentCache,
 ) -> None:
     """Handle a gopher request.
 
@@ -35,6 +40,7 @@ async def handle_gopher_request(
         current_document: The current document being viewed.
         client: The client to use for the request.
         owner: The widget that owns the request.
+        cache: The content cache to use for caching documents.
     """
     uri = request.location
     assert isinstance(uri, GopherURI)
@@ -56,6 +62,21 @@ async def handle_gopher_request(
         else:
             return
 
+    # If a cached copy of the document exists and the request allows it,
+    # use that instead of making a network request.
+    if (
+        ItemType(uri.item_type) is not ItemType.INDEX_SEARCH
+        and request.allow_cached
+        and (cached_document := cache.get_document(uri))
+    ):
+        owner.post_message(
+            OpenDocument(
+                document=cached_document,
+                original_request=request,
+            )
+        )
+        return
+
     # While Gopher doesn't deal with MIME types, Rogallo does for the
     # most part, so let's figure out the effective MIME type for what
     # we're doing here.
@@ -67,11 +88,13 @@ async def handle_gopher_request(
     try:
         owner.post_message(
             OpenDocument(
-                document=Document(
-                    location=uri,
-                    original_location=uri,
-                    content=(await client.request(uri)).text,
-                    mime_type=mime_type,
+                document=cache.add_document(
+                    Document(
+                        location=uri,
+                        original_location=uri,
+                        content=(await client.request(uri)).text,
+                        mime_type=mime_type,
+                    )
                 ),
                 original_request=request,
             )
