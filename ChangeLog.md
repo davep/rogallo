@@ -22,6 +22,8 @@
 - Added `hide_preformatted` to the configuration file. Allows you to hide
   specific pre-formatted blocks at specific locations.
   ([#329](https://github.com/davep/rogallo/pull/329))
+- Added cache support for Gopher responses.
+  ([#331](https://github.com/davep/rogallo/pull/331))
 
 ## v1.7.0
 

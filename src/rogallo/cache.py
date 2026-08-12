@@ -12,6 +12,10 @@ from shutil import rmtree
 from bagofstuff.cache import CacheManager
 
 ##############################################################################
+# Port70 imports.
+from port70 import GopherURI
+
+##############################################################################
 # Sybaritic imports.
 from sybaritic import SpartanURI
 
@@ -27,11 +31,11 @@ from .document import Document
 from .preflight import make_location
 
 ##############################################################################
-_CACHEABLE_URI_TYPES = (GeminiURI, SpartanURI)
+_CACHEABLE_URI_TYPES = (GeminiURI, SpartanURI, GopherURI)
 """The types of URIs that can be cached."""
 
 ##############################################################################
-type CachableURI = GeminiURI | SpartanURI
+type CachableURI = GeminiURI | SpartanURI | GopherURI
 """A URI that can be cached."""
 
 
