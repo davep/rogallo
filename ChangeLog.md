@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v1.8.0
 
-**Released: WiP**
+**Released: 2026-08-13**
 
 - Viewing `text/markdown` or `text/x-markdown` documents now uses full
   Markdown presentation in the viewer.
