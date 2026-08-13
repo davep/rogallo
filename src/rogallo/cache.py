@@ -12,31 +12,12 @@ from shutil import rmtree
 from bagofstuff.cache import CacheManager
 
 ##############################################################################
-# Port70 imports.
-from port70 import GopherURI
-
-##############################################################################
-# Sybaritic imports.
-from sybaritic import SpartanURI
-
-##############################################################################
-# Wasat imports.
-from wasat import GeminiURI
-
-##############################################################################
 # Local imports.
 from .data import load_configuration
 from .data.locations import cache_dir
 from .document import Document
 from .preflight import make_location
-
-##############################################################################
-_CACHEABLE_URI_TYPES = (GeminiURI, SpartanURI, GopherURI)
-"""The types of URIs that can be cached."""
-
-##############################################################################
-type CachableURI = GeminiURI | SpartanURI | GopherURI
-"""A URI that can be cached."""
+from .types import RogalloLocation
 
 
 ##############################################################################
@@ -51,7 +32,7 @@ class ContentCache(CacheManager):
         self._ttl = load_configuration().cache_ttl
         """The time-to-live for cached content, in seconds."""
 
-    def _cache_files(self, uri: CachableURI) -> tuple[Path, Path]:
+    def _cache_files(self, uri: RogalloLocation) -> tuple[Path, Path]:
         """Get the paths to the cache files.
 
         Args:
@@ -63,7 +44,7 @@ class ContentCache(CacheManager):
         cache_path = self.get(uri=uri)
         return cache_path.with_suffix(".meta"), cache_path.with_suffix(".content")
 
-    def get_document(self, uri: CachableURI) -> Document | None:
+    def get_document(self, uri: RogalloLocation) -> Document | None:
         """Get a cached copy of a document for a given URI.
 
         Args:
@@ -120,11 +101,9 @@ class ContentCache(CacheManager):
             The document that was cached.
         """
 
-        if (
-            self._disabled
-            or not isinstance(document.location, _CACHEABLE_URI_TYPES)
-            or document.needed_certificate
-        ):
+        # Just return the document if the cache is disabled or the document
+        # should avoid being cached.
+        if self._disabled or document.avoid_cache or document.location is None:
             return document
 
         meta_data_file, content_file = self._cache_files(document.location)

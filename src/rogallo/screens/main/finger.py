@@ -37,6 +37,7 @@ async def handle_finger_request(
                     original_location=uri,
                     content=(await client.request(uri)).text,
                     mime_type="text/plain",
+                    avoid_cache=True,
                 ),
                 original_request=request,
             )
