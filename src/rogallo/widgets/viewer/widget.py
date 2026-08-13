@@ -10,12 +10,19 @@ from functools import cached_property
 from gemtext import Gemtext, Line, Paragraph, PreFormatted
 
 ##############################################################################
+# Gophermap imports.
+from gophermap import ItemType
+
+##############################################################################
 # html2gemtext imports.
 from html2gemtext import html_to_gemtext
 
 ##############################################################################
-# Port79 imports.
+# Port70 imports.
 from port70 import GopherURI
+
+##############################################################################
+# Port79 imports.
 from port79 import FingerURI
 
 ##############################################################################
@@ -182,6 +189,7 @@ class Viewer(Vertical, can_focus=False):
     _WITH_SOURCE_MIME_TYPES = frozenset(
         {
             GEMINI_MIME_TYPE,
+            ItemType.MENU.mime_type,
             "text/markdown",
             "text/x-markdown",
             "text/html",
