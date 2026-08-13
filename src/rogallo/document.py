@@ -104,17 +104,19 @@ class Document:
         return self.is_gemtext or self.is_gophermap or self.is_gopher_error
 
     @cached_property
-    def suggested_filename(self) -> str:
+    def suggested_filename(self) -> Path:
         """The suggested filename for the document, if any."""
         if (location := self.location) is None:
-            return "index.txt"
+            return Path("index.txt")
         if isinstance(location, Path):
-            return location.name or "index.txt"
+            return Path(location.name or "index.txt")
         if isinstance(location, FingerURI):
-            return f"{location.username}.txt"
+            return Path(location.username or "finger").with_suffix(".txt")
         if location.path and not location.path.endswith("/"):
-            return Path(location.path).name
-        return "gophermap.txt" if isinstance(location, GopherURI) else "index.gmi"
+            return (candidate := Path(Path(location.path).name)).with_suffix(
+                candidate.suffix or ".txt"
+            )
+        return Path("gophermap.txt" if isinstance(location, GopherURI) else "index.gmi")
 
 
 ### document.py ends here
