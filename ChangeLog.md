@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added a development-oriented tool for taking ANSI "screenshots" of
+  Rogallo. ([#336](https://github.com/davep/rogallo/pull/336))
+
 ## v1.8.0
 
 **Released: 2026-08-13**

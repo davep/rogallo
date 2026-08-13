@@ -3,10 +3,13 @@
 ##############################################################################
 # Python imports.
 from argparse import Namespace
+from os import getenv
+from typing import Final
 
 ##############################################################################
 # Textual imports.
 from textual.app import InvalidThemeError
+from textual.binding import Binding
 from textual.screen import Screen
 
 ##############################################################################
@@ -22,6 +25,10 @@ from .data import (
     update_configuration,
 )
 from .screens import Main
+
+##############################################################################
+ROGALLO_SCREENSHOTS: Final[bool] = bool(getenv("ROGALLO_SCREENSHOTS"))
+"""Should we enable the ANSI screenshot feature?"""
 
 
 ##############################################################################
@@ -53,6 +60,20 @@ class Rogallo(EnhancedApp[None]):
 
     COMMANDS = set()
 
+    BINDINGS = (
+        [
+            Binding(
+                "ctrl+shift+f12",
+                "ansi_screenshot",
+                "Take ANSI screenshot",
+                priority=True,
+                show=False,
+            ),
+        ]
+        if ROGALLO_SCREENSHOTS
+        else []
+    )
+
     def __init__(self, arguments: Namespace) -> None:
         """Initialise the application.
 
@@ -81,6 +102,15 @@ class Rogallo(EnhancedApp[None]):
 
     def get_default_screen(self) -> Screen[None]:
         return Main(self._arguments)
+
+    def action_ansi_screenshot(self) -> None:
+        """Take an ANSI screenshot of the application."""
+        if not ROGALLO_SCREENSHOTS:
+            return
+        from ._screenshot import save_ansi_screenshot
+
+        save_ansi_screenshot(self, screenshot := "~/rogallo-screenshot.ansi")
+        self.notify(screenshot, title="Saved")
 
 
 ### rogallo.py ends here
