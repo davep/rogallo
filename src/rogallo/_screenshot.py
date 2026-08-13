@@ -4,6 +4,7 @@
 # Python imports.
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 ##############################################################################
 # Textual imports.
@@ -11,7 +12,7 @@ from textual.app import App
 
 
 ##############################################################################
-def _ansi_representation_of(app: App) -> Iterator[str]:
+def _ansi_representation_of(app: App[Any]) -> Iterator[str]:
     """Get the ANSI representation of the Textual app's screen.
 
     Args:
@@ -34,7 +35,7 @@ def _ansi_representation_of(app: App) -> Iterator[str]:
 
 
 ##############################################################################
-def save_ansi_screenshot(app: App, screenshot: Path | str) -> None:
+def save_ansi_screenshot(app: App[Any], screenshot: Path | str) -> None:
     """Save the ANSI representation of the Textual app's screen to a file.
 
     Args:
