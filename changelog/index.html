@@ -946,6 +946,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v180" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.8.0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v170" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1255,6 +1266,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v180" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.8.0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v170" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1550,6 +1572,30 @@
 
 
 <h1 id="rogallo-changelog">Rogallo ChangeLog</h1>
+<h2 id="v180">v1.8.0</h2>
+<p><strong>Released: 2026-08-13</strong></p>
+<ul>
+<li>Viewing <code>text/markdown</code> or <code>text/x-markdown</code> documents now uses full
+  Markdown presentation in the viewer.
+  (<a href="https://github.com/davep/rogallo/pull/320">#320</a>)</li>
+<li>Viewing <code>text/html</code> documents now converts the HTML to Gemtext and
+  displays it using the Gemtext view.
+  (<a href="https://github.com/davep/rogallo/pull/320">#320</a>)</li>
+<li>The <code>ToggleView</code> command now also toggles the Markdown and HTML views
+  between their richer presentations and their raw source view.
+  (<a href="https://github.com/davep/rogallo/pull/320">#320</a>)</li>
+<li>Added a <code>HandOffToOperatingSystem</code> command which hands the URI of the
+  current document to the operating system, allowing it to be opened in
+  whatever application is configured in the environment to handle it.
+  (<a href="https://github.com/davep/rogallo/pull/326">#326</a>)</li>
+<li>Fixed a false positive when detecting an error response from a Gopher
+  server. (<a href="https://github.com/davep/rogallo/pull/328">#328</a>)</li>
+<li>Added <code>hide_preformatted</code> to the configuration file. Allows you to hide
+  specific pre-formatted blocks at specific locations.
+  (<a href="https://github.com/davep/rogallo/pull/329">#329</a>)</li>
+<li>Added cache support for Gopher responses.
+  (<a href="https://github.com/davep/rogallo/pull/331">#331</a>)</li>
+</ul>
 <h2 id="v170">v1.7.0</h2>
 <p><strong>Released: 2026-08-10</strong></p>
 <ul>
