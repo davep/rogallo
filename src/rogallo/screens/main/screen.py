@@ -50,7 +50,7 @@ from textual_enhanced.tools import add_key
 
 ##############################################################################
 # Textual file system picker imports.
-from textual_fspicker import FileOpen, Filters
+from textual_fspicker import FileOpen, FileSave, Filters
 
 ##############################################################################
 # Wasat imports.
@@ -80,6 +80,7 @@ from ...commands import (
     OpenFile,
     PipeDocument,
     Reload,
+    SaveSource,
     SearchBookmarks,
     SearchHistory,
     SetHome,
@@ -246,6 +247,7 @@ class Main(EnhancedScreen[None]):
         OpenFile,
         PipeDocument,
         Reload,
+        SaveSource,
         SetHome,
         SetHomeToCurrentLocation,
         StripeLinks,
@@ -410,7 +412,11 @@ class Main(EnhancedScreen[None]):
         """
         if not self.is_mounted:
             return True
-        if action in (JumpToDocument.action_name(), AboutThisPage.action_name()):
+        if action in (
+            JumpToDocument.action_name(),
+            AboutThisPage.action_name(),
+            SaveSource.action_name(),
+        ):
             return bool(self._viewer.document)
         if action == JumpToCommandLine.action_name():
             return not self._command_line.has_control
@@ -1074,6 +1080,28 @@ class Main(EnhancedScreen[None]):
         """Hand off the current document's location to the operating system."""
         if self._viewer.document.location:
             open_in_browser(str(self._viewer.document.location))
+
+    @work
+    async def action_save_source_command(self) -> None:
+        """Save the current document's source to a file."""
+        if self._viewer.document and (
+            target := await self.app.push_screen_wait(
+                FileSave(
+                    default_file=self._viewer.document.suggested_filename,
+                    title="Save source to file",
+                    cancel_button=partial(add_key, key="Esc", context=self),
+                )
+            )
+        ):
+            try:
+                target.write_text(self._viewer.document.content, encoding="utf-8")
+                self.notify(f"Saved to {target}", title="Save Source")
+            except OSError as error:
+                self.notify(
+                    f"Unable to save to {target}:\n\n{error}",
+                    severity="error",
+                    title="Save Source Error",
+                )
 
 
 ### main.py ends here

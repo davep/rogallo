@@ -31,6 +31,7 @@ from ..commands import (
     OpenFile,
     PipeDocument,
     Reload,
+    SaveSource,
     SearchBookmarks,
     SearchHistory,
     SetHome,
@@ -78,6 +79,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(PipeDocument)
         yield Quit()
         yield from self.maybe(Reload)
+        yield from self.maybe(SaveSource)
         yield from self.maybe(SearchBookmarks)
         yield from self.maybe(SearchHistory)
         yield SetHome()

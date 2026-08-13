@@ -75,4 +75,11 @@ class HandOffToOperatingSystem(Command):
     BINDING_KEY = "ctrl+shift+o"
 
 
+##############################################################################
+class SaveSource(Command):
+    """Save the source of the current document to a file"""
+
+    BINDING_KEY = "ctrl+s"
+
+
 ### main.py ends here
