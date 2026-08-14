@@ -1417,11 +1417,11 @@ wheels = [
 
 [[package]]
 name = "port1900"
-version = "0.0.1"
+version = "0.1.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/0e/1d/51dede24f2118a13a9cee055ffd9498db9f2b66fefd1710a49b4abf24cd4/port1900-0.0.1.tar.gz", hash = "sha256:349d058ff424015935fd8fb72c714908b6eff1929b7c90b6caf50ac96363a1ad", size = 8551, upload-time = "2026-08-14T12:44:20.503Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/39/3d/4c41d01f44095fa8f7f852814b85354a380b6b4b9e69b6569ba7c31279a4/port1900-0.1.0.tar.gz", hash = "sha256:2108c9c1e8c1ed3e947c34cc72eeeb659afe68a93137772235bb116e202e5349", size = 8551, upload-time = "2026-08-14T18:35:01.959Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fc/32/a0e62d2e82fd8c16fd6611998b3a4c66bd09d752dce7a1701bb1e5324381/port1900-0.0.1-py3-none-any.whl", hash = "sha256:53987952f5752a5a234af252e3bc8ddf69b4bdb7fb34482b7c09e37d59a4b76c", size = 10736, upload-time = "2026-08-14T12:44:19.182Z" },
+    { url = "https://files.pythonhosted.org/packages/40/84/bcf70840aa504aaefe16a8a17d606bdf4d89aa9e56f6c88e19cbf9165079/port1900-0.1.0-py3-none-any.whl", hash = "sha256:4fc06b08f9d9a2d54a2462cd3325871ae6de51f9bb9f178a155cf81508a33e4e", size = 10735, upload-time = "2026-08-14T18:35:00.82Z" },
 ]
 
 [[package]]
@@ -1777,7 +1777,7 @@ requires-dist = [
     { name = "gemtext", specifier = ">=1.1.0" },
     { name = "gophermap", specifier = ">=1.0.0" },
     { name = "html2gemtext", specifier = ">=0.1.0" },
-    { name = "port1900", specifier = ">=0.0.1" },
+    { name = "port1900", specifier = ">=0.1.0" },
     { name = "port70", specifier = ">=0.1.2" },
     { name = "port79", specifier = ">=1.0.0" },
     { name = "pyperclip", specifier = ">=1.11.0" },
