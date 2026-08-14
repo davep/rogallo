@@ -6,7 +6,7 @@
 
 - Added a development-oriented tool for taking ANSI "screenshots" of
   Rogallo. ([#336](https://github.com/davep/rogallo/pull/336))
-- Added a `SourceSource` command to save the source of the current document.
+- Added a `SaveSource` command to save the source of the current document.
   ([#338](https://github.com/davep/rogallo/pull/338))
 - Fixed `ToggleView` not allowing you to view the source of a Gopher map.
   ([#340](https://github.com/davep/rogallo/pull/340))
