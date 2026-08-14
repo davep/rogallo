@@ -38,14 +38,6 @@ Key features for Gemini protocol support include:
 
 ## Installing
 
-### pipx
-
-The application can be installed using [`pipx`](https://pypa.github.io/pipx/):
-
-```sh
-pipx install rogallo
-```
-
 ### uv
 
 The application can be installed using [`uv`](https://docs.astral.sh/uv/getting-started/installation/):
@@ -65,6 +57,14 @@ or on Windows:
 
 ```sh
 powershell -ExecutionPolicy ByPass -c "irm https://uvx.sh/rogallo/install.ps1 | iex"
+```
+
+### pipx
+
+The application can be installed using [`pipx`](https://pypa.github.io/pipx/):
+
+```sh
+pipx install rogallo
 ```
 
 Once installed run the `rogallo` command.
