@@ -43,6 +43,7 @@ from textual.widgets import Footer, Header, Label
 
 ##############################################################################
 # Textual enhanced imports.
+from textual.worker import get_current_worker
 from textual_enhanced.commands import ChangeTheme, Command, Help, Quit
 from textual_enhanced.dialogs import Confirm, ModalInput
 from textual_enhanced.screen import EnhancedScreen
@@ -379,10 +380,18 @@ class Main(EnhancedScreen[None]):
                     do_not_record_in_history=True,
                 )
             )
+        # Wait a few moments to do housekeeping, because by then the user is
+        # probably reading something. For... reasons I guess.
+        self.set_timer(5, self._housekeeping, name="housekeeping")
 
     async def on_unmount(self) -> None:
         """Called when the screen is unmounted."""
         await self._gemini_client.close()
+
+    @work(thread=True)
+    def _housekeeping(self) -> None:
+        """Perform housekeeping tasks."""
+        self._cache.expire(lambda: get_current_worker().is_cancelled)
 
     def _set_last_input(self, input_content: InputContent | None) -> None:
         """Set the last user input.
