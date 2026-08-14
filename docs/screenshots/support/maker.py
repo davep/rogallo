@@ -44,6 +44,7 @@ docs_build_dir = docs_dir / "build"
 ##############################################################################
 # Set the XDG_ to point at an isolated build environment for the
 # screenshots. I don't want to mess with an actual installation of Rogallo.
+os.environ["XDG_CACHE_HOME"] = str(docs_build_dir / "cache")
 os.environ["XDG_CONFIG_HOME"] = str(docs_build_dir / "config")
 os.environ["XDG_DATA_HOME"] = str(docs_build_dir / "data")
 
