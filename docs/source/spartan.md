@@ -15,9 +15,9 @@ wish to visit. Spartan URIs begin with `spartan://`.
 ## `spartan://` URIs
 
 Rogallo will handle any valid `spartan://` URI, either as a link to be
-followed from content returned by a Spartan, [Gemini](./gemini.md) or
-[Gopher](./gopher.md) server, or as entered in the [command
-line](./command-line.md).
+followed from content returned by a Spartan, [Gemini](./gemini.md),
+[Gopher](./gopher.md) or [Nex](./nex.md) server, or as entered in the
+[command line](./command-line.md).
 
 ## Input support
 
