@@ -1,0 +1,22 @@
+# Welcome to the Rogallo Documentation!
+
+This is a sample of some text, served by a Nex server.
+
+## Places to go from here
+
+Perhaps a good place to start is the source of all information about Nex:
+
+=> nex://nightfall.city/nex/
+
+You can find out about the protocol there:
+
+=> nex://nightfall.city/nex/info/specification.txt
+
+Within Rogallo, all sorts of links are supported when viewing a text
+document delivered from a Nex server.
+
+=> gemini://tilde.team/~davep/
+=> spartan://tilde.team/~davep/
+=> gopher://tilde.team/1/~davep/
+=> finger://tilde.team/davep
+=> https://blog.davep.org/
