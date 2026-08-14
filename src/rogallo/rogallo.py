@@ -37,12 +37,12 @@ class Rogallo(EnhancedApp[None]):
 
     HELP_TITLE = f"Rogallo v{__version__}"
     HELP_ABOUT = """
-    `Rogallo` is a terminal-based client for the Gemini protocol; it was
+    `Rogallo` is a terminal-based client for small web protocols; it was
     created by and is maintained by Dave Pearson; it is Free Software and
     can be found on GitHub.
     """
     HELP_LICENSE = """
-    Rogallo - A client for the Gemini protocol for the terminal.  \n    Copyright (C) 2026 Dave Pearson
+    Rogallo - A terminal-based client for small web protocols.  \n    Copyright (C) 2026 Dave Pearson
 
     This program is free software: you can redistribute it and/or modify it
     under the terms of the GNU General Public License as published by the Free
