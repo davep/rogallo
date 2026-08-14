@@ -116,7 +116,7 @@ dev = [
     "pytest>=9.1.0",
     "pytest-cov>=7.1.0",
     "ruff>=0.15.17",
-    "smolserve>=1.0.0",
+    "smolserve>=1.1.0",
     "textual-dev>=1.8.0",
 ]
 
