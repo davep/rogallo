@@ -25,6 +25,7 @@ dependencies = [
     "gemtext>=1.1.0",
     "gophermap>=1.0.0",
     "html2gemtext>=0.1.0",
+    "port1900>=0.0.1",
     "port70>=0.1.2",
     "port79>=1.0.0",
     "pyperclip>=1.11.0",

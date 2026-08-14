@@ -142,6 +142,7 @@ def show_dignoastics() -> None:
     from html2gemtext import __version__ as html2gemtext_version
     from port70 import __version__ as port70_version
     from port79 import __version__ as port79_version
+    from port1900 import __version__ as port1900_version
     from sybaritic import __version__ as sybaritic_version
     from textual import __version__ as textual_version
     from textual_enhanced import __version__ as textual_enhanced_version
@@ -156,6 +157,7 @@ def show_dignoastics() -> None:
     print(f"html2gemtext: {html2gemtext_version}")
     print(f"port70: {port70_version}")
     print(f"port79: {port79_version}")
+    print(f"port1900: {port1900_version}")
     print(f"rogallo: {__version__}")
     print(f"sybaritic: {sybaritic_version}")
     print(f"textual: {textual_version}")
