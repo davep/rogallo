@@ -108,6 +108,9 @@ class Configuration:
     spartanspace_link_icon: str = "⪧"
     """The icon to use for links to spartan:// URIs."""
 
+    nexspace_link_icon: str = "☽"
+    """The icon to use for links to nex:// URIs."""
+
     otherspace_link_icon: str = "↗"
     """The icon to use for non-gemini URIs."""
 
