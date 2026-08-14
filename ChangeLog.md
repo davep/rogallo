@@ -10,6 +10,8 @@
   ([#338](https://github.com/davep/rogallo/pull/338))
 - Fixed `ToggleView` not allowing you to view the source of a Gopher map.
   ([#340](https://github.com/davep/rogallo/pull/340))
+- Added background cleaning up of the content cache.
+  ([#344](https://github.com/davep/rogallo/pull/344))
 
 ## v1.8.0
 

@@ -2,10 +2,12 @@
 
 ##############################################################################
 # Python imports.
+from collections.abc import Callable
 from datetime import datetime
 from json import JSONDecodeError, dumps, loads
 from pathlib import Path
 from shutil import rmtree
+from typing import Final
 
 ##############################################################################
 # BagOfStuff imports.
@@ -23,6 +25,11 @@ from .types import RogalloLocation
 ##############################################################################
 class ContentCache(CacheManager):
     """A cache manager for remote content."""
+
+    _META: Final[str] = ".meta"
+    """The suffix for the metadata files in the cache."""
+    _CONTENT: Final[str] = ".content"
+    """The suffix for the content files in the cache."""
 
     def __init__(self) -> None:
         """Initialise the content cache."""
@@ -42,7 +49,7 @@ class ContentCache(CacheManager):
             A tuple containing the paths to the cache files.
         """
         cache_path = self.get(uri=uri)
-        return cache_path.with_suffix(".meta"), cache_path.with_suffix(".content")
+        return cache_path.with_suffix(self._META), cache_path.with_suffix(self._CONTENT)
 
     def get_document(self, uri: RogalloLocation) -> Document | None:
         """Get a cached copy of a document for a given URI.
@@ -126,6 +133,68 @@ class ContentCache(CacheManager):
         except OSError:
             pass
         return document
+
+    @classmethod
+    def _reap(cls, meta_file: Path) -> None:
+        """Reap a cache entry.
+
+        Args:
+            meta_file: The path to the metadata file for the cache entry.
+        """
+        try:
+            meta_file.unlink()
+            if (content_file := meta_file.with_suffix(cls._CONTENT)).exists():
+                content_file.unlink()
+        except OSError:
+            pass
+
+    def expire(self, cancelled: Callable[[], bool]) -> None:
+        """Expire the cache."""
+        if self._disabled or cancelled():
+            return
+
+        # Clean out any old files.
+        for meta_file in self.base_path.glob(f"**/*{self._META}"):
+            if cancelled():
+                return
+            if meta_file.is_file():
+                # Try and load up the metadata.
+                try:
+                    meta_data = loads(meta_file.read_text(encoding="utf-8"))
+                except JSONDecodeError:
+                    # If we can't decode the metadata, it's probably
+                    # corrupted. Reap it.
+                    self._reap(meta_file)
+                    continue
+                except OSError:
+                    continue
+
+                # Get when the document was cached. If we can't work it out,
+                # it's probably corrupted. Reap it.
+                if (cached_at := meta_data.get("cached_at")) is None:
+                    self._reap(meta_file)
+                    continue
+
+                # See if the cached document has expired. If it has, reap it.
+                if (
+                    datetime.now() - datetime.fromisoformat(cached_at)
+                ).total_seconds() > self._ttl:
+                    self._reap(meta_file)
+
+        # Don't even try and clean out empty directories if the worker has
+        # been cancelled.
+        if cancelled():
+            return
+
+        # Clean out any empty directories.
+        for directory in self.base_path.iterdir():
+            if cancelled():
+                return
+            if directory.is_dir() and not any(directory.iterdir()):
+                try:
+                    directory.rmdir()
+                except OSError:
+                    pass
 
     def clear(self) -> None:
         """Clear the cache."""
