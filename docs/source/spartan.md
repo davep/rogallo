@@ -2,9 +2,9 @@
 
 ## Introduction
 
-Rogallo has support for visiting Spartan servers. Much like when Much like
-when [visiting a Gemini server](./gemini.md), you can type in the URI of the
-location you wish to visit. Spartan URIs begin with `spartan://`.
+Rogallo has support for visiting Spartan servers. Much like when [visiting a
+Gemini server](./gemini.md), you can type in the URI of the location you
+wish to visit. Spartan URIs begin with `spartan://`.
 
 ```{.textual path="docs/screenshots/empty_screenshot.py" title="Entering a Spartan URI" lines=30 columns=90 press="s,p,a,r,t,a,n,:,/,/,l,o,c,a,l,h,o,s,t,/"}
 ```
