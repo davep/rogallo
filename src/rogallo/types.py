@@ -14,6 +14,10 @@ from port70 import GopherURI
 from port79 import FingerURI
 
 ##############################################################################
+# Port1900 imports.
+from port1900 import NexURI
+
+##############################################################################
 # Sybaritic imports.
 from sybaritic import SpartanURI
 
@@ -22,7 +26,7 @@ from sybaritic import SpartanURI
 from wasat import GeminiURI
 
 ##############################################################################
-type RogalloLocation = Path | GeminiURI | FingerURI | GopherURI | SpartanURI
+type RogalloLocation = Path | GeminiURI | FingerURI | GopherURI | SpartanURI | NexURI
 """The type of a location handled by Rogallo."""
 
 ##############################################################################

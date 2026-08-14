@@ -11,6 +11,11 @@ from port79 import FingerURI
 from port79 import URIError as FingerURIError
 
 ##############################################################################
+# Port1900 imports.
+from port1900 import NexURI
+from port1900 import URIError as NexURIError
+
+##############################################################################
 # Sybaritic imports.
 from sybaritic import SpartanURI
 from sybaritic import URIError as SpartanURIError
@@ -52,6 +57,7 @@ def uri_resolver(
         (FingerURI, FingerURIError),
         (GopherURI, GopherURIError),
         (SpartanURI, SpartanURIError),
+        (NexURI, NexURIError),
     ):
         try:
             return OpenLocation(
