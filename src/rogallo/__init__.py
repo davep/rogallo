@@ -1,4 +1,4 @@
-"""A terminal-based client for the Gemini Protocol."""
+"""A terminal-based client for small web protocols."""
 
 ##############################################################################
 # Python imports.
