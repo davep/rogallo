@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Python imports.
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
 from functools import cached_property
 
 ##############################################################################
@@ -169,7 +169,7 @@ class Viewer(Vertical, can_focus=False):
         yield ViewerStatus()
 
     @staticmethod
-    def _consolidate(lines: tuple[Line, ...]) -> Iterator[Line]:
+    def _consolidate(lines: Iterable[Line]) -> Iterator[Line]:
         """Consolidate consecutive paragraphs into a single paragraph.
 
         Args:
@@ -303,12 +303,10 @@ class Viewer(Vertical, can_focus=False):
                 return [Markdown(document.content)]
             if document.mime_type_sans_parameters == "text/html":
                 return self._gemtext_widgets(html_to_gemtext(document.content))
-            if document.mime_type_sans_parameters == "text/plain" and isinstance(
-                document.location, NexURI
-            ):
+            if document.is_nex_text:
                 return [
                     get_block_widget(line)
-                    for line in self._consolidate(tuple(self._nextext(document)))
+                    for line in self._consolidate(self._nextext(document))
                 ]
         return [
             Static(
