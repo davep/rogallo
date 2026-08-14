@@ -277,7 +277,8 @@ class Viewer(Vertical, can_focus=False):
         """
         for line in document.content.splitlines():
             if line.startswith("=>"):
-                yield Link(link := line.removeprefix("=>").strip(), link)
+                uri, *_ = (line := line.removeprefix("=>").strip()).split(maxsplit=1)
+                yield Link(uri, line)
             else:
                 yield Paragraph(line)
 
