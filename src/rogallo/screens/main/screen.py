@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from argparse import Namespace
+from collections.abc import Awaitable
 from functools import partial
 from pathlib import Path
 from subprocess import CalledProcessError, run
@@ -530,81 +531,14 @@ class Main(EnhancedScreen[None]):
         self._viewer.take_control()
 
     @work
-    async def _load_from_gemini(self, request: OpenLocation) -> None:
-        """Load a document from a Gemini URI.
+    async def _make_request(self, handler: Awaitable[None]) -> None:
+        """Make a request to a server.
 
         Args:
-            request: The request to load the document from.
+            handler: The handler to use for the request.
         """
         with self._command_line.busy_spinner():
-            await handle_gemini_request(
-                request=request,
-                client=self._gemini_client,
-                owner=self,
-                cache=self._cache,
-                set_last_input=self._set_last_input,
-                get_last_input=self._get_last_input,
-            )
-
-    @work
-    async def _load_from_finger(self, request: OpenLocation) -> None:
-        """Load a document from a Finger URI.
-
-        Args:
-            request: The request to load the document from.
-        """
-        with self._command_line.busy_spinner():
-            await handle_finger_request(
-                request=request,
-                client=self._finger_client,
-                owner=self,
-            )
-
-    @work
-    async def _load_from_gopher(self, request: OpenLocation) -> None:
-        """Load a document from a Gopher URI.
-
-        Args:
-            request: The request to load the document from.
-        """
-        with self._command_line.busy_spinner():
-            await handle_gopher_request(
-                request=request,
-                current_document=self._viewer.document,
-                client=self._gopher_client,
-                owner=self,
-                cache=self._cache,
-            )
-
-    @work
-    async def _load_from_spartan(self, request: OpenLocation) -> None:
-        """Load a document from a Spartan URI.
-
-        Args:
-            request: The request to load the document from.
-        """
-        with self._command_line.busy_spinner():
-            await handle_spartan_request(
-                request=request,
-                client=self._spartan_cient,
-                owner=self,
-                cache=self._cache,
-            )
-
-    @work
-    async def _load_from_nex(self, request: OpenLocation) -> None:
-        """Load a document from a Nex URI.
-
-        Args:
-            request: The request to load the document from.
-        """
-        with self._command_line.busy_spinner():
-            await handle_nex_request(
-                request=request,
-                client=self._nex_client,
-                owner=self,
-                cache=self._cache,
-            )
+            await handler
 
     @work(thread=True)
     def _load_from_filesystem(self, request: OpenLocation) -> None:
@@ -623,15 +557,52 @@ class Main(EnhancedScreen[None]):
             message: The message the location open request.
         """
         if isinstance(message.location, FingerURI):
-            self._load_from_finger(message)
+            self._make_request(
+                handle_finger_request(
+                    request=message,
+                    client=self._finger_client,
+                    owner=self,
+                )
+            )
         elif isinstance(message.location, GeminiURI):
-            self._load_from_gemini(message)
+            self._make_request(
+                handle_gemini_request(
+                    request=message,
+                    client=self._gemini_client,
+                    owner=self,
+                    cache=self._cache,
+                    set_last_input=self._set_last_input,
+                    get_last_input=self._get_last_input,
+                )
+            )
         elif isinstance(message.location, GopherURI):
-            self._load_from_gopher(message)
+            self._make_request(
+                handle_gopher_request(
+                    request=message,
+                    client=self._gopher_client,
+                    owner=self,
+                    cache=self._cache,
+                    current_document=self._viewer.document,
+                )
+            )
         elif isinstance(message.location, SpartanURI):
-            self._load_from_spartan(message)
+            self._make_request(
+                handle_spartan_request(
+                    request=message,
+                    client=self._spartan_cient,
+                    owner=self,
+                    cache=self._cache,
+                )
+            )
         elif isinstance(message.location, NexURI):
-            self._load_from_nex(message)
+            self._make_request(
+                handle_nex_request(
+                    request=message,
+                    client=self._nex_client,
+                    owner=self,
+                    cache=self._cache,
+                )
+            )
         else:
             self._load_from_filesystem(message)
 
