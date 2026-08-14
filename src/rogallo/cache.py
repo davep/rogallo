@@ -2,11 +2,12 @@
 
 ##############################################################################
 # Python imports.
+from collections.abc import Callable
 from datetime import datetime
 from json import JSONDecodeError, dumps, loads
 from pathlib import Path
 from shutil import rmtree
-from typing import Callable, Final
+from typing import Final
 
 ##############################################################################
 # BagOfStuff imports.

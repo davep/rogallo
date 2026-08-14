@@ -40,10 +40,10 @@ from textual.getters import query_one
 from textual.reactive import var
 from textual.suggester import SuggestFromList
 from textual.widgets import Footer, Header, Label
+from textual.worker import get_current_worker
 
 ##############################################################################
 # Textual enhanced imports.
-from textual.worker import get_current_worker
 from textual_enhanced.commands import ChangeTheme, Command, Help, Quit
 from textual_enhanced.dialogs import Confirm, ModalInput
 from textual_enhanced.screen import EnhancedScreen
