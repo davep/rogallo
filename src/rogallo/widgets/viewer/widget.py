@@ -2,12 +2,12 @@
 
 ##############################################################################
 # Python imports.
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
 from functools import cached_property
 
 ##############################################################################
 # Gemtext imports.
-from gemtext import Gemtext, Line, Paragraph, PreFormatted
+from gemtext import Gemtext, Line, Link, Paragraph, PreFormatted
 
 ##############################################################################
 # Gophermap imports.
@@ -24,6 +24,10 @@ from port70 import GopherURI
 ##############################################################################
 # Port79 imports.
 from port79 import FingerURI
+
+##############################################################################
+# Port1900 imports.
+from port1900 import NexURI
 
 ##############################################################################
 # Rich imports.
@@ -165,7 +169,7 @@ class Viewer(Vertical, can_focus=False):
         yield ViewerStatus()
 
     @staticmethod
-    def _consolidate(lines: tuple[Line, ...]) -> Iterator[Line]:
+    def _consolidate(lines: Iterable[Line]) -> Iterator[Line]:
         """Consolidate consecutive paragraphs into a single paragraph.
 
         Args:
@@ -204,7 +208,9 @@ class Viewer(Vertical, can_focus=False):
         Returns:
             Whether the viewer can view the source of the document.
         """
-        return self.document.mime_type_sans_parameters in self._WITH_SOURCE_MIME_TYPES
+        return (
+            self.document.mime_type_sans_parameters in self._WITH_SOURCE_MIME_TYPES
+        ) or self.document.is_nex_text
 
     @cached_property
     def _hidden_pre_alt_text(self) -> set[tuple[str, str]]:
@@ -260,6 +266,22 @@ class Viewer(Vertical, can_focus=False):
             )
         ]
 
+    def _nextext(self, document: Document) -> Iterator[Line]:
+        """Parse a document as Nex content.
+
+        Args:
+            document: The document to convert.
+
+        Returns:
+            The widget for the Nex content.
+        """
+        for line in document.content.splitlines():
+            if line.startswith("=>"):
+                uri, *_ = (line := line.removeprefix("=>").strip()).split(maxsplit=1)
+                yield Link(uri, line)
+            else:
+                yield Paragraph(line)
+
     _MARKDOWN_MIME_TYPES = frozenset(
         {
             "text/markdown",
@@ -282,6 +304,11 @@ class Viewer(Vertical, can_focus=False):
                 return [Markdown(document.content)]
             if document.mime_type_sans_parameters == "text/html":
                 return self._gemtext_widgets(html_to_gemtext(document.content))
+            if document.is_nex_text:
+                return [
+                    get_block_widget(line)
+                    for line in self._consolidate(self._nextext(document))
+                ]
         return [
             Static(
                 Text.from_ansi(document.content)
@@ -337,12 +364,16 @@ class Viewer(Vertical, can_focus=False):
             await self._view.remove_children()
             await self._view.mount_all(self._build_content())
             if (
-                self.document.is_gemtext or self.document.is_gophermap
+                self.document.is_gemtext
+                or self.document.is_gophermap
+                or self.document.is_nex_text
             ) and not self.view_source:
                 visited_links = {
                     str(visit.location)
                     for visit in self.location_history
-                    if isinstance(visit.location, (FingerURI, GeminiURI, GopherURI))
+                    if isinstance(
+                        visit.location, (FingerURI, GeminiURI, GopherURI, NexURI)
+                    )
                 }
                 for jump_number, link in enumerate(self._view.query(GemtextLink)):
                     link.normalise_uri(self.document.location)

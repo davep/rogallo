@@ -14,6 +14,10 @@ from gemtext import Line, Link
 from port70 import GopherURI
 
 ##############################################################################
+# Port1900 imports.
+from port1900 import NexURI
+
+##############################################################################
 # Sybaritic imports.
 from sybaritic import SpartanURI
 
@@ -44,6 +48,7 @@ from ....preflight import (
     is_gopher_uri,
     is_likely_capsule,
     is_local_gemtext_file,
+    is_nex_uri,
     is_spartan_uri,
 )
 from ....types import RogalloLocation, SpartanURINeedingData
@@ -149,6 +154,7 @@ class GemtextLink(Horizontal, can_focus=True):
             (is_finger_uri, "fingerspace_link_icon"),
             (is_gopher_uri, "gopherspace_link_icon"),
             (is_spartan_uri, "spartanspace_link_icon"),
+            (is_nex_uri, "nexspace_link_icon"),
             (is_local_gemtext_file, "geminispace_link_icon"),
         ):
             if checker(self.normalised_uri):
@@ -165,7 +171,7 @@ class GemtextLink(Horizontal, can_focus=True):
             return
         if urlparse(self._normalised_uri).scheme:
             return
-        if isinstance(base_uri, (GeminiURI, GopherURI, SpartanURI)):
+        if isinstance(base_uri, (GeminiURI, GopherURI, SpartanURI, NexURI)):
             self._normalised_uri = str(base_uri.resolve(self._link.uri))
         elif isinstance(base_uri, Path):
             self._normalised_uri = (base_uri.parent / self._link.uri).resolve().as_uri()

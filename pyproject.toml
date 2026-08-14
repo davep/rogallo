@@ -25,6 +25,7 @@ dependencies = [
     "gemtext>=1.1.0",
     "gophermap>=1.0.0",
     "html2gemtext>=0.1.0",
+    "port1900>=0.1.0",
     "port70>=0.1.2",
     "port79>=1.0.0",
     "pyperclip>=1.11.0",
@@ -115,7 +116,7 @@ dev = [
     "pytest>=9.1.0",
     "pytest-cov>=7.1.0",
     "ruff>=0.15.17",
-    "smolserve>=1.0.0",
+    "smolserve>=1.1.0",
     "textual-dev>=1.8.0",
 ]
 

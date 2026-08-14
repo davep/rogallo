@@ -12,6 +12,8 @@
   ([#340](https://github.com/davep/rogallo/pull/340))
 - Added background cleaning up of the content cache.
   ([#344](https://github.com/davep/rogallo/pull/344))
+- Added support for the `nex` protocol.
+  ([#345](https://github.com/davep/rogallo/pull/345))
 
 ## v1.8.0
 

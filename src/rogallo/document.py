@@ -19,6 +19,10 @@ from port70 import GopherURI
 from port79 import FingerURI
 
 ##############################################################################
+# Port1900 imports.
+from port1900 import NexURI
+
+##############################################################################
 # Wasat imports.
 from wasat import ServerCertificate, VerificationMethod
 
@@ -90,6 +94,14 @@ class Document:
     def is_gophermap(self) -> bool:
         """`True` if the document is a Gophermap document, `False` otherwise."""
         return is_gopher_mime_type(self.mime_type)
+
+    @property
+    def is_nex_text(self) -> bool:
+        """`True` if the document is a Nex text document, `False` otherwise."""
+        return (
+            isinstance(self.location, NexURI)
+            and self.mime_type_sans_parameters == "text/plain"
+        )
 
     @cached_property
     def is_gopher_error(self) -> bool:

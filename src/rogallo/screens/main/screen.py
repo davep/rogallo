@@ -22,6 +22,11 @@ from port79 import Client as FingerClient
 from port79 import FingerURI
 
 ##############################################################################
+# Port1900 imports.
+from port1900 import Client as NexClient
+from port1900 import NexURI
+
+##############################################################################
 # Pyperclip imports.
 from pyperclip import PyperclipException
 from pyperclip import copy as copy_to_clipboard
@@ -137,6 +142,7 @@ from .local_messages import (
     OpenUnsupportedMIMEType,
     OpenUnsupportedURI,
 )
+from .nex import handle_nex_request
 from .spartan import handle_spartan_request
 from .uri_resolver import uri_resolver
 
@@ -327,6 +333,9 @@ class Main(EnhancedScreen[None]):
             timeout=load_configuration().connection_timeout,
         )
         """The Spartan client."""
+        self._nex_client = NexClient(
+            timeout=load_configuration().connection_timeout,
+        )
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
@@ -582,6 +591,21 @@ class Main(EnhancedScreen[None]):
                 cache=self._cache,
             )
 
+    @work
+    async def _load_from_nex(self, request: OpenLocation) -> None:
+        """Load a document from a Nex URI.
+
+        Args:
+            request: The request to load the document from.
+        """
+        with self._command_line.busy_spinner():
+            await handle_nex_request(
+                request=request,
+                client=self._nex_client,
+                owner=self,
+                cache=self._cache,
+            )
+
     @work(thread=True)
     def _load_from_filesystem(self, request: OpenLocation) -> None:
         """Load a document from the filesystem.
@@ -606,6 +630,8 @@ class Main(EnhancedScreen[None]):
             self._load_from_gopher(message)
         elif isinstance(message.location, SpartanURI):
             self._load_from_spartan(message)
+        elif isinstance(message.location, NexURI):
+            self._load_from_nex(message)
         else:
             self._load_from_filesystem(message)
 

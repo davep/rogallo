@@ -6,11 +6,12 @@
 Rogallo is a terminal-based client for browsing
 [Geminispace](https://geminiprotocol.net/),
 [Spartanspace](https://portal.mozz.us/spartan/spartan.mozz.us/),
-[Gopherspace](https://en.wikipedia.org/wiki/Gopher_(protocol)), and
+[Gopherspace](https://en.wikipedia.org/wiki/Gopher_(protocol)),
+[Nexspace](https://nightfall.city/nex/info/specification.txt), and
 [Fingerspace](https://en.wikipedia.org/wiki/Finger_(protocol)). Its key
 features include:
 
-- Support for the `gemini`, `spartan`, `gopher`, and `finger` protocols
+- Support for the `gemini`, `spartan`, `gopher`, `nex` and `finger` protocols
 - Bookmarks management with search
 - Location history tracking with search
 - Backward and forward page navigation

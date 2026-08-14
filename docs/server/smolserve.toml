@@ -22,3 +22,8 @@ plan_file = "./docs/server/plan.txt"
 enabled = true
 port = 3000
 root = "./docs/server/public_spartan"
+
+[nex]
+enabled = true
+port = 1900
+root = "./docs/server/public_nex"

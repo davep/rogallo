@@ -17,6 +17,11 @@ from port79 import FingerURI
 from port79 import URIError as FingerURIError
 
 ##############################################################################
+# Port1900 imports.
+from port1900 import NexURI
+from port1900 import URIError as NexURIError
+
+##############################################################################
 # Sybaritic imports.
 from sybaritic import SpartanURI
 from sybaritic import URIError as SpartanURIError
@@ -101,6 +106,23 @@ def is_spartan_uri(uri: str) -> bool:
     try:
         _ = SpartanURI(uri)
     except SpartanURIError:
+        return False
+    return True
+
+
+##############################################################################
+def is_nex_uri(uri: str) -> bool:
+    """Determine if a URI is a Nex URI.
+
+    Args:
+        uri: The URI to check.
+
+    Returns:
+        `True` if the URI is a Nex URI, `False` otherwise.
+    """
+    try:
+        _ = NexURI(uri)
+    except NexURIError:
         return False
     return True
 
@@ -325,6 +347,8 @@ def make_location(str: str) -> RogalloLocation:
             return GopherURI(str)
         if is_spartan_uri(str):
             return SpartanURI(str)
+        if is_nex_uri(str):
+            return NexURI(str)
         return path_from_uri(str)
     except ValueError as error:
         raise ValueError(f"Cannot make location from string: {str}") from error

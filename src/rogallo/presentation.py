@@ -13,6 +13,10 @@ from port70 import GopherURI
 from port79 import FingerURI
 
 ##############################################################################
+# Port1900 imports.
+from port1900 import NexURI
+
+##############################################################################
 # Sybaritic imports.
 from sybaritic import SpartanURI
 
@@ -36,7 +40,7 @@ def short_location(location: RogalloLocation) -> str:
     Returns:
         A short string representation of the location.
     """
-    if isinstance(location, (FingerURI, GopherURI, SpartanURI)):
+    if isinstance(location, (FingerURI, GopherURI, SpartanURI, NexURI)):
         return str(location)
     if isinstance(location, GeminiURI):
         return str(location).removeprefix(GEMINI_PREFIX)
