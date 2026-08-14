@@ -53,6 +53,15 @@ async def handle_nex_request(
         )
         return
 
+    # Don't show anything if the response itself was empty.
+    if not response.text:
+        owner.notify(
+            f"No content returned from {uri}",
+            severity="warning",
+            title="Nex Warning",
+        )
+        return
+
     # Try and show it.
     if is_displayable_mime_type(response.mime_type):
         owner.post_message(
