@@ -306,21 +306,16 @@ class Viewer(Vertical, can_focus=False):
         if not self.view_source:
             if document.mime_type_sans_parameters in self._MARKDOWN_MIME_TYPES:
                 return (
-                    [
-                        get_block_widget(line)
-                        for line in self._consolidate(
-                            Gemtext(
-                                markdown_to_gemtext(
-                                    document.content,
-                                    Options(
-                                        extra_linkable_protocols=SUPPORTED_PROTOCOLS,
-                                        html_inline_handling="striptags",
-                                        html_block_handling="convert",
-                                    ),
-                                )
-                            ).content
+                    self._gemtext_widgets(
+                        markdown_to_gemtext(
+                            document.content,
+                            Options(
+                                extra_linkable_protocols=SUPPORTED_PROTOCOLS,
+                                html_inline_handling="striptags",
+                                html_block_handling="convert",
+                            ),
                         )
-                    ]
+                    )
                     if load_configuration().convert_markdown_to_gemtext
                     else [Markdown(document.content)]
                 )
