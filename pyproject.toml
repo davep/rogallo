@@ -21,7 +21,7 @@ keywords = [
     "Textual",
 ]
 dependencies = [
-    "bagofstuff>=1.2.1",
+    "bagofstuff>=1.3.0",
     "gemtext>=1.1.0",
     "gophermap>=1.0.0",
     "html2gemtext>=0.1.0",

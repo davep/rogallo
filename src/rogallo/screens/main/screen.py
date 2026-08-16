@@ -358,6 +358,11 @@ class Main(EnhancedScreen[None]):
             )
         yield Footer()
 
+    def _navigation_changed(self) -> None:
+        """Handle changes to the navigation history."""
+        self.mutate_reactive(Main._navigation_history)
+        save_naviagation_history(self._navigation_history.clone().truncate())
+
     async def on_mount(self) -> None:
         """Called when the screen is mounted."""
         self._command_history = load_command_history()
@@ -383,10 +388,10 @@ class Main(EnhancedScreen[None]):
             location := getattr(self._arguments, "location", None)
         ):
             self.post_message(OpenURI(location))
-        elif self._location_history.current_item:
+        elif self._navigation_history.current_item:
             self.post_message(
                 OpenLocation(
-                    self._location_history.current_item.location,
+                    self._navigation_history.current_item,
                     do_not_record_in_history=True,
                 )
             )
@@ -515,8 +520,7 @@ class Main(EnhancedScreen[None]):
             != request.document.original_location
         ):
             self._navigation_history.add(location)
-            self.mutate_reactive(Main._navigation_history)
-            save_naviagation_history(self._navigation_history)
+            self._navigation_changed()
 
     @on(OpenDocument)
     def open_document(self, message: OpenDocument) -> None:
@@ -827,7 +831,7 @@ class Main(EnhancedScreen[None]):
                     self._navigation_history.current_item, do_not_record_in_history=True
                 )
             )
-            self.mutate_reactive(Main._navigation_history)
+            self._navigation_changed()
 
     def action_forward_command(self) -> None:
         """Go forward in the navigation history."""
@@ -837,7 +841,7 @@ class Main(EnhancedScreen[None]):
                     self._navigation_history.current_item, do_not_record_in_history=True
                 )
             )
-            self.mutate_reactive(Main._navigation_history)
+            self._navigation_changed()
 
     def action_toggle_history_manager_command(self) -> None:
         """Toggle the visibility of the history manager panel."""
