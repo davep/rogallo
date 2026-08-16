@@ -1058,6 +1058,21 @@ wheels = [
 ]
 
 [[package]]
+name = "md2gemtext"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "html2gemtext" },
+    { name = "linkify-it-py" },
+    { name = "markdown-it-py" },
+    { name = "mdit-py-plugins" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/37/f4/c4c3dd8b69830b11997f17def18ae5cfc1de729204fe859a5be8f8c5c10e/md2gemtext-0.1.1.tar.gz", hash = "sha256:4586411be33a64a312284f593722d764506bb267da90990ba7229fdfc767cd99", size = 10471, upload-time = "2026-08-16T18:28:32.212Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bd/55/3c1eae85b296ad61e01206d809dbbd6fef6769fa0f586372f528f6d48acc/md2gemtext-0.1.1-py3-none-any.whl", hash = "sha256:1c20ebdbd83ce6f69290f3342ff33b707ccfcde9e440ae27a933ef775aa34fec", size = 12075, upload-time = "2026-08-16T18:28:31.262Z" },
+]
+
+[[package]]
 name = "mdit-py-plugins"
 version = "0.6.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1750,6 +1765,7 @@ dependencies = [
     { name = "gemtext" },
     { name = "gophermap" },
     { name = "html2gemtext" },
+    { name = "md2gemtext" },
     { name = "port1900" },
     { name = "port70" },
     { name = "port79" },
@@ -1786,6 +1802,7 @@ requires-dist = [
     { name = "gemtext", specifier = ">=1.1.0" },
     { name = "gophermap", specifier = ">=1.0.0" },
     { name = "html2gemtext", specifier = ">=0.1.0" },
+    { name = "md2gemtext", specifier = ">=0.1.1" },
     { name = "port1900", specifier = ">=0.1.0" },
     { name = "port70", specifier = ">=0.1.2" },
     { name = "port79", specifier = ">=1.0.0" },

@@ -18,6 +18,10 @@ from gophermap import ItemType
 from html2gemtext import html_to_gemtext
 
 ##############################################################################
+# md2gemtext imports.
+from md2gemtext import Options, markdown_to_gemtext
+
+##############################################################################
 # Port70 imports.
 from port70 import GopherURI
 
@@ -62,7 +66,7 @@ from wasat import GeminiURI
 # Local imports.
 from ...data import LocationHistory, load_configuration
 from ...document import Document
-from ...types import GEMINI_MIME_TYPE
+from ...types import GEMINI_MIME_TYPE, SUPPORTED_PROTOCOLS
 from .document_view import DocumentView
 from .gemtext import GemtextContent, GemtextLink, get_block_widget
 from .gopher import to_gemtext
@@ -299,16 +303,38 @@ class Viewer(Vertical, can_focus=False):
         Returns:
             The best presentation for the document.
         """
+
+        # If we're not viewing the source, look for a richer presentation.
         if not self.view_source:
+            # Markdown.
             if document.mime_type_sans_parameters in self._MARKDOWN_MIME_TYPES:
-                return [Markdown(document.content)]
+                return (
+                    self._gemtext_widgets(
+                        markdown_to_gemtext(
+                            document.content,
+                            Options(
+                                extra_linkable_protocols=SUPPORTED_PROTOCOLS,
+                                html_inline_handling="striptags",
+                                html_block_handling="convert",
+                            ),
+                        )
+                    )
+                    if load_configuration().convert_markdown_to_gemtext
+                    else [Markdown(document.content)]
+                )
+
+            # HTML.
             if document.mime_type_sans_parameters == "text/html":
                 return self._gemtext_widgets(html_to_gemtext(document.content))
+
+            # Nex.
             if document.is_nex_text:
                 return [
                     get_block_widget(line)
                     for line in self._consolidate(self._nextext(document))
                 ]
+
+        # Source is always the fallback position.
         return [
             Static(
                 Text.from_ansi(document.content)
@@ -363,11 +389,7 @@ class Viewer(Vertical, can_focus=False):
         with self.app.batch_update():
             await self._view.remove_children()
             await self._view.mount_all(self._build_content())
-            if (
-                self.document.is_gemtext
-                or self.document.is_gophermap
-                or self.document.is_nex_text
-            ) and not self.view_source:
+            if not self.view_source and len(links := self._view.query(GemtextLink)):
                 visited_links = {
                     str(visit.location)
                     for visit in self.location_history
@@ -375,7 +397,7 @@ class Viewer(Vertical, can_focus=False):
                         visit.location, (FingerURI, GeminiURI, GopherURI, NexURI)
                     )
                 }
-                for jump_number, link in enumerate(self._view.query(GemtextLink)):
+                for jump_number, link in enumerate(links):
                     link.normalise_uri(self.document.location)
                     link.visited = link.normalised_uri in visited_links
                     link.jump_number = jump_number + 1

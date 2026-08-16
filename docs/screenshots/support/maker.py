@@ -137,10 +137,12 @@ def make_app(
         # Then apply any overrides that were passed in.
         for prop, value in config_overrides.items():
             setattr(config, prop, value)
+    if "." not in viewing:
+        viewing = f"{viewing}.gmi"
     return Rogallo(
         Namespace(
             command="open",
-            location=f"gemini://localhost/{viewing}.gmi",
+            location=f"gemini://localhost/{viewing}",
             theme=None,
         )
         if viewing

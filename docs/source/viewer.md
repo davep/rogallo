@@ -86,4 +86,30 @@ location, and also `gemini://station.martinrue.com/davep` and
 `gemini://station.martinrue.com/example-user` and so on. The second value is
 the alt-text for the pre-formatted text.
 
+### Markdown rendering
+
+If Rogallo is served a Markdown file, it will convert it into Gemtext and
+render it. This makes it easier to navigate links, etc.
+
+```{.textual path="docs/screenshots/markdown_gemtext_screenshot.py" title="Viewing Markdown as Gemtext" lines=50 columns=90}
+```
+
+If you would prefer that Rogallo renders the text using its builtin Markdown
+widget, you can set `convert_markdown_to_gemtext` in the configuration file
+to `false`:
+
+```json
+"convert_markdown_to_gemtext": false
+```
+
+The result of viewing Markdown will be more like this:
+
+```{.textual path="docs/screenshots/markdown_widget_screenshot.py" title="Viewing Markdown" lines=50 columns=90}
+```
+
+While the result is more in keeping with the document being Markdown, it
+will be trickier to navigate if you don't have a mouse (the issue being that
+[Textual's Markdown widget](https://textual.textualize.io/widgets/markdown/)
+is keyboard-hostile when it comes to navigation of links).
+
 [//]: # (viewer.md ends here)
