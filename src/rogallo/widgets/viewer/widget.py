@@ -303,7 +303,10 @@ class Viewer(Vertical, can_focus=False):
         Returns:
             The best presentation for the document.
         """
+
+        # If we're not viewing the source, look for a richer presentation.
         if not self.view_source:
+            # Markdown.
             if document.mime_type_sans_parameters in self._MARKDOWN_MIME_TYPES:
                 return (
                     self._gemtext_widgets(
@@ -319,13 +322,19 @@ class Viewer(Vertical, can_focus=False):
                     if load_configuration().convert_markdown_to_gemtext
                     else [Markdown(document.content)]
                 )
+
+            # HTML.
             if document.mime_type_sans_parameters == "text/html":
                 return self._gemtext_widgets(html_to_gemtext(document.content))
+
+            # Nex.
             if document.is_nex_text:
                 return [
                     get_block_widget(line)
                     for line in self._consolidate(self._nextext(document))
                 ]
+
+        # Source is always the fallback position.
         return [
             Static(
                 Text.from_ansi(document.content)
