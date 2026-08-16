@@ -7,6 +7,9 @@
 - Fixed confusing navigation history when quitting and later starting up
   again while navigated "back".
   ([#349](https://github.com/davep/rogallo/pull/349))
+- Added support for optionally displaying Markdown as a Gemtext conversion
+  (now the default view).
+  ([#350](https://github.com/davep/rogallo/pull/350))
 
 ## v1.9.0
 
