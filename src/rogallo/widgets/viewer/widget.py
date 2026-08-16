@@ -383,7 +383,7 @@ class Viewer(Vertical, can_focus=False):
         with self.app.batch_update():
             await self._view.remove_children()
             await self._view.mount_all(self._build_content())
-            if not self.view_source and len(self._view.query(GemtextLink)):
+            if not self.view_source and len(links := self._view.query(GemtextLink)):
                 visited_links = {
                     str(visit.location)
                     for visit in self.location_history
@@ -391,7 +391,7 @@ class Viewer(Vertical, can_focus=False):
                         visit.location, (FingerURI, GeminiURI, GopherURI, NexURI)
                     )
                 }
-                for jump_number, link in enumerate(self._view.query(GemtextLink)):
+                for jump_number, link in enumerate(links):
                     link.normalise_uri(self.document.location)
                     link.visited = link.normalised_uri in visited_links
                     link.jump_number = jump_number + 1
