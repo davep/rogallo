@@ -314,6 +314,8 @@ class Viewer(Vertical, can_focus=False):
                                     document.content,
                                     Options(
                                         extra_linkable_protocols=SUPPORTED_PROTOCOLS,
+                                        html_inline_handling="striptags",
+                                        html_block_handling="convert",
                                     ),
                                 )
                             ).content
