@@ -30,6 +30,17 @@ type RogalloLocation = Path | GeminiURI | FingerURI | GopherURI | SpartanURI | N
 """The type of a location handled by Rogallo."""
 
 ##############################################################################
+SUPPORTED_PROTOCOLS: Final[tuple[str, ...]] = (
+    "file",
+    "finger",
+    "gemini",
+    "gopher",
+    "nex",
+    "spartan",
+)
+"""The set of protocols handled by Rogallo."""
+
+##############################################################################
 GEMINI_MIME_TYPE: Final[str] = "text/gemini"
 """The MIME type for Gemini content."""
 

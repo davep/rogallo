@@ -182,6 +182,9 @@ class Configuration:
     guess_language_for_syntax_highlighting_text_documents: bool = True
     """Whether to guess the language for syntax highlighting of text documents."""
 
+    convert_markdown_to_gemtext: bool = True
+    """Whether to convert Markdown documents to Gemtext for display."""
+
 
 ##############################################################################
 def configuration_file() -> Path:

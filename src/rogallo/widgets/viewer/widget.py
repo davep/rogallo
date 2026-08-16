@@ -18,6 +18,10 @@ from gophermap import ItemType
 from html2gemtext import html_to_gemtext
 
 ##############################################################################
+# md2gemtext imports.
+from md2gemtext import Options, markdown_to_gemtext
+
+##############################################################################
 # Port70 imports.
 from port70 import GopherURI
 
@@ -62,7 +66,7 @@ from wasat import GeminiURI
 # Local imports.
 from ...data import LocationHistory, load_configuration
 from ...document import Document
-from ...types import GEMINI_MIME_TYPE
+from ...types import GEMINI_MIME_TYPE, SUPPORTED_PROTOCOLS
 from .document_view import DocumentView
 from .gemtext import GemtextContent, GemtextLink, get_block_widget
 from .gopher import to_gemtext
@@ -301,7 +305,23 @@ class Viewer(Vertical, can_focus=False):
         """
         if not self.view_source:
             if document.mime_type_sans_parameters in self._MARKDOWN_MIME_TYPES:
-                return [Markdown(document.content)]
+                return (
+                    [
+                        get_block_widget(line)
+                        for line in self._consolidate(
+                            Gemtext(
+                                markdown_to_gemtext(
+                                    document.content,
+                                    Options(
+                                        extra_linkable_protocols=SUPPORTED_PROTOCOLS,
+                                    ),
+                                )
+                            ).content
+                        )
+                    ]
+                    if load_configuration().convert_markdown_to_gemtext
+                    else [Markdown(document.content)]
+                )
             if document.mime_type_sans_parameters == "text/html":
                 return self._gemtext_widgets(html_to_gemtext(document.content))
             if document.is_nex_text:
