@@ -383,11 +383,7 @@ class Viewer(Vertical, can_focus=False):
         with self.app.batch_update():
             await self._view.remove_children()
             await self._view.mount_all(self._build_content())
-            if (
-                self.document.is_gemtext
-                or self.document.is_gophermap
-                or self.document.is_nex_text
-            ) and not self.view_source:
+            if not self.view_source and len(self._view.query(GemtextLink)):
                 visited_links = {
                     str(visit.location)
                     for visit in self.location_history
