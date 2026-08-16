@@ -30,13 +30,15 @@ type RogalloLocation = Path | GeminiURI | FingerURI | GopherURI | SpartanURI | N
 """The type of a location handled by Rogallo."""
 
 ##############################################################################
-SUPPORTED_PROTOCOLS: Final[tuple[str, ...]] = (
-    "file",
-    "finger",
-    "gemini",
-    "gopher",
-    "nex",
-    "spartan",
+SUPPORTED_PROTOCOLS: Final[frozenset[str]] = frozenset(
+    {
+        "file",
+        "finger",
+        "gemini",
+        "gopher",
+        "nex",
+        "spartan",
+    }
 )
 """The set of protocols handled by Rogallo."""
 
