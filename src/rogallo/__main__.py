@@ -140,6 +140,7 @@ def show_dignoastics() -> None:
     from gemtext import __version__ as gemtext_version
     from gophermap import __version__ as gophermap_version
     from html2gemtext import __version__ as html2gemtext_version
+    from md2gemtext import __version__ as md2gemtext_version
     from port70 import __version__ as port70_version
     from port79 import __version__ as port79_version
     from port1900 import __version__ as port1900_version
@@ -155,6 +156,7 @@ def show_dignoastics() -> None:
     print(f"gemtext: {gemtext_version}")
     print(f"gophermap: {gophermap_version}")
     print(f"html2gemtext: {html2gemtext_version}")
+    print(f"md2gemtext: {md2gemtext_version}")
     print(f"port70: {port70_version}")
     print(f"port79: {port79_version}")
     print(f"port1900: {port1900_version}")
