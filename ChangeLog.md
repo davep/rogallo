@@ -1,5 +1,13 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Fixed confusing navigation history when quitting and later starting up
+  again while navigated "back".
+  ([#349](https://github.com/davep/rogallo/pull/349))
+
 ## v1.9.0
 
 **Released: 2026-08-15**
