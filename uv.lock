@@ -1059,7 +1059,7 @@ wheels = [
 
 [[package]]
 name = "md2gemtext"
-version = "0.1.0"
+version = "0.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "html2gemtext" },
@@ -1067,9 +1067,9 @@ dependencies = [
     { name = "markdown-it-py" },
     { name = "mdit-py-plugins" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4b/9f/fdc6fd5d1fcada14578c5bd766dc27c6d0da7fa6eb59235a5650604b5178/md2gemtext-0.1.0.tar.gz", hash = "sha256:38d66217d018f6261eb9e525509989f870358c3780b2dbd656ce16c57b17b5ee", size = 10471, upload-time = "2026-08-16T13:28:09.847Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/37/f4/c4c3dd8b69830b11997f17def18ae5cfc1de729204fe859a5be8f8c5c10e/md2gemtext-0.1.1.tar.gz", hash = "sha256:4586411be33a64a312284f593722d764506bb267da90990ba7229fdfc767cd99", size = 10471, upload-time = "2026-08-16T18:28:32.212Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/96/9f/fc76954ee3bdf8e1e1c3c5d328ec02c032a8406fbb823cc3466a23ffa221/md2gemtext-0.1.0-py3-none-any.whl", hash = "sha256:f3f9d88ec9ccb2188015204530ea6d97f528df522449635b3b4fbf78570602fe", size = 12063, upload-time = "2026-08-16T13:28:08.732Z" },
+    { url = "https://files.pythonhosted.org/packages/bd/55/3c1eae85b296ad61e01206d809dbbd6fef6769fa0f586372f528f6d48acc/md2gemtext-0.1.1-py3-none-any.whl", hash = "sha256:1c20ebdbd83ce6f69290f3342ff33b707ccfcde9e440ae27a933ef775aa34fec", size = 12075, upload-time = "2026-08-16T18:28:31.262Z" },
 ]
 
 [[package]]
@@ -1802,7 +1802,7 @@ requires-dist = [
     { name = "gemtext", specifier = ">=1.1.0" },
     { name = "gophermap", specifier = ">=1.0.0" },
     { name = "html2gemtext", specifier = ">=0.1.0" },
-    { name = "md2gemtext", specifier = ">=0.1.0" },
+    { name = "md2gemtext", specifier = ">=0.1.1" },
     { name = "port1900", specifier = ">=0.1.0" },
     { name = "port70", specifier = ">=0.1.2" },
     { name = "port79", specifier = ">=1.0.0" },
