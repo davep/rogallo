@@ -1,6 +1,10 @@
 """Provides a toolbar widget that holds command buttons."""
 
 ##############################################################################
+# Python imports.
+from typing import Any
+
+##############################################################################
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
@@ -172,7 +176,7 @@ class Toolbar(Horizontal):
                 )
         yield Label(f"v{__version__}", id="version")
 
-    def _bindings_updated(self, screen: Screen) -> None:
+    def _bindings_updated(self, screen: Screen[Any]) -> None:
         """React to the bindings being updated on the screen.
 
         Args:
