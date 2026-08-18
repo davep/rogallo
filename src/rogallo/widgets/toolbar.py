@@ -109,7 +109,7 @@ class Toolbar(Horizontal):
     DEFAULT_CSS = """
     Toolbar {
         height: 1;
-        background: $surface;
+        background: $panel;
         color: $foreground;
         #version {
             dock: right;
