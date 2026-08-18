@@ -45,7 +45,7 @@ from textual.containers import HorizontalGroup, VerticalGroup
 from textual.getters import query_one
 from textual.reactive import var
 from textual.suggester import SuggestFromList
-from textual.widgets import Footer, Header, Label
+from textual.widgets import Footer, Label
 from textual.worker import get_current_worker
 
 ##############################################################################
@@ -130,7 +130,7 @@ from ...input_content import InputContent
 from ...messages import OpenFromFileSystem, OpenLocation, OpenURI
 from ...providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
 from ...types import GEMINI_EXTENSIONS, SpartanURINeedingData
-from ...widgets import BookmarksViewer, CommandLine, HistoryViewer, Viewer
+from ...widgets import BookmarksViewer, CommandLine, HistoryViewer, Toolbar, Viewer
 from ..about_page import AboutPage
 from ..confirm_unsupported import ConfirmUnsupportedURI
 from .filesystem import handle_filesystem_request
@@ -340,8 +340,13 @@ class Main(EnhancedScreen[None]):
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
-        yield Header()
         with VerticalGroup():
+            if load_configuration().toolbar_visible:
+                yield Toolbar(
+                    commands=load_configuration().toolbar_contents,
+                    can_focus=load_configuration().toolbar_can_get_focus,
+                    show_tooltips=load_configuration().toolbar_tooltips,
+                )
             with Workspace():
                 yield Viewer().data_bind(location_history=Main._location_history)
                 with VerticalGroup(id="history"):

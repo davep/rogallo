@@ -185,6 +185,30 @@ class Configuration:
     convert_markdown_to_gemtext: bool = True
     """Whether to convert Markdown documents to Gemtext for display."""
 
+    toolbar_visible: bool = True
+    """Whether the toolbar is visible."""
+
+    toolbar_contents: list[str | list[str]] = field(
+        default_factory=lambda: [
+            ["GoHome", "⌂"],
+            ["Reload", "↻"],
+            ["Backward", "◀◀"],
+            ["Forward", "▶▶"],
+            ["GoToParent", "↑"],
+            ["GoToRoot", "⇈"],
+            ["SearchHistory", "◷"],
+            ["SearchBookmarks", "★"],
+            ["ToggleView", "⇋"],
+        ]
+    )
+    """The contents of the toolbar."""
+
+    toolbar_can_get_focus: bool = False
+    """Whether the toolbar can get focus."""
+
+    toolbar_tooltips: bool = True
+    """Whether the toolbar buttons have tooltips."""
+
 
 ##############################################################################
 def configuration_file() -> Path:
