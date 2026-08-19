@@ -537,7 +537,7 @@ class Main(EnhancedScreen[None]):
             self._navigation_changed()
 
     @on(Viewer.DocumentLoaded)
-    def _document_loaded(self, message: Viewer.DocumentLoaded) -> None:
+    def _document_loaded(self) -> None:
         """Handle a document being loaded in the viewer.
 
         Args:
