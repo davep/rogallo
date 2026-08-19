@@ -64,7 +64,7 @@ from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
-from ...data import LocationHistory, load_configuration
+from ...data import LocationHistory, NavigationPosition, load_configuration
 from ...document import Document
 from ...types import GEMINI_MIME_TYPE, SUPPORTED_PROTOCOLS
 from .document_view import DocumentView
@@ -204,6 +204,22 @@ class Viewer(Vertical, can_focus=False):
         }
     )
     """The MIME types that can be viewed as source."""
+
+    @property
+    def navigation_position(self) -> NavigationPosition | None:
+        """Get the current navigation position.
+
+        Returns:
+            The current navigation position.
+        """
+        if self.document.location is None:
+            return None
+        return NavigationPosition(
+            location=self.document.location,
+            focused_link=self.screen.focused.jump_number
+            if isinstance(self.screen.focused, GemtextLink)
+            else None,
+        )
 
     @property
     def can_view_source(self) -> bool:
