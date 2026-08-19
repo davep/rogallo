@@ -530,6 +530,7 @@ class Main(EnhancedScreen[None]):
         if (
             not self._viewer.document.avoid_history
             and self._navigation_history.current_item
+            and self._navigation_history.current_item.location
             != self._viewer.document.original_location
         ):
             self._navigation_history.add(NavigationPosition(location))
