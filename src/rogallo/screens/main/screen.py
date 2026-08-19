@@ -345,6 +345,7 @@ class Main(EnhancedScreen[None]):
                 yield Toolbar(
                     buttons=load_configuration().toolbar_contents,
                     commands=Main.COMMAND_MESSAGES,
+                    version=__version__,
                     can_focus=load_configuration().toolbar_can_get_focus,
                     show_tooltips=load_configuration().toolbar_tooltips,
                 )

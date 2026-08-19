@@ -133,6 +133,7 @@ class Toolbar(Horizontal):
         self,
         buttons: Iterable[str | list[str]],
         commands: Iterable[type[Command]],
+        version: str | None = None,
         can_focus: bool = False,
         show_tooltips: bool = True,
     ):
@@ -141,6 +142,7 @@ class Toolbar(Horizontal):
         Args:
             buttons: The buttons to show in the toolbar.
             commands: The commands available to the toolbar.
+            version: The version to show in the toolbar.
             can_focus: Whether the toolbar can be focused.
             show_tooltips: Whether to show tooltips for the buttons in the toolbar.
         """
@@ -149,6 +151,8 @@ class Toolbar(Horizontal):
         """The buttons to show in the toolbar."""
         self._commands = {command.__name__: command for command in commands}
         """The commands available to the toolbar."""
+        self._version = version
+        """The version to show in the toolbar."""
         self._can_focus_buttons = can_focus
         """Whether the buttons in the toolbar can be focused."""
         self._show_button_tooltips = show_tooltips
@@ -179,7 +183,8 @@ class Toolbar(Horizontal):
                 yield Label(command_name, markup=False, classes="error").with_tooltip(
                     f"{command_name} is an unknown command"
                 )
-        yield Label(f"v{__version__}", id="version")
+        if self._version:
+            yield Label(f"v{self._version}", id="version")
 
     def _bindings_updated(self, screen: Screen[Any]) -> None:
         """React to the bindings being updated on the screen.
