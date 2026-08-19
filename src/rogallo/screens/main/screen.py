@@ -343,7 +343,8 @@ class Main(EnhancedScreen[None]):
         with VerticalGroup():
             if load_configuration().toolbar_visible:
                 yield Toolbar(
-                    commands=load_configuration().toolbar_contents,
+                    buttons=load_configuration().toolbar_contents,
+                    commands=Main.COMMAND_MESSAGES,
                     can_focus=load_configuration().toolbar_can_get_focus,
                     show_tooltips=load_configuration().toolbar_tooltips,
                 )

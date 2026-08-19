@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Python imports.
-from typing import Any
+from typing import Any, Iterable
 
 ##############################################################################
 # Textual imports.
@@ -21,7 +21,7 @@ from textual_enhanced.commands.bindings import primary_key_for
 
 ##############################################################################
 # Local imports.
-from .. import __version__, commands
+from .. import __version__
 
 
 ##############################################################################
@@ -130,28 +130,32 @@ class Toolbar(Horizontal):
 
     def __init__(
         self,
-        commands: list[str | list[str]],
+        buttons: list[str | list[str]],
+        commands: Iterable[type[Command]],
         can_focus: bool = False,
         show_tooltips: bool = True,
     ):
         """Initialise the toolbar.
 
         Args:
-            commands: The commands to show in the toolbar.
+            buttons: The buttons to show in the toolbar.
+            commands: The commands available to the toolbar.
             can_focus: Whether the toolbar can be focused.
             show_tooltips: Whether to show tooltips for the buttons in the toolbar.
         """
         super().__init__()
+        self._buttons = buttons
+        """The buttons to show in the toolbar."""
+        self._commands = {command.__name__: command for command in commands}
+        """The commands available to the toolbar."""
         self._can_focus_buttons = can_focus
         """Whether the buttons in the toolbar can be focused."""
         self._show_button_tooltips = show_tooltips
         """Whether to show tooltips for the buttons in the toolbar."""
-        self._commands = commands
-        """The commands to show in the toolbar."""
 
     def compose(self) -> ComposeResult:
         """Compose the toolbar."""
-        for toolbar_button in self._commands:
+        for toolbar_button in self._buttons:
             try:
                 command_name, title = (
                     toolbar_button
@@ -163,7 +167,7 @@ class Toolbar(Horizontal):
                     "Invalid command button configuration item"
                 )
                 continue
-            if command := getattr(commands, command_name, None):
+            if command := self._commands.get(command_name):
                 yield CommandButton(
                     command=command,
                     title=title,
