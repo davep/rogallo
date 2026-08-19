@@ -506,12 +506,11 @@ class Main(EnhancedScreen[None]):
             )
         return True
 
-    def _maybe_remember_location(self, request: OpenDocument) -> None:
-        """Remember a location in the history.
+    def _remember_last_visit(self, request: OpenDocument) -> None:
+        """Remember the last visit to a location.
 
         Args:
-            request: The request to open text for. This is used to determine
-                the location to remember.
+            request: The request to remember the visit for.
         """
         if (location := request.document.location) is None:
             return
@@ -522,10 +521,15 @@ class Main(EnhancedScreen[None]):
         self._location_history.add(LocationVisit(location))
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
+
+    def _remember_current_navigation(self) -> None:
+        """Remember our current position for navigation history."""
+        if (location := self._viewer.document.location) is None:
+            return
         if (
-            not request.document.avoid_history
+            not self._viewer.document.avoid_history
             and self._navigation_history.current_item
-            != request.document.original_location
+            != self._viewer.document.original_location
         ):
             self._navigation_history.add(location)
             self._navigation_changed()
@@ -537,7 +541,7 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the document to open.
         """
-        self._maybe_remember_location(message)
+        self._remember_last_visit(message)
         self._viewer.document = message.document
         self.refresh_bindings()
         self._viewer.take_control()
@@ -625,6 +629,7 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the URI to open.
         """
+        self._remember_current_navigation()
         self.post_message(uri_resolver(message))
 
     @on(OpenUnsupportedURI)
