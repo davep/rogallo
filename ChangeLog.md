@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Swapped the header bar out for an optional mouse-oriented toolbar of
+  command buttons. ([#357](https://github.com/davep/rogallo/pull/357))
+
 ## v1.10.0
 
 **Released: 2026-08-18**
