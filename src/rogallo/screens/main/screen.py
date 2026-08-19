@@ -109,7 +109,6 @@ from ...data import (
     LocationHistory,
     LocationVisit,
     NavigationHistory,
-    NavigationPosition,
     client_certificates_directory,
     load_bookmarks,
     load_command_history,
@@ -526,7 +525,7 @@ class Main(EnhancedScreen[None]):
     def _remember_current_navigation(self) -> None:
         """Remember our current position for navigation history."""
         if (
-            location := self._viewer.document.location
+            position := self._viewer.navigation_position
         ) is None or self._viewer.document.avoid_history:
             return
         if (
@@ -534,7 +533,7 @@ class Main(EnhancedScreen[None]):
             or self._navigation_history.current_item.location
             != self._viewer.document.original_location
         ):
-            self._navigation_history.add(NavigationPosition(location))
+            self._navigation_history.add(position)
             self._navigation_changed()
 
     @on(OpenDocument)
