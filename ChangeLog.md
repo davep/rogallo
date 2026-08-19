@@ -6,6 +6,9 @@
 
 - Swapped the header bar out for an optional mouse-oriented toolbar of
   command buttons. ([#357](https://github.com/davep/rogallo/pull/357))
+- Added `footer_visible` to the configuration file. Allows for hiding of the
+  application footer if it's not needed.
+  ([#359](https://github.com/davep/rogallo/pull/359))
 
 ## v1.10.0
 
