@@ -4,6 +4,7 @@
 # Python imports.
 from json import dumps, loads
 from pathlib import Path
+from typing import NamedTuple
 
 ##############################################################################
 # BagOfStuff imports.
@@ -17,7 +18,18 @@ from .locations import data_dir
 
 
 ##############################################################################
-class NavigationHistory(NavigableHistory[RogalloLocation]):
+class NavigationPosition(NamedTuple):
+    """A position in the navigation history."""
+
+    location: RogalloLocation
+    """The location at the position in the history."""
+
+    focused_link: int | None = None
+    """The index of the position in the history."""
+
+
+##############################################################################
+class NavigationHistory(NavigableHistory[NavigationPosition]):
     """The navigation history."""
 
 
@@ -42,7 +54,8 @@ def save_naviagation_history(history: NavigationHistory) -> None:
         dumps(
             [
                 {
-                    "location": str(entry),
+                    "location": str(entry.location),
+                    "focused_link": entry.focused_link,
                 }
                 for entry in history
             ],
@@ -61,7 +74,10 @@ def load_navigation_history() -> NavigationHistory:
     """
     return NavigationHistory(
         [
-            make_location(entry["location"])
+            NavigationPosition(
+                make_location(entry["location"]),
+                entry.get("focused_link"),
+            )
             for entry in loads(history.read_text(encoding="utf-8"))
         ]
         if (history := navigation_history_file()).exists()

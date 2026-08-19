@@ -23,6 +23,7 @@ from .location_history import (
 )
 from .navigation_history import (
     NavigationHistory,
+    NavigationPosition,
     load_navigation_history,
     save_naviagation_history,
 )
@@ -50,6 +51,7 @@ __all__ = [
     "LocationHistory",
     "LocationVisit",
     "NavigationHistory",
+    "NavigationPosition",
     "save_bookmarks",
     "save_command_history",
     "save_configuration",

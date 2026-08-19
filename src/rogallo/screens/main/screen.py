@@ -109,6 +109,7 @@ from ...data import (
     LocationHistory,
     LocationVisit,
     NavigationHistory,
+    NavigationPosition,
     client_certificates_directory,
     load_bookmarks,
     load_command_history,
@@ -399,7 +400,7 @@ class Main(EnhancedScreen[None]):
         elif self._navigation_history.current_item:
             self.post_message(
                 OpenLocation(
-                    self._navigation_history.current_item,
+                    self._navigation_history.current_item.location,
                     avoid_history=True,
                 )
             )
@@ -531,7 +532,7 @@ class Main(EnhancedScreen[None]):
             and self._navigation_history.current_item
             != self._viewer.document.original_location
         ):
-            self._navigation_history.add(location)
+            self._navigation_history.add(NavigationPosition(location))
             self._navigation_changed()
 
     @on(OpenDocument)
@@ -840,7 +841,9 @@ class Main(EnhancedScreen[None]):
             and self._navigation_history.current_item
         ):
             self.post_message(
-                OpenLocation(self._navigation_history.current_item, avoid_history=True)
+                OpenLocation(
+                    self._navigation_history.current_item.location, avoid_history=True
+                )
             )
             self._navigation_changed()
 
@@ -848,7 +851,9 @@ class Main(EnhancedScreen[None]):
         """Go forward in the navigation history."""
         if self._navigation_history.forward() and self._navigation_history.current_item:
             self.post_message(
-                OpenLocation(self._navigation_history.current_item, avoid_history=True)
+                OpenLocation(
+                    self._navigation_history.current_item.location, avoid_history=True
+                )
             )
             self._navigation_changed()
 
