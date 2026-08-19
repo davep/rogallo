@@ -15,6 +15,7 @@ nav:
       - ui.md
       - command-line.md
       - sidebar.md
+      - toolbar.md
       - viewer.md
       - custom-themes.md
   - "Configuration": configuration.md
