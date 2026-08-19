@@ -1,8 +1,13 @@
 """Provides the main viewer widget."""
 
 ##############################################################################
+# Future imports.
+from __future__ import annotations
+
+##############################################################################
 # Python imports.
 from collections.abc import Iterable, Iterator
+from dataclasses import dataclass
 from functools import cached_property
 
 ##############################################################################
@@ -49,6 +54,7 @@ from textual.containers import HorizontalGroup, Vertical
 from textual.events import DescendantBlur, DescendantFocus, Key
 from textual.getters import query_one
 from textual.highlight import HighlightTheme, highlight
+from textual.message import Message
 from textual.reactive import var
 from textual.timer import Timer
 from textual.widget import Widget
@@ -386,6 +392,13 @@ class Viewer(Vertical, can_focus=False):
             )
         return self._best_presentation_for(self.document)
 
+    @dataclass
+    class DocumentLoaded(Message):
+        """Message sent when a document has been loaded."""
+
+        viewer: Viewer
+        """The viewer that loaded the document."""
+
     async def _watch_document(
         self, old_document: Document, new_document: Document
     ) -> None:
@@ -426,6 +439,7 @@ class Viewer(Vertical, can_focus=False):
         # now. Not that it matters, issues seem to be ignored these days.
         self.call_after_refresh(self._view.scroll_end, animate=False, immediate=True)
         self.call_after_refresh(self._view.scroll_home, animate=False, immediate=True)
+        self.post_message(self.DocumentLoaded(self))
 
     def _watch_view_source(self) -> None:
         """Watch for changes to the view_source property and update the viewer."""
