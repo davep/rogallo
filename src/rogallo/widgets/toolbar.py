@@ -131,7 +131,7 @@ class Toolbar(Horizontal):
 
     def __init__(
         self,
-        buttons: list[str | list[str]],
+        buttons: Iterable[str | list[str]],
         commands: Iterable[type[Command]],
         can_focus: bool = False,
         show_tooltips: bool = True,
@@ -145,7 +145,7 @@ class Toolbar(Horizontal):
             show_tooltips: Whether to show tooltips for the buttons in the toolbar.
         """
         super().__init__()
-        self._buttons = buttons
+        self._buttons = list(buttons)
         """The buttons to show in the toolbar."""
         self._commands = {command.__name__: command for command in commands}
         """The commands available to the toolbar."""
