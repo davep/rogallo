@@ -226,7 +226,7 @@ class SpartanPromptLink(GemtextLink):
             OpenLocation(
                 SpartanURINeedingData(self._normalised_uri),
                 allow_cached=False,
-                do_not_record_in_history=True,
+                avoid_history=True,
             )
         )
 

@@ -177,7 +177,7 @@ async def _handle_response(
     if is_displayable_mime_type(response.mime_type):
         owner.post_message(
             OpenDocument(
-                document=cache.add_document(
+                cache.add_document(
                     Document(
                         location=uri,
                         original_location=request.location,
@@ -187,9 +187,9 @@ async def _handle_response(
                         verification_method=response.verification_method,
                         server_certificate=response.server_cert,
                         avoid_cache=response.client_cert_used,
+                        avoid_history=request.avoid_history,
                     )
-                ),
-                original_request=request,
+                )
             )
         )
     else:
@@ -222,12 +222,7 @@ async def handle_gemini_request(
     # If a cached copy of the document exists and the request allows it,
     # use that instead of making a network request.
     if request.allow_cached and (cached_document := cache.get_document(uri)):
-        owner.post_message(
-            OpenDocument(
-                document=cached_document,
-                original_request=request,
-            )
-        )
+        owner.post_message(OpenDocument(document=cached_document))
         return
 
     # Otherwise, make a request to the capsule and handle the response.

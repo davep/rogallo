@@ -400,7 +400,7 @@ class Main(EnhancedScreen[None]):
             self.post_message(
                 OpenLocation(
                     self._navigation_history.current_item,
-                    do_not_record_in_history=True,
+                    avoid_history=True,
                 )
             )
         # Wait a few moments to do housekeeping, because by then the user is
@@ -523,7 +523,7 @@ class Main(EnhancedScreen[None]):
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
         if (
-            not request.original_request.do_not_record_in_history
+            not request.document.avoid_history
             and self._navigation_history.current_item
             != request.document.original_location
         ):
@@ -835,9 +835,7 @@ class Main(EnhancedScreen[None]):
             and self._navigation_history.current_item
         ):
             self.post_message(
-                OpenLocation(
-                    self._navigation_history.current_item, do_not_record_in_history=True
-                )
+                OpenLocation(self._navigation_history.current_item, avoid_history=True)
             )
             self._navigation_changed()
 
@@ -845,9 +843,7 @@ class Main(EnhancedScreen[None]):
         """Go forward in the navigation history."""
         if self._navigation_history.forward() and self._navigation_history.current_item:
             self.post_message(
-                OpenLocation(
-                    self._navigation_history.current_item, do_not_record_in_history=True
-                )
+                OpenLocation(self._navigation_history.current_item, avoid_history=True)
             )
             self._navigation_changed()
 
@@ -893,7 +889,7 @@ class Main(EnhancedScreen[None]):
             self.post_message(
                 OpenLocation(
                     self._viewer.document.location,
-                    do_not_record_in_history=True,
+                    avoid_history=True,
                     allow_cached=False,
                 )
             )

@@ -48,7 +48,7 @@ async def _handle_response(
     if is_displayable_mime_type(response.mime_type):
         owner.post_message(
             OpenDocument(
-                document=cache.add_document(
+                cache.add_document(
                     Document(
                         location=uri,
                         original_location=request.location,
@@ -56,8 +56,7 @@ async def _handle_response(
                         mime_type=response.mime_type,
                         avoid_cache=isinstance(uri, SpartanURINeedingData),
                     )
-                ),
-                original_request=request,
+                )
             )
         )
     else:
@@ -87,12 +86,7 @@ async def handle_spartan_request(
         and request.allow_cached
         and (cached_document := cache.get_document(uri))
     ):
-        owner.post_message(
-            OpenDocument(
-                document=cached_document,
-                original_request=request,
-            )
-        )
+        owner.post_message(OpenDocument(cached_document))
         return
 
     # If we're looking at a Spartan request that needs data. Let's ask

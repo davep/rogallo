@@ -67,6 +67,9 @@ class Document:
     avoid_cache: bool = False
     """Whether the document should avoid being cached."""
 
+    avoid_history: bool = False
+    """Whether the document should avoid being recorded in history."""
+
     verification_method: VerificationMethod | None = None
     """The method used to verify the server, if any."""
 

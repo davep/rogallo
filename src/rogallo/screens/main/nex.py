@@ -34,12 +34,7 @@ async def handle_nex_request(
 
     # Check the cache first.
     if request.allow_cached and (cached_document := cache.get_document(uri)):
-        owner.post_message(
-            OpenDocument(
-                document=cached_document,
-                original_request=request,
-            )
-        )
+        owner.post_message(OpenDocument(cached_document))
         return
 
     # Grab the data from the server.
@@ -66,16 +61,16 @@ async def handle_nex_request(
     if is_displayable_mime_type(response.mime_type):
         owner.post_message(
             OpenDocument(
-                document=cache.add_document(
+                cache.add_document(
                     Document(
                         location=uri,
                         original_location=uri,
                         content=response.text,
                         mime_type=response.mime_type,
                         avoid_cache=False,
+                        avoid_history=request.avoid_history,
                     )
-                ),
-                original_request=request,
+                )
             )
         )
     else:
