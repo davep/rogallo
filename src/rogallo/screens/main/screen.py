@@ -536,6 +536,16 @@ class Main(EnhancedScreen[None]):
             self._navigation_history.add(position)
             self._navigation_changed()
 
+    @on(Viewer.DocumentLoaded)
+    def _document_loaded(self, message: Viewer.DocumentLoaded) -> None:
+        """Handle a document being loaded in the viewer.
+
+        Args:
+            message: The message containing the document that was loaded.
+        """
+        self.refresh_bindings()
+        self._viewer.take_control()
+
     @on(OpenDocument)
     def open_document(self, message: OpenDocument) -> None:
         """Open a document in the viewer.
@@ -545,8 +555,6 @@ class Main(EnhancedScreen[None]):
         """
         self._remember_last_visit(message)
         self._viewer.document = message.document
-        self.refresh_bindings()
-        self._viewer.take_control()
 
     @work
     async def _make_request(self, handler: Awaitable[None]) -> None:
