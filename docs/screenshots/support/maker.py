@@ -137,7 +137,7 @@ def make_app(
         # Then apply any overrides that were passed in.
         for prop, value in config_overrides.items():
             setattr(config, prop, value)
-    if "." not in viewing:
+    if viewing and "." not in viewing:
         viewing = f"{viewing}.gmi"
     return Rogallo(
         Namespace(
