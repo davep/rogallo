@@ -525,14 +525,13 @@ class Main(EnhancedScreen[None]):
 
     def _remember_current_navigation(self) -> None:
         """Remember our current position for navigation history."""
-        if (location := self._viewer.document.location) is None:
+        if (
+            location := self._viewer.document.location
+        ) is None or self._viewer.document.avoid_history:
             return
         if (
-            not self._viewer.document.avoid_history
-            # TODO: No, this next check is wrong.
-            and self._navigation_history.current_item
-            # TODO: The one above. If there is no current item we *should* save.
-            and self._navigation_history.current_item.location
+            self._navigation_history.current_item is None
+            or self._navigation_history.current_item.location
             != self._viewer.document.original_location
         ):
             self._navigation_history.add(NavigationPosition(location))
