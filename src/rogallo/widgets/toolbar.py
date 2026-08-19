@@ -20,10 +20,6 @@ from textual.widgets import Label
 from textual_enhanced.commands import Command
 from textual_enhanced.commands.bindings import primary_key_for
 
-##############################################################################
-# Local imports.
-from .. import __version__
-
 
 ##############################################################################
 class CommandButton(Widget):
