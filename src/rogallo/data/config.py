@@ -209,6 +209,9 @@ class Configuration:
     toolbar_tooltips: bool = True
     """Whether the toolbar buttons have tooltips."""
 
+    footer_visible: bool = True
+    """Whether the footer is visible."""
+
 
 ##############################################################################
 def configuration_file() -> Path:

@@ -363,7 +363,8 @@ class Main(EnhancedScreen[None]):
                 navigation_history=Main._navigation_history,
                 bookmarks=Main._bookmarks,
             )
-        yield Footer()
+        if load_configuration().footer_visible:
+            yield Footer()
 
     def _navigation_changed(self) -> None:
         """Handle changes to the navigation history."""
