@@ -529,7 +529,9 @@ class Main(EnhancedScreen[None]):
             return
         if (
             not self._viewer.document.avoid_history
+            # TODO: No, this next check is wrong.
             and self._navigation_history.current_item
+            # TODO: The one above. If there is no current item we *should* save.
             and self._navigation_history.current_item.location
             != self._viewer.document.original_location
         ):
