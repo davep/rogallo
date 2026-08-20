@@ -33,7 +33,9 @@ async def handle_nex_request(
     assert isinstance(uri, NexURI)
 
     # Check the cache first.
-    if request.allow_cached and (cached_document := cache.get_document(uri)):
+    if request.allow_cached and (
+        cached_document := cache.get_document(uri, avoid_history=request.avoid_history)
+    ):
         owner.post_message(OpenDocument(cached_document))
         return
 

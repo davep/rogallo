@@ -221,7 +221,15 @@ async def handle_gemini_request(
 
     # If a cached copy of the document exists and the request allows it,
     # use that instead of making a network request.
-    if request.allow_cached and (cached_document := cache.get_document(uri)):
+    if (
+        request.allow_cached
+        and (
+            cached_document := cache.get_document(
+                uri, avoid_history=request.avoid_history
+            )
+        )
+        is not None
+    ):
         owner.post_message(OpenDocument(document=cached_document))
         return
 

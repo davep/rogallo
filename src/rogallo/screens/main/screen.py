@@ -109,6 +109,7 @@ from ...data import (
     LocationHistory,
     LocationVisit,
     NavigationHistory,
+    NavigationPosition,
     client_certificates_directory,
     load_bookmarks,
     load_command_history,
@@ -522,20 +523,6 @@ class Main(EnhancedScreen[None]):
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
 
-    def _remember_current_navigation(self) -> None:
-        """Remember our current position for navigation history."""
-        if (
-            position := self._viewer.navigation_position
-        ) is None or self._viewer.document.avoid_history:
-            return
-        if (
-            self._navigation_history.current_item is None
-            or self._navigation_history.current_item.location
-            != self._viewer.document.original_location
-        ):
-            self._navigation_history.add(position)
-            self._navigation_changed()
-
     @on(Viewer.DocumentLoaded)
     def _document_loaded(self) -> None:
         """Handle a document being loaded in the viewer.
@@ -545,6 +532,8 @@ class Main(EnhancedScreen[None]):
         """
         self.refresh_bindings()
         self._viewer.take_control()
+        if self._navigation_history.current_item:
+            self._viewer.jump = self._navigation_history.current_item.focused_link
 
     @on(OpenDocument)
     def open_document(self, message: OpenDocument) -> None:
@@ -553,6 +542,9 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the document to open.
         """
+        if message.document.location and not message.document.avoid_history:
+            self._navigation_history.add(NavigationPosition(message.document.location))
+            self._navigation_changed()
         self._remember_last_visit(message)
         self._viewer.document = message.document
 
@@ -639,7 +631,14 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the URI to open.
         """
-        self._remember_current_navigation()
+        if (
+            position := self._viewer.navigation_position
+        ) and not self._viewer.document.avoid_history:
+            # TODO: Rather than `avoid_history`, I think I should have
+            # `from_history` and also `avoid_history`. Then I should make
+            # decisions based on that.
+            self._navigation_history.add_or_replace(position)
+            self._navigation_changed()
         self.post_message(uri_resolver(message))
 
     @on(OpenUnsupportedURI)

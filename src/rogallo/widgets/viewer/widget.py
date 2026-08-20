@@ -160,7 +160,7 @@ class Viewer(Vertical, can_focus=False):
     _status = query_one(ViewerStatus)
     """The status bar widget."""
 
-    _jump: var[int | None] = var(None)
+    jump: var[int | None] = var(None)
     """Keeps track of the jump progress."""
     _jump_timer: Timer | None = None
     """A timer to reset the jump progress after a short delay."""
@@ -447,7 +447,7 @@ class Viewer(Vertical, can_focus=False):
 
     def _watch_with_link_numbers(self) -> None:
         """Watch for changes to the with_link_numbers property."""
-        self._jump = None
+        self.jump = None
 
     def _watch_handle_ansi_escape_sequences(self) -> None:
         """Watch for changes to the handle_ansi_escape_sequences property and update the viewer."""
@@ -465,13 +465,13 @@ class Viewer(Vertical, can_focus=False):
         )
         self.mutate_reactive(Viewer.document)
 
-    def _watch__jump(self) -> None:
+    def _watch_jump(self) -> None:
         """Watch for changes to the jump property and update the viewer."""
-        if self._jump is not None:
-            if (link := self._jump_map.get(self._jump)) is not None:
+        if self.jump is not None:
+            if (link := self._jump_map.get(self.jump)) is not None:
                 link.focus(scroll_visible=True)
             else:
-                self._jump = self._jump % 10 if self._jump > 9 else None
+                self.jump = self.jump % 10 if self.jump > 9 else None
 
     def take_control(self) -> None:
         """Take control of the UI."""
@@ -503,7 +503,7 @@ class Viewer(Vertical, can_focus=False):
 
     def _reset_jump_progress(self) -> None:
         """Reset the jump progress."""
-        self._jump = None
+        self.jump = None
         self._reset_jump_timer()
 
     @on(Key)
@@ -513,7 +513,7 @@ class Viewer(Vertical, can_focus=False):
             return
         if event.key.isdigit():
             event.stop()
-            self._jump = (self._jump or 0) * 10 + int(event.key)
+            self.jump = (self.jump or 0) * 10 + int(event.key)
             self._reset_jump_timer(start_new=True)
         else:
             self._reset_jump_progress()
@@ -524,9 +524,9 @@ class Viewer(Vertical, can_focus=False):
             return
         current = self._view.query_one_optional("GemtextLink:focus", GemtextLink)
         if current is None or (current.jump_number and current.jump_number <= 1):
-            self._jump = links.last().jump_number
+            self.jump = links.last().jump_number
         elif current.jump_number is not None:
-            self._jump = current.jump_number - 1
+            self.jump = current.jump_number - 1
 
     def action_next_link(self) -> None:
         """Focus the next link."""
@@ -536,9 +536,9 @@ class Viewer(Vertical, can_focus=False):
         if (last := links.last().jump_number) is None:
             return
         if current is None or (current.jump_number and current.jump_number >= last):
-            self._jump = 1
+            self.jump = 1
         elif current.jump_number is not None:
-            self._jump = current.jump_number + 1
+            self.jump = current.jump_number + 1
 
 
 ### widget.py ends here

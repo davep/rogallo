@@ -67,7 +67,11 @@ async def handle_gopher_request(
     if (
         ItemType(uri.item_type) is not ItemType.INDEX_SEARCH
         and request.allow_cached
-        and (cached_document := cache.get_document(uri))
+        and (
+            cached_document := cache.get_document(
+                uri, avoid_history=request.avoid_history
+            )
+        )
     ):
         owner.post_message(OpenDocument(cached_document))
         return
