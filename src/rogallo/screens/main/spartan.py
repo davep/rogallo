@@ -55,8 +55,10 @@ async def _handle_response(
                         content=await decode_text(response),
                         mime_type=response.mime_type,
                         avoid_cache=isinstance(uri, SpartanURINeedingData),
+                        avoid_history=request.avoid_history,
                     )
-                )
+                ),
+                from_history=request.from_history,
             )
         )
     else:
@@ -90,7 +92,9 @@ async def handle_spartan_request(
             )
         )
     ):
-        owner.post_message(OpenDocument(cached_document))
+        owner.post_message(
+            OpenDocument(cached_document, from_history=request.from_history)
+        )
         return
 
     # If we're looking at a Spartan request that needs data. Let's ask

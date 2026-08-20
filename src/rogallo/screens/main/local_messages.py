@@ -32,6 +32,8 @@ class OpenDocument(Message):
 
     document: Document
     """The document to open."""
+    from_history: bool = False
+    """Whether this document was opened from history."""
 
 
 ##############################################################################

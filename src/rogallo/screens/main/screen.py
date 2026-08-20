@@ -401,7 +401,7 @@ class Main(EnhancedScreen[None]):
             self.post_message(
                 OpenLocation(
                     self._navigation_history.current_item.location,
-                    avoid_history=True,
+                    from_history=True,
                 )
             )
         # Wait a few moments to do housekeeping, because by then the user is
@@ -542,7 +542,11 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the document to open.
         """
-        if message.document.location and not message.document.avoid_history:
+        if (
+            message.document.location
+            and not message.document.avoid_history
+            and not message.from_history
+        ):
             self._navigation_history.add(NavigationPosition(message.document.location))
             self._navigation_changed()
         self._remember_last_visit(message)
@@ -634,9 +638,6 @@ class Main(EnhancedScreen[None]):
         if (
             position := self._viewer.navigation_position
         ) and not self._viewer.document.avoid_history:
-            # TODO: Rather than `avoid_history`, I think I should have
-            # `from_history` and also `avoid_history`. Then I should make
-            # decisions based on that.
             self._navigation_history.add_or_replace(position)
             self._navigation_changed()
         self.post_message(uri_resolver(message))
@@ -850,7 +851,8 @@ class Main(EnhancedScreen[None]):
         ):
             self.post_message(
                 OpenLocation(
-                    self._navigation_history.current_item.location, avoid_history=True
+                    self._navigation_history.current_item.location,
+                    from_history=True,
                 )
             )
             self._navigation_changed()
@@ -860,7 +862,8 @@ class Main(EnhancedScreen[None]):
         if self._navigation_history.forward() and self._navigation_history.current_item:
             self.post_message(
                 OpenLocation(
-                    self._navigation_history.current_item.location, avoid_history=True
+                    self._navigation_history.current_item.location,
+                    from_history=True,
                 )
             )
             self._navigation_changed()
@@ -907,7 +910,7 @@ class Main(EnhancedScreen[None]):
             self.post_message(
                 OpenLocation(
                     self._viewer.document.location,
-                    avoid_history=True,
+                    from_history=True,
                     allow_cached=False,
                 )
             )

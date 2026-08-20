@@ -73,7 +73,9 @@ async def handle_gopher_request(
             )
         )
     ):
-        owner.post_message(OpenDocument(cached_document))
+        owner.post_message(
+            OpenDocument(cached_document, from_history=request.from_history)
+        )
         return
 
     # While Gopher doesn't deal with MIME types, Rogallo does for the
@@ -96,7 +98,8 @@ async def handle_gopher_request(
                         avoid_cache=ItemType(uri.item_type) is ItemType.INDEX_SEARCH,
                         avoid_history=request.avoid_history,
                     )
-                )
+                ),
+                from_history=request.from_history,
             )
         )
     except Port70Error as error:

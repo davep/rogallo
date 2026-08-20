@@ -41,7 +41,9 @@ def handle_filesystem_request(request: OpenLocation, owner: Widget) -> None:
                     original_location=request.location,
                     content=uri.read_text(encoding="utf-8"),
                     mime_type=mime_type,
-                )
+                    avoid_history=request.avoid_history,
+                ),
+                from_history=request.from_history,
             )
         )
     except OSError as error:

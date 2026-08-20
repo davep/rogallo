@@ -189,7 +189,8 @@ async def _handle_response(
                         avoid_cache=response.client_cert_used,
                         avoid_history=request.avoid_history,
                     )
-                )
+                ),
+                from_history=request.from_history,
             )
         )
     else:
@@ -230,7 +231,9 @@ async def handle_gemini_request(
         )
         is not None
     ):
-        owner.post_message(OpenDocument(document=cached_document))
+        owner.post_message(
+            OpenDocument(document=cached_document, from_history=request.from_history)
+        )
         return
 
     # Otherwise, make a request to the capsule and handle the response.

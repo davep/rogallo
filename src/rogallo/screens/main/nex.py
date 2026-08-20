@@ -36,7 +36,9 @@ async def handle_nex_request(
     if request.allow_cached and (
         cached_document := cache.get_document(uri, avoid_history=request.avoid_history)
     ):
-        owner.post_message(OpenDocument(cached_document))
+        owner.post_message(
+            OpenDocument(cached_document, from_history=request.from_history)
+        )
         return
 
     # Grab the data from the server.
@@ -72,7 +74,8 @@ async def handle_nex_request(
                         avoid_cache=False,
                         avoid_history=request.avoid_history,
                     )
-                )
+                ),
+                from_history=request.from_history,
             )
         )
     else:

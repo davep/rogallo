@@ -39,7 +39,8 @@ async def handle_finger_request(
                     mime_type="text/plain",
                     avoid_cache=True,
                     avoid_history=request.avoid_history,
-                )
+                ),
+                from_history=request.from_history,
             )
         )
     except Port79Error as error:
