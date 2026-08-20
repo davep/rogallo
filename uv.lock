@@ -238,11 +238,11 @@ wheels = [
 
 [[package]]
 name = "bagofstuff"
-version = "1.3.0"
+version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/44/ac/afb8fd92c845a225d083d5c8a88a5722338ec60a93a3a440de6b15e91334/bagofstuff-1.3.0.tar.gz", hash = "sha256:3d0f64754221ea5a340ce3ff9c9be3af65702c94464e422d45e3ae8fb9878786", size = 6785, upload-time = "2026-08-16T08:05:14.89Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ff/52/020cf95233d6838920e3dfad6e4b4b1df6ce8d42646a8a094f9003356d97/bagofstuff-2.0.0.tar.gz", hash = "sha256:423604e10179ec61af1f3a62f8c61aeaa2383040fdea67175f5c43d50e829a44", size = 7160, upload-time = "2026-08-20T09:44:12.362Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d0/f4/e521f48e1c65d987d2ea6634476aa8a40b257f4e732b1d6d4f6c662a6da3/bagofstuff-1.3.0-py3-none-any.whl", hash = "sha256:acd9310aed5321334e17c0d7fc2e0271a30651e4e93ec9cac5663e8b97c3d105", size = 9879, upload-time = "2026-08-16T08:05:13.931Z" },
+    { url = "https://files.pythonhosted.org/packages/74/77/dc41b6ba788ef8eab0a8d35ef9f0138c378d05c049f99cd86df55f2c8222/bagofstuff-2.0.0-py3-none-any.whl", hash = "sha256:7f23be19513a5b50a6d6aa17c30feaf2cdc3337064b343478f8600761785fecc", size = 10277, upload-time = "2026-08-20T09:44:11.313Z" },
 ]
 
 [[package]]
@@ -1798,7 +1798,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "bagofstuff", specifier = ">=1.3.0" },
+    { name = "bagofstuff", specifier = ">=2.0.0" },
     { name = "gemtext", specifier = ">=1.1.0" },
     { name = "gophermap", specifier = ">=1.0.0" },
     { name = "html2gemtext", specifier = ">=0.1.0" },
