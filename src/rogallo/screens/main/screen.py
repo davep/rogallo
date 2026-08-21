@@ -106,9 +106,7 @@ from ...types import GEMINI_EXTENSIONS, SpartanURINeedingData
 from ...widgets import BookmarksViewer, CommandLine, HistoryViewer, Toolbar, Viewer
 from ..about_page import AboutPage
 from .clients import Clients
-from .handlers import (
-    handle_filesystem_request,
-)
+from .handlers import handle_filesystem_request
 from .local_messages import (
     CopyToClipboard,
     OpenDocument,
