@@ -48,6 +48,10 @@ class Clients(NamedTuple):
     spartan: SpartanClient
     """The spartan client."""
 
+    async def close(self) -> None:
+        """Close all clients."""
+        await self.gemini.close()
+
     @classmethod
     def create(cls) -> Self:
         """Create a new instance of the clients class.

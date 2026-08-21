@@ -359,7 +359,7 @@ class Main(EnhancedScreen[None]):
 
     async def on_unmount(self) -> None:
         """Called when the screen is unmounted."""
-        await self._clients.gemini.close()
+        await self._clients.close()
 
     @work(thread=True)
     def _housekeeping(self) -> None:
