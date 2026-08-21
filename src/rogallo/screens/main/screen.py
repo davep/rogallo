@@ -9,25 +9,9 @@ from subprocess import CalledProcessError, run
 from webbrowser import open as open_in_browser
 
 ##############################################################################
-# Port70 imports.
-from port70 import Client as GopherClient
-
-##############################################################################
-# Port79 imports.
-from port79 import Client as FingerClient
-
-##############################################################################
-# Port1900 imports.
-from port1900 import Client as NexClient
-
-##############################################################################
 # Pyperclip imports.
 from pyperclip import PyperclipException
 from pyperclip import copy as copy_to_clipboard
-
-##############################################################################
-# Sybaritic imports.
-from sybaritic import Client as SpartanClient
 
 ##############################################################################
 # Textual imports.
@@ -53,7 +37,6 @@ from textual_fspicker import FileOpen, FileSave, Filters
 
 ##############################################################################
 # Wasat imports.
-from wasat import Client as GeminiClient
 from wasat import GeminiURI
 
 ##############################################################################
@@ -102,7 +85,6 @@ from ...data import (
     LocationVisit,
     NavigationHistory,
     NavigationPosition,
-    client_certificates_directory,
     load_bookmarks,
     load_command_history,
     load_configuration,
@@ -114,7 +96,6 @@ from ...data import (
     save_command_history,
     save_location_history,
     save_naviagation_history,
-    trust_file,
     update_configuration,
 )
 from ...input_content import InputContent
@@ -304,28 +285,7 @@ class Main(EnhancedScreen[None]):
         """The trusted MIME types."""
         self._last_user_input: InputContent | None = None
         """The last user input."""
-        self._clients = Clients(
-            gemini=GeminiClient(
-                verify_mode=load_configuration().capsule_certificate_verify_mode,
-                trust_store_path=trust_file(),
-                client_cert_store_path=client_certificates_directory(),
-                connect_timeout=load_configuration().connection_timeout,
-                read_timeout=load_configuration().read_timeout,
-                max_redirects=load_configuration().maximum_redirects,
-            ),
-            finger=FingerClient(
-                timeout=load_configuration().connection_timeout,
-            ),
-            gopher=GopherClient(
-                timeout=load_configuration().connection_timeout,
-            ),
-            spartan=SpartanClient(
-                timeout=load_configuration().connection_timeout,
-            ),
-            nex=NexClient(
-                timeout=load_configuration().connection_timeout,
-            ),
-        )
+        self._clients = Clients.create()
         """The clients for the supported protocols."""
 
     def compose(self) -> ComposeResult:
