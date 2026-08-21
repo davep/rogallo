@@ -10,9 +10,9 @@ from textual.widget import Widget
 
 ##############################################################################
 # Local imports.
-from ...document import Document
-from ...messages import OpenLocation
-from .local_messages import OpenDocument
+from ....document import Document
+from ....messages import OpenLocation
+from ..local_messages import OpenDocument
 
 
 ##############################################################################

@@ -18,11 +18,11 @@ from textual_enhanced.dialogs import ModalInput
 
 ##############################################################################
 # Local imports.
-from ...cache import ContentCache
-from ...document import Document
-from ...messages import OpenLocation
-from ...mime_checks import is_displayable_mime_type
-from .local_messages import OpenDocument, OpenUnsupportedMIMEType
+from ....cache import ContentCache
+from ....document import Document
+from ....messages import OpenLocation
+from ....mime_checks import is_displayable_mime_type
+from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
 
 
 ##############################################################################

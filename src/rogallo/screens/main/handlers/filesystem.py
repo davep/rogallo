@@ -11,10 +11,10 @@ from textual.widget import Widget
 
 ##############################################################################
 # Local imports.
-from ...document import Document
-from ...messages import OpenLocation
-from ...mime_checks import is_displayable_mime_type
-from .local_messages import OpenDocument, OpenUnsupportedMIMEType
+from ....document import Document
+from ....messages import OpenLocation
+from ....mime_checks import is_displayable_mime_type
+from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
 
 
 ##############################################################################

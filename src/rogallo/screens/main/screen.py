@@ -5,37 +5,13 @@
 from argparse import Namespace
 from collections.abc import Awaitable
 from functools import partial
-from pathlib import Path
 from subprocess import CalledProcessError, run
-from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
-
-##############################################################################
-# Gophermap imports.
-##############################################################################
-# Port70 imports.
-from port70 import Client as GopherClient
-from port70 import GopherURI
-
-##############################################################################
-# Port79 imports.
-from port79 import Client as FingerClient
-from port79 import FingerURI
-
-##############################################################################
-# Port1900 imports.
-from port1900 import Client as NexClient
-from port1900 import NexURI
 
 ##############################################################################
 # Pyperclip imports.
 from pyperclip import PyperclipException
 from pyperclip import copy as copy_to_clipboard
-
-##############################################################################
-# Sybaritic imports.
-from sybaritic import Client as SpartanClient
-from sybaritic import SpartanURI
 
 ##############################################################################
 # Textual imports.
@@ -61,7 +37,6 @@ from textual_fspicker import FileOpen, FileSave, Filters
 
 ##############################################################################
 # Wasat imports.
-from wasat import Client as GeminiClient
 from wasat import GeminiURI
 
 ##############################################################################
@@ -110,7 +85,6 @@ from ...data import (
     LocationVisit,
     NavigationHistory,
     NavigationPosition,
-    client_certificates_directory,
     load_bookmarks,
     load_command_history,
     load_configuration,
@@ -122,9 +96,6 @@ from ...data import (
     save_command_history,
     save_location_history,
     save_naviagation_history,
-    save_trusted_mime_types,
-    save_trusted_schemes,
-    trust_file,
     update_configuration,
 )
 from ...input_content import InputContent
@@ -134,19 +105,16 @@ from ...providers import BookmarkSearchCommands, HistorySearchCommands, MainComm
 from ...types import GEMINI_EXTENSIONS, SpartanURINeedingData
 from ...widgets import BookmarksViewer, CommandLine, HistoryViewer, Toolbar, Viewer
 from ..about_page import AboutPage
-from ..confirm_unsupported import ConfirmUnsupportedURI
-from .filesystem import handle_filesystem_request
-from .finger import handle_finger_request
-from .gemini import handle_gemini_request
-from .gopher import handle_gopher_request
+from .clients import Clients
+from .handlers import handle_filesystem_request
 from .local_messages import (
     CopyToClipboard,
     OpenDocument,
     OpenUnsupportedMIMEType,
     OpenUnsupportedURI,
 )
-from .nex import handle_nex_request
-from .spartan import handle_spartan_request
+from .request_builder import build_request
+from .unsupported import maybe_open_unsupported_mime_type, maybe_open_unsupported_uri
 from .uri_resolver import uri_resolver
 
 
@@ -315,30 +283,8 @@ class Main(EnhancedScreen[None]):
         """The trusted MIME types."""
         self._last_user_input: InputContent | None = None
         """The last user input."""
-        self._gemini_client = GeminiClient(
-            verify_mode=load_configuration().capsule_certificate_verify_mode,
-            trust_store_path=trust_file(),
-            client_cert_store_path=client_certificates_directory(),
-            connect_timeout=load_configuration().connection_timeout,
-            read_timeout=load_configuration().read_timeout,
-            max_redirects=load_configuration().maximum_redirects,
-        )
-        """The Gemini client."""
-        self._finger_client = FingerClient(
-            timeout=load_configuration().connection_timeout,
-        )
-        """The Finger client."""
-        self._gopher_client = GopherClient(
-            timeout=load_configuration().connection_timeout,
-        )
-        """The Gopher client."""
-        self._spartan_cient = SpartanClient(
-            timeout=load_configuration().connection_timeout,
-        )
-        """The Spartan client."""
-        self._nex_client = NexClient(
-            timeout=load_configuration().connection_timeout,
-        )
+        self._clients = Clients.create()
+        """The clients for the supported protocols."""
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
@@ -381,10 +327,10 @@ class Main(EnhancedScreen[None]):
         self._bookmarks = load_bookmarks()
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
-        if self._gemini_client.trust_store:
+        if self._clients.gemini.trust_store:
             self._command_line.known_hosts = [
                 GeminiURI.with_default_scheme(f"{host}:{port}")
-                for host, port in await self._gemini_client.trust_store.get_hosts()
+                for host, port in await self._clients.gemini.trust_store.get_hosts()
             ]
             HistorySearchCommands.known_hosts = self._command_line.known_hosts
         self._history_visible = config.history_visible
@@ -411,7 +357,7 @@ class Main(EnhancedScreen[None]):
 
     async def on_unmount(self) -> None:
         """Called when the screen is unmounted."""
-        await self._gemini_client.close()
+        await self._clients.close()
 
     @work(thread=True)
     def _housekeeping(self) -> None:
@@ -582,53 +528,18 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message the location open request.
         """
-        if isinstance(message.location, FingerURI):
-            self._make_request(
-                handle_finger_request(
-                    request=message,
-                    client=self._finger_client,
-                    owner=self,
-                )
+        if (
+            request := build_request(
+                cache=self._cache,
+                clients=self._clients,
+                current_document=self._viewer.document,
+                message=message,
+                owner=self,
+                set_last_input=self._set_last_input,
+                get_last_input=self._get_last_input,
             )
-        elif isinstance(message.location, GeminiURI):
-            self._make_request(
-                handle_gemini_request(
-                    request=message,
-                    client=self._gemini_client,
-                    owner=self,
-                    cache=self._cache,
-                    set_last_input=self._set_last_input,
-                    get_last_input=self._get_last_input,
-                )
-            )
-        elif isinstance(message.location, GopherURI):
-            self._make_request(
-                handle_gopher_request(
-                    request=message,
-                    client=self._gopher_client,
-                    owner=self,
-                    cache=self._cache,
-                    current_document=self._viewer.document,
-                )
-            )
-        elif isinstance(message.location, SpartanURI):
-            self._make_request(
-                handle_spartan_request(
-                    request=message,
-                    client=self._spartan_cient,
-                    owner=self,
-                    cache=self._cache,
-                )
-            )
-        elif isinstance(message.location, NexURI):
-            self._make_request(
-                handle_nex_request(
-                    request=message,
-                    client=self._nex_client,
-                    owner=self,
-                    cache=self._cache,
-                )
-            )
+        ) is not None:
+            self._make_request(request)
         else:
             self._load_from_filesystem(message)
 
@@ -661,41 +572,7 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the unsupported URI.
         """
-
-        # Because we want to gatekeep which schemes get passed on, let's
-        # grab the scheme.
-        try:
-            scheme = urlparse(message.uri).scheme.lower()
-        except ValueError:
-            return
-
-        # If there's no scheme, let's GTFO.
-        if not scheme:
-            self.notify(
-                f"Unable to open {message.uri}: no scheme found", severity="error"
-            )
-            return
-
-        # If the scheme isn't trusted, let's see what the user wants to do about it.
-        if not (open_uri := scheme in self._trusted_schemes):
-            match await self.app.push_screen_wait(
-                ConfirmUnsupportedURI(
-                    message.uri,
-                    f"The scheme '{scheme}' is not supported by Rogallo. "
-                    "Do you want to open the URI in your external browser?",
-                )
-            ):
-                case "once":
-                    open_uri = True
-                case "always":
-                    open_uri = True
-                    self._trusted_schemes.add(scheme)
-                    save_trusted_schemes(self._trusted_schemes)
-
-        # At this point, if the user has consented to opening the URI based
-        # on the scheme, let's do it.
-        if open_uri:
-            open_in_browser(message.uri)
+        await maybe_open_unsupported_uri(message, self)
 
     @on(OpenUnsupportedMIMEType)
     @work
@@ -707,40 +584,7 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the unsupported MIME type.
         """
-
-        # There's no reason why we should be here for Finger URIs.
-        if isinstance(message.location, FingerURI):
-            self.notify(
-                f"Unexpected request to open {message.location}: please let Dave know",
-                severity="warning",
-            )
-            return
-
-        # If the MIME type isn't trusted, let's see what the user wants to
-        # do about it.
-        if not (open_uri := message.mime_type in self._trusted_mime_types):
-            match await self.app.push_screen_wait(
-                ConfirmUnsupportedURI(
-                    str(message.location),
-                    f"The MIME type '{message.mime_type}' is not supported by Rogallo. "
-                    "Do you want to open the location in your external browser?",
-                )
-            ):
-                case "once":
-                    open_uri = True
-                case "always":
-                    open_uri = True
-                    self._trusted_mime_types.add(message.mime_type)
-                    save_trusted_mime_types(self._trusted_mime_types)
-
-        # At this point, if the user has consented to opening the location
-        # based on the MIME type, let's do it.
-        if open_uri:
-            open_in_browser(
-                message.location.resolve().as_uri()
-                if isinstance(message.location, Path)
-                else str(message.location)
-            )
+        await maybe_open_unsupported_mime_type(message, self)
 
     @on(OpenFromFileSystem)
     @work
