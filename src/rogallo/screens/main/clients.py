@@ -60,6 +60,9 @@ class Clients(NamedTuple):
             A new instance of the clients class.
         """
         return cls(
+            finger=FingerClient(
+                timeout=load_configuration().connection_timeout,
+            ),
             gemini=GeminiClient(
                 verify_mode=load_configuration().capsule_certificate_verify_mode,
                 trust_store_path=trust_file(),
@@ -68,16 +71,13 @@ class Clients(NamedTuple):
                 read_timeout=load_configuration().read_timeout,
                 max_redirects=load_configuration().maximum_redirects,
             ),
-            finger=FingerClient(
-                timeout=load_configuration().connection_timeout,
-            ),
             gopher=GopherClient(
                 timeout=load_configuration().connection_timeout,
             ),
-            spartan=SpartanClient(
+            nex=NexClient(
                 timeout=load_configuration().connection_timeout,
             ),
-            nex=NexClient(
+            spartan=SpartanClient(
                 timeout=load_configuration().connection_timeout,
             ),
         )
