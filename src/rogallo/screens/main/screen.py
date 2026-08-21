@@ -129,6 +129,7 @@ from ...data import (
 )
 from ...input_content import InputContent
 from ...messages import OpenFromFileSystem, OpenLocation, OpenURI
+from ...preflight import has_navigable_path
 from ...providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
 from ...types import GEMINI_EXTENSIONS, SpartanURINeedingData
 from ...widgets import BookmarksViewer, CommandLine, HistoryViewer, Toolbar, Viewer
@@ -493,15 +494,13 @@ class Main(EnhancedScreen[None]):
             )
         if action == GoToParent.action_name():
             return (
-                bool(self._viewer.document.location)
-                and isinstance(self._viewer.document.location, (GeminiURI, SpartanURI))
+                has_navigable_path(self._viewer.document.location)
                 and self._viewer.document.location.parent
                 != self._viewer.document.location
             )
         if action == GoToRoot.action_name():
             return (
-                bool(self._viewer.document.location)
-                and isinstance(self._viewer.document.location, (GeminiURI, SpartanURI))
+                has_navigable_path(self._viewer.document.location)
                 and self._viewer.document.location.root
                 != self._viewer.document.location
             )
@@ -1046,9 +1045,7 @@ class Main(EnhancedScreen[None]):
     def action_go_to_parent_command(self) -> None:
         """Go to the parent of the current document's location."""
         if (
-            isinstance(
-                location := self._viewer.document.location, (GeminiURI, SpartanURI)
-            )
+            has_navigable_path(location := self._viewer.document.location)
             and location.parent != location
         ):
             self.post_message(OpenLocation(location.parent))
@@ -1056,9 +1053,7 @@ class Main(EnhancedScreen[None]):
     def action_go_to_root_command(self) -> None:
         """Go to the root of the current document's location."""
         if (
-            isinstance(
-                location := self._viewer.document.location, (GeminiURI, SpartanURI)
-            )
+            has_navigable_path(location := self._viewer.document.location)
             and location.root != location
         ):
             self.post_message(OpenLocation(location.root))
