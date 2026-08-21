@@ -547,6 +547,11 @@ class Main(EnhancedScreen[None]):
             and not message.document.avoid_history
             and not message.from_history
         ):
+            # Add this new document to the end of the navigation history.
+            # This ensures that we know where "here" is right now. Also
+            # force a save to storage so if we resume we're back on this
+            # page. Note that only the location is saved, there's no focused
+            # link to care about yet.
             self._navigation_history.add(NavigationPosition(message.document.location))
             self._navigation_changed()
         self._remember_last_visit(message)
@@ -638,6 +643,13 @@ class Main(EnhancedScreen[None]):
         if (
             position := self._viewer.navigation_position
         ) and not self._viewer.document.avoid_history:
+            # We're about to head somewhere else, which suggests that we've
+            # navigated via a link. So here we seek to replace the current
+            # head of the history with a fresh version that also records the
+            # focused link. It is possible we're navigating away because
+            # someone entered a fresh URI, etc, which means we'll be saving
+            # a link ID that wasn't used. This is fine, there's no downside
+            # to that.
             self._navigation_history.add_or_replace(position)
             self._navigation_changed()
         self.post_message(uri_resolver(message))
