@@ -9,8 +9,6 @@ from subprocess import CalledProcessError, run
 from webbrowser import open as open_in_browser
 
 ##############################################################################
-# Gophermap imports.
-##############################################################################
 # Port70 imports.
 from port70 import Client as GopherClient
 from port70 import GopherURI
