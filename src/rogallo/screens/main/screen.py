@@ -135,18 +135,20 @@ from ...types import GEMINI_EXTENSIONS, SpartanURINeedingData
 from ...widgets import BookmarksViewer, CommandLine, HistoryViewer, Toolbar, Viewer
 from ..about_page import AboutPage
 from ..confirm_unsupported import ConfirmUnsupportedURI
-from .filesystem import handle_filesystem_request
-from .finger import handle_finger_request
-from .gemini import handle_gemini_request
-from .gopher import handle_gopher_request
+from .handlers import (
+    handle_filesystem_request,
+    handle_finger_request,
+    handle_gemini_request,
+    handle_gopher_request,
+    handle_nex_request,
+    handle_spartan_request,
+)
 from .local_messages import (
     CopyToClipboard,
     OpenDocument,
     OpenUnsupportedMIMEType,
     OpenUnsupportedURI,
 )
-from .nex import handle_nex_request
-from .spartan import handle_spartan_request
 from .uri_resolver import uri_resolver
 
 

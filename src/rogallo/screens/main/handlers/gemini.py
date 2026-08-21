@@ -22,14 +22,14 @@ from wasat import (
 
 ##############################################################################
 # Local imports.
-from ...cache import ContentCache
-from ...document import Document
-from ...input_content import InputContent
-from ...messages import OpenLocation
-from ...mime_checks import is_displayable_mime_type
-from ..certificate import Certificate
-from ..user_input import UserInput
-from .local_messages import OpenDocument, OpenUnsupportedMIMEType
+from ....cache import ContentCache
+from ....document import Document
+from ....input_content import InputContent
+from ....messages import OpenLocation
+from ....mime_checks import is_displayable_mime_type
+from ...certificate import Certificate
+from ...user_input import UserInput
+from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
 from .text_decoder import decode_text
 
 ##############################################################################
