@@ -9,6 +9,8 @@
 - Navigating back through history now restores the link that was last
   focused on any given page.
   ([#361](https://github.com/davep/rogallo/pull/361))
+- Fixed viewer being hidden if there is no content, as opposed to if we're
+  not visiting anywhere. ([#363](https://github.com/davep/rogallo/pull/363))
 
 ## v1.11.0
 

@@ -96,7 +96,7 @@ class Viewer(Vertical, can_focus=False):
             height: 1fr;
         }
 
-        &.--has-content {
+        &.--is-visiting {
             visibility: visible;
         }
 
@@ -136,7 +136,7 @@ class Viewer(Vertical, can_focus=False):
         ),
     ]
 
-    document: var[Document] = var(Document(), toggle_class="--has-content")
+    document: var[Document] = var(Document(), toggle_class="--is-visiting")
     """The details of the document to show in the viewer."""
     view_source: var[bool] = var(False)
     """Whether the viewer is showing the source of the document or not."""

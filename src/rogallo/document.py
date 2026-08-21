@@ -77,8 +77,8 @@ class Document:
     """The server's certificate, if any."""
 
     def __bool__(self) -> bool:
-        """Return `True` if the document has content, `False` otherwise."""
-        return bool(self.content)
+        """Return `True` if there is a location, `False` if not."""
+        return self.location is not None
 
     @cached_property
     def mime_type_sans_parameters(self) -> str | None:
