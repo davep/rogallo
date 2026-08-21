@@ -217,7 +217,7 @@ class CommandLine(Vertical):
                                 for visit in self.location_history
                             ),
                             (
-                                short_location(visit)
+                                short_location(visit.location)
                                 for visit in self.navigation_history
                             ),
                             (

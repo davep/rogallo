@@ -48,16 +48,17 @@ async def _handle_response(
     if is_displayable_mime_type(response.mime_type):
         owner.post_message(
             OpenDocument(
-                document=cache.add_document(
+                cache.add_document(
                     Document(
                         location=uri,
                         original_location=request.location,
                         content=await decode_text(response),
                         mime_type=response.mime_type,
                         avoid_cache=isinstance(uri, SpartanURINeedingData),
+                        avoid_history=request.avoid_history,
                     )
                 ),
-                original_request=request,
+                from_history=request.from_history,
             )
         )
     else:
@@ -85,13 +86,14 @@ async def handle_spartan_request(
     if (
         not isinstance(uri, SpartanURINeedingData)
         and request.allow_cached
-        and (cached_document := cache.get_document(uri))
+        and (
+            cached_document := cache.get_document(
+                uri, avoid_history=request.avoid_history
+            )
+        )
     ):
         owner.post_message(
-            OpenDocument(
-                document=cached_document,
-                original_request=request,
-            )
+            OpenDocument(cached_document, from_history=request.from_history)
         )
         return
 

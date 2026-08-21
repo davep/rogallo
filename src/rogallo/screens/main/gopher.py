@@ -67,13 +67,14 @@ async def handle_gopher_request(
     if (
         ItemType(uri.item_type) is not ItemType.INDEX_SEARCH
         and request.allow_cached
-        and (cached_document := cache.get_document(uri))
+        and (
+            cached_document := cache.get_document(
+                uri, avoid_history=request.avoid_history
+            )
+        )
     ):
         owner.post_message(
-            OpenDocument(
-                document=cached_document,
-                original_request=request,
-            )
+            OpenDocument(cached_document, from_history=request.from_history)
         )
         return
 
@@ -88,16 +89,17 @@ async def handle_gopher_request(
     try:
         owner.post_message(
             OpenDocument(
-                document=cache.add_document(
+                cache.add_document(
                     Document(
                         location=uri,
                         original_location=uri,
                         content=(await client.request(uri)).text,
                         mime_type=mime_type,
                         avoid_cache=ItemType(uri.item_type) is ItemType.INDEX_SEARCH,
+                        avoid_history=request.avoid_history,
                     )
                 ),
-                original_request=request,
+                from_history=request.from_history,
             )
         )
     except Port70Error as error:

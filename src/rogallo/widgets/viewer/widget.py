@@ -1,8 +1,13 @@
 """Provides the main viewer widget."""
 
 ##############################################################################
+# Future imports.
+from __future__ import annotations
+
+##############################################################################
 # Python imports.
 from collections.abc import Iterable, Iterator
+from dataclasses import dataclass
 from functools import cached_property
 
 ##############################################################################
@@ -49,6 +54,7 @@ from textual.containers import HorizontalGroup, Vertical
 from textual.events import DescendantBlur, DescendantFocus, Key
 from textual.getters import query_one
 from textual.highlight import HighlightTheme, highlight
+from textual.message import Message
 from textual.reactive import var
 from textual.timer import Timer
 from textual.widget import Widget
@@ -64,7 +70,7 @@ from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
-from ...data import LocationHistory, load_configuration
+from ...data import LocationHistory, NavigationPosition, load_configuration
 from ...document import Document
 from ...types import GEMINI_MIME_TYPE, SUPPORTED_PROTOCOLS
 from .document_view import DocumentView
@@ -154,7 +160,7 @@ class Viewer(Vertical, can_focus=False):
     _status = query_one(ViewerStatus)
     """The status bar widget."""
 
-    _jump: var[int | None] = var(None)
+    jump: var[int | None] = var(None)
     """Keeps track of the jump progress."""
     _jump_timer: Timer | None = None
     """A timer to reset the jump progress after a short delay."""
@@ -204,6 +210,22 @@ class Viewer(Vertical, can_focus=False):
         }
     )
     """The MIME types that can be viewed as source."""
+
+    @property
+    def navigation_position(self) -> NavigationPosition | None:
+        """Get the current navigation position.
+
+        Returns:
+            The current navigation position.
+        """
+        if self.document.location is None:
+            return None
+        return NavigationPosition(
+            location=self.document.location,
+            focused_link=self.screen.focused.jump_number
+            if isinstance(self.screen.focused, GemtextLink)
+            else None,
+        )
 
     @property
     def can_view_source(self) -> bool:
@@ -370,6 +392,13 @@ class Viewer(Vertical, can_focus=False):
             )
         return self._best_presentation_for(self.document)
 
+    @dataclass
+    class DocumentLoaded(Message):
+        """Message sent when a document has been loaded."""
+
+        viewer: Viewer
+        """The viewer that loaded the document."""
+
     async def _watch_document(
         self, old_document: Document, new_document: Document
     ) -> None:
@@ -410,6 +439,7 @@ class Viewer(Vertical, can_focus=False):
         # now. Not that it matters, issues seem to be ignored these days.
         self.call_after_refresh(self._view.scroll_end, animate=False, immediate=True)
         self.call_after_refresh(self._view.scroll_home, animate=False, immediate=True)
+        self.post_message(self.DocumentLoaded(self))
 
     def _watch_view_source(self) -> None:
         """Watch for changes to the view_source property and update the viewer."""
@@ -417,7 +447,7 @@ class Viewer(Vertical, can_focus=False):
 
     def _watch_with_link_numbers(self) -> None:
         """Watch for changes to the with_link_numbers property."""
-        self._jump = None
+        self.jump = None
 
     def _watch_handle_ansi_escape_sequences(self) -> None:
         """Watch for changes to the handle_ansi_escape_sequences property and update the viewer."""
@@ -435,13 +465,13 @@ class Viewer(Vertical, can_focus=False):
         )
         self.mutate_reactive(Viewer.document)
 
-    def _watch__jump(self) -> None:
+    def _watch_jump(self) -> None:
         """Watch for changes to the jump property and update the viewer."""
-        if self._jump is not None:
-            if (link := self._jump_map.get(self._jump)) is not None:
+        if self.jump is not None:
+            if (link := self._jump_map.get(self.jump)) is not None:
                 link.focus(scroll_visible=True)
             else:
-                self._jump = self._jump % 10 if self._jump > 9 else None
+                self.jump = self.jump % 10 if self.jump > 9 else None
 
     def take_control(self) -> None:
         """Take control of the UI."""
@@ -473,7 +503,7 @@ class Viewer(Vertical, can_focus=False):
 
     def _reset_jump_progress(self) -> None:
         """Reset the jump progress."""
-        self._jump = None
+        self.jump = None
         self._reset_jump_timer()
 
     @on(Key)
@@ -483,7 +513,7 @@ class Viewer(Vertical, can_focus=False):
             return
         if event.key.isdigit():
             event.stop()
-            self._jump = (self._jump or 0) * 10 + int(event.key)
+            self.jump = (self.jump or 0) * 10 + int(event.key)
             self._reset_jump_timer(start_new=True)
         else:
             self._reset_jump_progress()
@@ -494,9 +524,9 @@ class Viewer(Vertical, can_focus=False):
             return
         current = self._view.query_one_optional("GemtextLink:focus", GemtextLink)
         if current is None or (current.jump_number and current.jump_number <= 1):
-            self._jump = links.last().jump_number
+            self.jump = links.last().jump_number
         elif current.jump_number is not None:
-            self._jump = current.jump_number - 1
+            self.jump = current.jump_number - 1
 
     def action_next_link(self) -> None:
         """Focus the next link."""
@@ -506,9 +536,9 @@ class Viewer(Vertical, can_focus=False):
         if (last := links.last().jump_number) is None:
             return
         if current is None or (current.jump_number and current.jump_number >= last):
-            self._jump = 1
+            self.jump = 1
         elif current.jump_number is not None:
-            self._jump = current.jump_number + 1
+            self.jump = current.jump_number + 1
 
 
 ### widget.py ends here

@@ -11,7 +11,6 @@ from textual.message import Message
 ##############################################################################
 # Local imports.
 from ...document import Document
-from ...messages import OpenLocation
 from ...types import RogalloLocation
 
 
@@ -33,8 +32,8 @@ class OpenDocument(Message):
 
     document: Document
     """The document to open."""
-    original_request: OpenLocation
-    """The original request that led to this text being opened."""
+    from_history: bool = False
+    """Whether this document was opened from history."""
 
 
 ##############################################################################

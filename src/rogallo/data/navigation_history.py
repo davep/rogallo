@@ -2,8 +2,10 @@
 
 ##############################################################################
 # Python imports.
+from dataclasses import dataclass
 from json import dumps, loads
 from pathlib import Path
+from typing import Any, Self
 
 ##############################################################################
 # BagOfStuff imports.
@@ -17,7 +19,51 @@ from .locations import data_dir
 
 
 ##############################################################################
-class NavigationHistory(NavigableHistory[RogalloLocation]):
+@dataclass(frozen=True)
+class NavigationPosition:
+    """A position in the navigation history."""
+
+    location: RogalloLocation
+    """The location at the position in the history."""
+
+    focused_link: int | None = None
+    """The index of the position in the history."""
+
+    def __eq__(self, value: object, /) -> bool:
+        if isinstance(value, NavigationPosition):
+            return self.location == value.location
+        return NotImplemented
+
+    @property
+    def as_json(self) -> dict[str, Any]:
+        """Get the visit as a JSON-serialisable dictionary.
+
+        Returns:
+            The visit as a JSON-serialisable dictionary.
+        """
+        return {
+            "location": str(self.location),
+            "focused_link": self.focused_link,
+        }
+
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> Self:
+        """Create a visit from a JSON-serialisable dictionary.
+
+        Args:
+            data: The JSON-serialisable dictionary.
+
+        Returns:
+            The visit.
+        """
+        return cls(
+            make_location(str(data["location"])),
+            data.get("focused_link"),
+        )
+
+
+##############################################################################
+class NavigationHistory(NavigableHistory[NavigationPosition]):
     """The navigation history."""
 
 
@@ -39,15 +85,7 @@ def save_naviagation_history(history: NavigationHistory) -> None:
         history: The navigation history to save.
     """
     navigation_history_file().write_text(
-        dumps(
-            [
-                {
-                    "location": str(entry),
-                }
-                for entry in history
-            ],
-            indent=4,
-        ),
+        dumps([entry.as_json for entry in history], indent=4),
         encoding="utf-8",
     )
 
@@ -61,7 +99,7 @@ def load_navigation_history() -> NavigationHistory:
     """
     return NavigationHistory(
         [
-            make_location(entry["location"])
+            NavigationPosition.from_json(entry)
             for entry in loads(history.read_text(encoding="utf-8"))
         ]
         if (history := navigation_history_file()).exists()

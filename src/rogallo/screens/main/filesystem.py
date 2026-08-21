@@ -36,13 +36,14 @@ def handle_filesystem_request(request: OpenLocation, owner: Widget) -> None:
     try:
         owner.post_message(
             OpenDocument(
-                document=Document(
+                Document(
                     location=request.location,
                     original_location=request.location,
                     content=uri.read_text(encoding="utf-8"),
                     mime_type=mime_type,
+                    avoid_history=request.avoid_history,
                 ),
-                original_request=request,
+                from_history=request.from_history,
             )
         )
     except OSError as error:

@@ -33,8 +33,10 @@ class OpenLocation(Message):
 
     location: RogalloLocation
     """The location to open."""
-    do_not_record_in_history: bool = False
+    avoid_history: bool = False
     """Whether we should avoid recording this in history."""
+    from_history: bool = False
+    """Whether this request came from navigating history."""
     allow_cached: bool = True
     """Whether to allow opening the location from cache."""
     associated_input: InputContent | None = None

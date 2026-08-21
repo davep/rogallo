@@ -109,6 +109,7 @@ from ...data import (
     LocationHistory,
     LocationVisit,
     NavigationHistory,
+    NavigationPosition,
     client_certificates_directory,
     load_bookmarks,
     load_command_history,
@@ -399,8 +400,8 @@ class Main(EnhancedScreen[None]):
         elif self._navigation_history.current_item:
             self.post_message(
                 OpenLocation(
-                    self._navigation_history.current_item,
-                    do_not_record_in_history=True,
+                    self._navigation_history.current_item.location,
+                    from_history=True,
                 )
             )
         # Wait a few moments to do housekeeping, because by then the user is
@@ -506,12 +507,11 @@ class Main(EnhancedScreen[None]):
             )
         return True
 
-    def _maybe_remember_location(self, request: OpenDocument) -> None:
-        """Remember a location in the history.
+    def _remember_last_visit(self, request: OpenDocument) -> None:
+        """Remember the last visit to a location.
 
         Args:
-            request: The request to open text for. This is used to determine
-                the location to remember.
+            request: The request to remember the visit for.
         """
         if (location := request.document.location) is None:
             return
@@ -522,13 +522,18 @@ class Main(EnhancedScreen[None]):
         self._location_history.add(LocationVisit(location))
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
-        if (
-            not request.original_request.do_not_record_in_history
-            and self._navigation_history.current_item
-            != request.document.original_location
-        ):
-            self._navigation_history.add(location)
-            self._navigation_changed()
+
+    @on(Viewer.DocumentLoaded)
+    def _document_loaded(self) -> None:
+        """Handle a document being loaded in the viewer.
+
+        Args:
+            message: The message containing the document that was loaded.
+        """
+        self.refresh_bindings()
+        self._viewer.take_control()
+        if self._navigation_history.current_item:
+            self._viewer.jump = self._navigation_history.current_item.focused_link
 
     @on(OpenDocument)
     def open_document(self, message: OpenDocument) -> None:
@@ -537,10 +542,20 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the document to open.
         """
-        self._maybe_remember_location(message)
+        if (
+            message.document.location
+            and not message.document.avoid_history
+            and not message.from_history
+        ):
+            # Add this new document to the end of the navigation history.
+            # This ensures that we know where "here" is right now. Also
+            # force a save to storage so if we resume we're back on this
+            # page. Note that only the location is saved, there's no focused
+            # link to care about yet.
+            self._navigation_history.add(NavigationPosition(message.document.location))
+            self._navigation_changed()
+        self._remember_last_visit(message)
         self._viewer.document = message.document
-        self.refresh_bindings()
-        self._viewer.take_control()
 
     @work
     async def _make_request(self, handler: Awaitable[None]) -> None:
@@ -625,6 +640,18 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the URI to open.
         """
+        if (
+            position := self._viewer.navigation_position
+        ) and not self._viewer.document.avoid_history:
+            # We're about to head somewhere else, which suggests that we've
+            # navigated via a link. So here we seek to replace the current
+            # head of the history with a fresh version that also records the
+            # focused link. It is possible we're navigating away because
+            # someone entered a fresh URI, etc, which means we'll be saving
+            # a link ID that wasn't used. This is fine, there's no downside
+            # to that.
+            self._navigation_history.add_or_replace(position)
+            self._navigation_changed()
         self.post_message(uri_resolver(message))
 
     @on(OpenUnsupportedURI)
@@ -836,7 +863,8 @@ class Main(EnhancedScreen[None]):
         ):
             self.post_message(
                 OpenLocation(
-                    self._navigation_history.current_item, do_not_record_in_history=True
+                    self._navigation_history.current_item.location,
+                    from_history=True,
                 )
             )
             self._navigation_changed()
@@ -846,7 +874,8 @@ class Main(EnhancedScreen[None]):
         if self._navigation_history.forward() and self._navigation_history.current_item:
             self.post_message(
                 OpenLocation(
-                    self._navigation_history.current_item, do_not_record_in_history=True
+                    self._navigation_history.current_item.location,
+                    from_history=True,
                 )
             )
             self._navigation_changed()
@@ -893,7 +922,7 @@ class Main(EnhancedScreen[None]):
             self.post_message(
                 OpenLocation(
                     self._viewer.document.location,
-                    do_not_record_in_history=True,
+                    from_history=True,
                     allow_cached=False,
                 )
             )

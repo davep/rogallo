@@ -1,5 +1,15 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Overhauled the way that navigation history is tracked and recorded.
+  ([#361](https://github.com/davep/rogallo/pull/361))
+- Navigating back through history now restores the link that was last
+  focused on any given page.
+  ([#361](https://github.com/davep/rogallo/pull/361))
+
 ## v1.11.0
 
 **Released: 2026-08-19**

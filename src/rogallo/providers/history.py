@@ -114,7 +114,7 @@ class HistorySearchCommands(CommandsProvider):
                 Historical(location)
                 for location in chain(
                     self.location_history,
-                    self.navigation_history,
+                    (event.location for event in self.navigation_history),
                     (KnownHost(host) for host in self.known_hosts),
                 )
             ),

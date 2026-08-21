@@ -32,14 +32,15 @@ async def handle_finger_request(
     try:
         owner.post_message(
             OpenDocument(
-                document=Document(
+                Document(
                     location=uri,
                     original_location=uri,
                     content=(await client.request(uri)).text,
                     mime_type="text/plain",
                     avoid_cache=True,
+                    avoid_history=request.avoid_history,
                 ),
-                original_request=request,
+                from_history=request.from_history,
             )
         )
     except Port79Error as error:

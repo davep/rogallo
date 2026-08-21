@@ -7,7 +7,7 @@ from datetime import datetime
 from json import JSONDecodeError, dumps, loads
 from pathlib import Path
 from shutil import rmtree
-from typing import Final
+from typing import Any, Final
 
 ##############################################################################
 # BagOfStuff imports.
@@ -51,11 +51,14 @@ class ContentCache(CacheManager):
         cache_path = self.get(uri=uri)
         return cache_path.with_suffix(self._META), cache_path.with_suffix(self._CONTENT)
 
-    def get_document(self, uri: RogalloLocation) -> Document | None:
+    def get_document(
+        self, uri: RogalloLocation, **document_properties: Any
+    ) -> Document | None:
         """Get a cached copy of a document for a given URI.
 
         Args:
             uri: The URI to get the cached copy for.
+            document_properties: Additional properties to set on the document.
 
         Returns:
             The cached document, or `None` if it is not cached.
@@ -94,6 +97,7 @@ class ContentCache(CacheManager):
                 mime_type=meta_data.get("mime_type"),
                 verification_method=meta_data.get("verification_method"),
                 from_cache=True,
+                **document_properties,
             )
         except OSError:
             return None
