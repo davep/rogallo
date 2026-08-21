@@ -5,9 +5,7 @@
 from argparse import Namespace
 from collections.abc import Awaitable
 from functools import partial
-from pathlib import Path
 from subprocess import CalledProcessError, run
-from urllib.parse import urlparse
 from webbrowser import open as open_in_browser
 
 ##############################################################################
@@ -122,8 +120,6 @@ from ...data import (
     save_command_history,
     save_location_history,
     save_naviagation_history,
-    save_trusted_mime_types,
-    save_trusted_schemes,
     trust_file,
     update_configuration,
 )
@@ -134,7 +130,6 @@ from ...providers import BookmarkSearchCommands, HistorySearchCommands, MainComm
 from ...types import GEMINI_EXTENSIONS, SpartanURINeedingData
 from ...widgets import BookmarksViewer, CommandLine, HistoryViewer, Toolbar, Viewer
 from ..about_page import AboutPage
-from ..confirm_unsupported import ConfirmUnsupportedURI
 from .handlers import (
     handle_filesystem_request,
     handle_finger_request,
@@ -149,6 +144,7 @@ from .local_messages import (
     OpenUnsupportedMIMEType,
     OpenUnsupportedURI,
 )
+from .unsupported import maybe_open_unsupported_mime_type, maybe_open_unsupported_uri
 from .uri_resolver import uri_resolver
 
 
@@ -663,41 +659,7 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the unsupported URI.
         """
-
-        # Because we want to gatekeep which schemes get passed on, let's
-        # grab the scheme.
-        try:
-            scheme = urlparse(message.uri).scheme.lower()
-        except ValueError:
-            return
-
-        # If there's no scheme, let's GTFO.
-        if not scheme:
-            self.notify(
-                f"Unable to open {message.uri}: no scheme found", severity="error"
-            )
-            return
-
-        # If the scheme isn't trusted, let's see what the user wants to do about it.
-        if not (open_uri := scheme in self._trusted_schemes):
-            match await self.app.push_screen_wait(
-                ConfirmUnsupportedURI(
-                    message.uri,
-                    f"The scheme '{scheme}' is not supported by Rogallo. "
-                    "Do you want to open the URI in your external browser?",
-                )
-            ):
-                case "once":
-                    open_uri = True
-                case "always":
-                    open_uri = True
-                    self._trusted_schemes.add(scheme)
-                    save_trusted_schemes(self._trusted_schemes)
-
-        # At this point, if the user has consented to opening the URI based
-        # on the scheme, let's do it.
-        if open_uri:
-            open_in_browser(message.uri)
+        await maybe_open_unsupported_uri(message, self)
 
     @on(OpenUnsupportedMIMEType)
     @work
@@ -709,40 +671,7 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message containing the unsupported MIME type.
         """
-
-        # There's no reason why we should be here for Finger URIs.
-        if isinstance(message.location, FingerURI):
-            self.notify(
-                f"Unexpected request to open {message.location}: please let Dave know",
-                severity="warning",
-            )
-            return
-
-        # If the MIME type isn't trusted, let's see what the user wants to
-        # do about it.
-        if not (open_uri := message.mime_type in self._trusted_mime_types):
-            match await self.app.push_screen_wait(
-                ConfirmUnsupportedURI(
-                    str(message.location),
-                    f"The MIME type '{message.mime_type}' is not supported by Rogallo. "
-                    "Do you want to open the location in your external browser?",
-                )
-            ):
-                case "once":
-                    open_uri = True
-                case "always":
-                    open_uri = True
-                    self._trusted_mime_types.add(message.mime_type)
-                    save_trusted_mime_types(self._trusted_mime_types)
-
-        # At this point, if the user has consented to opening the location
-        # based on the MIME type, let's do it.
-        if open_uri:
-            open_in_browser(
-                message.location.resolve().as_uri()
-                if isinstance(message.location, Path)
-                else str(message.location)
-            )
+        await maybe_open_unsupported_mime_type(message, self)
 
     @on(OpenFromFileSystem)
     @work
