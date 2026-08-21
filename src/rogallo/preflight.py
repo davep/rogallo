@@ -4,6 +4,7 @@
 # Python imports.
 import mimetypes
 from pathlib import Path
+from typing import TypeGuard
 from urllib.parse import urlparse
 
 ##############################################################################
@@ -323,6 +324,21 @@ def is_local_gemtext_file(uri: str) -> bool:
         and the MIME type comes back as the Gemini MIME type.
     """
     return is_local_file_of_type(uri, GEMINI_MIME_TYPE)
+
+
+##############################################################################
+def has_navigable_path(
+    location: RogalloLocation | None,
+) -> TypeGuard[GeminiURI | SpartanURI | NexURI | GopherURI]:
+    """Determine if a location has a navigable path.
+
+    Args:
+        location: The location to check.
+
+    Returns:
+        `True` if the location has a navigable path, `False` otherwise.
+    """
+    return isinstance(location, (GeminiURI, SpartanURI, NexURI, GopherURI))
 
 
 ##############################################################################

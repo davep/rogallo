@@ -11,6 +11,14 @@
   ([#361](https://github.com/davep/rogallo/pull/361))
 - Fixed viewer being hidden if there is no content, as opposed to if we're
   not visiting anywhere. ([#363](https://github.com/davep/rogallo/pull/363))
+- Allowed `GoToParent` to work on Nex URIs.
+  ([#366](https://github.com/davep/rogallo/pull/366))
+- Allowed `GoToParent` to work on Gopher URIs.
+  ([#366](https://github.com/davep/rogallo/pull/366))
+- Allowed `GoToRoot` to work on Nex URIs.
+  ([#366](https://github.com/davep/rogallo/pull/366))
+- Allowed `GoToRoot` to work on Gopher URIs.
+  ([#366](https://github.com/davep/rogallo/pull/366))
 
 ## v1.11.0
 
