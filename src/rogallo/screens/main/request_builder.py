@@ -61,7 +61,7 @@ def build_request(
             client=clients.finger,
             owner=owner,
         )
-    elif isinstance(message.location, GeminiURI):
+    if isinstance(message.location, GeminiURI):
         return handle_gemini_request(
             request=message,
             client=clients.gemini,
@@ -70,7 +70,7 @@ def build_request(
             set_last_input=set_last_input,
             get_last_input=get_last_input,
         )
-    elif isinstance(message.location, GopherURI):
+    if isinstance(message.location, GopherURI):
         return handle_gopher_request(
             request=message,
             client=clients.gopher,
@@ -78,14 +78,14 @@ def build_request(
             cache=cache,
             current_document=current_document,
         )
-    elif isinstance(message.location, SpartanURI):
+    if isinstance(message.location, SpartanURI):
         return handle_spartan_request(
             request=message,
             client=clients.spartan,
             owner=owner,
             cache=cache,
         )
-    elif isinstance(message.location, NexURI):
+    if isinstance(message.location, NexURI):
         return handle_nex_request(
             request=message,
             client=clients.nex,
