@@ -11,17 +11,14 @@ from webbrowser import open as open_in_browser
 ##############################################################################
 # Port70 imports.
 from port70 import Client as GopherClient
-from port70 import GopherURI
 
 ##############################################################################
 # Port79 imports.
 from port79 import Client as FingerClient
-from port79 import FingerURI
 
 ##############################################################################
 # Port1900 imports.
 from port1900 import Client as NexClient
-from port1900 import NexURI
 
 ##############################################################################
 # Pyperclip imports.
@@ -31,7 +28,6 @@ from pyperclip import copy as copy_to_clipboard
 ##############################################################################
 # Sybaritic imports.
 from sybaritic import Client as SpartanClient
-from sybaritic import SpartanURI
 
 ##############################################################################
 # Textual imports.
@@ -128,13 +124,9 @@ from ...providers import BookmarkSearchCommands, HistorySearchCommands, MainComm
 from ...types import GEMINI_EXTENSIONS, SpartanURINeedingData
 from ...widgets import BookmarksViewer, CommandLine, HistoryViewer, Toolbar, Viewer
 from ..about_page import AboutPage
+from .clients import Clients
 from .handlers import (
     handle_filesystem_request,
-    handle_finger_request,
-    handle_gemini_request,
-    handle_gopher_request,
-    handle_nex_request,
-    handle_spartan_request,
 )
 from .local_messages import (
     CopyToClipboard,
@@ -142,6 +134,7 @@ from .local_messages import (
     OpenUnsupportedMIMEType,
     OpenUnsupportedURI,
 )
+from .request_builder import build_request
 from .unsupported import maybe_open_unsupported_mime_type, maybe_open_unsupported_uri
 from .uri_resolver import uri_resolver
 
@@ -311,30 +304,29 @@ class Main(EnhancedScreen[None]):
         """The trusted MIME types."""
         self._last_user_input: InputContent | None = None
         """The last user input."""
-        self._gemini_client = GeminiClient(
-            verify_mode=load_configuration().capsule_certificate_verify_mode,
-            trust_store_path=trust_file(),
-            client_cert_store_path=client_certificates_directory(),
-            connect_timeout=load_configuration().connection_timeout,
-            read_timeout=load_configuration().read_timeout,
-            max_redirects=load_configuration().maximum_redirects,
+        self._clients = Clients(
+            gemini=GeminiClient(
+                verify_mode=load_configuration().capsule_certificate_verify_mode,
+                trust_store_path=trust_file(),
+                client_cert_store_path=client_certificates_directory(),
+                connect_timeout=load_configuration().connection_timeout,
+                read_timeout=load_configuration().read_timeout,
+                max_redirects=load_configuration().maximum_redirects,
+            ),
+            finger=FingerClient(
+                timeout=load_configuration().connection_timeout,
+            ),
+            gopher=GopherClient(
+                timeout=load_configuration().connection_timeout,
+            ),
+            spartan=SpartanClient(
+                timeout=load_configuration().connection_timeout,
+            ),
+            nex=NexClient(
+                timeout=load_configuration().connection_timeout,
+            ),
         )
-        """The Gemini client."""
-        self._finger_client = FingerClient(
-            timeout=load_configuration().connection_timeout,
-        )
-        """The Finger client."""
-        self._gopher_client = GopherClient(
-            timeout=load_configuration().connection_timeout,
-        )
-        """The Gopher client."""
-        self._spartan_cient = SpartanClient(
-            timeout=load_configuration().connection_timeout,
-        )
-        """The Spartan client."""
-        self._nex_client = NexClient(
-            timeout=load_configuration().connection_timeout,
-        )
+        """The clients for the supported protocols."""
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
@@ -377,10 +369,10 @@ class Main(EnhancedScreen[None]):
         self._bookmarks = load_bookmarks()
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
-        if self._gemini_client.trust_store:
+        if self._clients.gemini.trust_store:
             self._command_line.known_hosts = [
                 GeminiURI.with_default_scheme(f"{host}:{port}")
-                for host, port in await self._gemini_client.trust_store.get_hosts()
+                for host, port in await self._clients.gemini.trust_store.get_hosts()
             ]
             HistorySearchCommands.known_hosts = self._command_line.known_hosts
         self._history_visible = config.history_visible
@@ -407,7 +399,7 @@ class Main(EnhancedScreen[None]):
 
     async def on_unmount(self) -> None:
         """Called when the screen is unmounted."""
-        await self._gemini_client.close()
+        await self._clients.gemini.close()
 
     @work(thread=True)
     def _housekeeping(self) -> None:
@@ -578,53 +570,18 @@ class Main(EnhancedScreen[None]):
         Args:
             message: The message the location open request.
         """
-        if isinstance(message.location, FingerURI):
-            self._make_request(
-                handle_finger_request(
-                    request=message,
-                    client=self._finger_client,
-                    owner=self,
-                )
+        if (
+            request := build_request(
+                cache=self._cache,
+                clients=self._clients,
+                current_document=self._viewer.document,
+                message=message,
+                owner=self,
+                set_last_input=self._set_last_input,
+                get_last_input=self._get_last_input,
             )
-        elif isinstance(message.location, GeminiURI):
-            self._make_request(
-                handle_gemini_request(
-                    request=message,
-                    client=self._gemini_client,
-                    owner=self,
-                    cache=self._cache,
-                    set_last_input=self._set_last_input,
-                    get_last_input=self._get_last_input,
-                )
-            )
-        elif isinstance(message.location, GopherURI):
-            self._make_request(
-                handle_gopher_request(
-                    request=message,
-                    client=self._gopher_client,
-                    owner=self,
-                    cache=self._cache,
-                    current_document=self._viewer.document,
-                )
-            )
-        elif isinstance(message.location, SpartanURI):
-            self._make_request(
-                handle_spartan_request(
-                    request=message,
-                    client=self._spartan_cient,
-                    owner=self,
-                    cache=self._cache,
-                )
-            )
-        elif isinstance(message.location, NexURI):
-            self._make_request(
-                handle_nex_request(
-                    request=message,
-                    client=self._nex_client,
-                    owner=self,
-                    cache=self._cache,
-                )
-            )
+        ) is not None:
+            self._make_request(request)
         else:
             self._load_from_filesystem(message)
 
