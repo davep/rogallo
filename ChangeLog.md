@@ -21,6 +21,10 @@
   ([#366](https://github.com/davep/rogallo/pull/366))
 - A long-running pending request is now cancelled if a new request is made.
   ([#370](https://github.com/davep/rogallo/pull/370))
+- Added the ability to customise the input prompt,
+  ([#371](https://github.com/davep/rogallo/pull/371))
+- Added the ability to customise the busy prompt.
+  ([#371](https://github.com/davep/rogallo/pull/371))
 
 ## v1.11.0
 

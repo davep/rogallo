@@ -212,6 +212,12 @@ class Configuration:
     footer_visible: bool = True
     """Whether the footer is visible."""
 
+    command_line_prompt: str = ">"
+    """The prompt to use for the command line."""
+
+    busy_indicator_cells: str = ""
+    """The characters to use for the busy indicator."""
+
 
 ##############################################################################
 def configuration_file() -> Path:

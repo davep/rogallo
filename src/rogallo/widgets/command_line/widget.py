@@ -69,14 +69,6 @@ COMMANDS: Final[tuple[type[InputCommand], ...]] = (
 )
 """The commands used for the input."""
 
-##############################################################################
-_PROMPT: Final[str] = ">"
-"""The prompt for the command line."""
-
-##############################################################################
-_BUSY_CELLS: Final[cycle[str]] = cycle("⠁⠉⠘⠰⠤⠤⠆⠃⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏⠟⠿⠽⠾⠽⠿⠟⠯⠽⠾⠶⠦⠤⠤⠰⠘⠉⠁")
-"""The cells used for the busy indicator."""
-
 
 ##############################################################################
 class CommandLine(Vertical):
@@ -190,6 +182,17 @@ class CommandLine(Vertical):
     _busy_timer: var[Timer | None] = var(None)
     """The timer for the busy indicator."""
 
+    def __init__(self) -> None:
+        """Initialise the command line."""
+        super().__init__()
+        self._input_prompt = load_configuration().command_line_prompt
+        """The prompt for the command line."""
+        self._busy_cells = cycle(
+            load_configuration().busy_indicator_cells
+            or "⠁⠉⠘⠰⠤⠤⠆⠃⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏⠟⠿⠽⠾⠽⠿⠟⠯⠽⠾⠶⠦⠤⠤⠰⠘⠉⠁"
+        )
+        """The cells used for the busy indicator."""
+
     @property
     def _history_suggester(self) -> SuggestFromList:
         """A suggester for the history of input.
@@ -240,7 +243,7 @@ class CommandLine(Vertical):
     def compose(self) -> ComposeResult:
         """Compose the content of the widget."""
         with Horizontal():
-            yield Label(_PROMPT)
+            yield Label(self._input_prompt)
             yield Input(
                 placeholder="Enter a URI, file, or command",
                 suggester=self._history_suggester,
@@ -327,12 +330,12 @@ class CommandLine(Vertical):
         if self._working > 0 and not self._busy_timer:
             self._busy_timer = self.set_interval(
                 0.1,
-                lambda: self._prompt.update(next(_BUSY_CELLS)),
+                lambda: self._prompt.update(next(self._busy_cells)),
             )
         elif self._busy_timer:
             self._busy_timer.stop()
             self._busy_timer = None
-            self._prompt.update(_PROMPT)
+            self._prompt.update(self._input_prompt)
 
     def action_request_exit(self) -> None:
         """Request that the application quits."""
