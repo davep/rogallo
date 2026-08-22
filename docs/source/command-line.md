@@ -111,4 +111,19 @@ matches known commands, etc, a dimmed completion will be suggested. Press
 ```{.textual path="docs/screenshots/main_screenshot.py" title="Showing a suggested completion" lines=40 columns=85 press="/,g,e,m"}
 ```
 
+## Custom prompt
+
+By default the input prompt in the command line is `>`. If you would prefer
+it's something else, you can configure this via the configuration file.
+Suppose, instead, you wanted a nice colourful rocket:
+
+```json
+"command_line_prompt": "\ud83d\ude80"
+```
+
+resulting in:
+
+```{.textual path="docs/screenshots/custom_prompt_screenshot.py" title="Custom prompt" lines=20 columns=80 press="/,<,=,=,=, ,L,o,o,k, ,a,t, ,t,h,i,s, ,c,o,o,l, ,n,e,w, ,p,r,o,m,p,t,!"}
+```
+
 [//]: # (command-line.md ends here)
