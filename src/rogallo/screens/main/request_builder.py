@@ -31,9 +31,9 @@ from wasat import GeminiURI
 ##############################################################################
 # Local imports.
 from ...cache import ContentCache
+from ...clients import Clients
 from ...document import Document
 from ...messages import OpenLocation
-from .clients import Clients
 from .handlers import (
     LastInputGetter,
     LastInputSetter,

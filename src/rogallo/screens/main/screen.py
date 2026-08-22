@@ -43,6 +43,7 @@ from wasat import GeminiURI
 # Local imports.
 from ... import __version__
 from ...cache import ContentCache
+from ...clients import Clients
 from ...commands import (
     AboutThisPage,
     AddLocationToBookmarks,
@@ -105,7 +106,6 @@ from ...providers import BookmarkSearchCommands, HistorySearchCommands, MainComm
 from ...types import GEMINI_EXTENSIONS, SpartanURINeedingData
 from ...widgets import BookmarksViewer, CommandLine, HistoryViewer, Toolbar, Viewer
 from ..about_page import AboutPage
-from .clients import Clients
 from .handlers import handle_filesystem_request
 from .local_messages import (
     CopyToClipboard,

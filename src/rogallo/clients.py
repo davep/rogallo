@@ -26,7 +26,7 @@ from wasat import Client as GeminiClient
 
 ##############################################################################
 # Local imports.
-from ...data import client_certificates_directory, load_configuration, trust_file
+from .data import client_certificates_directory, load_configuration, trust_file
 
 
 ##############################################################################

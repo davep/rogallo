@@ -14,10 +14,10 @@ from ....cache import ContentCache
 from ....document import Document
 from ....messages import OpenLocation
 from ....mime_checks import is_displayable_mime_type
+from ....text_decoder import decode_text
 from ....types import SpartanURINeedingData
 from ...user_input import UserInput
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
-from .text_decoder import decode_text
 
 
 ##############################################################################
