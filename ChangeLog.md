@@ -19,6 +19,8 @@
   ([#366](https://github.com/davep/rogallo/pull/366))
 - Allowed `GoToRoot` to work on Gopher URIs.
   ([#366](https://github.com/davep/rogallo/pull/366))
+- A long-running pending request is now cancelled if a new request is made.
+  ([#370](https://github.com/davep/rogallo/pull/370))
 
 ## v1.11.0
 
