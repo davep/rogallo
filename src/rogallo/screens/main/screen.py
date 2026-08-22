@@ -502,7 +502,7 @@ class Main(EnhancedScreen[None]):
         self._remember_last_visit(message)
         self._viewer.document = message.document
 
-    @work
+    @work(exclusive=True)
     async def _make_request(self, handler: Awaitable[None]) -> None:
         """Make a request to a server.
 

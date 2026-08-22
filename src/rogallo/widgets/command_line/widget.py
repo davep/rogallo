@@ -167,7 +167,7 @@ class CommandLine(Vertical):
     dock_top: var[bool] = var(False, toggle_class="--top", init=True)
     """Should the input dock to the top of the screen?"""
 
-    working: var[bool] = var(False)
+    _working: var[int] = var(0)
     """Is the command line currently working on something?"""
 
     history: var[CommandLineHistory] = var(CommandLineHistory)
@@ -254,11 +254,11 @@ class CommandLine(Vertical):
     @contextmanager
     def busy_spinner(self) -> Iterator[None]:
         """A context manager to show a busy spinner while doing something."""
-        self.working = True
+        self._working += 1
         try:
             yield
         finally:
-            self.working = False
+            self._working -= 1
 
     @dataclass
     class CommandExecuted(Message):
@@ -322,9 +322,9 @@ class CommandLine(Vertical):
         """React to the bookmarks being updated."""
         self._refresh_suggestions()
 
-    def _watch_working(self) -> None:
+    def _watch__working(self) -> None:
         """React to the working state being updated."""
-        if self.working:
+        if self._working > 0 and not self._busy_timer:
             self._busy_timer = self.set_interval(
                 0.1,
                 lambda: self._prompt.update(next(_BUSY_CELLS)),
