@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v1.12.0
 
-**Released: WiP**
+**Released: 2026-08-22**
 
 - Overhauled the way that navigation history is tracked and recorded.
   ([#361](https://github.com/davep/rogallo/pull/361))
