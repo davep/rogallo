@@ -4,10 +4,10 @@
 # Sybaritic imports.
 from sybaritic import Response as SpartanResponse
 from sybaritic import ResponseError as SpartanResponseError
-from wasat import ProtocolError as GeminiProtocolError
 
 ##############################################################################
 # Wasat imports.
+from wasat import ProtocolError as GeminiProtocolError
 from wasat import Response as GeminiResponse
 
 
