@@ -1,6 +1,6 @@
 [project]
 name = "rogallo"
-version = "1.11.0"
+version = "1.12.0"
 description = "A terminal-based client for small web protocols"
 readme = "README.md"
 authors = [
@@ -68,7 +68,7 @@ Discussions = "https://github.com/davep/rogallo/discussions"
 rogallo = "rogallo.__main__:main"
 
 [build-system]
-requires = ["uv_build>=0.11.21,<0.12.0"]
+requires = ["uv_build>=0.12.0,<0.13.0"]
 build-backend = "uv_build"
 
 [[tool.uv.index]]
