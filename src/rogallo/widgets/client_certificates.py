@@ -31,8 +31,13 @@ class CertificateOption(Option):
         """The certificate to display."""
         scopes = "\n".join(f"[dim]{scope}[/]" for scope in certificate.scopes)
         super().__init__(
-            (f"{escape(certificate.issuer_common_name or 'Unknown')}\n{scopes}")
+            f"{escape(certificate.issuer_common_name or 'Unknown')}\n{scopes}"
         )
+
+    @property
+    def certificate(self) -> ClientCertificate:
+        """The certificate for this option."""
+        return self._certificate
 
 
 ##############################################################################
