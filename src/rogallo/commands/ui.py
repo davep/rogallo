@@ -48,6 +48,13 @@ class ToggleBookmarksManager(Command):
 
 
 ##############################################################################
+class ToggleClientCertificateManager(Command):
+    """Toggle the display of the client certificate manager"""
+
+    BINDING_KEY = "shift+f4"
+
+
+##############################################################################
 class StripeLinks(Command):
     """Toggle the striping of links in the document viewer"""
 

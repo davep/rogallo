@@ -39,6 +39,7 @@ from ..commands import (
     StripeLinks,
     ToggleANSIEscapeSequenceHandling,
     ToggleBookmarksManager,
+    ToggleClientCertificateManager,
     ToggleCosyLinkNumbers,
     ToggleEmojiRemoval,
     ToggleHistoryManager,
@@ -87,6 +88,7 @@ class MainCommands(CommandsProvider):
         yield StripeLinks()
         yield ToggleANSIEscapeSequenceHandling()
         yield from self.maybe(ToggleBookmarksManager)
+        yield ToggleClientCertificateManager()
         yield ToggleCosyLinkNumbers()
         yield ToggleEmojiRemoval()
         yield from self.maybe(ToggleHistoryManager)

@@ -71,6 +71,7 @@ from ...commands import (
     StripeLinks,
     ToggleANSIEscapeSequenceHandling,
     ToggleBookmarksManager,
+    ToggleClientCertificateManager,
     ToggleCosyLinkNumbers,
     ToggleEmojiRemoval,
     ToggleHistoryManager,
@@ -104,7 +105,14 @@ from ...messages import OpenFromFileSystem, OpenLocation, OpenURI
 from ...preflight import has_navigable_path
 from ...providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
 from ...types import GEMINI_EXTENSIONS, SpartanURINeedingData
-from ...widgets import BookmarksViewer, CommandLine, HistoryViewer, Toolbar, Viewer
+from ...widgets import (
+    BookmarksViewer,
+    ClientCertificateManager,
+    CommandLine,
+    HistoryViewer,
+    Toolbar,
+    Viewer,
+)
 from ..about_page import AboutPage
 from .handlers import handle_filesystem_request
 from .local_messages import (
@@ -173,7 +181,7 @@ class Main(EnhancedScreen[None]):
             }
         }
 
-        #history, #bookmarks {
+        #history, #bookmarks, #client-certificates {
             width: 30%;
             display: none;
             Label {
@@ -189,6 +197,10 @@ class Main(EnhancedScreen[None]):
         }
 
         &.--show-bookmarks #bookmarks {
+            display: block;
+        }
+
+        &.--show-client-certificates #client-certificates {
             display: block;
         }
     }
@@ -231,6 +243,7 @@ class Main(EnhancedScreen[None]):
         StripeLinks,
         ToggleANSIEscapeSequenceHandling,
         ToggleBookmarksManager,
+        ToggleClientCertificateManager,
         ToggleCosyLinkNumbers,
         ToggleEmojiRemoval,
         ToggleHistoryManager,
@@ -251,6 +264,8 @@ class Main(EnhancedScreen[None]):
     """The history viewer widget."""
     _bookmarks_viewer = query_one(BookmarksViewer)
     """The bookmarks viewer widget."""
+    _client_certificates_manager = query_one(ClientCertificateManager)
+    """The client certificates manager widget."""
 
     _location_history: var[LocationHistory] = var(LocationHistory)
     """The location history."""
@@ -265,6 +280,10 @@ class Main(EnhancedScreen[None]):
     """Is the history panel visible?"""
     _bookmarks_visible: var[bool] = var(False, toggle_class="--show-bookmarks")
     """Is the bookmarks panel visible?"""
+    _client_certificates_visible: var[bool] = var(
+        False, toggle_class="--show-client-certificates"
+    )
+    """Is the client certificates panel visible?"""
 
     def __init__(self, arguments: Namespace) -> None:
         """Initialize the main screen.
@@ -305,6 +324,9 @@ class Main(EnhancedScreen[None]):
                 with VerticalGroup(id="bookmarks"):
                     yield Label("Bookmarks")
                     yield BookmarksViewer().data_bind(bookmarks=Main._bookmarks)
+                with VerticalGroup(id="client-certificates"):
+                    yield Label("Client Certificates")
+                    yield ClientCertificateManager()
             yield CommandLine().data_bind(
                 history=Main._command_history,
                 location_history=Main._location_history,
@@ -733,8 +755,11 @@ class Main(EnhancedScreen[None]):
             self._history_viewer.focus()
         else:
             self._viewer.take_control()
-        if self._history_visible and self._bookmarks_visible:
-            self._bookmarks_visible = False
+        if self._history_visible:
+            if self._bookmarks_visible:
+                self._bookmarks_visible = False
+            if self._client_certificates_visible:
+                self._client_certificates_visible = False
 
     def action_toggle_bookmarks_manager_command(self) -> None:
         """Toggle the visibility of the bookmarks manager panel."""
@@ -746,8 +771,29 @@ class Main(EnhancedScreen[None]):
             self._bookmarks_viewer.focus()
         else:
             self._viewer.take_control()
-        if self._bookmarks_visible and self._history_visible:
-            self._history_visible = False
+        if self._bookmarks_visible:
+            if self._history_visible:
+                self._history_visible = False
+            if self._client_certificates_visible:
+                self._client_certificates_visible = False
+
+    def action_toggle_client_certificate_manager_command(self) -> None:
+        """Toggle the client certificate manager."""
+        if self._client_certificates_visible:
+            self._client_certificates_visible = (
+                not self._client_certificates_manager.has_focus
+            )
+        else:
+            self._client_certificates_visible = True
+        if self._client_certificates_visible:
+            self._client_certificates_manager.focus()
+        else:
+            self._viewer.take_control()
+        if self._client_certificates_visible:
+            if self._history_visible:
+                self._history_visible = False
+            if self._bookmarks_visible:
+                self._bookmarks_visible = False
 
     def _watch__history_visible(self) -> None:
         """Watch for changes to the history visibility."""
