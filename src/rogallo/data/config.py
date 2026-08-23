@@ -48,6 +48,9 @@ class Configuration:
     bookmarks_visible: bool = False
     """Should the bookmarks panel be visible by default?"""
 
+    client_certificates_visible: bool = False
+    """Should the certificate manager panel be visible by default?"""
+
     show_link_tooltips: bool = True
     """Should tooltips be shown for links?"""
 

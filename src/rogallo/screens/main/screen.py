@@ -357,6 +357,7 @@ class Main(EnhancedScreen[None]):
             HistorySearchCommands.known_hosts = self._command_line.known_hosts
         self._history_visible = config.history_visible
         self._bookmarks_visible = config.bookmarks_visible
+        self._client_certificates_visible = config.client_certificates_visible
         self._viewer.stripe_links = config.stripe_links
         self._viewer.with_link_numbers = config.with_link_jumps
         self._viewer.handle_ansi_escape_sequences = config.handle_ansi_escape_sequences
@@ -804,6 +805,11 @@ class Main(EnhancedScreen[None]):
         """Watch for changes to the bookmarks visibility."""
         with update_configuration() as config:
             config.bookmarks_visible = self._bookmarks_visible
+
+    def _watch__client_certificates_visible(self) -> None:
+        """Watch for changes to the client certificates visibility."""
+        with update_configuration() as config:
+            config.client_certificates_visible = self._client_certificates_visible
 
     def action_reload_command(self) -> None:
         """Reload the current document."""
