@@ -326,7 +326,7 @@ class Main(EnhancedScreen[None]):
                     yield BookmarksViewer().data_bind(bookmarks=Main._bookmarks)
                 with VerticalGroup(id="client-certificates"):
                     yield Label("Client Certificates")
-                    yield ClientCertificateManager()
+                    yield ClientCertificateManager(self._clients.gemini)
             yield CommandLine().data_bind(
                 history=Main._command_history,
                 location_history=Main._location_history,
