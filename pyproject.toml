@@ -77,6 +77,9 @@ url = "https://test.pypi.org/simple/"
 publish-url = "https://test.pypi.org/legacy/"
 explicit = true
 
+[tool.uv.sources]
+wasat = { path = "../wasat", editable = true }
+
 [tool.pyright]
 venvPath="."
 venv=".venv"

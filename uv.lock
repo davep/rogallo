@@ -1813,7 +1813,7 @@ requires-dist = [
     { name = "textual-fspicker", specifier = ">=1.0.1" },
     { name = "types-pygments", specifier = ">=2.20.0.20260518" },
     { name = "types-pyperclip", specifier = ">=1.11.0.20260508" },
-    { name = "wasat", specifier = ">=1.3.1" },
+    { name = "wasat", editable = "../wasat" },
     { name = "xdg-base-dirs", specifier = ">=6.0.2" },
 ]
 
@@ -2025,13 +2025,29 @@ wheels = [
 [[package]]
 name = "wasat"
 version = "1.3.1"
-source = { registry = "https://pypi.org/simple" }
+source = { editable = "../wasat" }
 dependencies = [
     { name = "cryptography" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/52/c4/d2c36778782be4338750f40b6fce623a6208f54ac796d67b1562ef9e3c23/wasat-1.3.1.tar.gz", hash = "sha256:6c1c7f2dc40e5a0abeaad9495331a640f69b1051684de1283951d197eafa73d5", size = 24847, upload-time = "2026-07-30T18:32:10.559Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/87/d0/d19146930c807d0d401a2ddf34c4cbdb1f9da331462b33d329f6dffae228/wasat-1.3.1-py3-none-any.whl", hash = "sha256:40a47a808c3c1b53941b1d0c0645e275497e1c0ab22a5874603a7f19e05710b6", size = 28824, upload-time = "2026-07-30T18:32:09.612Z" },
+
+[package.metadata]
+requires-dist = [{ name = "cryptography", specifier = ">=49.0.0" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "codespell", specifier = ">=2.4.2" },
+    { name = "mypy", specifier = ">=2.1.0" },
+    { name = "pre-commit", specifier = ">=4.6.0" },
+    { name = "ruff", specifier = ">=0.15.17" },
+]
+docs = [
+    { name = "mkdocs", specifier = ">=1.6.1,<2" },
+    { name = "mkdocs-material", specifier = ">=9.7.6" },
+    { name = "mkdocstrings", extras = ["python"], specifier = ">=1.0.4" },
+]
+test = [
+    { name = "pytest", specifier = ">=9.1.0" },
+    { name = "pytest-cov", specifier = ">=7.1.0" },
 ]
 
 [[package]]
