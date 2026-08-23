@@ -29,9 +29,9 @@ class CertificateOption(Option):
         """
         self._certificate = certificate
         """The certificate to display."""
-        scoptes = "\n".join(f"[dim]{scope}[/]" for scope in certificate.scopes)
+        scopes = "\n".join(f"[dim]{scope}[/]" for scope in certificate.scopes)
         super().__init__(
-            (f"{escape(certificate.issuer_common_name or 'Unknown')}\n" f"{scoptes}")
+            (f"{escape(certificate.issuer_common_name or 'Unknown')}\n{scopes}")
         )
 
 
