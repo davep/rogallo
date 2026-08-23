@@ -82,7 +82,10 @@ class ClientCertificateManager(EnhancedOptionList):
             self.clear_options().add_options(
                 [
                     CertificateOption(certificate)
-                    for certificate in await self._client.client_cert_store.list_certificates()
+                    for certificate in sorted(
+                        await self._client.client_cert_store.list_certificates(),
+                        key=lambda c: (c.issuer_common_name or "Unknown").casefold(),
+                    )
                 ]
             )
 
