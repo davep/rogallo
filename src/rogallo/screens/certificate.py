@@ -129,6 +129,17 @@ class BaseCertificateMaker(ModalScreen[CertificateData | None]):
             max_length=2,
         )
 
+    @property
+    def _common_buttons(self) -> Iterator[Widget]:
+        """The common buttons for the certificate dialog.
+
+        Yields:
+            The common buttons for the certificate dialog.
+        """
+        with HorizontalGroup(id="buttons"):
+            yield Button(add_key("Create", "F2"), id="create", variant="success")
+            yield Button(add_key("Cancel", "Esc"), id="cancel", variant="error")
+
     @on(Button.Pressed, "#cancel")
     def action_cancel(self) -> None:
         """Cancel the edit of the certificate data."""
@@ -203,9 +214,7 @@ class LocationSpecificClientCertificateMaker(BaseCertificateMaker):
                     classes="leave-room",
                 )
                 yield from self._common_fields
-            with HorizontalGroup(id="buttons"):
-                yield Button(add_key("Create", "F2"), id="create", variant="success")
-                yield Button(add_key("Cancel", "Esc"), id="cancel", variant="error")
+            yield from self._common_buttons
 
     def _scoped_location(self) -> GeminiURI:
         """Returns the location scoped as per the user's choice.
@@ -246,9 +255,7 @@ class ClientCertificateMaker(BaseCertificateMaker):
             )
             with Collapsible(title="Advanced options"):
                 yield from self._common_fields
-            with HorizontalGroup(id="buttons"):
-                yield Button(add_key("Create", "F2"), id="create", variant="success")
-                yield Button(add_key("Cancel", "Esc"), id="cancel", variant="error")
+            yield from self._common_buttons
 
     def _build_certificate_data(self) -> CertificateData:
         """Create the certificate."""
