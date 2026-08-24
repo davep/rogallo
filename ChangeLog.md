@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unrelased
+## v1.12.1
 
-**Released: WiP**
+**Released: 2026-08-24**
 
 - Fixed default client certificate expiry date being too short.
   ([#374](https://github.com/davep/rogallo/pull/374))
