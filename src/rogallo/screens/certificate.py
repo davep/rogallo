@@ -171,10 +171,19 @@ class BaseCertificateMaker(ModalScreen[CertificateData | None]):
         """Build the certificate data from the inputs."""
         raise NotImplementedError
 
+    def _can_create(self) -> bool:
+        """Check if the certificate can be created.
+
+        Returns:
+            True if the certificate can be created, False otherwise.
+        """
+        return True
+
     @on(Button.Pressed, "#create")
     def action_create(self) -> None:
         """Create the certificate."""
-        self.dismiss(self._build_certificate_data())
+        if self._can_create():
+            self.dismiss(self._build_certificate_data())
 
 
 ##############################################################################
@@ -233,8 +242,6 @@ class LocationSpecificClientCertificateMaker(BaseCertificateMaker):
 class ClientCertificateMaker(BaseCertificateMaker):
     """A modal screen to get a certificate from the user."""
 
-    # TODO: Require there's a common name and don't allow exit otherwise.
-
     def compose(self) -> ComposeResult:
         """Compose the certificate dialog."""
         with VerticalGroup() as dialog:
@@ -249,11 +256,30 @@ class ClientCertificateMaker(BaseCertificateMaker):
                 yield from self._common_fields
             yield from self._common_buttons
 
+    def on_mount(self) -> None:
+        """Ensure the create button is disabled to start with."""
+        self.query_one("#create", Button).disabled = True
+
     def _build_certificate_data(self) -> CertificateData:
         """Create the certificate."""
         certificate_data: CertificateData = {"scopes": (), "name": str(uuid4())}
         self._add_common_data(certificate_data)
         return certificate_data
+
+    @on(Input.Changed, "#common_name")
+    def _ensure_common_name(self, message: Input.Changed) -> None:
+        """Ensure the common name is not empty."""
+        self.query_one("#create", Button).disabled = not bool(message.value.strip())
+
+    def _can_create(self) -> bool:
+        """Check if the certificate can be created.
+
+        Returns:
+            True if the certificate can be created, False otherwise.
+        """
+        return super()._can_create() and bool(
+            self.query_one("#common_name", Input).value.strip()
+        )
 
 
 ### certificate.py ends here
