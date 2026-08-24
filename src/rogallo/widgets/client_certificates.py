@@ -18,6 +18,7 @@ from wasat import Client, ClientCertificate
 ##############################################################################
 # Local imports.
 from ..safe_escape import escape
+from ..screens.certificate import ClientCertificateMaker
 
 
 ##############################################################################
@@ -45,7 +46,11 @@ class CertificateOption(Option):
         """
         self._certificate = certificate
         """The certificate to display."""
-        scopes = "\n".join(f"[dim]{scope}[/]" for scope in certificate.scopes)
+        scopes = (
+            "\n".join(f"[dim]{escape(scope)}[/]" for scope in certificate.scopes)
+            if certificate.scopes
+            else "[dim italic]Unused[/]"
+        )
         super().__init__(
             f"{escape(_name(certificate))}\n"
             f"{scopes}\n"
@@ -86,6 +91,12 @@ class ClientCertificateManager(EnhancedOptionList):
 
     BINDINGS = [
         HelpfulBinding(
+            "n",
+            "new",
+            "New",
+            tooltip="Add a new certificate",
+        ),
+        HelpfulBinding(
             "d", "delete", "Delete", tooltip="Delete the selected certificate"
         ),
     ]
@@ -112,6 +123,16 @@ class ClientCertificateManager(EnhancedOptionList):
                     )
                 ]
             )
+
+    @work
+    async def action_new(self) -> None:
+        """Add a new certificate."""
+        if data := await self.app.push_screen_wait(ClientCertificateMaker()):
+            certificate = await self._client.client_cert_store.create_certificate(
+                **data
+            )
+            await self._load_certificates()
+            self.notify(escape(_name(certificate)), title="Added")
 
     @work
     async def action_delete(self) -> None:
