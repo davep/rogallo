@@ -2,10 +2,13 @@
 
 ##############################################################################
 # Textual imports.
+from textual import work
 from textual.widgets.option_list import Option
 
 ##############################################################################
 # Textual enhanced imports.
+from textual_enhanced.binding import HelpfulBinding
+from textual_enhanced.dialogs import Confirm
 from textual_enhanced.widgets import EnhancedOptionList
 
 ##############################################################################
@@ -15,6 +18,19 @@ from wasat import Client, ClientCertificate
 ##############################################################################
 # Local imports.
 from ..safe_escape import escape
+
+
+##############################################################################
+def _name(certificate: ClientCertificate) -> str:
+    """Return the name of the certificate.
+
+    Args:
+        certificate: The certificate to get the name of.
+
+    Returns:
+        The name of the certificate.
+    """
+    return certificate.issuer_common_name or "Unnamed"
 
 
 ##############################################################################
@@ -31,7 +47,7 @@ class CertificateOption(Option):
         """The certificate to display."""
         scopes = "\n".join(f"[dim]{scope}[/]" for scope in certificate.scopes)
         super().__init__(
-            f"{escape(certificate.issuer_common_name or 'Unknown')}\n"
+            f"{escape(_name(certificate))}\n"
             f"{scopes}\n"
             f"[dim][bold]Expires[/bold]: {certificate.not_after}[/]"
         )
@@ -68,6 +84,12 @@ class ClientCertificateManager(EnhancedOptionList):
     them.
     """
 
+    BINDINGS = [
+        HelpfulBinding(
+            "d", "delete", "Delete", tooltip="Delete the selected certificate"
+        ),
+    ]
+
     def __init__(self, client: Client) -> None:
         """Initialize the client certificate manager widget."""
         super().__init__()
@@ -86,10 +108,27 @@ class ClientCertificateManager(EnhancedOptionList):
                     CertificateOption(certificate)
                     for certificate in sorted(
                         await self._client.client_cert_store.list_certificates(),
-                        key=lambda c: (c.issuer_common_name or "Unknown").casefold(),
+                        key=lambda certificate: _name(certificate).casefold(),
                     )
                 ]
             )
+
+    @work
+    async def action_delete(self) -> None:
+        """Delete the selected certificate."""
+        if (
+            self.highlighted is not None
+            and isinstance(option := self.options[self.highlighted], CertificateOption)
+            and await self.app.push_screen_wait(
+                Confirm(
+                    "Delete certificate?",
+                    f"Are you sure you want to delete '{_name(option.certificate)}'?",
+                )
+            )
+        ):
+            await self._client.client_cert_store.delete_certificate(option.certificate)
+            await self._load_certificates()
+            self.notify(escape(_name(option.certificate)), title="Deleted")
 
 
 ### client_certificates.py ends here
