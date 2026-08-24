@@ -97,7 +97,7 @@ class BookmarksViewer(EnhancedOptionList):
     def _watch_bookmarks(self) -> None:
         """React to the bookmarks changing."""
         self.clear_options().add_options(
-            [BookmarkOption(bookmark) for bookmark in sorted(self.bookmarks)]
+            BookmarkOption(bookmark) for bookmark in sorted(self.bookmarks)
         )
         if self.option_count:
             self.highlighted = 0
