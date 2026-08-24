@@ -232,6 +232,8 @@ class LocationSpecificClientCertificateMaker(BaseCertificateMaker):
 class ClientCertificateMaker(BaseCertificateMaker):
     """A modal screen to get a certificate from the user."""
 
+    # TODO: Require there's a common name and don't allow exit otherwise.
+
     def compose(self) -> ComposeResult:
         """Compose the certificate dialog."""
         with VerticalGroup() as dialog:
