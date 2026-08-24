@@ -216,22 +216,14 @@ class LocationSpecificClientCertificateMaker(BaseCertificateMaker):
                 yield from self._common_fields
             yield from self._common_buttons
 
-    def _scoped_location(self) -> GeminiURI:
-        """Returns the location scoped as per the user's choice.
-
-        Returns:
-            The location to scope the certificate to.
-        """
-        return (
-            self._location.with_path(None).with_query(None)
-            if self.query_one("#scope-to-domain", Checkbox).value
-            else self._location
-        )
-
     def _build_certificate_data(self) -> CertificateData:
         """Create the certificate."""
         certificate_data: CertificateData = {
-            "uri": self._scoped_location(),
+            "uri": (
+                self._location.with_path(None).with_query(None)
+                if self.query_one("#scope-to-domain", Checkbox).value
+                else self._location
+            ),
         }
         self._add_common_data(certificate_data)
         return certificate_data
