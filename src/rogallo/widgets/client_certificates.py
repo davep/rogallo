@@ -1,22 +1,29 @@
 """Provides a client certificate manager widget for the application."""
 
 ##############################################################################
+# Python imports.
+from itertools import chain
+
+##############################################################################
 # Textual imports.
 from textual import work
+from textual.reactive import var
+from textual.suggester import SuggestFromList
 from textual.widgets.option_list import Option
 
 ##############################################################################
 # Textual enhanced imports.
 from textual_enhanced.binding import HelpfulBinding
-from textual_enhanced.dialogs import Confirm
+from textual_enhanced.dialogs import Confirm, ModalInput
 from textual_enhanced.widgets import EnhancedOptionList
 
 ##############################################################################
 # Wasat imports.
-from wasat import Client, ClientCertificate
+from wasat import Client, ClientCertificate, GeminiURI, URIError
 
 ##############################################################################
 # Local imports.
+from ..data import Bookmarks, LocationHistory, NavigationHistory
 from ..safe_escape import escape
 from ..screens.certificate import ClientCertificateMaker
 
@@ -99,7 +106,20 @@ class ClientCertificateManager(EnhancedOptionList):
         HelpfulBinding(
             "d", "delete", "Delete", tooltip="Delete the selected certificate"
         ),
+        HelpfulBinding(
+            "a",
+            "add_association",
+            "Associate",
+            tooltip="Add an association to the selected certificate",
+        ),
     ]
+
+    location_history: var[LocationHistory] = var(LocationHistory)
+    """The history of locations visited."""
+    navigation_history: var[NavigationHistory] = var(NavigationHistory)
+    """The history of navigation through locations."""
+    bookmarks: var[Bookmarks] = var(list)
+    """The bookmarks for the application."""
 
     def __init__(self, client: Client) -> None:
         """Initialize the client certificate manager widget."""
@@ -148,6 +168,62 @@ class ClientCertificateManager(EnhancedOptionList):
             await self._client.client_cert_store.delete_certificate(option.certificate)
             await self._load_certificates()
             self.notify(escape(_name(option.certificate)), title="Deleted")
+
+    async def _history_suggester(self) -> SuggestFromList:
+        """A suggester for the history of input.
+
+        If there us no history yet then a list of commands and aliases will
+        be used.
+        """
+        return SuggestFromList(
+            [
+                *sorted(
+                    # Suggest the set of all known locations...
+                    set(
+                        chain(
+                            (str(visit.location) for visit in self.location_history),
+                            (str(visit) for visit in self.navigation_history),
+                            (str(bookmark.location) for bookmark in self.bookmarks),
+                        )
+                    )
+                    # ...minus those that are already associated with a certificate.
+                    - {
+                        str(GeminiURI.with_default_scheme(scope))
+                        for certificate in await self._client.client_cert_store.list_certificates()
+                        for scope in certificate.scopes
+                    }
+                ),
+            ]
+        )
+
+    @work
+    async def action_add_association(self) -> None:
+        """Add an association to the selected certificate."""
+        if (
+            self.highlighted is not None
+            and isinstance(option := self.options[self.highlighted], CertificateOption)
+            and (
+                location := await self.app.push_screen_wait(
+                    ModalInput(
+                        "Enter the location to associate with this certificate (e.g. gemini://example.com):",
+                        title="Add Association",
+                        suggester=await self._history_suggester(),
+                    )
+                )
+            )
+        ):
+            try:
+                await self._client.client_cert_store.associate_scope(
+                    option.certificate, GeminiURI(location)
+                )
+                await self._load_certificates()
+                self.notify(f"Association added for {location}", title="Added")
+            except (RuntimeError, URIError, ValueError) as error:
+                self.notify(
+                    f"Unable to add association for {location}:\n\n{error}",
+                    severity="error",
+                    title="Error",
+                )
 
 
 ### client_certificates.py ends here
