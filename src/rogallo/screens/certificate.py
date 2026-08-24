@@ -26,11 +26,11 @@ type CertificateData = dict[str, Any]
 
 
 ##############################################################################
-class Certificate(ModalScreen[CertificateData | None]):
+class CertificateMaker(ModalScreen[CertificateData | None]):
     """A modal screen to get a certificate from the user."""
 
     CSS = """
-    Certificate {
+    CertificateMaker {
         align: center middle;
 
         &> VerticalGroup {

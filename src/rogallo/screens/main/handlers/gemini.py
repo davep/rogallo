@@ -28,7 +28,7 @@ from ....input_content import InputContent
 from ....messages import OpenLocation
 from ....mime_checks import is_displayable_mime_type
 from ....text_decoder import decode_text
-from ...certificate import Certificate
+from ...certificate import CertificateMaker
 from ...user_input import UserInput
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
 
@@ -54,7 +54,7 @@ async def _handle_client_certificate_request(
 
     if (
         certificate_data := await owner.app.push_screen_wait(
-            Certificate(location, request_reason)
+            CertificateMaker(location, request_reason)
         )
     ) is None:
         owner.notify("Client certificate request cancelled.", severity="warning")
