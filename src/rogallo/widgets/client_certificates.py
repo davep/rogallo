@@ -115,13 +115,11 @@ class ClientCertificateManager(EnhancedOptionList):
         """Load the client certificates into the widget."""
         with self.preserved_highlight:
             self.clear_options().add_options(
-                [
-                    CertificateOption(certificate)
-                    for certificate in sorted(
-                        await self._client.client_cert_store.list_certificates(),
-                        key=lambda certificate: _name(certificate).casefold(),
-                    )
-                ]
+                CertificateOption(certificate)
+                for certificate in sorted(
+                    await self._client.client_cert_store.list_certificates(),
+                    key=lambda certificate: _name(certificate).casefold(),
+                )
             )
 
     @work
