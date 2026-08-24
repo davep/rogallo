@@ -178,6 +178,7 @@ class Certificate(ModalScreen[CertificateData | None]):
         certificate_data: CertificateData = {
             "uri": self._scoped_location(),
             "transient": self.query_one("#transient", Checkbox).value,
+            "valid_days": None,
         }
         self._maybe_add(certificate_data, "common_name")
         try:
