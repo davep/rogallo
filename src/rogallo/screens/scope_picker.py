@@ -4,6 +4,7 @@
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
+from textual.containers import VerticalGroup
 from textual.screen import ModalScreen
 from textual.widgets import OptionList
 from textual.widgets.option_list import Option
@@ -36,12 +37,24 @@ class ScopePicker(ModalScreen[str | None]):
     CSS = """
     ScopePicker {
         align: center middle;
-        OptionList {
+        &> VerticalGroup {
+            background: $panel;
+            border: panel $border;
             width: auto;
-            max-width: 80%;
-            min-width: 30;
             height: auto;
             max-height: 80%;
+            max-width: 80%;
+            padding-top: 1;
+        }
+        OptionList {
+            &, &:focus {
+                border: none;
+                background: $panel;
+                background-tint: $panel 0%;
+            }
+            width: auto;
+            min-width: 30;
+            height: auto;
         }
     }
     """
@@ -60,10 +73,9 @@ class ScopePicker(ModalScreen[str | None]):
 
     def compose(self) -> ComposeResult:
         """Compose the screen."""
-        yield (
-            options := OptionList(*(Scope(scope) for scope in self._certificate.scopes))
-        )
-        options.border_title = self._caption
+        with VerticalGroup() as dialog:
+            dialog.border_title = self._caption
+            yield OptionList(*(Scope(scope) for scope in self._certificate.scopes))
 
     @on(OptionList.OptionSelected)
     def action_select(self, event: OptionList.OptionSelected) -> None:
