@@ -6,7 +6,7 @@ from itertools import chain
 
 ##############################################################################
 # Textual imports.
-from textual import work
+from textual import on, work
 from textual.reactive import var
 from textual.suggester import SuggestFromList
 from textual.widgets.option_list import Option
@@ -138,6 +138,25 @@ class ClientCertificateManager(EnhancedOptionList):
         super().__init__()
         self._store = store
         """The client certificate store."""
+
+    def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
+        if not self.is_mounted:
+            return True
+        if action == "remove_association":
+            return (
+                self.highlighted is not None
+                and isinstance(
+                    option := self.options[self.highlighted], CertificateOption
+                )
+                and len(option.certificate.scopes) > 0
+                or None
+            )
+        return True
+
+    @on(EnhancedOptionList.OptionHighlighted)
+    def _highlighted_certificate(self) -> None:
+        """Refresh bindings as we move through the list."""
+        self.refresh_bindings()
 
     async def _watch_client_certificates(self) -> None:
         """Load the client certificates into the widget."""
