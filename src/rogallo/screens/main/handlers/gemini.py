@@ -25,7 +25,7 @@ from wasat import (
 from ....cache import ContentCache
 from ....document import Document
 from ....input_content import InputContent
-from ....messages import OpenLocation
+from ....messages import ClientCertificatesModified, OpenLocation
 from ....mime_checks import is_displayable_mime_type
 from ....text_decoder import decode_text
 from ...certificate import LocationSpecificClientCertificateMaker
@@ -52,6 +52,10 @@ async def _handle_client_certificate_request(
         owner: The widget that owns the request.
     """
 
+    # TODO: Give the user the ability to pick an existing certificate and
+    # force an association, or (as we are right now) create a new
+    # certificate and associate it with the location.
+
     if (
         certificate_data := await owner.app.push_screen_wait(
             LocationSpecificClientCertificateMaker(location, request_reason)
@@ -69,6 +73,7 @@ async def _handle_client_certificate_request(
             title="Client Certificate Error",
         )
         return
+    owner.post_message(ClientCertificatesModified())
     owner.post_message(OpenLocation(location, allow_cached=False))
 
 
