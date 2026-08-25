@@ -45,11 +45,12 @@ def _name(certificate: ClientCertificate) -> str:
 class CertificateOption(Option):
     """An option for the client certificate manager."""
 
-    def __init__(self, certificate: ClientCertificate) -> None:
+    def __init__(self, certificate: ClientCertificate, with_spacer: bool) -> None:
         """Initialise the certificate option.
 
         Args:
             certificate: The certificate to display.
+            with_spacer: Whether to add a spacer after the option.
         """
         self._certificate = certificate
         """The certificate to display."""
@@ -62,6 +63,7 @@ class CertificateOption(Option):
             f"{escape(_name(certificate))}\n"
             f"{scopes}\n"
             f"[dim][bold]Expires[/bold]: {certificate.not_after}[/]"
+            f"{'\n' if with_spacer else ''}",
         )
 
     @property
@@ -134,8 +136,13 @@ class ClientCertificateManager(EnhancedOptionList):
     async def _load_certificates(self) -> None:
         """Load the client certificates into the widget."""
         with self.preserved_highlight:
+            certificates = sorted(
+                await self._client.client_cert_store.list_certificates(),
+                key=lambda certificate: _name(certificate).casefold(),
+            )
+            with_spacer = bool(certificates)
             self.clear_options().add_options(
-                CertificateOption(certificate)
+                CertificateOption(certificate, with_spacer)
                 for certificate in sorted(
                     await self._client.client_cert_store.list_certificates(),
                     key=lambda certificate: _name(certificate).casefold(),
