@@ -19,11 +19,12 @@ from textual_enhanced.widgets import EnhancedOptionList
 
 ##############################################################################
 # Wasat imports.
-from wasat import Client, ClientCertificate, GeminiURI, URIError
+from wasat import ClientCertificate, ClientCertificateStore, GeminiURI, URIError
 
 ##############################################################################
 # Local imports.
 from ..data import Bookmarks, LocationHistory, NavigationHistory
+from ..messages import ClientCertificatesModified
 from ..safe_escape import escape
 from ..screens.certificate import ClientCertificateMaker
 from ..screens.scope_picker import ScopePicker
@@ -129,41 +130,34 @@ class ClientCertificateManager(EnhancedOptionList):
     """The history of navigation through locations."""
     bookmarks: var[Bookmarks] = var(list)
     """The bookmarks for the application."""
+    client_certificates: var[list[ClientCertificate]] = var(list)
+    """The client certificates for the application."""
 
-    def __init__(self, client: Client) -> None:
+    def __init__(self, store: ClientCertificateStore) -> None:
         """Initialize the client certificate manager widget."""
         super().__init__()
-        self._client = client
-        """The client for which to manage certificates."""
+        self._store = store
+        """The client certificate store."""
 
-    def on_mount(self) -> None:
-        """Called when the widget is mounted."""
-        self.call_next(self._load_certificates)
-
-    async def _load_certificates(self) -> None:
+    async def _watch_client_certificates(self) -> None:
         """Load the client certificates into the widget."""
         with self.preserved_highlight:
             certificates = sorted(
-                await self._client.client_cert_store.list_certificates(),
+                self.client_certificates,
                 key=lambda certificate: _name(certificate).casefold(),
             )
             with_spacer = bool(certificates)
             self.clear_options().add_options(
                 CertificateOption(certificate, with_spacer)
-                for certificate in sorted(
-                    await self._client.client_cert_store.list_certificates(),
-                    key=lambda certificate: _name(certificate).casefold(),
-                )
+                for certificate in certificates
             )
 
     @work
     async def action_new(self) -> None:
         """Add a new certificate."""
         if data := await self.app.push_screen_wait(ClientCertificateMaker()):
-            certificate = await self._client.client_cert_store.create_certificate(
-                **data
-            )
-            await self._load_certificates()
+            certificate = await self._store.create_certificate(**data)
+            self.post_message(ClientCertificatesModified())
             self.notify(escape(_name(certificate)), title="Added")
 
     @work
@@ -179,8 +173,8 @@ class ClientCertificateManager(EnhancedOptionList):
                 )
             )
         ):
-            await self._client.client_cert_store.delete_certificate(option.certificate)
-            await self._load_certificates()
+            await self._store.delete_certificate(option.certificate)
+            self.post_message(ClientCertificatesModified())
             self.notify(escape(_name(option.certificate)), title="Deleted")
 
     async def _history_suggester(self) -> SuggestFromList:
@@ -203,7 +197,7 @@ class ClientCertificateManager(EnhancedOptionList):
                     # ...minus those that are already associated with a certificate.
                     - {
                         str(GeminiURI.with_default_scheme(scope))
-                        for certificate in await self._client.client_cert_store.list_certificates()
+                        for certificate in await self._store.list_certificates()
                         for scope in certificate.scopes
                     }
                 ),
@@ -227,10 +221,10 @@ class ClientCertificateManager(EnhancedOptionList):
             )
         ):
             try:
-                await self._client.client_cert_store.associate_scope(
+                await self._store.associate_scope(
                     option.certificate, GeminiURI(location)
                 )
-                await self._load_certificates()
+                self.post_message(ClientCertificatesModified())
                 self.notify(f"Association added for {location}", title="Added")
             except (RuntimeError, URIError, ValueError) as error:
                 self.notify(
@@ -283,8 +277,8 @@ class ClientCertificateManager(EnhancedOptionList):
             )
         ):
             try:
-                await self._client.client_cert_store.disassociate_scope(location)
-                await self._load_certificates()
+                await self._store.disassociate_scope(location)
+                self.post_message(ClientCertificatesModified())
                 self.notify(f"Association removed for {location}", title="Removed")
             except RuntimeError as error:
                 self.notify(

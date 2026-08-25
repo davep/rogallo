@@ -37,7 +37,7 @@ from textual_fspicker import FileOpen, FileSave, Filters
 
 ##############################################################################
 # Wasat imports.
-from wasat import GeminiURI
+from wasat import ClientCertificate, GeminiURI
 
 ##############################################################################
 # Local imports.
@@ -101,7 +101,12 @@ from ...data import (
     update_configuration,
 )
 from ...input_content import InputContent
-from ...messages import OpenFromFileSystem, OpenLocation, OpenURI
+from ...messages import (
+    ClientCertificatesModified,
+    OpenFromFileSystem,
+    OpenLocation,
+    OpenURI,
+)
 from ...preflight import has_navigable_path
 from ...providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
 from ...types import GEMINI_EXTENSIONS, SpartanURINeedingData
@@ -275,6 +280,8 @@ class Main(EnhancedScreen[None]):
     """The command line history."""
     _bookmarks: var[Bookmarks] = var(list)
     """The bookmarks."""
+    _client_certificates: var[list[ClientCertificate]] = var(list)
+    """The client certificates."""
 
     _history_visible: var[bool] = var(False, toggle_class="--show-history")
     """Is the history panel visible?"""
@@ -326,10 +333,13 @@ class Main(EnhancedScreen[None]):
                     yield BookmarksViewer().data_bind(bookmarks=Main._bookmarks)
                 with VerticalGroup(id="client-certificates"):
                     yield Label("Client Certificates")
-                    yield ClientCertificateManager(self._clients.gemini).data_bind(
+                    yield ClientCertificateManager(
+                        self._clients.gemini.client_cert_store
+                    ).data_bind(
                         bookmarks=Main._bookmarks,
                         location_history=Main._location_history,
                         navigation_history=Main._navigation_history,
+                        client_certificates=Main._client_certificates,
                     )
             yield CommandLine().data_bind(
                 history=Main._command_history,
@@ -351,6 +361,9 @@ class Main(EnhancedScreen[None]):
         self._location_history = load_location_history()
         self._navigation_history = load_navigation_history()
         self._bookmarks = load_bookmarks()
+        self._client_certificates = (
+            await self._clients.gemini.client_cert_store.list_certificates()
+        )
         config = load_configuration()
         self._command_line.dock_top = config.command_line_on_top
         if self._clients.gemini.trust_store:
@@ -659,6 +672,13 @@ class Main(EnhancedScreen[None]):
         """
         self.mutate_reactive(Main._bookmarks)
         save_bookmarks(self._bookmarks)
+
+    @on(ClientCertificatesModified)
+    async def _refresh_known_client_certificates(self) -> None:
+        """Refresh the known client certificates when they are modified."""
+        self._client_certificates = (
+            await self._clients.gemini.client_cert_store.list_certificates()
+        )
 
     @on(CopyToClipboard)
     def _copy_text_to_clipboard(self, message: CopyToClipboard) -> None:

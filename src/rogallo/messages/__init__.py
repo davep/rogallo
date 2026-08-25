@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Local imports.
+from .certificates import ClientCertificatesModified
 from .opening import (
     OpenFromFileSystem,
     OpenLocation,
@@ -11,6 +12,7 @@ from .opening import (
 ##############################################################################
 # Exports.
 __all__ = [
+    "ClientCertificatesModified",
     "OpenFromFileSystem",
     "OpenLocation",
     "OpenURI",
