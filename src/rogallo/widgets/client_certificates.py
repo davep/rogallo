@@ -241,7 +241,7 @@ class ClientCertificateManager(EnhancedOptionList):
         ):
             try:
                 await self._store.associate_scope(
-                    option.certificate, GeminiURI(location)
+                    option.certificate, GeminiURI.with_default_scheme(location)
                 )
                 self.post_message(ClientCertificatesModified())
                 self.notify(f"Association added for {location}", title="Added")
