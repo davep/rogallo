@@ -25,12 +25,10 @@ from .ui import (
     JumpToSidebar,
     StripeLinks,
     ToggleANSIEscapeSequenceHandling,
-    ToggleBookmarksManager,
-    ToggleClientCertificateManager,
     ToggleCosyLinkNumbers,
     ToggleEmojiRemoval,
-    ToggleHistoryManager,
     ToggleLinkNumbers,
+    ToggleSidebar,
 )
 
 ##############################################################################
@@ -61,12 +59,10 @@ __all__ = [
     "SetHomeToCurrentLocation",
     "StripeLinks",
     "ToggleANSIEscapeSequenceHandling",
-    "ToggleBookmarksManager",
-    "ToggleClientCertificateManager",
     "ToggleCosyLinkNumbers",
     "ToggleEmojiRemoval",
-    "ToggleHistoryManager",
     "ToggleLinkNumbers",
+    "ToggleSidebar",
     "ToggleView",
     "ViewChangeLog",
 ]

@@ -1,5 +1,18 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added a client certificate management interface.
+  ([#373](https://github.com/davep/rogallo/pull/373))
+- Removed the `ToggleHistoryManager` command.
+  ([#373](https://github.com/davep/rogallo/pull/373))
+- Removed the `ToggleBookmarksManager` command.
+  ([#373](https://github.com/davep/rogallo/pull/373))
+- Added a tabbed sidebar to contain the bookmarks, history and new client
+  certificate manager. ([#373](https://github.com/davep/rogallo/pull/373))
+
 ## v1.12.1
 
 **Released: 2026-08-24**

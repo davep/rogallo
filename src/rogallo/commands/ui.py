@@ -34,24 +34,10 @@ class ChangeCommandLineLocation(Command):
 
 
 ##############################################################################
-class ToggleHistoryManager(Command):
-    """Toggle the display of the history viewer"""
+class ToggleSidebar(Command):
+    """Toggle the visibility of the sidebar"""
 
-    BINDING_KEY = "shift+f2"
-
-
-##############################################################################
-class ToggleBookmarksManager(Command):
-    """Toggle the display of the bookmarks viewer"""
-
-    BINDING_KEY = "shift+f3"
-
-
-##############################################################################
-class ToggleClientCertificateManager(Command):
-    """Toggle the display of the client certificate manager"""
-
-    BINDING_KEY = "shift+f4"
+    BINDING_KEY = "ctrl+l"
 
 
 ##############################################################################

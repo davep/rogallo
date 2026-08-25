@@ -2,7 +2,11 @@
 
 ##############################################################################
 # Local imports.
-from .certificates import ClientCertificatesModified
+from .data_modification import (
+    BookmarksModified,
+    ClientCertificatesModified,
+    HistoryModified,
+)
 from .opening import (
     OpenFromFileSystem,
     OpenLocation,
@@ -12,7 +16,9 @@ from .opening import (
 ##############################################################################
 # Exports.
 __all__ = [
+    "BookmarksModified",
     "ClientCertificatesModified",
+    "HistoryModified",
     "OpenFromFileSystem",
     "OpenLocation",
     "OpenURI",

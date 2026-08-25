@@ -42,14 +42,11 @@ class Configuration:
     strip_emoji: bool = False
     """Should emoji be stripped from text content?"""
 
-    history_visible: bool = False
-    """Should the history panel be visible by default?"""
+    sidepanel_visible: bool = False
+    """Should the sidepanel be visible?"""
 
-    bookmarks_visible: bool = False
-    """Should the bookmarks panel be visible by default?"""
-
-    client_certificates_visible: bool = False
-    """Should the certificate manager panel be visible by default?"""
+    sidepanel_on_right: bool = False
+    """Should the sidepanel be on the right?"""
 
     show_link_tooltips: bool = True
     """Should tooltips be shown for links?"""

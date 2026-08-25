@@ -21,7 +21,7 @@ from textual.containers import HorizontalGroup, VerticalGroup
 from textual.getters import query_one
 from textual.reactive import var
 from textual.suggester import SuggestFromList
-from textual.widgets import Footer, Label
+from textual.widgets import Footer
 from textual.worker import get_current_worker
 
 ##############################################################################
@@ -70,12 +70,10 @@ from ...commands import (
     SetHomeToCurrentLocation,
     StripeLinks,
     ToggleANSIEscapeSequenceHandling,
-    ToggleBookmarksManager,
-    ToggleClientCertificateManager,
     ToggleCosyLinkNumbers,
     ToggleEmojiRemoval,
-    ToggleHistoryManager,
     ToggleLinkNumbers,
+    ToggleSidebar,
     ToggleView,
     ViewChangeLog,
 )
@@ -102,7 +100,9 @@ from ...data import (
 )
 from ...input_content import InputContent
 from ...messages import (
+    BookmarksModified,
     ClientCertificatesModified,
+    HistoryModified,
     OpenFromFileSystem,
     OpenLocation,
     OpenURI,
@@ -111,10 +111,8 @@ from ...preflight import has_navigable_path
 from ...providers import BookmarkSearchCommands, HistorySearchCommands, MainCommands
 from ...types import GEMINI_EXTENSIONS, SpartanURINeedingData
 from ...widgets import (
-    BookmarksViewer,
-    ClientCertificateManager,
     CommandLine,
-    HistoryViewer,
+    SidePanel,
     Toolbar,
     Viewer,
 )
@@ -186,26 +184,10 @@ class Main(EnhancedScreen[None]):
             }
         }
 
-        #history, #bookmarks, #client-certificates {
-            width: 30%;
+        SidePanel {
             display: none;
-            Label {
-                padding: 0 1;
-                text-align: right;
-                background: $panel;
-                width: 1fr;
-            }
         }
-
-        &.--show-history #history {
-            display: block;
-        }
-
-        &.--show-bookmarks #bookmarks {
-            display: block;
-        }
-
-        &.--show-client-certificates #client-certificates {
+        &.--side-panel SidePanel {
             display: block;
         }
     }
@@ -247,12 +229,10 @@ class Main(EnhancedScreen[None]):
         SetHomeToCurrentLocation,
         StripeLinks,
         ToggleANSIEscapeSequenceHandling,
-        ToggleBookmarksManager,
-        ToggleClientCertificateManager,
         ToggleCosyLinkNumbers,
         ToggleEmojiRemoval,
-        ToggleHistoryManager,
         ToggleLinkNumbers,
+        ToggleSidebar,
         ToggleView,
         ViewChangeLog,
     ]
@@ -265,12 +245,8 @@ class Main(EnhancedScreen[None]):
     """The viewer widget."""
     _command_line = query_one(CommandLine)
     """The command line widget."""
-    _history_viewer = query_one(HistoryViewer)
-    """The history viewer widget."""
-    _bookmarks_viewer = query_one(BookmarksViewer)
-    """The bookmarks viewer widget."""
-    _client_certificates_manager = query_one(ClientCertificateManager)
-    """The client certificates manager widget."""
+    _sidepanel = query_one(SidePanel)
+    """The side panel widget."""
 
     _location_history: var[LocationHistory] = var(LocationHistory)
     """The location history."""
@@ -282,15 +258,8 @@ class Main(EnhancedScreen[None]):
     """The bookmarks."""
     _client_certificates: var[list[ClientCertificate]] = var(list)
     """The client certificates."""
-
-    _history_visible: var[bool] = var(False, toggle_class="--show-history")
-    """Is the history panel visible?"""
-    _bookmarks_visible: var[bool] = var(False, toggle_class="--show-bookmarks")
-    """Is the bookmarks panel visible?"""
-    _client_certificates_visible: var[bool] = var(
-        False, toggle_class="--show-client-certificates"
-    )
-    """Is the client certificates panel visible?"""
+    _sidepanel_visible: var[bool] = var(False, toggle_class="--side-panel")
+    """Whether the side panel is visible."""
 
     def __init__(self, arguments: Namespace) -> None:
         """Initialize the main screen.
@@ -312,6 +281,11 @@ class Main(EnhancedScreen[None]):
         self._clients = Clients.create()
         """The clients for the supported protocols."""
 
+    def _watch__sidepanel_visible(self) -> None:
+        """Watch for changes to the side panel visibility."""
+        with update_configuration() as config:
+            config.sidepanel_visible = self._sidepanel_visible
+
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
         with VerticalGroup():
@@ -325,22 +299,12 @@ class Main(EnhancedScreen[None]):
                 )
             with Workspace():
                 yield Viewer().data_bind(location_history=Main._location_history)
-                with VerticalGroup(id="history"):
-                    yield Label("History")
-                    yield HistoryViewer().data_bind(history=Main._location_history)
-                with VerticalGroup(id="bookmarks"):
-                    yield Label("Bookmarks")
-                    yield BookmarksViewer().data_bind(bookmarks=Main._bookmarks)
-                with VerticalGroup(id="client-certificates"):
-                    yield Label("Client Certificates")
-                    yield ClientCertificateManager(
-                        self._clients.gemini.client_cert_store
-                    ).data_bind(
-                        bookmarks=Main._bookmarks,
-                        location_history=Main._location_history,
-                        navigation_history=Main._navigation_history,
-                        client_certificates=Main._client_certificates,
-                    )
+                yield SidePanel(self._clients.gemini.client_cert_store).data_bind(
+                    bookmarks=Main._bookmarks,
+                    client_certificates=Main._client_certificates,
+                    location_history=Main._location_history,
+                    navigation_history=Main._navigation_history,
+                )
             yield CommandLine().data_bind(
                 history=Main._command_history,
                 location_history=Main._location_history,
@@ -365,6 +329,8 @@ class Main(EnhancedScreen[None]):
             await self._clients.gemini.client_cert_store.list_certificates()
         )
         config = load_configuration()
+        self._sidepanel_visible = config.sidepanel_visible
+        self._sidepanel.dock_right = config.sidepanel_on_right
         self._command_line.dock_top = config.command_line_on_top
         if self._clients.gemini.trust_store:
             self._command_line.known_hosts = [
@@ -372,9 +338,6 @@ class Main(EnhancedScreen[None]):
                 for host, port in await self._clients.gemini.trust_store.get_hosts()
             ]
             HistorySearchCommands.known_hosts = self._command_line.known_hosts
-        self._history_visible = config.history_visible
-        self._bookmarks_visible = config.bookmarks_visible
-        self._client_certificates_visible = config.client_certificates_visible
         self._viewer.stripe_links = config.stripe_links
         self._viewer.with_link_numbers = config.with_link_jumps
         self._viewer.handle_ansi_escape_sequences = config.handle_ansi_escape_sequences
@@ -444,8 +407,6 @@ class Main(EnhancedScreen[None]):
             return self._navigation_history.can_go_backward or None
         if action == Forward.action_name():
             return self._navigation_history.can_go_forward or None
-        if action == ToggleHistoryManager.action_name():
-            return len(self._location_history) > 0 or None
         if action == SearchHistory.action_name():
             return (
                 len(self._location_history) > 0
@@ -453,10 +414,7 @@ class Main(EnhancedScreen[None]):
                 or len(HistorySearchCommands.known_hosts) > 0
                 or None
             )
-        if action in (
-            ToggleBookmarksManager.action_name(),
-            SearchBookmarks.action_name(),
-        ):
+        if action == SearchBookmarks.action_name():
             return len(self._bookmarks) > 0 or None
         if action in (
             CopyLocationToClipboard.action_name(),
@@ -653,7 +611,7 @@ class Main(EnhancedScreen[None]):
         self.mutate_reactive(Main._command_history)
         save_command_history(message.command_line.history)
 
-    @on(HistoryViewer.HistoryModified)
+    @on(HistoryModified)
     def _save_location_history(self) -> None:
         """Save the location history when it is modified.
 
@@ -663,7 +621,7 @@ class Main(EnhancedScreen[None]):
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
 
-    @on(BookmarksViewer.BookmarksModified)
+    @on(BookmarksModified)
     def _save_bookmarks(self) -> None:
         """Save the bookmarks when they are modified.
 
@@ -737,13 +695,16 @@ class Main(EnhancedScreen[None]):
 
     def action_jump_to_sidebar_command(self) -> None:
         """Jump to the sidebar."""
-        if self._history_visible:
-            self._history_viewer.focus()
-        elif self._bookmarks_visible:
-            self._bookmarks_viewer.focus()
-        else:
-            self._history_visible = True
-            self._history_viewer.focus()
+        if self.screen.focused and (self._sidepanel in self.screen.focused.ancestors):
+            self._sidepanel_visible = False
+            return
+        if not self._sidepanel_visible:
+            self._sidepanel_visible = True
+        self._sidepanel.focus()
+
+    def action_toggle_sidebar_command(self) -> None:
+        """Toggle the sidebar."""
+        self._sidepanel_visible = not self._sidepanel_visible
 
     def action_backward_command(self) -> None:
         """Go backward in the navigation history."""
@@ -769,71 +730,6 @@ class Main(EnhancedScreen[None]):
                 )
             )
             self._navigation_changed()
-
-    def action_toggle_history_manager_command(self) -> None:
-        """Toggle the visibility of the history manager panel."""
-        if self._history_visible:
-            self._history_visible = not self._history_viewer.has_focus
-        else:
-            self._history_visible = True
-        if self._history_visible:
-            self._history_viewer.focus()
-        else:
-            self._viewer.take_control()
-        if self._history_visible:
-            if self._bookmarks_visible:
-                self._bookmarks_visible = False
-            if self._client_certificates_visible:
-                self._client_certificates_visible = False
-
-    def action_toggle_bookmarks_manager_command(self) -> None:
-        """Toggle the visibility of the bookmarks manager panel."""
-        if self._bookmarks_visible:
-            self._bookmarks_visible = not self._bookmarks_viewer.has_focus
-        else:
-            self._bookmarks_visible = True
-        if self._bookmarks_visible:
-            self._bookmarks_viewer.focus()
-        else:
-            self._viewer.take_control()
-        if self._bookmarks_visible:
-            if self._history_visible:
-                self._history_visible = False
-            if self._client_certificates_visible:
-                self._client_certificates_visible = False
-
-    def action_toggle_client_certificate_manager_command(self) -> None:
-        """Toggle the client certificate manager."""
-        if self._client_certificates_visible:
-            self._client_certificates_visible = (
-                not self._client_certificates_manager.has_focus
-            )
-        else:
-            self._client_certificates_visible = True
-        if self._client_certificates_visible:
-            self._client_certificates_manager.focus()
-        else:
-            self._viewer.take_control()
-        if self._client_certificates_visible:
-            if self._history_visible:
-                self._history_visible = False
-            if self._bookmarks_visible:
-                self._bookmarks_visible = False
-
-    def _watch__history_visible(self) -> None:
-        """Watch for changes to the history visibility."""
-        with update_configuration() as config:
-            config.history_visible = self._history_visible
-
-    def _watch__bookmarks_visible(self) -> None:
-        """Watch for changes to the bookmarks visibility."""
-        with update_configuration() as config:
-            config.bookmarks_visible = self._bookmarks_visible
-
-    def _watch__client_certificates_visible(self) -> None:
-        """Watch for changes to the client certificates visibility."""
-        with update_configuration() as config:
-            config.client_certificates_visible = self._client_certificates_visible
 
     def action_reload_command(self) -> None:
         """Reload the current document."""

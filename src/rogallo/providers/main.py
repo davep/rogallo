@@ -38,12 +38,10 @@ from ..commands import (
     SetHomeToCurrentLocation,
     StripeLinks,
     ToggleANSIEscapeSequenceHandling,
-    ToggleBookmarksManager,
-    ToggleClientCertificateManager,
     ToggleCosyLinkNumbers,
     ToggleEmojiRemoval,
-    ToggleHistoryManager,
     ToggleLinkNumbers,
+    ToggleSidebar,
     ToggleView,
     ViewChangeLog,
 )
@@ -87,12 +85,10 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(SetHomeToCurrentLocation)
         yield StripeLinks()
         yield ToggleANSIEscapeSequenceHandling()
-        yield from self.maybe(ToggleBookmarksManager)
-        yield ToggleClientCertificateManager()
         yield ToggleCosyLinkNumbers()
         yield ToggleEmojiRemoval()
-        yield from self.maybe(ToggleHistoryManager)
         yield ToggleLinkNumbers()
+        yield ToggleSidebar()
         yield from self.maybe(ToggleView)
         yield ViewChangeLog()
 

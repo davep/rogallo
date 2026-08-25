@@ -23,11 +23,11 @@ from wasat import ClientCertificate, ClientCertificateStore, GeminiURI, URIError
 
 ##############################################################################
 # Local imports.
-from ..data import Bookmarks, LocationHistory, NavigationHistory
-from ..messages import ClientCertificatesModified
-from ..safe_escape import escape
-from ..screens.certificate import ClientCertificateMaker
-from ..screens.scope_picker import ScopePicker
+from ...data import Bookmarks, LocationHistory, NavigationHistory
+from ...messages import ClientCertificatesModified
+from ...safe_escape import escape
+from ...screens.certificate import ClientCertificateMaker
+from ...screens.scope_picker import ScopePicker
 
 
 ##############################################################################
@@ -90,8 +90,6 @@ class ClientCertificateManager(EnhancedOptionList):
         }
     }
     """
-
-    DEFAULT_CLASSES = "panel"
 
     HELP = """
     ## Client certificates
