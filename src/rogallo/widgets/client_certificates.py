@@ -26,6 +26,7 @@ from wasat import Client, ClientCertificate, GeminiURI, URIError
 from ..data import Bookmarks, LocationHistory, NavigationHistory
 from ..safe_escape import escape
 from ..screens.certificate import ClientCertificateMaker
+from ..screens.scope_picker import ScopePicker
 
 
 ##############################################################################
@@ -113,6 +114,12 @@ class ClientCertificateManager(EnhancedOptionList):
             "add_association",
             "Associate",
             tooltip="Add an association to the selected certificate",
+        ),
+        HelpfulBinding(
+            "r",
+            "remove_association",
+            "Disassociate",
+            tooltip="Remove an association from the selected certificate",
         ),
     ]
 
@@ -228,6 +235,60 @@ class ClientCertificateManager(EnhancedOptionList):
             except (RuntimeError, URIError, ValueError) as error:
                 self.notify(
                     f"Unable to add association for {location}:\n\n{error}",
+                    severity="error",
+                    title="Error",
+                )
+
+    @work
+    async def action_remove_association(self) -> None:
+        """Remove an association from the selected certificate."""
+        # GTFO if there's no scope to remove.
+        if (
+            self.highlighted is None
+            or not isinstance(
+                option := self.options[self.highlighted], CertificateOption
+            )
+            or len(option.certificate.scopes) == 0
+        ):
+            return
+
+        # If there's only one scope, use that. If there are multiple scopes,
+        # ask the user to pick one. If there are no scopes, do nothing.
+        location = (
+            option.certificate.scopes[0]
+            if len(option.certificate.scopes) == 1
+            else (
+                (
+                    await self.app.push_screen_wait(
+                        ScopePicker(
+                            option.certificate,
+                            "Remove scope",
+                        )
+                    )
+                )
+                if len(option.certificate.scopes) > 1
+                else option.certificate.scopes[0]
+            )
+        )
+
+        # Give up if we didn't get a scope.
+        if location is None:
+            return
+
+        # Confirm they really want to remove the association.
+        if await self.app.push_screen_wait(
+            Confirm(
+                "Remove association?",
+                f"Are you sure you want to remove the association for '{escape(location)}'?",
+            )
+        ):
+            try:
+                await self._client.client_cert_store.disassociate_scope(location)
+                await self._load_certificates()
+                self.notify(f"Association removed for {location}", title="Removed")
+            except RuntimeError as error:
+                self.notify(
+                    f"Unable to remove association for {location}:\n\n{error}",
                     severity="error",
                     title="Error",
                 )
