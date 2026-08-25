@@ -19,7 +19,11 @@ class Scope(Option):
     """An option for a scope."""
 
     def __init__(self, scope: str) -> None:
-        """Initialise the option."""
+        """Initialise the option.
+
+        Args:
+            scope: The scope to display.
+        """
         super().__init__(scope)
         self._scope = scope
         """The scope."""
