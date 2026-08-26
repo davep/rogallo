@@ -13,6 +13,10 @@ from textual.reactive import var
 from textual.widgets import TabbedContent, TabPane, Tabs
 
 ##############################################################################
+# Textual enhanced imports.
+from textual_enhanced.binding import HelpfulBinding
+
+##############################################################################
 # Wasat imports.
 from wasat import ClientCertificate, ClientCertificateStore
 
@@ -47,7 +51,29 @@ class SidePanel(Container):
 
     DEFAULT_CLASSES = "panel"
 
-    BINDINGS = [("escape", "bounce_out")]
+    BINDINGS = [
+        ("escape", "bounce_out"),
+        ("down", "dig_in"),
+        HelpfulBinding(
+            "ctrl+left",
+            "switch('previous_tab')",
+            tooltip="Move to the previous side panel tab",
+        ),
+        HelpfulBinding(
+            "ctrl+right",
+            "switch('next_tab')",
+            tooltip="Move to the next side panel tab",
+        ),
+    ]
+
+    HELP = """
+    ## The Side Panel
+
+    Here you can manage your bookmarks, your location history, and client
+    certificates.
+
+    ### Useful keys
+    """
 
     dock_right: var[bool] = var(False, toggle_class="--dock-right")
     """Should the panel dock to the right?"""
@@ -103,6 +129,18 @@ class SidePanel(Container):
             await self.screen.run_action("screen.jump_to_command_line_command")
         else:
             tabs.focus()
+
+    def action_dig_in(self) -> None:
+        """Dig focus into the side panel."""
+        if (active := self.query_one(TabbedContent).active_pane) is not None:
+            for widget in active.query("*"):
+                if widget.can_focus:
+                    widget.focus()
+                    return
+
+    async def action_switch(self, switcher: str) -> None:
+        await self.query_one(Tabs).run_action(switcher)
+        self.call_after_refresh(self.run_action, "dig_in")
 
 
 ### widget.py ends here
