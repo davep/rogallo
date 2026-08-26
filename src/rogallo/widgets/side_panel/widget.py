@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Python imports.
-from typing import Self
+from typing import Literal, Self
 
 ##############################################################################
 # Textual imports.
@@ -57,13 +57,15 @@ class SidePanel(Container):
         ("escape", "bounce_out"),
         ("enter, down, j", "dig_in"),
         HelpfulBinding(
-            "ctrl+left",
-            "switch('previous_tab')",
+            "ctrl+left, h, left",
+            "switch('previous')",
+            priority=True,
             tooltip="Move to the previous side panel tab",
         ),
         HelpfulBinding(
-            "ctrl+right",
-            "switch('next_tab')",
+            "ctrl+right, l, right",
+            "switch('next')",
+            priority=True,
             tooltip="Move to the next side panel tab",
         ),
     ]
@@ -143,9 +145,16 @@ class SidePanel(Container):
                     widget.focus()
                     return
 
-    async def action_switch(self, switcher: str) -> None:
-        await self.query_one(Tabs).run_action(switcher)
-        self.call_after_refresh(self.run_action, "dig_in")
+    async def action_switch(self, switcher: Literal["next", "previous"]) -> None:
+        """Switch the active tab in the side-panel.
+
+        Args:
+            switcher: The switcher to use. Can be `next` or `previous`.
+        """
+        dig_in = self.screen.focused != (tabs := self.query_one(Tabs))
+        await tabs.run_action(f"{switcher}_tab")
+        if dig_in:
+            self.call_after_refresh(self.run_action, "dig_in")
 
 
 ### widget.py ends here
