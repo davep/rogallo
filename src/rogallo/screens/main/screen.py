@@ -59,7 +59,7 @@ from ...commands import (
     HandOffToOperatingSystem,
     JumpToCommandLine,
     JumpToDocument,
-    JumpToSidebar,
+    JumpToSidePanel,
     OpenFile,
     PipeDocument,
     Reload,
@@ -73,7 +73,7 @@ from ...commands import (
     ToggleCosyLinkNumbers,
     ToggleEmojiRemoval,
     ToggleLinkNumbers,
-    ToggleSidebar,
+    ToggleSidePanel,
     ToggleView,
     ViewChangeLog,
 )
@@ -220,7 +220,7 @@ class Main(EnhancedScreen[None]):
         HandOffToOperatingSystem,
         JumpToCommandLine,
         JumpToDocument,
-        JumpToSidebar,
+        JumpToSidePanel,
         OpenFile,
         PipeDocument,
         Reload,
@@ -232,7 +232,7 @@ class Main(EnhancedScreen[None]):
         ToggleCosyLinkNumbers,
         ToggleEmojiRemoval,
         ToggleLinkNumbers,
-        ToggleSidebar,
+        ToggleSidePanel,
         ToggleView,
         ViewChangeLog,
     ]
@@ -245,7 +245,7 @@ class Main(EnhancedScreen[None]):
     """The viewer widget."""
     _command_line = query_one(CommandLine)
     """The command line widget."""
-    _sidepanel = query_one(SidePanel)
+    _side_panel = query_one(SidePanel)
     """The side panel widget."""
 
     _location_history: var[LocationHistory] = var(LocationHistory)
@@ -258,7 +258,7 @@ class Main(EnhancedScreen[None]):
     """The bookmarks."""
     _client_certificates: var[list[ClientCertificate]] = var(list)
     """The client certificates."""
-    _sidepanel_visible: var[bool] = var(False, toggle_class="--side-panel")
+    _side_panel_visible: var[bool] = var(False, toggle_class="--side-panel")
     """Whether the side panel is visible."""
 
     def __init__(self, arguments: Namespace) -> None:
@@ -284,7 +284,7 @@ class Main(EnhancedScreen[None]):
     def _watch__sidepanel_visible(self) -> None:
         """Watch for changes to the side panel visibility."""
         with update_configuration() as config:
-            config.sidepanel_visible = self._sidepanel_visible
+            config.side_panel_visible = self._side_panel_visible
 
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
@@ -329,8 +329,8 @@ class Main(EnhancedScreen[None]):
             await self._clients.gemini.client_cert_store.list_certificates()
         )
         config = load_configuration()
-        self._sidepanel_visible = config.sidepanel_visible
-        self._sidepanel.dock_right = config.sidepanel_on_right
+        self._side_panel_visible = config.side_panel_visible
+        self._side_panel.dock_right = config.side_panel_on_right
         self._command_line.dock_top = config.command_line_on_top
         if self._clients.gemini.trust_store:
             self._command_line.known_hosts = [
@@ -693,18 +693,18 @@ class Main(EnhancedScreen[None]):
         if self._viewer.document:
             self._viewer.take_control()
 
-    def action_jump_to_sidebar_command(self) -> None:
-        """Jump to the sidebar."""
-        if self.screen.focused and (self._sidepanel in self.screen.focused.ancestors):
-            self._sidepanel_visible = False
+    def action_jump_to_side_panel_command(self) -> None:
+        """Jump to the side panel."""
+        if self.screen.focused and (self._side_panel in self.screen.focused.ancestors):
+            self._side_panel_visible = False
             return
-        if not self._sidepanel_visible:
-            self._sidepanel_visible = True
-        self._sidepanel.focus()
+        if not self._side_panel_visible:
+            self._side_panel_visible = True
+        self._side_panel.focus()
 
-    def action_toggle_sidebar_command(self) -> None:
-        """Toggle the sidebar."""
-        self._sidepanel_visible = not self._sidepanel_visible
+    def action_toggle_side_panel_command(self) -> None:
+        """Toggle the side panel."""
+        self._side_panel_visible = not self._side_panel_visible
 
     def action_backward_command(self) -> None:
         """Go backward in the navigation history."""

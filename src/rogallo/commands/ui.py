@@ -20,8 +20,8 @@ class JumpToDocument(Command):
 
 
 ##############################################################################
-class JumpToSidebar(Command):
-    """Jump to the sidebar"""
+class JumpToSidePanel(Command):
+    """Jump to the side panel"""
 
     BINDING_KEY = "ctrl+3"
 
@@ -34,8 +34,8 @@ class ChangeCommandLineLocation(Command):
 
 
 ##############################################################################
-class ToggleSidebar(Command):
-    """Toggle the visibility of the sidebar"""
+class ToggleSidePanel(Command):
+    """Toggle the visibility of the side panel"""
 
     BINDING_KEY = "ctrl+l"
 

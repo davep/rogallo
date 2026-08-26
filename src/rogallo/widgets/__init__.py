@@ -3,7 +3,7 @@
 ##############################################################################
 # Local imports.
 from .command_line import CommandLine
-from .sidepanel import SidePanel
+from .side_panel import SidePanel
 from .toolbar import Toolbar
 from .viewer import Viewer
 

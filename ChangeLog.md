@@ -10,8 +10,10 @@
   ([#373](https://github.com/davep/rogallo/pull/373))
 - Removed the `ToggleBookmarksManager` command.
   ([#373](https://github.com/davep/rogallo/pull/373))
-- Added a tabbed sidebar to contain the bookmarks, history and new client
+- Added a tabbed side panel to contain the bookmarks, history and new client
   certificate manager. ([#373](https://github.com/davep/rogallo/pull/373))
+- Renamed the `JumpToSidebar` command to `JumpToSidePanel`.
+  ([#373](https://github.com/davep/rogallo/pull/373))
 
 ## v1.12.1
 

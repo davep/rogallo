@@ -42,10 +42,10 @@ class Configuration:
     strip_emoji: bool = False
     """Should emoji be stripped from text content?"""
 
-    sidepanel_visible: bool = False
+    side_panel_visible: bool = False
     """Should the sidepanel be visible?"""
 
-    sidepanel_on_right: bool = False
+    side_panel_on_right: bool = False
     """Should the sidepanel be on the right?"""
 
     show_link_tooltips: bool = True

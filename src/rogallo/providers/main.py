@@ -27,7 +27,7 @@ from ..commands import (
     HandOffToOperatingSystem,
     JumpToCommandLine,
     JumpToDocument,
-    JumpToSidebar,
+    JumpToSidePanel,
     OpenFile,
     PipeDocument,
     Reload,
@@ -41,7 +41,7 @@ from ..commands import (
     ToggleCosyLinkNumbers,
     ToggleEmojiRemoval,
     ToggleLinkNumbers,
-    ToggleSidebar,
+    ToggleSidePanel,
     ToggleView,
     ViewChangeLog,
 )
@@ -73,7 +73,7 @@ class MainCommands(CommandsProvider):
         yield Help()
         yield from self.maybe(JumpToCommandLine)
         yield from self.maybe(JumpToDocument)
-        yield JumpToSidebar()
+        yield JumpToSidePanel()
         yield OpenFile()
         yield from self.maybe(PipeDocument)
         yield Quit()
@@ -88,7 +88,7 @@ class MainCommands(CommandsProvider):
         yield ToggleCosyLinkNumbers()
         yield ToggleEmojiRemoval()
         yield ToggleLinkNumbers()
-        yield ToggleSidebar()
+        yield ToggleSidePanel()
         yield from self.maybe(ToggleView)
         yield ViewChangeLog()
 

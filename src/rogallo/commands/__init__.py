@@ -22,13 +22,13 @@ from .ui import (
     ChangeCommandLineLocation,
     JumpToCommandLine,
     JumpToDocument,
-    JumpToSidebar,
+    JumpToSidePanel,
     StripeLinks,
     ToggleANSIEscapeSequenceHandling,
     ToggleCosyLinkNumbers,
     ToggleEmojiRemoval,
     ToggleLinkNumbers,
-    ToggleSidebar,
+    ToggleSidePanel,
 )
 
 ##############################################################################
@@ -48,7 +48,7 @@ __all__ = [
     "HandOffToOperatingSystem",
     "JumpToCommandLine",
     "JumpToDocument",
-    "JumpToSidebar",
+    "JumpToSidePanel",
     "OpenFile",
     "PipeDocument",
     "Reload",
@@ -62,7 +62,7 @@ __all__ = [
     "ToggleCosyLinkNumbers",
     "ToggleEmojiRemoval",
     "ToggleLinkNumbers",
-    "ToggleSidebar",
+    "ToggleSidePanel",
     "ToggleView",
     "ViewChangeLog",
 ]
