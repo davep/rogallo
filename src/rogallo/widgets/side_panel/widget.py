@@ -55,7 +55,7 @@ class SidePanel(Container):
 
     BINDINGS = [
         ("escape", "bounce_out"),
-        ("down", "dig_in"),
+        ("enter, down", "dig_in"),
         HelpfulBinding(
             "ctrl+left",
             "switch('previous_tab')",
