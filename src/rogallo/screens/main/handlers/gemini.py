@@ -28,7 +28,7 @@ from ....input_content import InputContent
 from ....messages import ClientCertificatesModified, OpenLocation
 from ....mime_checks import is_displayable_mime_type
 from ....text_decoder import decode_text
-from ...certificate import LocationSpecificClientCertificateMaker
+from ...certificate_maker import LocationSpecificClientCertificateMaker
 from ...user_input import UserInput
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
 

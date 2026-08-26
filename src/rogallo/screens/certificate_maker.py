@@ -1,4 +1,4 @@
-"""Provides a dialog for setting the values of a certificate."""
+"""Provides dialogs for getting details needed to make client certificates."""
 
 ##############################################################################
 # Python imports.
@@ -282,4 +282,4 @@ class ClientCertificateMaker(BaseCertificateMaker):
         )
 
 
-### certificate.py ends here
+### certificate_maker.py ends here

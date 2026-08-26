@@ -27,7 +27,7 @@ from ...data import Bookmarks, LocationHistory, NavigationHistory
 from ...document import Document
 from ...messages import ClientCertificatesModified
 from ...safe_escape import escape
-from ...screens.certificate import ClientCertificateMaker
+from ...screens.certificate_maker import ClientCertificateMaker
 from ...screens.scope_picker import ScopePicker
 
 
