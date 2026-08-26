@@ -24,6 +24,7 @@ from wasat import ClientCertificate, ClientCertificateStore
 # Local imports.
 from ...commands import JumpToCommandLine
 from ...data import Bookmarks, LocationHistory, NavigationHistory
+from ...document import Document
 from .bookmarks import BookmarksViewer
 from .client_certificates import ClientCertificateManager
 from .history import HistoryViewer
@@ -87,6 +88,8 @@ class SidePanel(Container):
     """The bookmarks for the application."""
     client_certificates: var[list[ClientCertificate]] = var(list)
     """The client certificates for the application."""
+    current_document: var[Document] = var(Document)
+    """The current document being viewed."""
 
     _tabs = query_one(TabbedContent)
     """The tabbed content widget."""
@@ -114,6 +117,7 @@ class SidePanel(Container):
                 ).data_bind(
                     bookmarks=SidePanel.bookmarks,
                     client_certificates=SidePanel.client_certificates,
+                    current_document=SidePanel.current_document,
                     location_history=SidePanel.location_history,
                     navigation_history=SidePanel.navigation_history,
                 )

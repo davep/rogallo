@@ -24,6 +24,7 @@ from wasat import ClientCertificate, ClientCertificateStore, GeminiURI, URIError
 ##############################################################################
 # Local imports.
 from ...data import Bookmarks, LocationHistory, NavigationHistory
+from ...document import Document
 from ...messages import ClientCertificatesModified
 from ...safe_escape import escape
 from ...screens.certificate import ClientCertificateMaker
@@ -130,6 +131,7 @@ class ClientCertificateManager(EnhancedOptionList):
     """The bookmarks for the application."""
     client_certificates: var[list[ClientCertificate]] = var(list)
     """The client certificates for the application."""
+    current_document: var[Document] = var(Document)
 
     def __init__(self, store: ClientCertificateStore) -> None:
         """Initialize the client certificate manager widget."""
@@ -221,6 +223,19 @@ class ClientCertificateManager(EnhancedOptionList):
             ]
         )
 
+    def _infer_default_association(self) -> str:
+        """Infer a default association for the selected certificate.
+
+        Returns:
+            The default association, or an empty string if none can be inferred.
+        """
+        if (
+            isinstance(self.current_document.location, GeminiURI)
+            and not self.current_document.needed_certificate
+        ):
+            return str(self.current_document.location.with_path(None))
+        return ""
+
     @work
     async def action_add_association(self) -> None:
         """Add an association to the selected certificate."""
@@ -231,6 +246,7 @@ class ClientCertificateManager(EnhancedOptionList):
                 location := await self.app.push_screen_wait(
                     ModalInput(
                         "Enter the location to associate with this certificate (e.g. gemini://example.com):",
+                        initial=self._infer_default_association(),
                         title="Add Association",
                         suggester=await self._history_suggester(),
                     )

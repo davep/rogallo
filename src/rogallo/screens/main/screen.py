@@ -474,6 +474,7 @@ class Main(EnhancedScreen[None]):
             message: The message containing the document that was loaded.
         """
         self.refresh_bindings()
+        self._side_panel.current_document = self._viewer.document
         self._viewer.take_control()
         if self._navigation_history.current_item:
             self._viewer.jump = self._navigation_history.current_item.focused_link
