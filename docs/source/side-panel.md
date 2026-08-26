@@ -1,4 +1,4 @@
-# The sidebar
+# The side panel
 
 ## Introduction
 
@@ -54,4 +54,4 @@ would prefer that it's on the right side, you can modify the
 
 Set it to `true` to position the side panel on the right.
 
-[//]: # (sidebar.md ends here)
+[//]: # (side-panel.md ends here)
