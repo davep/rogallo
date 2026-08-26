@@ -21,12 +21,16 @@ from textual_enhanced.binding import HelpfulBinding
 # Wasat imports.
 from wasat import ClientCertificate, ClientCertificateStore
 
-from rogallo.data.config import update_configuration
-
 ##############################################################################
 # Local imports.
 from ...commands import JumpToCommandLine
-from ...data import Bookmarks, LocationHistory, NavigationHistory, load_configuration
+from ...data import (
+    Bookmarks,
+    LocationHistory,
+    NavigationHistory,
+    load_configuration,
+    update_configuration,
+)
 from ...document import Document
 from .bookmarks import BookmarksViewer
 from .client_certificates import ClientCertificateManager
