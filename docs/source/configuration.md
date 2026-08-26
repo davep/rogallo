@@ -43,24 +43,6 @@ values. It will be `true` (handle ANSI sequences) by default:
 "handle_ansi_escape_sequences": true
 ```
 
-## Bookmarks manager visible
-
-Rogallo has a sidebar that displays the bookmarks manager. By default it
-isn't visible. It can be made visible with the `Toggle Bookmarks Manager`
-command ([`ToggleBookmarks`](#bindable-commands), bound to <kbd>F3</kbd> by
-default).
-
-```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo with the bookmarks manager visible" lines=35 columns=90 press="shift+f3"}
-```
-
-The setting itself is saved in the configuration file as
-`bookmarks_visible`, which takes `true` or `false` as valid values. It will
-be `false` (not visible) by default:
-
-```json
-"bookmarks_visible": false
-```
-
 ## Connection settings
 
 Rogallo imposes some limits on connections to capsules. These include the
@@ -239,23 +221,6 @@ types. For example, if you wanted to use simple three-latter codes:
     "X": "(XML)",
     "unknown": "(???)"
 }
-```
-
-## History manager visible
-
-Rogallo has a sidebar that displays the history manager. By default it isn't
-visible. It can be made visible with the `Toggle History` command
-([`ToggleHistoryManager`](#bindable-commands), bound to <kbd>F2</kbd> by default).
-
-```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo with the history manager visible" lines=50 columns=120 press="shift+f2"}
-```
-
-The setting itself is saved in the configuration file as `history_visible`,
-which takes `true` or `false` as valid values. It will be `false` (not
-visible) by default:
-
-```json
-"history_visible": false
 ```
 
 ## Home page
