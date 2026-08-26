@@ -22,6 +22,7 @@ from wasat import ClientCertificate, ClientCertificateStore
 
 ##############################################################################
 # Local imports.
+from ...commands import JumpToCommandLine
 from ...data import Bookmarks, LocationHistory, NavigationHistory
 from .bookmarks import BookmarksViewer
 from .client_certificates import ClientCertificateManager
@@ -126,7 +127,7 @@ class SidePanel(Container):
     async def action_bounce_out(self) -> None:
         """Bounce focus out of the side panel."""
         if self.screen.focused == (tabs := self.query_one(Tabs)):
-            await self.screen.run_action("screen.jump_to_command_line_command")
+            await self.screen.run_action(JumpToCommandLine.action_name())
         else:
             tabs.focus()
 
