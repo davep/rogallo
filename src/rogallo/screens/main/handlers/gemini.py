@@ -12,6 +12,7 @@ from textual.widget import Widget
 # Wasat imports.
 from wasat import (
     Client,
+    ClientCertificate,
     ConnectionError,
     GeminiURI,
     Response,
@@ -28,7 +29,8 @@ from ....input_content import InputContent
 from ....messages import ClientCertificatesModified, OpenLocation
 from ....mime_checks import is_displayable_mime_type
 from ....text_decoder import decode_text
-from ...certificate_maker import LocationSpecificClientCertificateMaker
+from ...certificate_maker import CertificateData, LocationSpecificClientCertificateMaker
+from ...certificate_picker import ClientCertificatePicker, ClientCertificatePickerResult
 from ...user_input import UserInput
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
 
@@ -52,27 +54,59 @@ async def _handle_client_certificate_request(
         owner: The widget that owns the request.
     """
 
-    # TODO: Give the user the ability to pick an existing certificate and
-    # force an association, or (as we are right now) create a new
-    # certificate and associate it with the location.
+    decision: ClientCertificatePickerResult = None
 
-    if (
-        certificate_data := await owner.app.push_screen_wait(
-            LocationSpecificClientCertificateMaker(location, request_reason)
+    # Check if there are any certificates available to use.
+    if available_certificates := await client.client_cert_store.list_certificates():
+        decision = await owner.app.push_screen_wait(
+            ClientCertificatePicker(location, available_certificates)
         )
-    ) is None:
+
+    # Bail if the user backed out.
+    if decision is None:
         owner.notify("Client certificate request cancelled.", severity="warning")
         return
 
-    try:
-        await client.client_cert_store.create_credentials(**certificate_data)
-    except (ValueError, OSError, RuntimeError) as error:
-        owner.notify(
-            f"Unable to create client certificate for {location}:\n\n{error}",
-            severity="error",
-            title="Client Certificate Error",
-        )
-        return
+    # If the user selected an existing certificate, associate it with the location.
+    if isinstance(decision, ClientCertificate):
+        try:
+            await client.client_cert_store.associate_scope(
+                decision, location.with_path(None).with_query(None)
+            )
+        except (ValueError, RuntimeError) as error:
+            owner.notify(
+                f"Unable to associate client certificate for {location}:\n\n{error}",
+                severity="error",
+                title="Client Certificate Error",
+            )
+            return
+    else:
+        # The user elected to create a new certificate, so show the
+        # certificate creation dialog.
+        certificate_data: CertificateData | None = None
+        if (
+            certificate_data := await owner.app.push_screen_wait(
+                LocationSpecificClientCertificateMaker(location, request_reason)
+            )
+        ) is None:
+            owner.notify("Client certificate creation cancelled.", severity="warning")
+            return
+
+        # If they didn't bail on entering the new details, create the certificate.
+        if certificate_data is not None:
+            try:
+                await client.client_cert_store.create_credentials(**certificate_data)
+            except (ValueError, OSError, RuntimeError) as error:
+                owner.notify(
+                    f"Unable to create client certificate for {location}:\n\n{error}",
+                    severity="error",
+                    title="Client Certificate Error",
+                )
+                return
+
+    # Finally, at this point, we've made *some* sort of change to the
+    # certificate data so flag that up, and then re-request the original
+    # location.
     owner.post_message(ClientCertificatesModified())
     owner.post_message(OpenLocation(location, allow_cached=False))
 
