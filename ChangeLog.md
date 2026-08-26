@@ -14,6 +14,9 @@
   certificate manager. ([#373](https://github.com/davep/rogallo/pull/373))
 - Renamed the `JumpToSidebar` command to `JumpToSidePanel`.
   ([#373](https://github.com/davep/rogallo/pull/373))
+- Added the ability to optionally select an existing client certificate
+  (rather than always create a new one) when a Gemini URI requires one.
+  ([#373](https://github.com/davep/rogallo/pull/373))
 
 ## v1.12.1
 
