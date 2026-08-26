@@ -702,6 +702,10 @@ class Main(EnhancedScreen[None]):
     def action_toggle_side_panel_command(self) -> None:
         """Toggle the side panel."""
         self._side_panel_visible = not self._side_panel_visible
+        if self._side_panel_visible:
+            self._side_panel.focus()
+        else:
+            self._viewer.take_control()
 
     def action_backward_command(self) -> None:
         """Go backward in the navigation history."""
