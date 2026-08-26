@@ -48,6 +48,9 @@ class Configuration:
     side_panel_on_right: bool = False
     """Should the sidepanel be on the right?"""
 
+    side_panel_chosen_tab: str = "bookmarks"
+    """The tab that should be chosen in the sidepanel."""
+
     show_link_tooltips: bool = True
     """Should tooltips be shown for links?"""
 

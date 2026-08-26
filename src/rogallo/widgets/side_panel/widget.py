@@ -6,6 +6,7 @@ from typing import Literal, Self
 
 ##############################################################################
 # Textual imports.
+from textual import on
 from textual.app import ComposeResult
 from textual.containers import Container
 from textual.getters import query_one
@@ -20,10 +21,12 @@ from textual_enhanced.binding import HelpfulBinding
 # Wasat imports.
 from wasat import ClientCertificate, ClientCertificateStore
 
+from rogallo.data.config import update_configuration
+
 ##############################################################################
 # Local imports.
 from ...commands import JumpToCommandLine
-from ...data import Bookmarks, LocationHistory, NavigationHistory
+from ...data import Bookmarks, LocationHistory, NavigationHistory, load_configuration
 from ...document import Document
 from .bookmarks import BookmarksViewer
 from .client_certificates import ClientCertificateManager
@@ -109,11 +112,11 @@ class SidePanel(Container):
     def compose(self) -> ComposeResult:
         """Compose the side-panel."""
         with TabbedContent():
-            with TabPane("Bookmarks"):
+            with TabPane("Bookmarks", id="bookmarks"):
                 yield BookmarksViewer().data_bind(SidePanel.bookmarks)
-            with TabPane("History"):
+            with TabPane("History", id="history"):
                 yield HistoryViewer().data_bind(history=SidePanel.location_history)
-            with TabPane("Client Certificates"):
+            with TabPane("Client Certificates", id="client-certificates"):
                 yield ClientCertificateManager(
                     self._client_certificate_store
                 ).data_bind(
@@ -123,6 +126,23 @@ class SidePanel(Container):
                     location_history=SidePanel.location_history,
                     navigation_history=SidePanel.navigation_history,
                 )
+
+    def on_mount(self) -> None:
+        """Called when the side-panel is mounted."""
+        try:
+            self._tabs.active = load_configuration().side_panel_chosen_tab
+        except Tabs.TabError:
+            pass
+
+    @on(TabbedContent.TabActivated)
+    def _remember_chosen_tab(self) -> None:
+        """Remember the active tab in the side-panel.
+
+        Args:
+            event: The tab activated event.
+        """
+        with update_configuration() as config:
+            config.side_panel_chosen_tab = self._tabs.active
 
     def focus(self, scroll_visible: bool = True) -> Self:
         """Focus the first tab in the side-panel."""
