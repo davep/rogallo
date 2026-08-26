@@ -228,11 +228,12 @@ class LocationSpecificClientCertificateMaker(BaseCertificateMaker):
     def _build_certificate_data(self) -> CertificateData:
         """Create the certificate."""
         certificate_data: CertificateData = {
-            "uri": (
+            "name": str(uuid4()),
+            "scopes": [
                 self._location.with_path(None).with_query(None)
                 if self.query_one("#scope-to-domain", Checkbox).value
                 else self._location
-            ),
+            ],
         }
         self._add_common_data(certificate_data)
         return certificate_data
@@ -262,7 +263,7 @@ class ClientCertificateMaker(BaseCertificateMaker):
 
     def _build_certificate_data(self) -> CertificateData:
         """Create the certificate."""
-        certificate_data: CertificateData = {"scopes": (), "name": str(uuid4())}
+        certificate_data: CertificateData = {"name": str(uuid4()), "scopes": ()}
         self._add_common_data(certificate_data)
         return certificate_data
 

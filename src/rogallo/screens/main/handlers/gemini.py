@@ -95,7 +95,7 @@ async def _handle_client_certificate_request(
         # If they didn't bail on entering the new details, create the certificate.
         if certificate_data is not None:
             try:
-                await client.client_cert_store.create_credentials(**certificate_data)
+                await client.client_cert_store.create_certificate(**certificate_data)
             except (ValueError, OSError, RuntimeError) as error:
                 owner.notify(
                     f"Unable to create client certificate for {location}:\n\n{error}",
