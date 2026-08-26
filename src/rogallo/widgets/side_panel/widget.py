@@ -10,7 +10,7 @@ from textual.app import ComposeResult
 from textual.containers import Container
 from textual.getters import query_one
 from textual.reactive import var
-from textual.widgets import TabbedContent, TabPane
+from textual.widgets import TabbedContent, TabPane, Tabs
 
 ##############################################################################
 # Wasat imports.
@@ -46,6 +46,8 @@ class SidePanel(Container):
     """
 
     DEFAULT_CLASSES = "panel"
+
+    BINDINGS = [("escape", "bounce_out")]
 
     dock_right: var[bool] = var(False, toggle_class="--dock-right")
     """Should the panel dock to the right?"""
@@ -94,6 +96,13 @@ class SidePanel(Container):
         if self._tabs.active_pane is not None:
             self._tabs.active_pane.children[0].focus(scroll_visible=scroll_visible)
         return self
+
+    async def action_bounce_out(self) -> None:
+        """Bounce focus out of the side panel."""
+        if self.screen.focused == (tabs := self.query_one(Tabs)):
+            await self.screen.run_action("screen.jump_to_command_line_command")
+        else:
+            tabs.focus()
 
 
 ### widget.py ends here
