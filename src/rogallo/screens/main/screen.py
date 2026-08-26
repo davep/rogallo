@@ -281,7 +281,7 @@ class Main(EnhancedScreen[None]):
         self._clients = Clients.create()
         """The clients for the supported protocols."""
 
-    def _watch__sidepanel_visible(self) -> None:
+    def _watch__side_panel_visible(self) -> None:
         """Watch for changes to the side panel visibility."""
         with update_configuration() as config:
             config.side_panel_visible = self._side_panel_visible
