@@ -695,9 +695,6 @@ class Main(EnhancedScreen[None]):
 
     def action_jump_to_side_panel_command(self) -> None:
         """Jump to the side panel."""
-        if self.screen.focused and (self._side_panel in self.screen.focused.ancestors):
-            self._side_panel_visible = False
-            return
         if not self._side_panel_visible:
             self._side_panel_visible = True
         self._side_panel.focus()
