@@ -11,7 +11,6 @@ from textual.widget import Widget
 ##############################################################################
 # Local imports.
 from ...messages import OpenLocation
-from ...preflight import is_likely_finger_request
 from .base_command import InputCommand
 
 
