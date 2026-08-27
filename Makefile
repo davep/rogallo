@@ -37,6 +37,11 @@ debug:				# Run the code with Textual devtools enabled
 console:			# Run the textual console
 	$(run) textual console
 
+.PHONY: profile
+profile:
+	$(run) pyinstrument -r html -o $(reports)/profile.html -m $(app)
+	open $(reports)/profile.html
+
 .PHONY: testserver
 testserver:			# Run the test server for use in the browser
 	$(smol)
