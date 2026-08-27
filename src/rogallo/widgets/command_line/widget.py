@@ -46,6 +46,7 @@ from ...data import (
 from ...presentation import short_location
 from .aliases import AliasError, expand_aliases
 from .base_command import InputCommand
+from .best_guess import BestGuessCommand
 from .finger import FingerCommand
 from .general import ChangeThemeCommand, HelpCommand, QuitCommand, UnknownCommand
 from .open_directory import OpenDirectoryCommand
@@ -64,6 +65,7 @@ COMMANDS: Final[tuple[type[InputCommand], ...]] = (
     UnknownCommand,
     OpenFileCommand,
     OpenDirectoryCommand,
+    BestGuessCommand,
     OpenGeminiURICommand,
     OpenOtherURICommand,
 )

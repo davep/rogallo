@@ -26,6 +26,12 @@
 - The file names of client certificates created within Rogallo now use a
   uuid4 for the name, rather than the host/port of the initially-associated
   site. ([#373](https://github.com/davep/rogallo/pull/373))
+- Command inputs in `user@example.com` form are now considered to be
+  `finger` requests. ([#381](https://github.com/davep/rogallo/pull/381))
+- Command inputs with that look like hostnames that start with a protocol
+  name are now considered to be a request to visit a host of that protocol
+  (`gopher.example.com` -> `gopher://gopher.example.com/1`, etc).
+  ([#381](https://github.com/davep/rogallo/pull/381))
 
 ## v1.12.1
 
