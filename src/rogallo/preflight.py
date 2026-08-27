@@ -176,6 +176,25 @@ def is_likely_schemeless_capsule(uri: str) -> bool:
 
 
 ##############################################################################
+def is_likely_finger_request(text: str) -> bool:
+    """Determine if some text is likely a Finger request.
+
+    Args:
+        text: The text to check.
+
+    Returns:
+        `True` if the text is likely a Finger request, `False` otherwise.
+    """
+    if not "@" in text:
+        return False
+    try:
+        _ = FingerURI.from_string(text)
+    except FingerURIError:
+        return False
+    return True
+
+
+##############################################################################
 def path_from_uri(uri: str) -> Path:
     """Get the path from a URI.
 

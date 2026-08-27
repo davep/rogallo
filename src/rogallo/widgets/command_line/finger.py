@@ -11,6 +11,7 @@ from textual.widget import Widget
 ##############################################################################
 # Local imports.
 from ...messages import OpenLocation
+from ...preflight import is_likely_finger_request
 from .base_command import InputCommand
 
 
@@ -39,6 +40,12 @@ class FingerCommand(InputCommand):
                 for_widget.post_message(OpenLocation(FingerURI.from_string(user)))
             except URIError as error:
                 for_widget.notify(str(error), title="Finger error", severity="error")
+            return True
+        if is_likely_finger_request(text):
+            try:
+                for_widget.post_message(OpenLocation(FingerURI.from_string(text)))
+            except URIError as error:
+                return False
             return True
         return False
 

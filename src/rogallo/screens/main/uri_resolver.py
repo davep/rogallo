@@ -29,6 +29,7 @@ from wasat import URIError as GeminiURIError
 # Local imports.
 from ...messages import OpenFromFileSystem, OpenLocation, OpenURI
 from ...preflight import (
+    is_likely_finger_request,
     is_likely_schemeless_capsule,
     is_local_directory,
     is_local_text_file,
