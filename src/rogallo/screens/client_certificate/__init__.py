@@ -8,6 +8,7 @@ from .maker import (
     LocationSpecificClientCertificateMaker,
 )
 from .picker import ClientCertificatePicker, ClientCertificatePickerResult
+from .scope_picker import ScopePicker
 from .viewer import ClientCertificateViewer
 
 ##############################################################################
@@ -19,6 +20,7 @@ __all__ = [
     "ClientCertificatePickerResult",
     "ClientCertificateViewer",
     "LocationSpecificClientCertificateMaker",
+    "ScopePicker",
 ]
 
 ### __init__.py ends here

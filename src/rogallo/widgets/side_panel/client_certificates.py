@@ -30,8 +30,8 @@ from ...safe_escape import escape
 from ...screens.client_certificate import (
     ClientCertificateMaker,
     ClientCertificateViewer,
+    ScopePicker,
 )
-from ...screens.scope_picker import ScopePicker
 
 
 ##############################################################################
