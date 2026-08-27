@@ -23,6 +23,9 @@
 - The "used a client certificate" icon in the viewer is now clickable with
   the mouse and will show the certificate details when clicked.
   ([#373](https://github.com/davep/rogallo/pull/373))
+- The file names of client certificates created within Rogallo now use a
+  uuid4 for the name, rather than the host/port of the initially-associated
+  site. ([#373](https://github.com/davep/rogallo/pull/373))
 
 ## v1.12.1
 
