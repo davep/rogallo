@@ -185,7 +185,7 @@ def is_likely_finger_request(text: str) -> bool:
     Returns:
         `True` if the text is likely a Finger request, `False` otherwise.
     """
-    if not "@" in text:
+    if "@" not in text:
         return False
     try:
         _ = FingerURI.from_string(text)
