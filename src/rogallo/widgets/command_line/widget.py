@@ -65,9 +65,9 @@ COMMANDS: Final[tuple[type[InputCommand], ...]] = (
     UnknownCommand,
     OpenFileCommand,
     OpenDirectoryCommand,
+    BestGuessCommand,
     OpenGeminiURICommand,
     OpenOtherURICommand,
-    BestGuessCommand,
 )
 """The commands used for the input."""
 
