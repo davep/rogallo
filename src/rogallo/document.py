@@ -24,7 +24,7 @@ from port1900 import NexURI
 
 ##############################################################################
 # Wasat imports.
-from wasat import ServerCertificate, VerificationMethod
+from wasat import ClientCertificate, ServerCertificate, VerificationMethod
 
 ##############################################################################
 # Local imports.
@@ -61,8 +61,11 @@ class Document:
     from_cache: bool = False
     """Whether the document was loaded from cache."""
 
-    needed_certificate: bool = False
+    needed_client_certificate: bool = False
     """Whether the document required a client certificate to access."""
+
+    client_certificate: ClientCertificate | None = None
+    """The client certificate used to access the document, if any."""
 
     avoid_cache: bool = False
     """Whether the document should avoid being cached."""

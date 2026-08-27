@@ -4,6 +4,7 @@
 # Local imports.
 from .clipboard import CopyDocumentToClipboard, CopyLocationToClipboard
 from .main import (
+    AboutClientCertificate,
     AboutThisPage,
     AddLocationToBookmarks,
     ClearCache,
@@ -34,6 +35,7 @@ from .ui import (
 ##############################################################################
 # Exports.
 __all__ = [
+    "AboutClientCertificate",
     "AboutThisPage",
     "AddLocationToBookmarks",
     "Backward",

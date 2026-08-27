@@ -79,7 +79,7 @@ class AboutPage(ModalScreen[None]):
                 yield Data("From cache", "Yes" if self._document.from_cache else "No")
                 yield Data(
                     "Needed client certificate",
-                    self._document.needed_certificate,
+                    self._document.needed_client_certificate,
                 )
                 yield Data(
                     "Verification method", str(self._document.verification_method)

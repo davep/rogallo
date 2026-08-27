@@ -55,6 +55,13 @@ class AboutThisPage(Command):
 
 
 ##############################################################################
+class AboutClientCertificate(Command):
+    """Show information about the client certificate used for the current page"""
+
+    BINDING_KEY = "shift+f7"
+
+
+##############################################################################
 class PipeDocument(Command):
     """Pipe the current document to an external command"""
 

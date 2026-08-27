@@ -22,11 +22,11 @@ from .data import Data
 
 
 ##############################################################################
-class CertificateViewer(ModalScreen[None]):
+class ClientCertificateViewer(ModalScreen[None]):
     """A modal screen to show information about a certificate."""
 
     CSS = """
-    CertificateViewer {
+    ClientCertificateViewer {
         align: center middle;
 
         &> VerticalGroup {

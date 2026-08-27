@@ -28,7 +28,7 @@ from ...document import Document
 from ...messages import ClientCertificatesModified
 from ...safe_escape import escape
 from ...screens.certificate_maker import ClientCertificateMaker
-from ...screens.certificate_viewer import CertificateViewer
+from ...screens.certificate_viewer import ClientCertificateViewer
 from ...screens.scope_picker import ScopePicker
 
 
@@ -199,7 +199,7 @@ class ClientCertificateManager(EnhancedOptionList):
         if self.highlighted is not None and isinstance(
             option := self.options[self.highlighted], CertificateOption
         ):
-            self.app.push_screen(CertificateViewer(option.certificate))
+            self.app.push_screen(ClientCertificateViewer(option.certificate))
 
     @work
     async def action_delete(self) -> None:
@@ -253,7 +253,7 @@ class ClientCertificateManager(EnhancedOptionList):
         """
         if (
             isinstance(self.current_document.location, GeminiURI)
-            and not self.current_document.needed_certificate
+            and not self.current_document.needed_client_certificate
         ):
             return str(self.current_document.location.with_path(None))
         return ""

@@ -15,7 +15,7 @@ from wasat import VerificationMethod
 
 ##############################################################################
 # Local imports.
-from ...commands import AboutThisPage
+from ...commands import AboutClientCertificate, AboutThisPage
 from ...data import load_configuration
 from ...types import RogalloLocation
 
@@ -36,7 +36,7 @@ class ViewerTitle(Horizontal):
             padding-right: 1;
         }
 
-        #verification-method {
+        #verification-method, #lock-icon {
             pointer: pointer;
         }
 
@@ -129,6 +129,8 @@ class ViewerTitle(Horizontal):
         """Handle the widget being clicked."""
         if event.widget is self._verification_method_icon:
             await self.screen.run_action(AboutThisPage.action_name())
+        elif event.widget is self._lock_icon:
+            await self.screen.run_action(AboutClientCertificate.action_name())
 
 
 ### title.py ends here

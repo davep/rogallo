@@ -17,6 +17,12 @@
 - Added the ability to optionally select an existing client certificate
   (rather than always create a new one) when a Gemini URI requires one.
   ([#373](https://github.com/davep/rogallo/pull/373))
+- Added a `AboutClientCertificate` command for viewing details of any
+  currently-used client certificate.
+  ([#373](https://github.com/davep/rogallo/pull/373))
+- The "used a client certificate" icon in the viewer is now clickable with
+  the mouse and will show the certificate details when clicked.
+  ([#373](https://github.com/davep/rogallo/pull/373))
 
 ## v1.12.1
 

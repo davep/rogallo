@@ -13,6 +13,7 @@ from textual_enhanced.commands import (
 ##############################################################################
 # Local imports.
 from ..commands import (
+    AboutClientCertificate,
     AboutThisPage,
     AddLocationToBookmarks,
     Backward,
@@ -57,6 +58,7 @@ class MainCommands(CommandsProvider):
         Yields:
             The commands for the command palette.
         """
+        yield from self.maybe(AboutClientCertificate)
         yield from self.maybe(AboutThisPage)
         yield from self.maybe(AddLocationToBookmarks)
         yield from self.maybe(Backward)

@@ -45,6 +45,7 @@ from ... import __version__
 from ...cache import ContentCache
 from ...clients import Clients
 from ...commands import (
+    AboutClientCertificate,
     AboutThisPage,
     AddLocationToBookmarks,
     Backward,
@@ -117,6 +118,7 @@ from ...widgets import (
     Viewer,
 )
 from ..about_page import AboutPage
+from ..certificate_viewer import ClientCertificateViewer
 from .handlers import handle_filesystem_request
 from .local_messages import (
     CopyToClipboard,
@@ -207,6 +209,7 @@ class Main(EnhancedScreen[None]):
         Forward,
         Quit,
         # Everything else.
+        AboutClientCertificate,
         AboutThisPage,
         AddLocationToBookmarks,
         ChangeCommandLineLocation,
@@ -447,6 +450,11 @@ class Main(EnhancedScreen[None]):
                 has_navigable_path(self._viewer.document.location)
                 and self._viewer.document.location.root
                 != self._viewer.document.location
+            )
+        if action == AboutClientCertificate.action_name():
+            return (
+                self._viewer.document.needed_client_certificate
+                and self._viewer.document.client_certificate is not None
             )
         return True
 
@@ -895,6 +903,16 @@ class Main(EnhancedScreen[None]):
     def action_open_file_command(self) -> None:
         """Open a file."""
         self.post_message(OpenFromFileSystem())
+
+    def action_about_client_certificate_command(self) -> None:
+        """Show information about the client certificate used for the current page."""
+        if (
+            self._viewer.document.needed_client_certificate
+            and self._viewer.document.client_certificate
+        ):
+            self.app.push_screen(
+                ClientCertificateViewer(self._viewer.document.client_certificate)
+            )
 
     def action_about_this_page_command(self) -> None:
         """Show information about the current page."""
