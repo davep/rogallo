@@ -411,7 +411,7 @@ class Viewer(Vertical, can_focus=False):
         if old_document.location != new_document.location:
             self.set_reactive(Viewer.view_source, False)
         self._title.verification_method = self.document.verification_method
-        self._title.needed_certificate = self.document.needed_certificate
+        self._title.needed_certificate = self.document.needed_client_certificate
         self._title.location = self.document.location
         self._status.mime_type = self.document.mime_type or ""
         self._jump_map = {}

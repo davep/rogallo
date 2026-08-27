@@ -5,13 +5,8 @@
 from __future__ import annotations
 
 ##############################################################################
-# Python imports.
-from dataclasses import dataclass
-
-##############################################################################
 # Textual imports.
 from textual import on, work
-from textual.message import Message
 from textual.reactive import var
 from textual.widgets.option_list import Option
 
@@ -23,10 +18,10 @@ from textual_enhanced.widgets import EnhancedOptionList
 
 ##############################################################################
 # Local imports.
-from ..data.bookmarks import Bookmark, Bookmarks
-from ..messages import OpenLocation
-from ..presentation import short_location
-from ..safe_escape import escape
+from ...data.bookmarks import Bookmark, Bookmarks
+from ...messages import BookmarksModified, OpenLocation
+from ...presentation import short_location
+from ...safe_escape import escape
 
 
 ##############################################################################
@@ -72,8 +67,6 @@ class BookmarksViewer(EnhancedOptionList):
         }
     }
     """
-
-    DEFAULT_CLASSES = "panel"
 
     HELP = """
     ## Bookmarks
@@ -125,13 +118,6 @@ class BookmarksViewer(EnhancedOptionList):
             return self.highlighted is not None
         return True
 
-    @dataclass
-    class BookmarksModified(Message):
-        """A message indicating that the bookmarks have been modified."""
-
-        bookmarks_viewer: BookmarksViewer
-        """The new bookmarks."""
-
     @work
     async def action_rename(self) -> None:
         """Rename the currently-selected bookmark."""
@@ -148,7 +134,7 @@ class BookmarksViewer(EnhancedOptionList):
                 )
                 with self.preserved_highlight:
                     self.mutate_reactive(BookmarksViewer.bookmarks)
-                self.post_message(self.BookmarksModified(self))
+                self.post_message(BookmarksModified())
             except ValueError:
                 self.notify(
                     "Unable to find the bookmark to rename. It may have been removed.",
@@ -173,7 +159,7 @@ class BookmarksViewer(EnhancedOptionList):
                 del self.bookmarks[self.bookmarks.index(bookmark_view.bookmark)]
                 with self.preserved_highlight:
                     self.mutate_reactive(BookmarksViewer.bookmarks)
-                self.post_message(self.BookmarksModified(self))
+                self.post_message(BookmarksModified())
             except ValueError:
                 self.notify(
                     "Unable to find the bookmark to delete.",

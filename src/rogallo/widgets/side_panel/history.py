@@ -6,13 +6,11 @@ from __future__ import annotations
 
 ##############################################################################
 # Python imports.
-from dataclasses import dataclass
 from datetime import datetime
 
 ##############################################################################
 # Textual imports.
 from textual import on, work
-from textual.message import Message
 from textual.reactive import var
 from textual.widgets.option_list import Option
 
@@ -24,11 +22,11 @@ from textual_enhanced.widgets import EnhancedOptionList
 
 ##############################################################################
 # Local imports.
-from ..data import LocationHistory, LocationVisit
-from ..messages import OpenLocation
-from ..presentation import short_location
-from ..safe_escape import escape
-from ..types import RogalloLocation
+from ...data import LocationHistory, LocationVisit
+from ...messages import HistoryModified, OpenLocation
+from ...presentation import short_location
+from ...safe_escape import escape
+from ...types import RogalloLocation
 
 
 ##############################################################################
@@ -95,8 +93,6 @@ class HistoryViewer(EnhancedOptionList):
     }
     """
 
-    DEFAULT_CLASSES = "panel"
-
     HELP = """
     ## Location history
 
@@ -140,13 +136,6 @@ class HistoryViewer(EnhancedOptionList):
         assert isinstance(event.option, HistoryOption)
         self.post_message(OpenLocation(event.option.location))
 
-    @dataclass
-    class HistoryModified(Message):
-        """A message sent when the history is modified."""
-
-        history_viewer: HistoryViewer
-        """The history viewer that was modified."""
-
     @work
     async def action_delete_location(self) -> None:
         """Delete the selected location from the history."""
@@ -159,7 +148,7 @@ class HistoryViewer(EnhancedOptionList):
             del self.history[location.history_position]
             with self.preserved_highlight:
                 self.mutate_reactive(HistoryViewer.history)
-            self.post_message(self.HistoryModified(self))
+            self.post_message(HistoryModified())
             self.notify(f"{location.location} deleted", title="Location history")
 
     @work
@@ -172,7 +161,7 @@ class HistoryViewer(EnhancedOptionList):
         ):
             self.history.clear()
             self.mutate_reactive(HistoryViewer.history)
-            self.post_message(self.HistoryModified(self))
+            self.post_message(HistoryModified())
             self.notify("All locations deleted", title="Location history")
 
 

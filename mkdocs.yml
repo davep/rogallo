@@ -14,7 +14,7 @@ nav:
   - "UI":
       - ui.md
       - command-line.md
-      - sidebar.md
+      - side-panel.md
       - toolbar.md
       - viewer.md
       - custom-themes.md

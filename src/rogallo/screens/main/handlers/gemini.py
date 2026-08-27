@@ -12,6 +12,7 @@ from textual.widget import Widget
 # Wasat imports.
 from wasat import (
     Client,
+    ClientCertificate,
     ConnectionError,
     GeminiURI,
     Response,
@@ -25,10 +26,15 @@ from wasat import (
 from ....cache import ContentCache
 from ....document import Document
 from ....input_content import InputContent
-from ....messages import OpenLocation
+from ....messages import ClientCertificatesModified, OpenLocation
 from ....mime_checks import is_displayable_mime_type
 from ....text_decoder import decode_text
-from ...certificate import Certificate
+from ...client_certificate import (
+    CertificateData,
+    ClientCertificatePicker,
+    ClientCertificatePickerResult,
+    LocationSpecificClientCertificateMaker,
+)
 from ...user_input import UserInput
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
 
@@ -52,23 +58,60 @@ async def _handle_client_certificate_request(
         owner: The widget that owns the request.
     """
 
-    if (
-        certificate_data := await owner.app.push_screen_wait(
-            Certificate(location, request_reason)
+    decision: ClientCertificatePickerResult = None
+
+    # Check if there are any certificates available to use.
+    if available_certificates := await client.client_cert_store.list_certificates():
+        decision = await owner.app.push_screen_wait(
+            ClientCertificatePicker(location, available_certificates)
         )
-    ) is None:
+
+    # Bail if the user backed out.
+    if decision is None:
         owner.notify("Client certificate request cancelled.", severity="warning")
         return
 
-    try:
-        await client.client_cert_store.create_credentials(**certificate_data)
-    except (ValueError, OSError, RuntimeError) as error:
-        owner.notify(
-            f"Unable to create client certificate for {location}:\n\n{error}",
-            severity="error",
-            title="Client Certificate Error",
-        )
-        return
+    # If the user selected an existing certificate, associate it with the location.
+    if isinstance(decision, ClientCertificate):
+        try:
+            await client.client_cert_store.associate_scope(
+                decision, location.with_path(None).with_query(None)
+            )
+        except (ValueError, RuntimeError) as error:
+            owner.notify(
+                f"Unable to associate client certificate for {location}:\n\n{error}",
+                severity="error",
+                title="Client Certificate Error",
+            )
+            return
+    else:
+        # The user elected to create a new certificate, so show the
+        # certificate creation dialog.
+        certificate_data: CertificateData | None = None
+        if (
+            certificate_data := await owner.app.push_screen_wait(
+                LocationSpecificClientCertificateMaker(location, request_reason)
+            )
+        ) is None:
+            owner.notify("Client certificate creation cancelled.", severity="warning")
+            return
+
+        # If they didn't bail on entering the new details, create the certificate.
+        if certificate_data is not None:
+            try:
+                await client.client_cert_store.create_certificate(**certificate_data)
+            except (ValueError, OSError, RuntimeError) as error:
+                owner.notify(
+                    f"Unable to create client certificate for {location}:\n\n{error}",
+                    severity="error",
+                    title="Client Certificate Error",
+                )
+                return
+
+    # Finally, at this point, we've made *some* sort of change to the
+    # certificate data so flag that up, and then re-request the original
+    # location.
+    owner.post_message(ClientCertificatesModified())
     owner.post_message(OpenLocation(location, allow_cached=False))
 
 
@@ -183,7 +226,8 @@ async def _handle_response(
                         original_location=request.location,
                         content=await decode_text(response),
                         mime_type=response.mime_type,
-                        needed_certificate=response.client_cert_used,
+                        needed_client_certificate=response.client_cert_used,
+                        client_certificate=response.client_cert,
                         verification_method=response.verification_method,
                         server_certificate=response.server_cert,
                         avoid_cache=response.client_cert_used,

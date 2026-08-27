@@ -4,6 +4,7 @@
 # Local imports.
 from .clipboard import CopyDocumentToClipboard, CopyLocationToClipboard
 from .main import (
+    AboutClientCertificate,
     AboutThisPage,
     AddLocationToBookmarks,
     ClearCache,
@@ -22,19 +23,19 @@ from .ui import (
     ChangeCommandLineLocation,
     JumpToCommandLine,
     JumpToDocument,
-    JumpToSidebar,
+    JumpToSidePanel,
     StripeLinks,
     ToggleANSIEscapeSequenceHandling,
-    ToggleBookmarksManager,
     ToggleCosyLinkNumbers,
     ToggleEmojiRemoval,
-    ToggleHistoryManager,
     ToggleLinkNumbers,
+    ToggleSidePanel,
 )
 
 ##############################################################################
 # Exports.
 __all__ = [
+    "AboutClientCertificate",
     "AboutThisPage",
     "AddLocationToBookmarks",
     "Backward",
@@ -49,7 +50,7 @@ __all__ = [
     "HandOffToOperatingSystem",
     "JumpToCommandLine",
     "JumpToDocument",
-    "JumpToSidebar",
+    "JumpToSidePanel",
     "OpenFile",
     "PipeDocument",
     "Reload",
@@ -60,11 +61,10 @@ __all__ = [
     "SetHomeToCurrentLocation",
     "StripeLinks",
     "ToggleANSIEscapeSequenceHandling",
-    "ToggleBookmarksManager",
     "ToggleCosyLinkNumbers",
     "ToggleEmojiRemoval",
-    "ToggleHistoryManager",
     "ToggleLinkNumbers",
+    "ToggleSidePanel",
     "ToggleView",
     "ViewChangeLog",
 ]

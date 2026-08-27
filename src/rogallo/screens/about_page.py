@@ -11,38 +11,7 @@ from textual.widgets import Button, Label
 ##############################################################################
 # Local imports.
 from ..document import Document
-
-
-##############################################################################
-class Data(HorizontalGroup):
-    """A widget to show a label and a value."""
-
-    DEFAULT_CSS = """
-    Data {
-        height: 1;
-        width: auto;
-        #label {
-            text-style: bold;
-            color: $text-accent;
-            padding-right: 1;
-        }
-    }
-    """
-
-    def __init__(self, label: str, value: str | bool) -> None:
-        """Initialise the widget."""
-        super().__init__()
-        self._data_label = label
-        """The label of the data."""
-        self._data_value = (
-            value if isinstance(value, str) else ("Yes" if value else "No")
-        )
-        """The value of the data."""
-
-    def compose(self) -> ComposeResult:
-        """Compose the widget."""
-        yield Label(f"{self._data_label}:", id="label")
-        yield Label(self._data_value, id="value", markup=False)
+from ..widgets import Data
 
 
 ##############################################################################
@@ -110,7 +79,7 @@ class AboutPage(ModalScreen[None]):
                 yield Data("From cache", "Yes" if self._document.from_cache else "No")
                 yield Data(
                     "Needed client certificate",
-                    self._document.needed_certificate,
+                    self._document.needed_client_certificate,
                 )
                 yield Data(
                     "Verification method", str(self._document.verification_method)

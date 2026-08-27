@@ -1,5 +1,32 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added a client certificate management interface.
+  ([#373](https://github.com/davep/rogallo/pull/373))
+- Removed the `ToggleHistoryManager` command.
+  ([#373](https://github.com/davep/rogallo/pull/373))
+- Removed the `ToggleBookmarksManager` command.
+  ([#373](https://github.com/davep/rogallo/pull/373))
+- Added a tabbed side panel to contain the bookmarks, history and new client
+  certificate manager. ([#373](https://github.com/davep/rogallo/pull/373))
+- Renamed the `JumpToSidebar` command to `JumpToSidePanel`.
+  ([#373](https://github.com/davep/rogallo/pull/373))
+- Added the ability to optionally select an existing client certificate
+  (rather than always create a new one) when a Gemini URI requires one.
+  ([#373](https://github.com/davep/rogallo/pull/373))
+- Added a `AboutClientCertificate` command for viewing details of any
+  currently-used client certificate.
+  ([#373](https://github.com/davep/rogallo/pull/373))
+- The "used a client certificate" icon in the viewer is now clickable with
+  the mouse and will show the certificate details when clicked.
+  ([#373](https://github.com/davep/rogallo/pull/373))
+- The file names of client certificates created within Rogallo now use a
+  uuid4 for the name, rather than the host/port of the initially-associated
+  site. ([#373](https://github.com/davep/rogallo/pull/373))
+
 ## v1.12.1
 
 **Released: 2026-08-24**

@@ -42,11 +42,14 @@ class Configuration:
     strip_emoji: bool = False
     """Should emoji be stripped from text content?"""
 
-    history_visible: bool = False
-    """Should the history panel be visible by default?"""
+    side_panel_visible: bool = False
+    """Should the sidepanel be visible?"""
 
-    bookmarks_visible: bool = False
-    """Should the bookmarks panel be visible by default?"""
+    side_panel_on_right: bool = False
+    """Should the sidepanel be on the right?"""
+
+    side_panel_chosen_tab: str = "bookmarks"
+    """The tab that should be chosen in the sidepanel."""
 
     show_link_tooltips: bool = True
     """Should tooltips be shown for links?"""

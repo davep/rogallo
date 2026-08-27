@@ -2,15 +2,21 @@
 
 ##############################################################################
 # Local imports.
-from .bookmarks import BookmarksViewer
 from .command_line import CommandLine
-from .history import HistoryViewer
+from .data import Data
+from .side_panel import SidePanel
 from .toolbar import Toolbar
 from .viewer import Viewer
 
 ##############################################################################
 # Exports.
-__all__ = ["BookmarksViewer", "CommandLine", "HistoryViewer", "Toolbar", "Viewer"]
+__all__ = [
+    "CommandLine",
+    "Data",
+    "SidePanel",
+    "Toolbar",
+    "Viewer",
+]
 
 
 ### __init__.py ends here

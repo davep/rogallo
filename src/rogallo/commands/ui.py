@@ -20,8 +20,8 @@ class JumpToDocument(Command):
 
 
 ##############################################################################
-class JumpToSidebar(Command):
-    """Jump to the sidebar"""
+class JumpToSidePanel(Command):
+    """Jump to the side panel"""
 
     BINDING_KEY = "ctrl+3"
 
@@ -34,17 +34,10 @@ class ChangeCommandLineLocation(Command):
 
 
 ##############################################################################
-class ToggleHistoryManager(Command):
-    """Toggle the display of the history viewer"""
+class ToggleSidePanel(Command):
+    """Toggle the visibility of the side panel"""
 
-    BINDING_KEY = "shift+f2"
-
-
-##############################################################################
-class ToggleBookmarksManager(Command):
-    """Toggle the display of the bookmarks viewer"""
-
-    BINDING_KEY = "shift+f3"
+    BINDING_KEY = "ctrl+l"
 
 
 ##############################################################################

@@ -13,6 +13,7 @@ from textual_enhanced.commands import (
 ##############################################################################
 # Local imports.
 from ..commands import (
+    AboutClientCertificate,
     AboutThisPage,
     AddLocationToBookmarks,
     Backward,
@@ -27,7 +28,7 @@ from ..commands import (
     HandOffToOperatingSystem,
     JumpToCommandLine,
     JumpToDocument,
-    JumpToSidebar,
+    JumpToSidePanel,
     OpenFile,
     PipeDocument,
     Reload,
@@ -38,11 +39,10 @@ from ..commands import (
     SetHomeToCurrentLocation,
     StripeLinks,
     ToggleANSIEscapeSequenceHandling,
-    ToggleBookmarksManager,
     ToggleCosyLinkNumbers,
     ToggleEmojiRemoval,
-    ToggleHistoryManager,
     ToggleLinkNumbers,
+    ToggleSidePanel,
     ToggleView,
     ViewChangeLog,
 )
@@ -58,6 +58,7 @@ class MainCommands(CommandsProvider):
         Yields:
             The commands for the command palette.
         """
+        yield from self.maybe(AboutClientCertificate)
         yield from self.maybe(AboutThisPage)
         yield from self.maybe(AddLocationToBookmarks)
         yield from self.maybe(Backward)
@@ -74,7 +75,7 @@ class MainCommands(CommandsProvider):
         yield Help()
         yield from self.maybe(JumpToCommandLine)
         yield from self.maybe(JumpToDocument)
-        yield JumpToSidebar()
+        yield JumpToSidePanel()
         yield OpenFile()
         yield from self.maybe(PipeDocument)
         yield Quit()
@@ -86,11 +87,10 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(SetHomeToCurrentLocation)
         yield StripeLinks()
         yield ToggleANSIEscapeSequenceHandling()
-        yield from self.maybe(ToggleBookmarksManager)
         yield ToggleCosyLinkNumbers()
         yield ToggleEmojiRemoval()
-        yield from self.maybe(ToggleHistoryManager)
         yield ToggleLinkNumbers()
+        yield ToggleSidePanel()
         yield from self.maybe(ToggleView)
         yield ViewChangeLog()
 
