@@ -18,7 +18,7 @@ from wasat import ClientCertificate
 
 ##############################################################################
 # Local imports.
-from .data import Data
+from ...widgets import Data
 
 
 ##############################################################################
@@ -98,4 +98,4 @@ class ClientCertificateViewer(ModalScreen[None]):
         self.dismiss()
 
 
-### certificate_viewer.py ends here
+### viewer.py ends here

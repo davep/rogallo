@@ -11,7 +11,7 @@ from textual.widgets import Button, Label
 ##############################################################################
 # Local imports.
 from ..document import Document
-from .data import Data
+from ..widgets import Data
 
 
 ##############################################################################

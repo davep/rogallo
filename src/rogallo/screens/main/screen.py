@@ -118,7 +118,7 @@ from ...widgets import (
     Viewer,
 )
 from ..about_page import AboutPage
-from ..certificate_viewer import ClientCertificateViewer
+from ..client_certificate import ClientCertificateViewer
 from .handlers import handle_filesystem_request
 from .local_messages import (
     CopyToClipboard,

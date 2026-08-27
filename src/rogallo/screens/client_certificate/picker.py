@@ -146,4 +146,4 @@ class ClientCertificatePicker(ModalScreen[ClientCertificatePickerResult]):
         self.dismiss(None)
 
 
-### certificate_picker.py ends here
+### picker.py ends here
