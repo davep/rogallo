@@ -44,7 +44,7 @@ class FingerCommand(InputCommand):
         if is_likely_finger_request(text):
             try:
                 for_widget.post_message(OpenLocation(FingerURI.from_string(text)))
-            except URIError as error:
+            except URIError:
                 return False
             return True
         return False
