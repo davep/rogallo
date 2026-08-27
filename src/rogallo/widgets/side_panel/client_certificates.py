@@ -28,6 +28,7 @@ from ...document import Document
 from ...messages import ClientCertificatesModified
 from ...safe_escape import escape
 from ...screens.certificate_maker import ClientCertificateMaker
+from ...screens.certificate_viewer import CertificateViewer
 from ...screens.scope_picker import ScopePicker
 
 
@@ -121,6 +122,12 @@ class ClientCertificateManager(EnhancedOptionList):
             "Disassociate",
             tooltip="Remove an association from the selected certificate",
         ),
+        HelpfulBinding(
+            "v",
+            "view",
+            "View",
+            tooltip="View the selected certificate",
+        ),
     ]
 
     location_history: var[LocationHistory] = var(LocationHistory)
@@ -142,6 +149,14 @@ class ClientCertificateManager(EnhancedOptionList):
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
         if not self.is_mounted:
             return True
+        if action in ("delete", "add_association", "view"):
+            return (
+                self.highlighted is not None
+                and isinstance(
+                    option := self.options[self.highlighted], CertificateOption
+                )
+                or None
+            )
         if action == "remove_association":
             return (
                 self.highlighted is not None
@@ -178,6 +193,13 @@ class ClientCertificateManager(EnhancedOptionList):
             certificate = await self._store.create_certificate(**data)
             self.post_message(ClientCertificatesModified())
             self.notify(escape(_name(certificate)), title="Added")
+
+    def action_view(self) -> None:
+        """View the selected certificate."""
+        if self.highlighted is not None and isinstance(
+            option := self.options[self.highlighted], CertificateOption
+        ):
+            self.app.push_screen(CertificateViewer(option.certificate))
 
     @work
     async def action_delete(self) -> None:
