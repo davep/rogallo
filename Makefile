@@ -42,6 +42,10 @@ profile:
 	$(run) pyinstrument -r html -o $(reports)/profile.html -m $(app)
 	open $(reports)/profile.html
 
+.PHONY: profile-json
+profile-json:
+	$(run) pyinstrument --show-all -r json -o $(reports)/profile.json -m $(app)
+
 .PHONY: testserver
 testserver:			# Run the test server for use in the browser
 	$(smol)
