@@ -18,7 +18,7 @@ from rich.text import Text
 # Textual imports.
 from textual import on
 from textual.events import Click
-from textual.reactive import var
+from textual.reactive import reactive, var
 from textual.widget import Widget
 
 ##############################################################################
@@ -93,11 +93,11 @@ class GemtextLink(Widget, can_focus=True):
 
     visited: var[bool] = var(False, toggle_class="--visited")
     """Whether the link has been visited or not."""
-    with_link_numbers: var[bool] = var(True)
+    with_link_numbers: reactive[bool] = reactive(True)
     """Whether to show link numbers or not."""
-    cosy_link_numbers: var[bool] = var(False)
+    cosy_link_numbers: reactive[bool] = reactive(False)
     """Whether to show link numbers in a cosy way or not."""
-    jump_number: var[int | None] = var(None)
+    jump_number: reactive[int | None] = reactive(None)
     """The jump number for the link."""
 
     _normalised_uri: var[str] = var("")
@@ -174,15 +174,6 @@ class GemtextLink(Widget, can_focus=True):
             self.jump_number is not None and not bool(self.jump_number % 2),
             "--stripe",
         )
-        self.refresh()
-
-    def _watch_with_link_numbers(self) -> None:
-        """Watch for changes to the with_link_numbers property."""
-        self.refresh()
-
-    def _watch_cosy_link_numbers(self) -> None:
-        """Watch for changes to the cosy_link_numbers property."""
-        self.refresh()
 
     def render(self) -> Table:
         """Render the Gemtext link widget."""
