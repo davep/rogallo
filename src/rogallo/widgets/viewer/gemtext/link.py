@@ -181,6 +181,9 @@ class GemtextLink(Widget, can_focus=True):
     def render(self) -> Table:
         """Render the Gemtext link widget."""
         link = Table.grid(expand=True)
+        link_jump: str | Text = (
+            self._jump_link_content if self.with_link_numbers else ""
+        )
 
         # Icon is always first.
         link.add_column(width=2)
@@ -193,8 +196,8 @@ class GemtextLink(Widget, can_focus=True):
 
         # Next is the link number, if we're showing them and they're "cosy".
         if self.with_link_numbers and self.cosy_link_numbers:
-            link.add_column(width=len(self._jump_link_content) + 1)
-            link_data.append(self._jump_link_content)
+            link.add_column(width=len(link_jump) + 1)
+            link_data.append(link_jump)
 
         # Now the link text.
         link.add_column(ratio=1)
@@ -204,8 +207,8 @@ class GemtextLink(Widget, can_focus=True):
 
         # If we're showing link numbers and they're not "cosy".
         if self.with_link_numbers and not self.cosy_link_numbers:
-            link.add_column(width=len(self._jump_link_content) + 1, justify="right")
-            link_data.append(self._jump_link_content)
+            link.add_column(width=len(link_jump) + 1, justify="right")
+            link_data.append(link_jump)
 
         link.add_row(*link_data)
         return link
