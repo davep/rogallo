@@ -61,8 +61,6 @@ class GemtextLink(Widget, can_focus=True):
 
         & > .gemtext-link--icon {
             color: $text-primary;
-            margin-right: 1;
-            height: auto;
         }
 
         &.--visited > .gemtext-link--icon {
