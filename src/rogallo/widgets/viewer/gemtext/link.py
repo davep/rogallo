@@ -19,6 +19,7 @@ from rich.text import Text
 from textual import on
 from textual.events import Click
 from textual.reactive import reactive, var
+from textual.selection import Selection
 from textual.widget import Widget
 
 ##############################################################################
@@ -204,7 +205,16 @@ class GemtextLink(Widget, can_focus=True):
         link.add_column(ratio=1)
         if self._filtered_content is None:
             self._filtered_content = GemtextContent.filter(self._link)
-        link_data.append(self._filtered_content)
+        link_text = (
+            Text(self._filtered_content)
+            if isinstance(self._filtered_content, str)
+            else self._filtered_content.copy()
+        )
+        if self.text_selection:
+            link_text.stylize(
+                self.screen.get_component_rich_style("screen--selection", partial=True)
+            )
+        link_data.append(link_text)
 
         # If we're showing link numbers and they're not "cosy".
         if self.with_link_numbers and not self.cosy_link_numbers:
@@ -222,6 +232,9 @@ class GemtextLink(Widget, can_focus=True):
     def _action_open_link(self) -> None:
         """Open the link."""
         self._navigate_to_uri()
+
+    def get_selection(self, selection: Selection) -> tuple[str, str] | None:
+        return selection.extract(f"=> {self.normalised_uri} {self._link}"), "\n"
 
 
 ##############################################################################
