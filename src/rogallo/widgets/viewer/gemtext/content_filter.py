@@ -41,7 +41,7 @@ class GemtextContent:
         Returns:
             The string with ANSI escape sequences stripped.
         """
-        return Text.from_ansi(text).plain
+        return Text.from_ansi(text).plain if "\x1b" in text else text
 
     @staticmethod
     def _strip_emoji(text: str) -> str:

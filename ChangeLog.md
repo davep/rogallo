@@ -32,6 +32,11 @@
   name are now considered to be a request to visit a host of that protocol
   (`gopher.example.com` -> `gopher://gopher.example.com/1`, etc).
   ([#381](https://github.com/davep/rogallo/pull/381))
+- Improved link navigation performance in documents with a huge number of
+  links. ([#383](https://github.com/davep/rogallo/pull/383))
+- <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> no longer navigate
+  through links, but instead only navigate through the higher-level user
+  interface elements. ([#383](https://github.com/davep/rogallo/pull/383))
 
 ## v1.12.1
 

@@ -106,17 +106,10 @@ class Viewer(Vertical, can_focus=False):
                 background: $background 60%;
             }
         }
-
-        &.--with-link-numbers GemtextLink #jump {
-            display: block;
-        }
-
-        &.--cosy-link-numbers GemtextLink #jump {
-            dock: left;
-            padding-right: 1;
-        }
     }
     """
+
+    DEFAULT_CLASSES = "panel"
 
     HELP = """
     As well as the normal widget navigation keys, the following keys are
@@ -130,7 +123,7 @@ class Viewer(Vertical, can_focus=False):
             tooltip="Move backwards through each of the links",
         ),
         HelpfulBinding(
-            "right, shift+down, l",
+            "right, shift+down, l, n",
             "next_link",
             tooltip="Move forward through each of the links",
         ),
@@ -140,9 +133,9 @@ class Viewer(Vertical, can_focus=False):
     """The details of the document to show in the viewer."""
     view_source: var[bool] = var(False)
     """Whether the viewer is showing the source of the document or not."""
-    with_link_numbers: var[bool] = var(False, toggle_class="--with-link-numbers")
+    with_link_numbers: var[bool] = var(False)
     """Whether the viewer is showing link numbers or not."""
-    cosy_link_numbers: var[bool] = var(False, toggle_class="--cosy-link-numbers")
+    cosy_link_numbers: var[bool] = var(False)
     """Whether the viewer is showing link numbers in a cosy way or not."""
     stripe_links: var[bool] = var(False, toggle_class="--stripe-links")
     """Whether the viewer is showing links with stripes or not."""
@@ -416,9 +409,10 @@ class Viewer(Vertical, can_focus=False):
         self._status.mime_type = self.document.mime_type or ""
         self._jump_map = {}
         with self.app.batch_update():
-            await self._view.remove_children()
-            await self._view.mount_all(self._build_content())
-            if not self.view_source and len(links := self._view.query(GemtextLink)):
+            content = self._build_content()
+            if not self.view_source and len(
+                links := [link for link in content if isinstance(link, GemtextLink)]
+            ):
                 visited_links = {
                     str(visit.location)
                     for visit in self.location_history
@@ -427,10 +421,13 @@ class Viewer(Vertical, can_focus=False):
                     )
                 }
                 for jump_number, link in enumerate(links):
+                    link.data_bind(Viewer.with_link_numbers, Viewer.cosy_link_numbers)
                     link.normalise_uri(self.document.location)
                     link.visited = link.normalised_uri in visited_links
                     link.jump_number = jump_number + 1
                     self._jump_map[link.jump_number] = link
+            await self._view.remove_children()
+            await self._view.mount_all(content)
         # This next bit of nonsense is because Textual fails to sort its
         # scrollbars out upon clearing down and remounting a new set of
         # children. So we have to force it to refresh and then scroll to the
@@ -520,25 +517,31 @@ class Viewer(Vertical, can_focus=False):
 
     def action_previous_link(self) -> None:
         """Focus the previous link."""
-        if not (links := self._view.query(GemtextLink)):
+        if not self._jump_map:
             return
-        current = self._view.query_one_optional("GemtextLink:focus", GemtextLink)
-        if current is None or (current.jump_number and current.jump_number <= 1):
-            self.jump = links.last().jump_number
-        elif current.jump_number is not None:
-            self.jump = current.jump_number - 1
+        current = (
+            focused.jump_number
+            if isinstance(focused := self.screen.focused, GemtextLink)
+            else None
+        )
+        if current is None or current <= 1:
+            self.jump = len(self._jump_map)
+        else:
+            self.jump = current - 1
 
     def action_next_link(self) -> None:
         """Focus the next link."""
-        if not (links := self._view.query(GemtextLink)):
+        if not self._jump_map:
             return
-        current = self._view.query_one_optional("GemtextLink:focus", GemtextLink)
-        if (last := links.last().jump_number) is None:
-            return
-        if current is None or (current.jump_number and current.jump_number >= last):
+        current = (
+            focused.jump_number
+            if isinstance(focused := self.screen.focused, GemtextLink)
+            else None
+        )
+        if current is None or current >= len(self._jump_map):
             self.jump = 1
-        elif current.jump_number is not None:
-            self.jump = current.jump_number + 1
+        else:
+            self.jump = current + 1
 
 
 ### widget.py ends here

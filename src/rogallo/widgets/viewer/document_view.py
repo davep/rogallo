@@ -6,7 +6,7 @@ from textual_enhanced.containers import EnhancedVerticalScroll
 
 
 ##############################################################################
-class DocumentView(EnhancedVerticalScroll):
+class DocumentView(EnhancedVerticalScroll, can_focus_children=False):
     """The scrolling container for the document."""
 
     HELP = """
@@ -15,8 +15,6 @@ class DocumentView(EnhancedVerticalScroll):
     As well as using the common set of cursor and page keys, the following
     keys are available for movement within the document:
     """
-
-    DEFAULT_CLASSES = "panel"
 
 
 ### document_view.py ends here
