@@ -10,9 +10,8 @@ from gemtext import Line, PreFormatted
 
 ##############################################################################
 # Textual imports.
-from textual.app import ComposeResult
 from textual.highlight import HighlightTheme, highlight
-from textual.widgets import Label, Static
+from textual.widgets import Static
 
 ##############################################################################
 # Local imports.
