@@ -149,8 +149,7 @@ class GemtextLink(Widget, can_focus=True):
             self._normalised_uri = str(base_uri.resolve(self._link.uri))
         elif isinstance(base_uri, Path):
             self._normalised_uri = (base_uri.parent / self._link.uri).resolve().as_uri()
-        if self.is_mounted:
-            self.refresh()
+        self.refresh()
 
     def _watch__normalised_uri(self) -> None:
         """Watch for changes to the normalised URI."""
