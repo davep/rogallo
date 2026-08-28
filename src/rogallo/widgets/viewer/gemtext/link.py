@@ -183,15 +183,19 @@ class GemtextLink(Horizontal, can_focus=True):
         if load_configuration().show_link_tooltips:
             self.tooltip = self._normalised_uri
 
+    @property
+    def _jump_link_content(self) -> str:
+        """Get the content for the jump link."""
+        return "" if self.jump_number is None else f"[{self.jump_number}]"
+
     def _watch_jump_number(self) -> None:
         """Watch for changes to the jump number."""
-        self._jump_link.update(
-            "" if self.jump_number is None else f"[{self.jump_number}]"
-        )
         self.set_class(
             self.jump_number is not None and not bool(self.jump_number % 2),
             "--stripe",
         )
+        if self.is_mounted:
+            self._jump_link.update(self._jump_link_content)
 
     def compose(self) -> ComposeResult:
         """Compose the Gemtext link widget."""
@@ -204,7 +208,7 @@ class GemtextLink(Horizontal, can_focus=True):
                     markup=False,
                     shrink=True,
                 )
-            yield Label(id="jump", markup=False)
+            yield Label(self._jump_link_content, id="jump", markup=False)
 
     def _navigate_to_uri(self) -> None:
         """Navigate to the normalised URI."""

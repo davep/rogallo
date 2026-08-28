@@ -418,9 +418,10 @@ class Viewer(Vertical, can_focus=False):
         self._status.mime_type = self.document.mime_type or ""
         self._jump_map = {}
         with self.app.batch_update():
-            await self._view.remove_children()
-            await self._view.mount_all(self._build_content())
-            if not self.view_source and len(links := self._view.query(GemtextLink)):
+            content = self._build_content()
+            if not self.view_source and len(
+                links := [link for link in content if isinstance(link, GemtextLink)]
+            ):
                 visited_links = {
                     str(visit.location)
                     for visit in self.location_history
@@ -433,6 +434,8 @@ class Viewer(Vertical, can_focus=False):
                     link.visited = link.normalised_uri in visited_links
                     link.jump_number = jump_number + 1
                     self._jump_map[link.jump_number] = link
+            await self._view.remove_children()
+            await self._view.mount_all(content)
         # This next bit of nonsense is because Textual fails to sort its
         # scrollbars out upon clearing down and remounting a new set of
         # children. So we have to force it to refresh and then scroll to the
