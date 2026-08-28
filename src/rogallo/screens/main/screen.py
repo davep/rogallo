@@ -285,13 +285,12 @@ class Main(EnhancedScreen[None]):
     _ACTIVE: Final[str] = "--active-panel"
     """The CSS class for the active panel."""
 
-    def _watch_focused(self):
+    def watch_focused(self) -> None:
         """Watch for changes to the focused widget.
 
         This is a workaround for Textual's poor performance when using
         :focus-within.
         """
-        super()._watch_focused()
         ancestors = (
             set(focused.ancestors_with_self)
             if (focused := self.focused) is not None
