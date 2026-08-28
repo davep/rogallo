@@ -100,7 +100,7 @@ class GemtextLink(Widget, can_focus=True):
     jump_number: reactive[int | None] = reactive(None)
     """The jump number for the link."""
 
-    _normalised_uri: var[str] = var("")
+    _normalised_uri: reactive[str] = reactive("")
     """The normalised URI to use when opening the link."""
 
     def __init__(self, link: Line) -> None:
@@ -149,7 +149,6 @@ class GemtextLink(Widget, can_focus=True):
             self._normalised_uri = str(base_uri.resolve(self._link.uri))
         elif isinstance(base_uri, Path):
             self._normalised_uri = (base_uri.parent / self._link.uri).resolve().as_uri()
-        self.refresh()
 
     def _watch__normalised_uri(self) -> None:
         """Watch for changes to the normalised URI."""
