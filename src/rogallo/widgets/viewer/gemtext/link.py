@@ -116,6 +116,8 @@ class GemtextLink(Widget, can_focus=True):
         """The link data."""
         self._normalised_uri = link.uri
         """The normalised URI to use when opening the link."""
+        self._filtered_content: Text | str | None = None
+        """The filtered content of the link."""
 
     @property
     def normalised_uri(self) -> str:
@@ -196,7 +198,9 @@ class GemtextLink(Widget, can_focus=True):
 
         # Now the link text.
         link.add_column(ratio=1)
-        link_data.append(GemtextContent.filter(self._link))
+        if self._filtered_content is None:
+            self._filtered_content = GemtextContent.filter(self._link)
+        link_data.append(self._filtered_content)
 
         # If we're showing link numbers and they're not "cosy".
         if self.with_link_numbers and not self.cosy_link_numbers:
