@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Gemtext imports.
-from gemtext import Line, ListItem
+from gemtext import Line
 
 ##############################################################################
 # Rich imports.
@@ -45,10 +45,11 @@ class GemtextListItem(Widget):
         Args:
             list_item: The Gemtext list item to display.
         """
-        assert isinstance(list_item, ListItem)
         super().__init__()
-        self._list_item: ListItem = list_item
-        """The Gemtext list item to display."""
+        self._bullet = icon("list_item_bullet_icon")
+        """The bullet icon for the Gemtext list item."""
+        self._text = GemtextContent.filter(list_item)
+        """The text content of the Gemtext list item."""
 
     def render(self) -> Table:
         """Render the Gemtext list item widget."""
@@ -57,10 +58,10 @@ class GemtextListItem(Widget):
         item.add_column(ratio=1, no_wrap=False)
         item.add_row(
             Text(
-                icon("list_item_bullet_icon"),
+                self._bullet,
                 style=self.get_component_rich_style("gemtext-list-item--bullet"),
             ),
-            GemtextContent.filter(self._list_item),
+            self._text,
         )
         return item
 
