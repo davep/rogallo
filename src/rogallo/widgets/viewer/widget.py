@@ -132,7 +132,7 @@ class Viewer(Vertical, can_focus=False):
             tooltip="Move backwards through each of the links",
         ),
         HelpfulBinding(
-            "right, shift+down, l",
+            "right, shift+down, l, n",
             "next_link",
             tooltip="Move forward through each of the links",
         ),

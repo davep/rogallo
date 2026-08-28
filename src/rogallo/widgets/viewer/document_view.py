@@ -6,7 +6,7 @@ from textual_enhanced.containers import EnhancedVerticalScroll
 
 
 ##############################################################################
-class DocumentView(EnhancedVerticalScroll):
+class DocumentView(EnhancedVerticalScroll, can_focus_children=False):
     """The scrolling container for the document."""
 
     HELP = """
