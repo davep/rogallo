@@ -11,6 +11,7 @@ from rich.text import Text
 
 ##############################################################################
 # Textual imports.
+from textual.selection import Selection
 from textual.widget import Widget
 
 ##############################################################################
@@ -48,11 +49,18 @@ class GemtextListItem(Widget):
         super().__init__()
         self._bullet = icon("list_item_bullet_icon")
         """The bullet icon for the Gemtext list item."""
+        self._list_item = list_item
+        """The Gemtext list item to display."""
         self._text = GemtextContent.filter(list_item)
         """The text content of the Gemtext list item."""
 
     def render(self) -> Table:
         """Render the Gemtext list item widget."""
+        text = Text(self._text) if isinstance(self._text, str) else self._text.copy()
+        if self.text_selection:
+            text.stylize(
+                self.screen.get_component_rich_style("screen--selection", partial=True)
+            )
         item = Table.grid(expand=True)
         item.add_column(width=2, no_wrap=True)
         item.add_column(ratio=1, no_wrap=False)
@@ -61,9 +69,12 @@ class GemtextListItem(Widget):
                 self._bullet,
                 style=self.get_component_rich_style("gemtext-list-item--bullet"),
             ),
-            self._text,
+            text,
         )
         return item
+
+    def get_selection(self, selection: Selection) -> tuple[str, str] | None:
+        return selection.extract(f"* {self._list_item}"), "\n"
 
 
 ### list_item.py ends here
