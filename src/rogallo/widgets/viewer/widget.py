@@ -106,15 +106,6 @@ class Viewer(Vertical, can_focus=False):
                 background: $background 60%;
             }
         }
-
-        &.--with-link-numbers GemtextLink #jump {
-            display: block;
-        }
-
-        &.--cosy-link-numbers GemtextLink #jump {
-            dock: left;
-            padding-right: 1;
-        }
     }
     """
 
@@ -142,9 +133,9 @@ class Viewer(Vertical, can_focus=False):
     """The details of the document to show in the viewer."""
     view_source: var[bool] = var(False)
     """Whether the viewer is showing the source of the document or not."""
-    with_link_numbers: var[bool] = var(False, toggle_class="--with-link-numbers")
+    with_link_numbers: var[bool] = var(False)
     """Whether the viewer is showing link numbers or not."""
-    cosy_link_numbers: var[bool] = var(False, toggle_class="--cosy-link-numbers")
+    cosy_link_numbers: var[bool] = var(False)
     """Whether the viewer is showing link numbers in a cosy way or not."""
     stripe_links: var[bool] = var(False, toggle_class="--stripe-links")
     """Whether the viewer is showing links with stripes or not."""
@@ -430,6 +421,7 @@ class Viewer(Vertical, can_focus=False):
                     )
                 }
                 for jump_number, link in enumerate(links):
+                    link.data_bind(Viewer.with_link_numbers, Viewer.cosy_link_numbers)
                     link.normalise_uri(self.document.location)
                     link.visited = link.normalised_uri in visited_links
                     link.jump_number = jump_number + 1

@@ -10,40 +10,27 @@ from urllib.parse import urlparse
 from gemtext import Line, Link
 
 ##############################################################################
-# Port70 imports.
-from port70 import GopherURI
-
-##############################################################################
-# Port1900 imports.
-from port1900 import NexURI
-
-##############################################################################
-# Sybaritic imports.
-from sybaritic import SpartanURI
+# Rich imports.
+from rich.table import Table
+from rich.text import Text
 
 ##############################################################################
 # Textual imports.
 from textual import on
-from textual.app import ComposeResult
-from textual.containers import Horizontal, HorizontalGroup
 from textual.events import Click
-from textual.getters import query_one
 from textual.reactive import var
-from textual.widgets import Label
+from textual.widget import Widget
 
 ##############################################################################
 # Textual enhanced imports.
 from textual_enhanced.binding import HelpfulBinding
 
 ##############################################################################
-# Wasat imports.
-from wasat import GeminiURI
-
-##############################################################################
 # Local imports.
 from ....data import load_configuration
 from ....messages import OpenLocation, OpenURI
 from ....preflight import (
+    has_navigable_path,
     is_finger_uri,
     is_gopher_uri,
     is_likely_capsule,
@@ -51,14 +38,20 @@ from ....preflight import (
     is_nex_uri,
     is_spartan_uri,
 )
+from ....safe_escape import escape
 from ....types import RogalloLocation, SpartanURINeedingData
 from .content_filter import GemtextContent
 from .icons import icon
 
 
 ##############################################################################
-class GemtextLink(Horizontal, can_focus=True):
+class GemtextLink(Widget, can_focus=True):
     """A widget for displaying a Gemtext link."""
+
+    COMPONENT_CLASSES = {
+        "gemtext-link--icon",
+        "gemtext-link--jump-number",
+    }
 
     DEFAULT_CSS = """
     GemtextLink {
@@ -66,25 +59,17 @@ class GemtextLink(Horizontal, can_focus=True):
         height: auto;
         pointer: pointer;
 
-        #icon {
+        & > .gemtext-link--icon {
             color: $text-primary;
             margin-right: 1;
             height: auto;
         }
 
-        &.--visited #icon {
+        &.--visited > .gemtext-link--icon {
             color: $text-primary 50%;
         }
 
-        #text-wrap {
-            height: auto;
-        }
-
-        #text {
-            margin-right: 2;
-        }
-
-        #jump {
+        & > .gemtext-link--jump-number {
             display: none;
             color: $text-muted 30%;
             height: 100%;
@@ -95,14 +80,8 @@ class GemtextLink(Horizontal, can_focus=True):
         }
 
         &:focus {
-            #text-wrap, #jump {
-                color: $block-cursor-foreground;
-                background: $block-cursor-background;
-            }
-            #jump {
-                color: $text;
-                text-style: bold;
-            }
+            color: $block-cursor-foreground;
+            background: $block-cursor-background !important;
         }
     }
     """
@@ -118,16 +97,15 @@ class GemtextLink(Horizontal, can_focus=True):
 
     visited: var[bool] = var(False, toggle_class="--visited")
     """Whether the link has been visited or not."""
+    with_link_numbers: var[bool] = var(True)
+    """Whether to show link numbers or not."""
+    cosy_link_numbers: var[bool] = var(False)
+    """Whether to show link numbers in a cosy way or not."""
     jump_number: var[int | None] = var(None)
     """The jump number for the link."""
 
     _normalised_uri: var[str] = var("")
     """The normalised URI to use when opening the link."""
-
-    _jump_link = query_one("#jump", Label)
-    """The jump link label."""
-    _icon = query_one("#icon", Label)
-    """The icon label."""
 
     def __init__(self, link: Line) -> None:
         """Initialize a Gemtext link widget.
@@ -171,12 +149,12 @@ class GemtextLink(Horizontal, can_focus=True):
             return
         if urlparse(self._normalised_uri).scheme:
             return
-        if isinstance(base_uri, (GeminiURI, GopherURI, SpartanURI, NexURI)):
+        if has_navigable_path(base_uri):
             self._normalised_uri = str(base_uri.resolve(self._link.uri))
         elif isinstance(base_uri, Path):
             self._normalised_uri = (base_uri.parent / self._link.uri).resolve().as_uri()
         if self.is_mounted:
-            self._icon.update(self._best_icon())
+            self.refresh()
 
     def _watch__normalised_uri(self) -> None:
         """Watch for changes to the normalised URI."""
@@ -184,9 +162,16 @@ class GemtextLink(Horizontal, can_focus=True):
             self.tooltip = self._normalised_uri
 
     @property
-    def _jump_link_content(self) -> str:
+    def _jump_link_content(self) -> str | Text:
         """Get the content for the jump link."""
-        return "" if self.jump_number is None else f"[{self.jump_number}]"
+        return (
+            ""
+            if self.jump_number is None
+            else Text(
+                escape(f"[{self.jump_number}]"),
+                style=self.get_component_rich_style("gemtext-link--jump-number"),
+            )
+        )
 
     def _watch_jump_number(self) -> None:
         """Watch for changes to the jump number."""
@@ -194,21 +179,45 @@ class GemtextLink(Horizontal, can_focus=True):
             self.jump_number is not None and not bool(self.jump_number % 2),
             "--stripe",
         )
-        if self.is_mounted:
-            self._jump_link.update(self._jump_link_content)
+        self.refresh()
 
-    def compose(self) -> ComposeResult:
-        """Compose the Gemtext link widget."""
-        yield Label(self._best_icon(), id="icon")
-        with HorizontalGroup():
-            with HorizontalGroup(id="text-wrap"):
-                yield Label(
-                    GemtextContent.filter(self._link),
-                    id="text",
-                    markup=False,
-                    shrink=True,
-                )
-            yield Label(self._jump_link_content, id="jump", markup=False)
+    def _watch_with_link_numbers(self) -> None:
+        """Watch for changes to the with_link_numbers property."""
+        self.refresh()
+
+    def _watch_cosy_link_numbers(self) -> None:
+        """Watch for changes to the cosy_link_numbers property."""
+        self.refresh()
+
+    def render(self) -> Table:
+        """Render the Gemtext link widget."""
+        link = Table.grid(expand=True)
+
+        # Icon is always first.
+        link.add_column(width=2)
+        link_data: list[str | Text] = [
+            Text(
+                self._best_icon(),
+                style=self.get_component_rich_style("gemtext-link--icon"),
+            )
+        ]
+
+        # Next is the link number, if we're showing them and they're "cosy".
+        if self.with_link_numbers and self.cosy_link_numbers:
+            link.add_column(width=len(self._jump_link_content) + 1)
+            link_data.append(self._jump_link_content)
+
+        # Now the link text.
+        link.add_column(ratio=1)
+        link_data.append(GemtextContent.filter(self._link))
+
+        # If we're showing link numbers and they're not "cosy".
+        if self.with_link_numbers and not self.cosy_link_numbers:
+            link.add_column(width=len(self._jump_link_content) + 1, justify="right")
+            link_data.append(self._jump_link_content)
+
+        link.add_row(*link_data)
+        return link
 
     def _navigate_to_uri(self) -> None:
         """Navigate to the normalised URI."""
