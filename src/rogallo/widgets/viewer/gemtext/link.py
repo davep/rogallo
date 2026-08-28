@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Python imports.
+from functools import cached_property
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -121,6 +122,7 @@ class GemtextLink(Widget, can_focus=True):
         """The normalised URI to use when opening the link."""
         return self._normalised_uri
 
+    @cached_property
     def _best_icon(self) -> str:
         """Get the best icon for the link based on its URI."""
         for checker, icon_name in (
@@ -182,7 +184,7 @@ class GemtextLink(Widget, can_focus=True):
         link.add_column(width=2)
         link_data: list[str | Text] = [
             Text(
-                self._best_icon(),
+                self._best_icon,
                 style=self.get_component_rich_style("gemtext-link--icon"),
             )
         ]
