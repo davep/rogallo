@@ -5,10 +5,13 @@
 from gemtext import Line, ListItem
 
 ##############################################################################
+# Rich imports.
+from rich.table import Table
+from rich.text import Text
+
+##############################################################################
 # Textual imports.
-from textual.app import ComposeResult
-from textual.containers import Horizontal
-from textual.widgets import Label
+from textual.widget import Widget
 
 ##############################################################################
 # Local imports.
@@ -17,24 +20,21 @@ from .icons import icon
 
 
 ##############################################################################
-class GemtextListItem(Horizontal):
+class GemtextListItem(Widget):
     """A widget for displaying a Gemtext list item."""
+
+    COMPONENT_CLASSES = {"gemtext-list-item--bullet"}
 
     DEFAULT_CSS = """
     GemtextListItem {
         margin: 0 2 0 0;
         height: auto;
 
-        #bullet {
+        & > .gemtext-list-item--bullet {
             color: $text-primary;
-            padding-right: 1;
             &:light {
                 color: $text-secondary;
             }
-        }
-
-        #text {
-            margin-right: 2;
         }
     }
     """
@@ -48,13 +48,21 @@ class GemtextListItem(Horizontal):
         assert isinstance(list_item, ListItem)
         super().__init__()
         self._list_item: ListItem = list_item
+        """The Gemtext list item to display."""
 
-    def compose(self) -> ComposeResult:
-        """Compose the Gemtext list item widget."""
-        yield Label(icon("list_item_bullet_icon"), id="bullet")
-        yield Label(
-            GemtextContent.filter(self._list_item), markup=False, shrink=True, id="text"
+    def render(self) -> Table:
+        """Render the Gemtext list item widget."""
+        item = Table.grid(expand=True)
+        item.add_column(width=2, no_wrap=True)
+        item.add_column(ratio=1, no_wrap=False)
+        item.add_row(
+            Text(
+                icon("list_item_bullet_icon"),
+                style=self.get_component_rich_style("gemtext-list-item--bullet"),
+            ),
+            GemtextContent.filter(self._list_item),
         )
+        return item
 
 
 ### list_item.py ends here
