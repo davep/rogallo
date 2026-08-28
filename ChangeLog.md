@@ -37,6 +37,8 @@
 - <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> no longer navigate
   through links, but instead only navigate through the higher-level user
   interface elements. ([#383](https://github.com/davep/rogallo/pull/383))
+- Simplified a number of widgets used in displaying the content of a page.
+  ([#385](https://github.com/davep/rogallo/pull/385))
 
 ## v1.12.1
 

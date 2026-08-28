@@ -10,9 +10,8 @@ from gemtext import Line, PreFormatted
 
 ##############################################################################
 # Textual imports.
-from textual.app import ComposeResult
 from textual.highlight import HighlightTheme, highlight
-from textual.widgets import Label, Static
+from textual.widgets import Static
 
 ##############################################################################
 # Local imports.
@@ -59,35 +58,26 @@ class GemtextPreformatted(Static):
             preformatted: The Gemtext preformatted text to display.
         """
         assert isinstance(preformatted, PreFormatted)
-        self._preformatted = preformatted
-        """The Gemtext preformatted text to display."""
+        text = GemtextContent.ansi_filter(preformatted)
         super().__init__(
+            highlight(
+                str(text),
+                language=preformatted.alt_text,
+                theme=HighlightTheme,
+            )
+            if preformatted.has_alt_text and supported_language(preformatted.alt_text)
+            else text,
             classes=(
                 ""
                 if preformatted.alt_text.casefold() in _blended_types()
                 else "--highlight"
-            )
+            ),
         )
         self.tooltip = (
             preformatted.alt_text
             if preformatted.has_alt_text
             and load_configuration().show_preformat_tooltips
             else None
-        )
-
-    def compose(self) -> ComposeResult:
-        """Compose the Gemtext preformatted text widget."""
-        text = GemtextContent.ansi_filter(self._preformatted)
-        yield Label(
-            highlight(
-                str(text),
-                language=self._preformatted.alt_text,
-                theme=HighlightTheme,
-            )
-            if self._preformatted.has_alt_text
-            and supported_language(self._preformatted.alt_text)
-            else text,
-            markup=False,
         )
 
 
