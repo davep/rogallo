@@ -52,8 +52,25 @@ class GemtextContent:
 
         Returns:
             The string with emoji stripped.
+
+        Note:
+            Any space that immediately follows an emoji will also be
+            stripped, to avoid leaving a space that was intended to separate
+            the emoji from the what follows it.
         """
-        return "".join(char for char in text if category(char) != "So")
+        retained: list[str] = []
+        retain = retained.append
+        skip = False
+        for character in text:
+            if skip:
+                skip = False
+                if character == " ":
+                    continue
+            if category(character) == "So":
+                skip = True
+            else:
+                retain(character)
+        return "".join(retained)
 
     @classmethod
     def set_filter(
