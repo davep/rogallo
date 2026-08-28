@@ -39,6 +39,8 @@
   interface elements. ([#383](https://github.com/davep/rogallo/pull/383))
 - Simplified a number of widgets used in displaying the content of a page.
   ([#385](https://github.com/davep/rogallo/pull/385))
+- When removing emoji, any space directly following an emoji is also
+  removed. ([#386](https://github.com/davep/rogallo/pull/386))
 
 ## v1.12.1
 
