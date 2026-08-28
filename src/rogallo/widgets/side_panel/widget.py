@@ -52,8 +52,8 @@ class SidePanel(Container):
             dock: right;
         }
 
-        #tabs-list {
-            background: $panel;
+        #tabs-list, Tabs {
+            background: transparent;
         }
     }
     """

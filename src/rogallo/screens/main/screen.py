@@ -6,6 +6,7 @@ from argparse import Namespace
 from collections.abc import Awaitable
 from functools import partial
 from subprocess import CalledProcessError, run
+from typing import Final
 from webbrowser import open as open_in_browser
 
 ##############################################################################
@@ -171,18 +172,15 @@ class Main(EnhancedScreen[None]):
             scrollbar-background-active: $surface;
         }
 
-        *:focus, *:focus-within {
-            scrollbar-background: $panel 80%;
-            scrollbar-background-hover: $panel 80%;
-            scrollbar-background-active: $panel 80%;
-        }
-
         .panel {
             border-left: solid $panel;
             background: $surface;
-            &:focus, &:focus-within {
+            &.--active-panel {
                 border-left: solid $border;
-                background: $panel 80%;
+                background: $panel;
+                scrollbar-background: $panel 80%;
+                scrollbar-background-hover: $panel 80%;
+                scrollbar-background-active: $panel 80%;
             }
         }
 
@@ -283,6 +281,24 @@ class Main(EnhancedScreen[None]):
         """The last user input."""
         self._clients = Clients.create()
         """The clients for the supported protocols."""
+
+    _ACTIVE: Final[str] = "--active-panel"
+    """The CSS class for the active panel."""
+
+    def _watch_focused(self):
+        """Watch for changes to the focused widget.
+
+        This is a workaround for Textual's poor performance when using
+        :focus-within.
+        """
+        super()._watch_focused()
+        ancestors = (
+            set(focused.ancestors_with_self)
+            if (focused := self.focused) is not None
+            else ()
+        )
+        self._side_panel.set_class(self._side_panel in ancestors, self._ACTIVE)
+        self._viewer.set_class(self._viewer in ancestors, self._ACTIVE)
 
     def _watch__side_panel_visible(self) -> None:
         """Watch for changes to the side panel visibility."""

@@ -16,7 +16,5 @@ class DocumentView(EnhancedVerticalScroll):
     keys are available for movement within the document:
     """
 
-    DEFAULT_CLASSES = "panel"
-
 
 ### document_view.py ends here
