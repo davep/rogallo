@@ -70,9 +70,7 @@ class GemtextLink(Widget, can_focus=True):
         }
 
         & > .gemtext-link--jump-number {
-            display: none;
             color: $text-muted 30%;
-            height: 100%;
         }
 
         &:hover {
