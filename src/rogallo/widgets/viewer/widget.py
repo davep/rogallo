@@ -522,25 +522,31 @@ class Viewer(Vertical, can_focus=False):
 
     def action_previous_link(self) -> None:
         """Focus the previous link."""
-        if not (links := self._view.query(GemtextLink)):
+        if not self._jump_map:
             return
-        current = self._view.query_one_optional("GemtextLink:focus", GemtextLink)
-        if current is None or (current.jump_number and current.jump_number <= 1):
-            self.jump = links.last().jump_number
-        elif current.jump_number is not None:
-            self.jump = current.jump_number - 1
+        current = (
+            focused.jump_number
+            if isinstance(focused := self.screen.focused, GemtextLink)
+            else None
+        )
+        if current is None or current <= 1:
+            self.jump = len(self._jump_map)
+        else:
+            self.jump = current - 1
 
     def action_next_link(self) -> None:
         """Focus the next link."""
-        if not (links := self._view.query(GemtextLink)):
+        if not self._jump_map:
             return
-        current = self._view.query_one_optional("GemtextLink:focus", GemtextLink)
-        if (last := links.last().jump_number) is None:
-            return
-        if current is None or (current.jump_number and current.jump_number >= last):
+        current = (
+            focused.jump_number
+            if isinstance(focused := self.screen.focused, GemtextLink)
+            else None
+        )
+        if current is None or current >= len(self._jump_map):
             self.jump = 1
-        elif current.jump_number is not None:
-            self.jump = current.jump_number + 1
+        else:
+            self.jump = current + 1
 
 
 ### widget.py ends here
