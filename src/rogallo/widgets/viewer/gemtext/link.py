@@ -55,7 +55,7 @@ class GemtextLink(Widget, can_focus=True):
 
     DEFAULT_CSS = """
     GemtextLink {
-        margin: 0 2 0 0;
+        margin: 0 1 0 0;
         height: auto;
         pointer: pointer;
 
