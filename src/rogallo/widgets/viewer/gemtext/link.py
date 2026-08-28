@@ -2,7 +2,6 @@
 
 ##############################################################################
 # Python imports.
-from functools import cached_property
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -103,6 +102,8 @@ class GemtextLink(Widget, can_focus=True):
 
     _normalised_uri: reactive[str] = reactive("")
     """The normalised URI to use when opening the link."""
+    _icon: reactive[str] = reactive("")
+    """The icon to display for the link."""
 
     def __init__(self, link: Line) -> None:
         """Initialize a Gemtext link widget.
@@ -124,7 +125,6 @@ class GemtextLink(Widget, can_focus=True):
         """The normalised URI to use when opening the link."""
         return self._normalised_uri
 
-    @cached_property
     def _best_icon(self) -> str:
         """Get the best icon for the link based on its URI."""
         for checker, icon_name in (
@@ -156,6 +156,7 @@ class GemtextLink(Widget, can_focus=True):
 
     def _watch__normalised_uri(self) -> None:
         """Watch for changes to the normalised URI."""
+        self._icon = self._best_icon()
         if load_configuration().show_link_tooltips:
             self.tooltip = self._normalised_uri
 
@@ -189,7 +190,7 @@ class GemtextLink(Widget, can_focus=True):
         link.add_column(width=2)
         link_data: list[str | Text] = [
             Text(
-                self._best_icon,
+                self._icon,
                 style=self.get_component_rich_style("gemtext-link--icon"),
             )
         ]
