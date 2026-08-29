@@ -794,11 +794,11 @@ wheels = [
 
 [[package]]
 name = "html2gemtext"
-version = "0.1.0"
+version = "1.0.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/2d/1d/7e842b0402c03eeb1b1c39bfd0dfe6d80feaeaf6f8689d10feceb6f9d74e/html2gemtext-0.1.0.tar.gz", hash = "sha256:84360f629c25c797d96921a2662a83777f09bf93e7f8cd876d37358567c66ab2", size = 5165, upload-time = "2026-08-11T18:38:30.353Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/89/44/945f75b007ea424defb3a078885120e75d79a3a0da164095df2b090811d9/html2gemtext-1.0.0.tar.gz", hash = "sha256:db50e385bb7374868988f2e0bcd8d74f19791c3d32d1f6049ed5a57dba15b0ab", size = 5142, upload-time = "2026-08-29T08:57:03.604Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/22/c8/90e64e7bcd5fe382981a3dbe795f03909520c04cb2ccbf1da2046b3343e2/html2gemtext-0.1.0-py3-none-any.whl", hash = "sha256:f13e3c9ff41edcdc8e2fa058deb5dbbe788b37eefbe1f27002f3add28c74bd72", size = 6621, upload-time = "2026-08-11T18:38:29.265Z" },
+    { url = "https://files.pythonhosted.org/packages/4d/d1/55c204bd9bda3314874b6bb2729a3311aa007e70622af80019ba7658148a/html2gemtext-1.0.0-py3-none-any.whl", hash = "sha256:523029305f4189d8b35e8ba47e293432e59aaff6fec0c56536f06aa2f2f34862", size = 6598, upload-time = "2026-08-29T08:57:02.362Z" },
 ]
 
 [[package]]
@@ -1862,7 +1862,7 @@ requires-dist = [
     { name = "bagofstuff", specifier = ">=2.0.0" },
     { name = "gemtext", specifier = ">=1.1.0" },
     { name = "gophermap", specifier = ">=1.0.0" },
-    { name = "html2gemtext", specifier = ">=0.1.0" },
+    { name = "html2gemtext", specifier = ">=1.0.0" },
     { name = "md2gemtext", specifier = ">=1.0.0" },
     { name = "port1900", specifier = ">=1.0.0" },
     { name = "port70", specifier = ">=0.1.2" },
