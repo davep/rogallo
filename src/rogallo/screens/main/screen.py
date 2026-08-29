@@ -967,7 +967,7 @@ class Main(EnhancedScreen[None]):
 
     def action_view_change_log_command(self) -> None:
         """View the change log."""
-        self.post_message(OpenURI("gemini://tilde.team/~davep/rogallo/changelog.gmi"))
+        self.post_message(OpenURI("gemini://davep.gemcities.com/rogallo/changelog.gmi"))
 
     def action_hand_off_to_operating_system_command(self) -> None:
         """Hand off the current document's location to the operating system."""
