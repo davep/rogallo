@@ -48,6 +48,8 @@
 - Updated the in-app ChangeLog link to my Gemcities capsule due to
   tilde.team having a long-term outage.
   ([#388](https://github.com/davep/rogallo/pull/388))
+- Improved what is and isn't considered to be an emoji when stripping
+  emojis. ([#392](https://github.com/davep/rogallo/pull/392))
 
 ## v1.12.1
 
