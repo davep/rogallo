@@ -41,6 +41,9 @@
   ([#385](https://github.com/davep/rogallo/pull/385))
 - When removing emoji, any space directly following an emoji is also
   removed. ([#386](https://github.com/davep/rogallo/pull/386))
+- Updated the in-app ChangeLog link to my Gemcities capsule due to
+  tilde.team having a long-term outage.
+  ([#388](https://github.com/davep/rogallo/pull/388))
 
 ## v1.12.1
 
