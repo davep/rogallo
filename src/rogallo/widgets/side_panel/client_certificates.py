@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from itertools import chain
+from typing import Final
 
 ##############################################################################
 # Textual imports.
@@ -36,6 +37,13 @@ from ...screens.client_certificate import (
     ClientCertificateViewer,
     ScopePicker,
 )
+
+##############################################################################
+_FILE_FILTERS: Final[Filters] = Filters(
+    ("PEM files", lambda path: path.suffix.lower() == ".pem"),
+    ("All files", lambda _: True),
+)
+"""Filters for file dialogs that only allow PEM files or all files."""
 
 
 ##############################################################################
@@ -375,10 +383,7 @@ class ClientCertificateManager(EnhancedOptionList):
                         ).name
                         if option.certificate.cert_path
                         else "certificate.pem",
-                        filters=Filters(
-                            ("PEM files", lambda path: path.suffix.lower() == ".pem"),
-                            ("All files", lambda _: True),
-                        ),
+                        filters=_FILE_FILTERS,
                         save_button="Export",
                     )
                 )
@@ -402,12 +407,9 @@ class ClientCertificateManager(EnhancedOptionList):
         """Import a certificate."""
         if target := await self.app.push_screen_wait(
             FileOpen(
-                title="Import Certificate",
-                filters=Filters(
-                    ("PEM files", lambda path: path.suffix.lower() == ".pem"),
-                    ("All files", lambda _: True),
-                ),
+                filters=_FILE_FILTERS,
                 open_button="Import",
+                title="Import Certificate",
             )
         ):
             try:
