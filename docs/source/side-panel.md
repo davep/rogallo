@@ -39,6 +39,8 @@ the following keys perform the following actions:
 - `d` - Delete a client certificate.
 - `a` - Associate the highlighted certificate with a Gemini URI.
 - `r` - Remove an association from the highlighted certificate.
+- `x` - Export the highlighted certificate.
+- `i` - Import a certificate.
 
 ## Configuration
 

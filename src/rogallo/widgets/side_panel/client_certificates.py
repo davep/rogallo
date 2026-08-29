@@ -3,6 +3,7 @@
 ##############################################################################
 # Python imports.
 from itertools import chain
+from typing import Final
 
 ##############################################################################
 # Textual imports.
@@ -16,6 +17,10 @@ from textual.widgets.option_list import Option
 from textual_enhanced.binding import HelpfulBinding
 from textual_enhanced.dialogs import Confirm, ModalInput
 from textual_enhanced.widgets import EnhancedOptionList
+
+##############################################################################
+# Textual fspicker imports.
+from textual_fspicker import FileOpen, FileSave, Filters
 
 ##############################################################################
 # Wasat imports.
@@ -32,6 +37,13 @@ from ...screens.client_certificate import (
     ClientCertificateViewer,
     ScopePicker,
 )
+
+##############################################################################
+_FILE_FILTERS: Final[Filters] = Filters(
+    ("PEM files", lambda path: path.suffix.lower() == ".pem"),
+    ("All files", lambda _: True),
+)
+"""Filters for file dialogs that only allow PEM files or all files."""
 
 
 ##############################################################################
@@ -130,6 +142,18 @@ class ClientCertificateManager(EnhancedOptionList):
             "View",
             tooltip="View the selected certificate",
         ),
+        HelpfulBinding(
+            "x",
+            "export",
+            "Export",
+            tooltip="Export the selected certificate",
+        ),
+        HelpfulBinding(
+            "i",
+            "import",
+            "Import",
+            tooltip="Import a certificate",
+        ),
     ]
 
     location_history: var[LocationHistory] = var(LocationHistory)
@@ -151,7 +175,7 @@ class ClientCertificateManager(EnhancedOptionList):
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
         if not self.is_mounted:
             return True
-        if action in ("delete", "add_association", "view"):
+        if action in ("delete", "add_association", "view", "export"):
             return (
                 self.highlighted is not None
                 and isinstance(
@@ -343,6 +367,62 @@ class ClientCertificateManager(EnhancedOptionList):
                     severity="error",
                     title="Error",
                 )
+
+    @work
+    async def action_export(self) -> None:
+        """Export the selected certificate."""
+        if (
+            self.highlighted is not None
+            and isinstance(option := self.options[self.highlighted], CertificateOption)
+            and (
+                target := await self.app.push_screen_wait(
+                    FileSave(
+                        title="Export Certificate",
+                        default_file=option.certificate.cert_path.with_suffix(
+                            ".pem"
+                        ).name
+                        if option.certificate.cert_path
+                        else "certificate.pem",
+                        filters=_FILE_FILTERS,
+                        save_button="Export",
+                    )
+                )
+            )
+        ):
+            try:
+                await self._store.export_certificate(
+                    option.certificate, target, combined=True
+                )
+            except (OSError, ValueError) as error:
+                self.notify(
+                    f"Unable to export certificate to {target}:\n\n{error}",
+                    severity="error",
+                    title="Error",
+                )
+                return
+            self.notify(f"Certificate exported to {target}", title="Exported")
+
+    @work
+    async def action_import(self) -> None:
+        """Import a certificate."""
+        if target := await self.app.push_screen_wait(
+            FileOpen(
+                filters=_FILE_FILTERS,
+                open_button="Import",
+                title="Import Certificate",
+            )
+        ):
+            try:
+                certificate = await self._store.import_certificate(target)
+            except (FileNotFoundError, ValueError, OSError, RuntimeError) as error:
+                self.notify(
+                    f"Unable to import certificate from {target}:\n\n{error}",
+                    severity="error",
+                    title="Error",
+                )
+                return
+            self.post_message(ClientCertificatesModified())
+            self.notify(escape(_name(certificate)), title="Imported")
 
 
 ### client_certificates.py ends here
