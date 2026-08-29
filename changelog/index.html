@@ -773,14 +773,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../sidebar/" class="md-nav__link">
+      <a href="../side-panel/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    The sidebar
+    The side panel
   
 
     
@@ -1004,6 +1004,17 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#v200" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v2.0.0
+      
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#v1121" class="md-nav__link">
@@ -1381,6 +1392,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v200" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v2.0.0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v1121" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1742,6 +1764,56 @@
 
 
 <h1 id="rogallo-changelog">Rogallo ChangeLog</h1>
+<h2 id="v200">v2.0.0</h2>
+<p><strong>Released: 2026-08-29</strong></p>
+<ul>
+<li>Added a client certificate management interface.
+  (<a href="https://github.com/davep/rogallo/pull/373">#373</a>)</li>
+<li>Added the ability to export certificates.
+  (<a href="https://github.com/davep/rogallo/pull/389">#389</a>)</li>
+<li>Added the ability to import certificates.
+  (<a href="https://github.com/davep/rogallo/pull/389">#389</a>)</li>
+<li>Removed the <code>ToggleHistoryManager</code> command.
+  (<a href="https://github.com/davep/rogallo/pull/373">#373</a>)</li>
+<li>Removed the <code>ToggleBookmarksManager</code> command.
+  (<a href="https://github.com/davep/rogallo/pull/373">#373</a>)</li>
+<li>Added a tabbed side panel to contain the bookmarks, history and new client
+  certificate manager. (<a href="https://github.com/davep/rogallo/pull/373">#373</a>)</li>
+<li>Renamed the <code>JumpToSidebar</code> command to <code>JumpToSidePanel</code>.
+  (<a href="https://github.com/davep/rogallo/pull/373">#373</a>)</li>
+<li>Added the ability to optionally select an existing client certificate
+  (rather than always create a new one) when a Gemini URI requires one.
+  (<a href="https://github.com/davep/rogallo/pull/373">#373</a>)</li>
+<li>Added a <code>AboutClientCertificate</code> command for viewing details of any
+  currently-used client certificate.
+  (<a href="https://github.com/davep/rogallo/pull/373">#373</a>)</li>
+<li>The "used a client certificate" icon in the viewer is now clickable with
+  the mouse and will show the certificate details when clicked.
+  (<a href="https://github.com/davep/rogallo/pull/373">#373</a>)</li>
+<li>The file names of client certificates created within Rogallo now use a
+  uuid4 for the name, rather than the host/port of the initially-associated
+  site. (<a href="https://github.com/davep/rogallo/pull/373">#373</a>)</li>
+<li>Command inputs in <code>user@example.com</code> form are now considered to be
+  <code>finger</code> requests. (<a href="https://github.com/davep/rogallo/pull/381">#381</a>)</li>
+<li>Command inputs with that look like hostnames that start with a protocol
+  name are now considered to be a request to visit a host of that protocol
+  (<code>gopher.example.com</code> -&gt; <code>gopher://gopher.example.com/1</code>, etc).
+  (<a href="https://github.com/davep/rogallo/pull/381">#381</a>)</li>
+<li>Improved link navigation performance in documents with a huge number of
+  links. (<a href="https://github.com/davep/rogallo/pull/383">#383</a>)</li>
+<li><kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> no longer navigate
+  through links, but instead only navigate through the higher-level user
+  interface elements. (<a href="https://github.com/davep/rogallo/pull/383">#383</a>)</li>
+<li>Simplified a number of widgets used in displaying the content of a page.
+  (<a href="https://github.com/davep/rogallo/pull/385">#385</a>)</li>
+<li>When removing emoji, any space directly following an emoji is also
+  removed. (<a href="https://github.com/davep/rogallo/pull/386">#386</a>)</li>
+<li>Updated the in-app ChangeLog link to my Gemcities capsule due to
+  tilde.team having a long-term outage.
+  (<a href="https://github.com/davep/rogallo/pull/388">#388</a>)</li>
+<li>Improved what is and isn't considered to be an emoji when stripping
+  emojis. (<a href="https://github.com/davep/rogallo/pull/391">#391</a>)</li>
+</ul>
 <h2 id="v1121">v1.12.1</h2>
 <p><strong>Released: 2026-08-24</strong></p>
 <ul>
