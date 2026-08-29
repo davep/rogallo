@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v2.0.0
 
-**Released: WiP**
+**Released: 2026-08-29**
 
 - Added a client certificate management interface.
   ([#373](https://github.com/davep/rogallo/pull/373))
