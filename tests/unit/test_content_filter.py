@@ -28,6 +28,9 @@ from rogallo.widgets.viewer.gemtext.content_filter import GemtextContent
         ("Multiple emojis 😄😎👍", "Multiple emojis "),
         ("Emoji with space 😄 ", "Emoji with space "),
         ("😄 Hello", "Hello"),
+        ("✏️ Hello", "Hello"),
+        ("🏴󠁧󠁢󠁳󠁣󠁴󠁿 Hello", "Hello"),
+        ("🧑🏻‍🤝‍🧑🏿 Hello", "Hello"),
     ],
 )
 def test_strip_emoji(source: str, result: str) -> None:

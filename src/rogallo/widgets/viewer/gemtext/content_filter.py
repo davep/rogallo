@@ -62,14 +62,16 @@ class GemtextContent:
         retain = retained.append
         skip = False
         for character in text:
+            if (unicode_category := category(character)) in ("So", "Sk"):
+                skip = True
+                continue
             if skip:
+                if unicode_category in ("Mn", "Cf"):
+                    continue
                 skip = False
                 if character == " ":
                     continue
-            if category(character) == "So":
-                skip = True
-            else:
-                retain(character)
+            retain(character)
         return "".join(retained)
 
     @classmethod
