@@ -19,7 +19,7 @@ from textual_enhanced.widgets import EnhancedOptionList
 
 ##############################################################################
 # Textual fspicker imports.
-from textual_fspicker import FileSave, Filters
+from textual_fspicker import FileOpen, FileSave, Filters
 
 ##############################################################################
 # Wasat imports.
@@ -139,6 +139,12 @@ class ClientCertificateManager(EnhancedOptionList):
             "export",
             "Export",
             tooltip="Export the selected certificate",
+        ),
+        HelpfulBinding(
+            "i",
+            "import",
+            "Import",
+            tooltip="Import a certificate",
         ),
     ]
 
@@ -385,6 +391,29 @@ class ClientCertificateManager(EnhancedOptionList):
             except (RuntimeError, ValueError) as error:
                 self.notify(
                     f"Unable to export certificate to {target}:\n\n{error}",
+                    severity="error",
+                    title="Error",
+                )
+
+    @work
+    async def action_import(self) -> None:
+        """Import a certificate."""
+        if target := await self.app.push_screen_wait(
+            FileOpen(
+                title="Import Certificate",
+                filters=Filters(
+                    ("PEM files", lambda path: path.suffix.lower() == ".pem"),
+                    ("All files", lambda _: True),
+                ),
+            )
+        ):
+            try:
+                certificate = await self._store.import_certificate(target)
+                self.post_message(ClientCertificatesModified())
+                self.notify(escape(_name(certificate)), title="Imported")
+            except (RuntimeError, ValueError) as error:
+                self.notify(
+                    f"Unable to import certificate from {target}:\n\n{error}",
                     severity="error",
                     title="Error",
                 )
