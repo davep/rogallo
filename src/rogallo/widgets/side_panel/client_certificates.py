@@ -167,7 +167,7 @@ class ClientCertificateManager(EnhancedOptionList):
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
         if not self.is_mounted:
             return True
-        if action in ("delete", "add_association", "view", "export", "import"):
+        if action in ("delete", "add_association", "view", "export"):
             return (
                 self.highlighted is not None
                 and isinstance(
