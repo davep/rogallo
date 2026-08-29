@@ -388,13 +388,14 @@ class ClientCertificateManager(EnhancedOptionList):
                 await self._store.export_certificate(
                     option.certificate, target, combined=True
                 )
-                self.notify(f"Certificate exported to {target}", title="Exported")
-            except (RuntimeError, ValueError) as error:
+            except (OSError, ValueError) as error:
                 self.notify(
                     f"Unable to export certificate to {target}:\n\n{error}",
                     severity="error",
                     title="Error",
                 )
+                return
+            self.notify(f"Certificate exported to {target}", title="Exported")
 
     @work
     async def action_import(self) -> None:
@@ -411,14 +412,15 @@ class ClientCertificateManager(EnhancedOptionList):
         ):
             try:
                 certificate = await self._store.import_certificate(target)
-                self.post_message(ClientCertificatesModified())
-                self.notify(escape(_name(certificate)), title="Imported")
-            except (RuntimeError, ValueError) as error:
+            except (FileNotFoundError, ValueError, OSError, RuntimeError) as error:
                 self.notify(
                     f"Unable to import certificate from {target}:\n\n{error}",
                     severity="error",
                     title="Error",
                 )
+                return
+            self.post_message(ClientCertificatesModified())
+            self.notify(escape(_name(certificate)), title="Imported")
 
 
 ### client_certificates.py ends here
