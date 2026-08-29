@@ -1,10 +1,6 @@
 """Provides a configurable content filter."""
 
 ##############################################################################
-# Python imports.
-from unicodedata import category
-
-##############################################################################
 # BagOfStuff imports.
 from bagofstuff.pipe import Pipe
 
@@ -15,6 +11,10 @@ from gemtext import Line
 ##############################################################################
 # Rich imports.
 from rich.text import Text
+
+##############################################################################
+# Local imports.
+from ....strip_emoji import strip_emoji as emoji_stripper
 
 
 ##############################################################################
@@ -43,35 +43,6 @@ class GemtextContent:
         """
         return Text.from_ansi(text).plain if "\x1b" in text else text
 
-    @staticmethod
-    def _strip_emoji(text: str) -> str:
-        """Strip emoji from a string.
-
-        Args:
-            text: The string to strip emoji from.
-
-        Returns:
-            The string with emoji stripped.
-
-        Note:
-            Any space that immediately follows an emoji will also be
-            stripped, to avoid leaving a space that was intended to separate
-            the emoji from the what follows it.
-        """
-        retained: list[str] = []
-        retain = retained.append
-        skip = False
-        for character in text:
-            if skip:
-                skip = False
-                if character == " ":
-                    continue
-            if category(character) == "So":
-                skip = True
-            else:
-                retain(character)
-        return "".join(retained)
-
     @classmethod
     def set_filter(
         cls, *, allow_ansi_escape_sequences: bool, strip_emoji: bool
@@ -85,7 +56,7 @@ class GemtextContent:
         cls._filter = ContentFilter(str)
         cls._purely_ansi_filter = ContentFilter(str)
         if strip_emoji:
-            cls._filter |= cls._strip_emoji
+            cls._filter |= emoji_stripper
         if allow_ansi_escape_sequences:
             cls._filter |= Text.from_ansi
             cls._purely_ansi_filter |= Text.from_ansi

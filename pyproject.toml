@@ -125,7 +125,7 @@ dev = [
 [tool.coverage.run]
 include = [
     "src/rogallo/preflight.py",
-    "src/rogallo/widgets/viewer/gemtext/content_filter.py"
+    "src/rogallo/strip_emoji.py",
 ]
 
 [tool.coverage.report]
