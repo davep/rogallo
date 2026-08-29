@@ -6,6 +6,8 @@
 
 - Added a client certificate management interface.
   ([#373](https://github.com/davep/rogallo/pull/373))
+- Added the ability to export certificates.
+  ([#389](https://github.com/davep/rogallo/pull/389))
 - Removed the `ToggleHistoryManager` command.
   ([#373](https://github.com/davep/rogallo/pull/373))
 - Removed the `ToggleBookmarksManager` command.

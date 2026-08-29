@@ -18,6 +18,10 @@ from textual_enhanced.dialogs import Confirm, ModalInput
 from textual_enhanced.widgets import EnhancedOptionList
 
 ##############################################################################
+# Textual fspicker imports.
+from textual_fspicker import FileSave, Filters
+
+##############################################################################
 # Wasat imports.
 from wasat import ClientCertificate, ClientCertificateStore, GeminiURI, URIError
 
@@ -129,6 +133,12 @@ class ClientCertificateManager(EnhancedOptionList):
             "view",
             "View",
             tooltip="View the selected certificate",
+        ),
+        HelpfulBinding(
+            "x",
+            "export",
+            "Export",
+            tooltip="Export the selected certificate",
         ),
     ]
 
@@ -340,6 +350,41 @@ class ClientCertificateManager(EnhancedOptionList):
             except RuntimeError as error:
                 self.notify(
                     f"Unable to remove association for {location}:\n\n{error}",
+                    severity="error",
+                    title="Error",
+                )
+
+    @work
+    async def action_export(self) -> None:
+        """Export the selected certificate."""
+        if (
+            self.highlighted is not None
+            and isinstance(option := self.options[self.highlighted], CertificateOption)
+            and (
+                target := await self.app.push_screen_wait(
+                    FileSave(
+                        title="Export Certificate",
+                        default_file=option.certificate.cert_path.with_suffix(
+                            ".pem"
+                        ).name
+                        if option.certificate.cert_path
+                        else "certificate.pem",
+                        filters=Filters(
+                            ("PEM files", lambda path: path.suffix.lower() == ".pem"),
+                            ("All files", lambda _: True),
+                        ),
+                    )
+                )
+            )
+        ):
+            try:
+                await self._store.export_certificate(
+                    option.certificate, target, combined=True
+                )
+                self.notify(f"Certificate exported to {target}", title="Exported")
+            except (RuntimeError, ValueError) as error:
+                self.notify(
+                    f"Unable to export certificate to {target}:\n\n{error}",
                     severity="error",
                     title="Error",
                 )
