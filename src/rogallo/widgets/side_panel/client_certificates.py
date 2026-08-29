@@ -379,6 +379,7 @@ class ClientCertificateManager(EnhancedOptionList):
                             ("PEM files", lambda path: path.suffix.lower() == ".pem"),
                             ("All files", lambda _: True),
                         ),
+                        save_button="Export",
                     )
                 )
             )
@@ -405,6 +406,7 @@ class ClientCertificateManager(EnhancedOptionList):
                     ("PEM files", lambda path: path.suffix.lower() == ".pem"),
                     ("All files", lambda _: True),
                 ),
+                open_button="Import",
             )
         ):
             try:
