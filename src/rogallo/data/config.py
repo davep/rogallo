@@ -132,7 +132,7 @@ class Configuration:
     verified_off_icon: str = "✗"
     """The icon to use for indicating that server was off."""
 
-    verified_none_icon: str = "•"
+    unverified_icon: str = "•"
     """The icon to use for indicating that a server was not verified."""
 
     external_editor: str | None = None

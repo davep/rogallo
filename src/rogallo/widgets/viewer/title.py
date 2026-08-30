@@ -136,7 +136,7 @@ class ViewerTitle(Horizontal):
                 self._verification_method_icon.tooltip = "Verification: Off"
             case _:
                 self._verification_method_icon.update(
-                    load_configuration().verified_none_icon
+                    load_configuration().unverified_icon
                 )
                 self._verification_method_icon.tooltip = "About this page"
 
