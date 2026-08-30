@@ -36,7 +36,7 @@ dependencies = [
     "textual-fspicker>=1.0.1",
     "types-pygments>=2.20.0.20260518",
     "types-pyperclip>=1.11.0.20260508",
-    "wasat>=1.6.0",
+    "wasat>=1.7.0",
     "xdg-base-dirs>=6.0.2",
 ]
 classifiers = [

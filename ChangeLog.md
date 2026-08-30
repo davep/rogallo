@@ -9,6 +9,8 @@
   ([#395](https://github.com/davep/rogallo/pull/395))
 - Adjusted the styling of tooltips so they stand out better no matter what
   is under them. ([#396](https://github.com/davep/rogallo/pull/396))
+- Added the ability to forget a known host when encountering a security
+  issue. ([#398](https://github.com/davep/rogallo/pull/398))
 
 ## v2.0.0
 
