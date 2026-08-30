@@ -7,6 +7,8 @@
 - Minor improvements to the verification method and client certificate
   status icons in the viewer title bar.
   ([#395](https://github.com/davep/rogallo/pull/395))
+- Adjusted the styling of tooltips so they stand out better no matter what
+  is under them. ([#396](https://github.com/davep/rogallo/pull/396))
 
 ## v2.0.0
 
