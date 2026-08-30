@@ -49,7 +49,12 @@ class SecurityAlert(ModalScreen[bool]):
     }
     """
 
-    BINDINGS = [("f", "forget"), ("escape", "cancel")]
+    BINDINGS = [
+        ("f", "forget"),
+        ("escape", "cancel"),
+        ("left, up", "app.focus_previous"),
+        ("right, down", "app.focus_next"),
+    ]
 
     def __init__(self, uri: RogalloLocation, message: str) -> None:
         """Initialise the screen.
