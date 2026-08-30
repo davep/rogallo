@@ -53,7 +53,13 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
     }
     """
 
-    BINDINGS = [("o", "open_once"), ("a", "open_always"), ("escape", "cancel")]
+    BINDINGS = [
+        ("o", "open_once"),
+        ("a", "open_always"),
+        ("escape", "cancel"),
+        ("left, up", "app.focus_previous"),
+        ("right, down", "app.focus_next"),
+    ]
 
     def __init__(self, uri: str, description: str) -> None:
         """Initialise the screen.
