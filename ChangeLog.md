@@ -1,5 +1,13 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Minor improvements to the verification method and client certificate
+  status icons in the viewer title bar.
+  ([#395](https://github.com/davep/rogallo/pull/395))
+
 ## v2.0.0
 
 **Released: 2026-08-29**
