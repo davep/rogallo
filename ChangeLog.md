@@ -11,6 +11,8 @@
   is under them. ([#396](https://github.com/davep/rogallo/pull/396))
 - Added the ability to forget a known host when encountering a security
   issue. ([#398](https://github.com/davep/rogallo/pull/398))
+- Fixed the cosmetics of the viewer when it's in a narrowed state.
+  ([#399](https://github.com/davep/rogallo/pull/399))
 
 ## v2.0.0
 

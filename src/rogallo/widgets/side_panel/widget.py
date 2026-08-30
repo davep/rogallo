@@ -58,8 +58,6 @@ class SidePanel(Container):
     }
     """
 
-    DEFAULT_CLASSES = "panel"
-
     BINDINGS = [
         ("escape", "bounce_out"),
         ("enter, down, j", "dig_in"),

@@ -172,16 +172,17 @@ class Main(EnhancedScreen[None]):
             scrollbar-background-active: $surface;
         }
 
-        .panel {
+        SidePanel, Viewer DocumentView {
             border-left: solid $panel;
             background: $surface;
-            &.--active-panel {
-                border-left: solid $border;
-                background: $panel;
-                scrollbar-background: $panel 80%;
-                scrollbar-background-hover: $panel 80%;
-                scrollbar-background-active: $panel 80%;
-            }
+        }
+
+        SidePanel.--active-panel, Viewer.--active-panel DocumentView {
+            border-left: solid $border;
+            background: $panel;
+            scrollbar-background: $panel 80%;
+            scrollbar-background-hover: $panel 80%;
+            scrollbar-background-active: $panel 80%;
         }
 
         SidePanel {

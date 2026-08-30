@@ -109,8 +109,6 @@ class Viewer(Vertical, can_focus=False):
     }
     """
 
-    DEFAULT_CLASSES = "panel"
-
     HELP = """
     As well as the normal widget navigation keys, the following keys are
     available to navigate through the links:
