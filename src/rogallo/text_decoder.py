@@ -24,7 +24,7 @@ async def decode_text(response: GeminiResponse | SpartanResponse) -> str:
     try:
         # Give the library a chance to decode the text using the charset
         # specified in the response headers.
-        return await response.text()
+        return await response.text(encoding="utf-8-sig")
     except (GeminiProtocolError, SpartanResponseError):
         # If the library fails to decode the text, fall back to latin-1.
         return await response.text(encoding="latin-1")

@@ -13,6 +13,8 @@
   issue. ([#398](https://github.com/davep/rogallo/pull/398))
 - Fixed the cosmetics of the viewer when it's in a narrowed state.
   ([#399](https://github.com/davep/rogallo/pull/399))
+- Handle BOMs at the start of received content.
+  ([#403](https://github.com/davep/rogallo/pull/403))
 
 ## v2.0.0
 
