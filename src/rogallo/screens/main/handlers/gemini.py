@@ -35,6 +35,7 @@ from ...client_certificate import (
     ClientCertificatePickerResult,
     LocationSpecificClientCertificateMaker,
 )
+from ...security_alert import SecurityAlert
 from ...user_input import UserInput
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
 
@@ -242,6 +243,28 @@ async def _handle_response(
 
 
 ##############################################################################
+async def _handle_security_error(
+    client: Client, error: SecurityError, uri: GeminiURI, owner: Widget
+) -> None:
+    """Handle a security error from a Gemini request.
+
+    Args:
+        error: The security error to handle.
+        uri: The URI that caused the security error.
+        owner: The widget that owns the request.
+    """
+    if await owner.app.push_screen_wait(SecurityAlert(uri, str(error))):
+        assert client.trust_store is not None
+        await client.trust_store.forget(uri.host, uri.port)
+        owner.post_message(OpenLocation(uri, allow_cached=False))
+        owner.notify(
+            f"Reset the trust status for {uri.host}:{uri.port}",
+            title="Security Alert",
+            severity="warning",
+        )
+
+
+##############################################################################
 async def handle_gemini_request(
     request: OpenLocation,
     owner: Widget,
@@ -294,11 +317,7 @@ async def handle_gemini_request(
             title="Connection Error",
         )
     except SecurityError as error:
-        owner.notify(
-            f"Error loading {uri}:\n\n{error}",
-            severity="error",
-            title="Security Error",
-        )
+        await _handle_security_error(client, error, uri, owner)
 
 
 ### gemini.py ends here
