@@ -32,22 +32,29 @@ class ViewerTitle(Horizontal):
         padding: 0 1;
 
         #verification-method, #lock-icon {
-            width: 2;
-            padding-right: 1;
+            width: 1;
+            margin-right: 1;
         }
 
-        #verification-method, #lock-icon {
+        #verification-method {
             pointer: pointer;
+            &.--verified-ca {
+                color: $text-success;
+            }
+            &.--verified-tofu {
+                color: $text-warning;
+            }
+            &.--verified-off {
+                color: $text-error;
+            }
+            &.--verified-none {
+                color: $text-muted;
+            }
         }
 
-        .--verified-ca, #lock-icon {
+        #lock-icon.--needed-certificate {
+            pointer: pointer;
             color: $text-success;
-        }
-        .--verified-tofu {
-            color: $text-warning;
-        }
-        .--verified-off, .--verified-none {
-            color: $text-error;
         }
 
         #location {
@@ -97,6 +104,12 @@ class ViewerTitle(Horizontal):
             if self.needed_certificate
             else " "
         )
+        self._lock_icon.set_class(self.needed_certificate, "--needed-certificate")
+        self._lock_icon.tooltip = (
+            f"Client certificate used for this connection"
+            if self.needed_certificate
+            else ""
+        )
 
     def _watch_verification_method(self) -> None:
         """React to the verification_method changing."""
@@ -108,18 +121,24 @@ class ViewerTitle(Horizontal):
                 self._verification_method_icon.update(
                     load_configuration().verified_ca_icon
                 )
+                self._verification_method_icon.tooltip = (
+                    "Verification: Certificate Authority"
+                )
             case "tofu":
                 self._verification_method_icon.update(
                     load_configuration().verified_tofu_icon
                 )
+                self._verification_method_icon.tooltip = "Verification: TOFU"
             case "off":
                 self._verification_method_icon.update(
                     load_configuration().verified_off_icon
                 )
+                self._verification_method_icon.tooltip = "Verification: Off"
             case _:
                 self._verification_method_icon.update(
                     load_configuration().verified_none_icon
                 )
+                self._verification_method_icon.tooltip = "About this page"
 
     def on_resize(self) -> None:
         """Handle the widget being resized."""
