@@ -60,13 +60,15 @@ class Rogallo(EnhancedApp[None]):
 
     COMMANDS = set()
 
-    CSS = """
-    Tooltip {
+    CSS = f"""
+    {EnhancedApp.CSS}
+
+    Tooltip {{
         padding: 0 2;
         background: $panel 80%;
         border-top: hkey $panel 20%;
         border-bottom: hkey $panel 20%;
-    }
+    }}
     """
 
     BINDINGS = (
