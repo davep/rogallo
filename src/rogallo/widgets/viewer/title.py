@@ -106,7 +106,7 @@ class ViewerTitle(Horizontal):
         )
         self._lock_icon.set_class(self.needed_certificate, "--needed-certificate")
         self._lock_icon.tooltip = (
-            f"Client certificate used for this connection"
+            "Client certificate used for this connection"
             if self.needed_certificate
             else ""
         )
