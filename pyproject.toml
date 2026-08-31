@@ -1,6 +1,6 @@
 [project]
 name = "rogallo"
-version = "2.0.0"
+version = "2.1.0"
 description = "A terminal-based client for small web protocols"
 readme = "README.md"
 authors = [

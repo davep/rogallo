@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v2.1.0
 
-**Released: WiP**
+**Released: 2026-08-31**
 
 - Minor improvements to the verification method and client certificate
   status icons in the viewer title bar.
