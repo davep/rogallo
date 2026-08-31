@@ -173,12 +173,10 @@ class Main(EnhancedScreen[None]):
         }
 
         SidePanel, Viewer DocumentView {
-            border-left: solid $panel;
             background: $surface;
         }
 
         SidePanel.--active-panel, Viewer.--active-panel DocumentView {
-            border-left: solid $border;
             background: $panel;
             scrollbar-background: $panel 80%;
             scrollbar-background-hover: $panel 80%;
@@ -188,8 +186,18 @@ class Main(EnhancedScreen[None]):
         SidePanel {
             display: none;
         }
-        &.--side-panel SidePanel {
-            display: block;
+
+        &.--side-panel-visible {
+            SidePanel {
+                display: block;
+            }
+
+            SidePanel, Viewer DocumentView {
+                border-left: solid $panel;
+            }
+            SidePanel.--active-panel, Viewer.--active-panel DocumentView {
+                border-left: solid $border;
+            }
         }
     }
 
@@ -260,7 +268,7 @@ class Main(EnhancedScreen[None]):
     """The bookmarks."""
     _client_certificates: var[list[ClientCertificate]] = var(list)
     """The client certificates."""
-    _side_panel_visible: var[bool] = var(False, toggle_class="--side-panel")
+    _side_panel_visible: var[bool] = var(False, toggle_class="--side-panel-visible")
     """Whether the side panel is visible."""
 
     def __init__(self, arguments: Namespace) -> None:
