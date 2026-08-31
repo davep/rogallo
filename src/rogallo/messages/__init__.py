@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Local imports.
+from .clipboard import CopyToClipboard
 from .data_modification import (
     BookmarksModified,
     ClientCertificatesModified,
@@ -17,6 +18,7 @@ from .opening import (
 # Exports.
 __all__ = [
     "BookmarksModified",
+    "CopyToClipboard",
     "ClientCertificatesModified",
     "HistoryModified",
     "OpenFromFileSystem",

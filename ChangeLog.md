@@ -8,6 +8,8 @@
   only visible when the side panel is open, saving one horizontal character
   of space for viewing when only the viewer is open.
   ([#405](https://github.com/davep/rogallo/pull/405))
+- Added the ability to copy the URI of the currently-selected link to the
+  clipboard. ([#406](https://github.com/davep/rogallo/pull/406))
 
 ## v2.1.0
 

@@ -29,7 +29,7 @@ from textual_enhanced.binding import HelpfulBinding
 ##############################################################################
 # Local imports.
 from ....data import load_configuration
-from ....messages import OpenLocation, OpenURI
+from ....messages import CopyToClipboard, OpenLocation, OpenURI
 from ....preflight import (
     has_navigable_path,
     is_finger_uri,
@@ -90,7 +90,10 @@ class GemtextLink(Widget, can_focus=True):
     will be handled by your system.
     """
 
-    BINDINGS = [HelpfulBinding("enter", "open_link", "Open link", show=False)]
+    BINDINGS = [
+        HelpfulBinding("enter", "open_link", "Open link", show=False),
+        HelpfulBinding("c", "copy_link", "Copy link to clipboard", show=False),
+    ]
 
     visited: var[bool] = var(False, toggle_class="--visited")
     """Whether the link has been visited or not."""
@@ -232,6 +235,12 @@ class GemtextLink(Widget, can_focus=True):
     def _action_open_link(self) -> None:
         """Open the link."""
         self._navigate_to_uri()
+
+    def _action_copy_link(self) -> None:
+        """Copy the link to the clipboard."""
+        self.post_message(
+            CopyToClipboard(self._normalised_uri, description="selected link")
+        )
 
     def get_selection(self, selection: Selection) -> tuple[str, str] | None:
         return selection.extract(f"=> {self.normalised_uri} {self._link}"), "\n"
