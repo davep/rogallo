@@ -104,6 +104,7 @@ from ...input_content import InputContent
 from ...messages import (
     BookmarksModified,
     ClientCertificatesModified,
+    CopyToClipboard,
     HistoryModified,
     OpenFromFileSystem,
     OpenLocation,
@@ -122,7 +123,6 @@ from ..about_page import AboutPage
 from ..client_certificate import ClientCertificateViewer
 from .handlers import handle_filesystem_request
 from .local_messages import (
-    CopyToClipboard,
     OpenDocument,
     OpenUnsupportedMIMEType,
     OpenUnsupportedURI,

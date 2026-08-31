@@ -16,17 +16,6 @@ from ...types import RogalloLocation
 
 ##############################################################################
 @dataclass
-class CopyToClipboard(Message):
-    """Request that some text is copied to the clipboard."""
-
-    text: str
-    """The text to copy to the clipboard."""
-    description: str | None = None
-    """A description of the text to copy to the clipboard."""
-
-
-##############################################################################
-@dataclass
 class OpenDocument(Message):
     """Open the given document for viewing."""
 
