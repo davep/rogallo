@@ -1,5 +1,14 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Changed the active panel border styling so that the left-hand border is
+  only visible when the side panel is open, saving one horizontal character
+  of space for viewing when only the viewer is open.
+  ([#405](https://github.com/davep/rogallo/pull/405))
+
 ## v2.1.0
 
 **Released: 2026-08-31**
