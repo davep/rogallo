@@ -4,7 +4,7 @@
 
 Rogallo has support for visiting Nex servers. Much like when [visiting a
 Gemini server](./gemini.md), you can type in the URI of the location you
-wish to visit. Spartan URIs begin with `nex://`.
+wish to visit. Nex URIs begin with `nex://`.
 
 ```{.textual path="docs/screenshots/empty_screenshot.py" title="Entering a Nex URI" lines=30 columns=90 press="n,e,x,:,/,/,l,o,c,a,l,h,o,s,t,/"}
 ```
