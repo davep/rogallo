@@ -10,6 +10,9 @@
   ([#405](https://github.com/davep/rogallo/pull/405))
 - Added the ability to copy the URI of the currently-selected link to the
   clipboard. ([#406](https://github.com/davep/rogallo/pull/406))
+- Added the ability to hand off the currently-highlighted link for opening
+  by the operating system.
+  ([#410](https://github.com/davep/rogallo/pull/410))
 
 ## v2.1.0
 
