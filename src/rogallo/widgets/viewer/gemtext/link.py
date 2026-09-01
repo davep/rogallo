@@ -4,6 +4,7 @@
 # Python imports.
 from pathlib import Path
 from urllib.parse import urlparse
+from webbrowser import open as open_in_browser
 
 ##############################################################################
 # Gemtext imports.
@@ -93,6 +94,12 @@ class GemtextLink(Widget, can_focus=True):
     BINDINGS = [
         HelpfulBinding("enter", "open_link", "Open link", show=False),
         HelpfulBinding("c", "copy_link", "Copy link to clipboard", show=False),
+        HelpfulBinding(
+            "o",
+            "open_link_externally",
+            "Hand the current link off to the operating system for opening",
+            show=False,
+        ),
     ]
 
     visited: var[bool] = var(False, toggle_class="--visited")
@@ -241,6 +248,10 @@ class GemtextLink(Widget, can_focus=True):
         self.post_message(
             CopyToClipboard(self._normalised_uri, description="selected link")
         )
+
+    def _action_open_link_externally(self) -> None:
+        """Open the link in the external browser."""
+        open_in_browser(self._normalised_uri)
 
     def get_selection(self, selection: Selection) -> tuple[str, str] | None:
         return selection.extract(f"=> {self.normalised_uri} {self._link}"), "\n"
