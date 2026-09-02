@@ -137,6 +137,7 @@ def show_dignoastics() -> None:
 
     from bagofstuff import __version__ as bagofstuff_version
     from cryptography import __version__ as cryptography_version
+    from finger2gemtext import __version__ as finger2gemtext_version
     from gemtext import __version__ as gemtext_version
     from gophermap import __version__ as gophermap_version
     from html2gemtext import __version__ as html2gemtext_version
@@ -153,13 +154,14 @@ def show_dignoastics() -> None:
     print("# Libraries")
     print(f"bagofstuff: {bagofstuff_version}")
     print(f"cryptography: {cryptography_version}")
+    print(f"finger2gemtext: {finger2gemtext_version}")
     print(f"gemtext: {gemtext_version}")
     print(f"gophermap: {gophermap_version}")
     print(f"html2gemtext: {html2gemtext_version}")
     print(f"md2gemtext: {md2gemtext_version}")
+    print(f"port1900: {port1900_version}")
     print(f"port70: {port70_version}")
     print(f"port79: {port79_version}")
-    print(f"port1900: {port1900_version}")
     print(f"rogallo: {__version__}")
     print(f"sybaritic: {sybaritic_version}")
     print(f"textual: {textual_version}")
