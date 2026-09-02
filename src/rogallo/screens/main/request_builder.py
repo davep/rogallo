@@ -60,6 +60,7 @@ def build_request(
             request=message,
             client=clients.finger,
             owner=owner,
+            cache=cache,
         )
     if isinstance(message.location, GeminiURI):
         return handle_gemini_request(
