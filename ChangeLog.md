@@ -15,6 +15,8 @@
   ([#410](https://github.com/davep/rogallo/pull/410))
 - Finger responses are, where appropriate, shown in a richer form, allowing
   following some links. ([#412](https://github.com/davep/rogallo/pull/412))
+- Finger responses now use the document cache.
+  ([#413](https://github.com/davep/rogallo/pull/413))
 
 ## v2.1.0
 
