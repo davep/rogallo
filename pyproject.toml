@@ -22,7 +22,7 @@ keywords = [
 ]
 dependencies = [
     "bagofstuff>=2.0.0",
-    "finger2gemtext>=0.0.3",
+    "finger2gemtext>=0.1.0",
     "gemtext>=1.1.0",
     "gophermap>=1.0.0",
     "html2gemtext>=1.0.0",
