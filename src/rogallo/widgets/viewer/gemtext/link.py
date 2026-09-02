@@ -11,6 +11,10 @@ from webbrowser import open as open_in_browser
 from gemtext import Line, Link
 
 ##############################################################################
+# Port79 imports.
+from port79 import FingerURI
+
+##############################################################################
 # Rich imports.
 from rich.table import Table
 from rich.text import Text
@@ -160,7 +164,7 @@ class GemtextLink(Widget, can_focus=True):
             return
         if urlparse(self._normalised_uri).scheme:
             return
-        if has_navigable_path(base_uri):
+        if has_navigable_path(base_uri) or isinstance(base_uri, FingerURI):
             self._normalised_uri = str(base_uri.resolve(self._link.uri))
         elif isinstance(base_uri, Path):
             self._normalised_uri = (base_uri.parent / self._link.uri).resolve().as_uri()
