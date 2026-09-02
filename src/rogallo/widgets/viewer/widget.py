@@ -11,6 +11,10 @@ from dataclasses import dataclass
 from functools import cached_property
 
 ##############################################################################
+# Finger2Gemtext imports.
+from finger2gemtext import finger_to_gemtext
+
+##############################################################################
 # Gemtext imports.
 from gemtext import Gemtext, Line, Link, Paragraph, PreFormatted
 
@@ -226,8 +230,10 @@ class Viewer(Vertical, can_focus=False):
             Whether the viewer can view the source of the document.
         """
         return (
-            self.document.mime_type_sans_parameters in self._WITH_SOURCE_MIME_TYPES
-        ) or self.document.is_nex_text
+            (self.document.mime_type_sans_parameters in self._WITH_SOURCE_MIME_TYPES)
+            or self.document.is_nex_text
+            or self.document.is_finger_text
+        )
 
     @cached_property
     def _hidden_pre_alt_text(self) -> set[tuple[str, str]]:
@@ -346,6 +352,12 @@ class Viewer(Vertical, can_focus=False):
                     get_block_widget(line)
                     for line in self._consolidate(self._nextext(document))
                 ]
+
+            # Finger responses.
+            if isinstance(document.location, FingerURI) and (
+                (rich_finger := finger_to_gemtext(document.content)) != document.content
+            ):
+                return self._gemtext_widgets(rich_finger)
 
         # Source is always the fallback position.
         return [

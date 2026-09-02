@@ -13,6 +13,8 @@
 - Added the ability to hand off the currently-highlighted link for opening
   by the operating system.
   ([#410](https://github.com/davep/rogallo/pull/410))
+- Finger responses are, where appropriate, shown in a richer form, allowing
+  following some links. ([#412](https://github.com/davep/rogallo/pull/412))
 
 ## v2.1.0
 

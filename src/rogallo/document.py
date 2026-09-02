@@ -109,6 +109,14 @@ class Document:
             and self.mime_type_sans_parameters == "text/plain"
         )
 
+    @property
+    def is_finger_text(self) -> bool:
+        """`True` if the document is a Finger text document, `False` otherwise."""
+        return (
+            isinstance(self.location, FingerURI)
+            and self.mime_type_sans_parameters == "text/plain"
+        )
+
     @cached_property
     def is_gopher_error(self) -> bool:
         """`True` if the document is a Gopher error document, `False` otherwise."""
