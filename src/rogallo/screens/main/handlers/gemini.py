@@ -183,8 +183,8 @@ async def _handle_response(
         set_last_input: A function to set the last input from the user.
         get_last_input: A function to get the last input from the user.
     """
-    assert isinstance(request.location, GeminiURI)
     uri = response.uri or response.requested_uri or request.location
+    assert isinstance(uri, GeminiURI)
 
     # Handle a request for user input.
     if response.status.is_input:
