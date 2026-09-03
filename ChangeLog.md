@@ -1,5 +1,15 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Fixed Rogallo not playing well with the scriptonite examples found at
+  gemini://ultimatumlabs.com/scripto.gmi.
+  ([#415](https://github.com/davep/rogallo/pull/415))
+
+**Released: 2026-09-03**
+
 ## v2.2.0
 
 **Released: 2026-09-03**
