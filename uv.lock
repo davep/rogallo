@@ -1876,7 +1876,7 @@ requires-dist = [
     { name = "html2gemtext", specifier = ">=1.0.0" },
     { name = "md2gemtext", specifier = ">=1.0.0" },
     { name = "port1900", specifier = ">=1.0.0" },
-    { name = "port70", specifier = ">=0.1.2" },
+    { name = "port70", specifier = ">=1.0.0" },
     { name = "port79", specifier = ">=1.1.0" },
     { name = "pyperclip", specifier = ">=1.11.0" },
     { name = "sybaritic", specifier = ">=1.0.0" },
