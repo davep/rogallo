@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v2.2.0
 
-**Released: WiP**
+**Released: 2026-09-03**
 
 - Changed the active panel border styling so that the left-hand border is
   only visible when the side panel is open, saving one horizontal character
