@@ -43,6 +43,7 @@ from ....preflight import (
     is_local_gemtext_file,
     is_nex_uri,
     is_spartan_uri,
+    is_titan_uri,
 )
 from ....safe_escape import escape
 from ....types import RogalloLocation, SpartanURINeedingData
@@ -143,12 +144,13 @@ class GemtextLink(Widget, can_focus=True):
     def _best_icon(self) -> str:
         """Get the best icon for the link based on its URI."""
         for checker, icon_name in (
-            (is_likely_capsule, "geminispace_link_icon"),
             (is_finger_uri, "fingerspace_link_icon"),
             (is_gopher_uri, "gopherspace_link_icon"),
-            (is_spartan_uri, "spartanspace_link_icon"),
-            (is_nex_uri, "nexspace_link_icon"),
+            (is_likely_capsule, "geminispace_link_icon"),
             (is_local_gemtext_file, "geminispace_link_icon"),
+            (is_nex_uri, "nexspace_link_icon"),
+            (is_spartan_uri, "spartanspace_link_icon"),
+            (is_titan_uri, "titanspace_link_icon"),
         ):
             if checker(self.normalised_uri):
                 return icon(icon_name)
