@@ -5,7 +5,7 @@ This screen is intended to be used for Titan uploads.
 
 ##############################################################################
 # Python imports.
-from mimetypes import guess_type
+from mimetypes import guess_type, types_map
 from os import getenv
 from pathlib import Path
 from subprocess import run
@@ -19,6 +19,7 @@ from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, VerticalGroup
 from textual.getters import query_one
 from textual.screen import ModalScreen
+from textual.suggester import SuggestFromList
 from textual.widgets import Button, Input, Label, TabbedContent, TabPane, TextArea
 
 ##############################################################################
@@ -179,7 +180,9 @@ class UserUpload(ModalScreen[UploadData | None]):
                     yield Label("<none>", id="selected-file", classes="--empty")
                     yield Label("Mime type:", classes="--title")
                     yield Input(
-                        placeholder="Enter MIME type (e.g. text/plain)", id="mime-type"
+                        placeholder="Enter MIME type (e.g. text/plain)",
+                        id="mime-type",
+                        suggester=SuggestFromList(sorted(types_map.values())),
                     )
             with HorizontalGroup(id="token-input"):
                 yield Label("Token:", classes="--title")
