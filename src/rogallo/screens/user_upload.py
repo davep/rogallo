@@ -63,19 +63,20 @@ class UserUpload(ModalScreen[UploadData | None]):
         &> VerticalGroup {
             height: 60vh;
             width: 60vw;
-            padding: 1 2;
             background: $panel;
             border: panel $border;
 
             TabbedContent {
                 height: 1fr;
+                margin: 1;
             }
 
             #token-input {
                 align: left middle;
                 width: 1fr;
+                padding: 0 1 0 2;
                 height: auto;
-                margin-top: 1;
+                border-top: solid $border;
                 Input {
                     width: 1fr;
                 }
@@ -89,9 +90,15 @@ class UserUpload(ModalScreen[UploadData | None]):
                 align: right middle;
                 width: 100%;
                 height: auto;
-                padding-top: 1;
+                padding: 1 1 0 0;
                 Button {
                     margin-right: 1;
+                }
+            }
+
+            #file {
+                Button, Label {
+                    margin: 0 0 1 1;
                 }
             }
 
@@ -103,10 +110,6 @@ class UserUpload(ModalScreen[UploadData | None]):
 
             .--empty {
                 color: $text-muted;
-            }
-
-            .--gap-above {
-                margin-top: 1;
             }
 
             .--title {
@@ -172,9 +175,9 @@ class UserUpload(ModalScreen[UploadData | None]):
                         yield Label("[$accent]\\[f3][/] for $EDITOR", id="editor-help")
                 with TabPane("File [$accent]\\[^f][/]", id="file"):
                     yield Button("Select file...", id="select-file")
-                    yield Label("Selected file:", classes="--gap-above --title")
+                    yield Label("Selected file:", classes="--title")
                     yield Label("<none>", id="selected-file", classes="--empty")
-                    yield Label("Mime type:", classes="--gap-above --title")
+                    yield Label("Mime type:", classes="--title")
                     yield Input(
                         placeholder="Enter MIME type (e.g. text/plain)", id="mime-type"
                     )
