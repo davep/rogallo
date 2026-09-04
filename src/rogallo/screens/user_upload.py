@@ -95,6 +95,12 @@ class UserUpload(ModalScreen[UploadData | None]):
                 }
             }
 
+            #editor-help {
+                width: 100%;
+                content-align: right middle;
+                padding-right: 1;
+            }
+
             .--empty {
                 color: $text-muted;
             }
@@ -163,7 +169,7 @@ class UserUpload(ModalScreen[UploadData | None]):
                         placeholder="Enter text to upload...",
                     )
                     if self._external_editor:
-                        yield Label("[$accent]\\[f3][/] for $EDITOR")
+                        yield Label("[$accent]\\[f3][/] for $EDITOR", id="editor-help")
                 with TabPane("File [$accent]\\[^f][/]", id="file"):
                     yield Button("Select file...", id="select-file")
                     yield Label("Selected file:", classes="--gap-above --title")
