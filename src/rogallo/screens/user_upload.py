@@ -97,6 +97,7 @@ class UserUpload(ModalScreen[UploadData | None]):
             .--gap-above {
                 margin-top: 1;
             }
+
             .--title {
                 color: $accent;
             }
