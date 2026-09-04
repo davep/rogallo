@@ -192,13 +192,15 @@ class UserUpload(ModalScreen[UploadData | None]):
 
     def action_prepare_file(self) -> None:
         """Switch to the file tab."""
-        self.screen.focused = self._text_or_file
         self._text_or_file.active = "file"
+        self.query_one("Tabs").focus()
+        self.call_after_refresh(self.focus_next)
 
     def action_prepare_text(self) -> None:
         """Switch to the text tab."""
-        self.screen.focused = self._text_or_file
         self._text_or_file.active = "text"
+        self.query_one("Tabs").focus()
+        self.call_after_refresh(self.focus_next)
 
     @on(TextArea.Changed)
     def _text_changed(self) -> None:
