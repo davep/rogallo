@@ -114,7 +114,7 @@ class Configuration:
     nexspace_link_icon: str = "☽"
     """The icon to use for links to nex:// URIs."""
 
-    titanspace_link_icon: str = "⫸"
+    titanspace_link_icon: str = "⩓"
     """The icon to use for links to titan:// URIs."""
 
     otherspace_link_icon: str = "↗"
