@@ -7,8 +7,8 @@
 - Fixed Rogallo not playing well with the scriptonite examples found at
   gemini://ultimatumlabs.com/scripto.gmi.
   ([#415](https://github.com/davep/rogallo/pull/415))
-
-**Released: 2026-09-03**
+- Added support for the Titan Protocol.
+  ([#417](https://github.com/davep/rogallo/pull/417))
 
 ## v2.2.0
 
