@@ -6,7 +6,7 @@ from textual.widget import Widget
 
 ##############################################################################
 # Wasat imports.
-from wasat import Client, GeminiURI, Response, TitanURI
+from wasat import Client, GeminiURI, Response, SecurityError, TitanURI
 
 ##############################################################################
 # Local imports.
@@ -78,13 +78,26 @@ async def handle_titan_request(
     assert isinstance(uri, TitanURI)
 
     if upload := await owner.app.push_screen_wait(UserUpload(uri)):
-        async with await client.upload(
-            uri=uri,
-            data=upload.data,
-            mime=upload.mime_type,
-            token=upload.token,
-        ) as response:
-            await _handle_response(response, request, owner)
+        try:
+            async with await client.upload(
+                uri=uri,
+                data=upload.data,
+                mime=upload.mime_type,
+                token=upload.token,
+            ) as response:
+                await _handle_response(response, request, owner)
+        except ConnectionError as error:
+            owner.notify(
+                f"Error loading {uri}:\n\n{error}",
+                severity="error",
+                title="Connection Error",
+            )
+        except SecurityError as error:
+            owner.notify(
+                f"Error loading {uri}:\n\n{error}",
+                severity="error",
+                title="Security Error",
+            )
 
 
 ### titan.py ends here
