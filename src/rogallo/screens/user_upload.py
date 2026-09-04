@@ -141,12 +141,12 @@ class UserUpload(ModalScreen[UploadData | None]):
             dialog.border_title = f"Upload to {self._location}"
             dialog.border_subtitle = "Titan"
             with TabbedContent():
-                with TabPane("Text [$accent]\\[F3][/]", id="text"):
+                with TabPane("Text [$accent]\\[f3][/]", id="text"):
                     yield TextArea(
                         highlight_cursor_line=False,
                         placeholder="Enter text to upload...",
                     )
-                with TabPane("File [$accent]\\[F4][/]", id="file"):
+                with TabPane("File [$accent]\\[f4][/]", id="file"):
                     yield Button("Select file...", id="select-file")
                     yield Label("Selected file:", classes="--gap-above --title")
                     yield Label("<none>", id="selected-file", classes="--empty")
