@@ -5,6 +5,7 @@ This screen is intended to be used for Titan uploads.
 
 ##############################################################################
 # Python imports.
+from mimetypes import guess_type
 from pathlib import Path
 from typing import NamedTuple
 
@@ -186,6 +187,8 @@ class UserUpload(ModalScreen[UploadData | None]):
             self._selected_file = selected_file
             self._selected_file_display.update(short_location(selected_file))
             self._selected_file_display.remove_class("--empty")
+            mime_type, _ = guess_type(self._selected_file)
+            self._mime_type.value = mime_type or "application/octet-stream"
 
     @on(Button.Pressed, "#upload")
     def action_upload(self) -> None:
