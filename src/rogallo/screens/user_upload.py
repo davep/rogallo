@@ -197,6 +197,7 @@ class UserUpload(ModalScreen[UploadData | None]):
             self.dismiss(
                 UploadData(
                     data=self._text.text,
+                    mime_type="text/plain",
                     token=self._token.value.strip() or None,
                 )
             )
