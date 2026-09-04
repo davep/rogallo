@@ -11,6 +11,7 @@ from wasat import Client, TitanURI
 ##############################################################################
 # Local imports.
 from ....messages import OpenLocation
+from ...user_upload import UserUpload
 
 
 ##############################################################################
@@ -28,7 +29,8 @@ async def handle_titan_request(
     uri = request.location
     assert isinstance(uri, TitanURI)
 
-    owner.notify(f"TODO: Handling Titan request for {request.location}")
+    if upload := await owner.app.push_screen_wait(UserUpload(uri)):
+        owner.notify(f"TODO: Perform the upload {upload!r}")
 
 
 ### titan.py ends here

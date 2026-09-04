@@ -1,0 +1,216 @@
+"""Provides a modal screen for uploading text or a file.
+
+This screen is intended to be used for Titan uploads.
+"""
+
+##############################################################################
+# Python imports.
+from pathlib import Path
+from typing import NamedTuple
+
+##############################################################################
+# Textual imports.
+from textual import on
+from textual.app import ComposeResult
+from textual.containers import HorizontalGroup, VerticalGroup
+from textual.getters import query_one
+from textual.screen import ModalScreen
+from textual.widgets import Button, Input, Label, TabbedContent, TabPane, TextArea
+
+##############################################################################
+# Textual enhanced imports.
+from textual_enhanced.tools import add_key
+
+##############################################################################
+# Textual FSPicker imports.
+from textual_fspicker import FileOpen
+
+##############################################################################
+# Wasat imports.
+from wasat import TitanURI
+
+##############################################################################
+# Local imports.
+from ..presentation import short_location
+
+
+##############################################################################
+class UploadData(NamedTuple):
+    """The data for uploading."""
+
+    data: str | Path
+    """The data to upload."""
+    mime_type: str | None = None
+    """The MIME type of the data."""
+    token: str | None = None
+    """The token to use for the upload, if any."""
+
+
+##############################################################################
+class UserUpload(ModalScreen[UploadData | None]):
+    """A modal screen to get input from the user."""
+
+    CSS = """
+    UserUpload {
+        align: center middle;
+
+        &> VerticalGroup {
+            height: 60vh;
+            width: 60vw;
+            padding: 1 2;
+            background: $panel;
+            border: panel $border;
+
+            TabbedContent {
+                height: 1fr;
+            }
+
+            #token-input {
+                align: left middle;
+                width: 1fr;
+                height: auto;
+                margin-top: 1;
+                Input {
+                    width: 1fr;
+                }
+                Label {
+                   height: 3;
+                   content-align: center middle;
+                }
+            }
+
+            #buttons {
+                align: right middle;
+                width: 100%;
+                height: auto;
+                padding-top: 1;
+                Button {
+                    margin-right: 1;
+                }
+            }
+
+            .--empty {
+                color: $text-muted;
+            }
+
+            .--gap-above {
+                margin-top: 1;
+            }
+            .--title {
+                color: $accent;
+            }
+        }
+    }
+    """
+
+    BINDINGS = [
+        ("f2", "upload"),
+        ("f3", "prepare_text"),
+        ("f4", "prepare_file"),
+        ("escape", "cancel"),
+    ]
+
+    _text_or_file = query_one(TabbedContent)
+    """The tabbed content widget for text or file."""
+    _selected_file_display = query_one("#selected-file", Label)
+    """The label displaying the selected file."""
+    _text = query_one(TextArea)
+    """The user's input text."""
+    _mime_type = query_one("#mime-type", Input)
+    """The mime type input."""
+    _token = query_one("#token", Input)
+    """The token input."""
+
+    def __init__(self, location: TitanURI) -> None:
+        """Initialise the screen.
+
+        Args:
+            location: The location to upload to.
+        """
+        super().__init__()
+        self._location = location
+        """The location to upload to."""
+        self._selected_file: Path | None = None
+        """The selected file to upload."""
+
+    def compose(self) -> ComposeResult:
+        """Compose the screen."""
+        with VerticalGroup() as dialog:
+            dialog.border_title = f"Upload to {self._location}"
+            dialog.border_subtitle = "Titan"
+            with TabbedContent():
+                with TabPane("Text [$accent]\\[F3][/]", id="text"):
+                    yield TextArea(
+                        highlight_cursor_line=False,
+                        placeholder="Enter text to upload...",
+                    )
+                with TabPane("File [$accent]\\[F4][/]", id="file"):
+                    yield Button("Select file...", id="select-file")
+                    yield Label("Selected file:", classes="--gap-above --title")
+                    yield Label("<none>", id="selected-file", classes="--empty")
+                    yield Label("Mime type:", classes="--gap-above --title")
+                    yield Input(
+                        placeholder="Enter MIME type (e.g. text/plain)", id="mime-type"
+                    )
+            with HorizontalGroup(id="token-input"):
+                yield Label("Token:", classes="--title")
+                yield Input(placeholder="Enter token (optional)", id="token")
+            with HorizontalGroup(id="buttons"):
+                yield Button(add_key("Upload", "F2", self), id="upload")
+                yield Button(add_key("Cancel", "Esc", self), id="cancel")
+
+    def action_prepare_file(self) -> None:
+        """Switch to the file tab."""
+        self.screen.focused = self._text_or_file
+        self._text_or_file.active = "file"
+
+    def action_prepare_text(self) -> None:
+        """Switch to the text tab."""
+        self.screen.focused = self._text_or_file
+        self._text_or_file.active = "text"
+
+    @on(Button.Pressed, "#select-file")
+    async def _select_file(self) -> None:
+        """Select a file to upload."""
+        start_at = Path(".")
+        if self._selected_file is not None and self._selected_file.parent.is_dir():
+            start_at = self._selected_file.parent
+        if selected_file := await self.app.push_screen_wait(
+            FileOpen(
+                start_at,
+                title="Select a file to upload",
+                open_button="Select",
+                cancel_button=add_key("Cancel", "Esc", self),
+            )
+        ):
+            self._selected_file = selected_file
+            self._selected_file_display.update(short_location(selected_file))
+            self._selected_file_display.remove_class("--empty")
+
+    @on(Button.Pressed, "#upload")
+    def action_upload(self) -> None:
+        """Upload the data."""
+        if self._text_or_file.active == "text":
+            self.dismiss(
+                UploadData(
+                    data=self._text.text,
+                    token=self._token.value.strip() or None,
+                )
+            )
+        elif self._text_or_file.active == "file" and self._selected_file is not None:
+            self.dismiss(
+                UploadData(
+                    data=self._selected_file,
+                    mime_type=self._mime_type.value.strip()
+                    or "application/octet-stream",
+                    token=self._token.value.strip() or None,
+                )
+            )
+
+    @on(Button.Pressed, "#cancel")
+    def action_cancel(self) -> None:
+        """Cancel the upload."""
+        self.dismiss(None)
+
+
+### user_upload.py ends here
