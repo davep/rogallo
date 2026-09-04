@@ -31,7 +31,10 @@ async def _handle_response(
     uri = response.uri or response.requested_uri or request.location
     assert isinstance(uri, GeminiURI | TitanURI)
 
-    # Handle any other non-successful response.
+    # TODO: Should I still handle a `is_client_certificate_required`
+    # response here?
+
+    # Handle any non-successful response.
     if not response.status.is_success:
         owner.notify(
             f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
