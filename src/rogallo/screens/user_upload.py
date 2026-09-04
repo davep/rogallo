@@ -99,8 +99,14 @@ class UserUpload(ModalScreen[UploadData | None]):
                 }
             }
 
+            #character-count {
+                width: 1fr;
+                padding-left: 1;
+                color: $text-muted;
+            }
+
             #editor-help {
-                width: 100%;
+                width: 1fr;
                 content-align: right middle;
                 padding-right: 1;
             }
@@ -124,6 +130,8 @@ class UserUpload(ModalScreen[UploadData | None]):
         ("escape", "cancel"),
     ]
 
+    _character_count = query_one("#character-count", Label)
+    """The label displaying the character count."""
     _text_or_file = query_one(TabbedContent)
     """The tabbed content widget for text or file."""
     _selected_file_display = query_one("#selected-file", Label)
@@ -158,8 +166,13 @@ class UserUpload(ModalScreen[UploadData | None]):
                         highlight_cursor_line=False,
                         placeholder="Enter text to upload...",
                     )
-                    if external_editor():
-                        yield Label("[$accent]\\[f3][/] for $EDITOR", id="editor-help")
+                    with HorizontalGroup():
+                        yield Label(id="character-count")
+                        if external_editor():
+                            yield Label(
+                                "[dim][$accent]\\[f3][/] for $EDITOR[/]",
+                                id="editor-help",
+                            )
                 with TabPane("File [$accent]\\[^f][/]", id="file"):
                     yield Button("Select file...", id="select-file")
                     yield Label("Selected file:", classes="--title")
@@ -186,6 +199,13 @@ class UserUpload(ModalScreen[UploadData | None]):
         """Switch to the text tab."""
         self.screen.focused = self._text_or_file
         self._text_or_file.active = "text"
+
+    @on(TextArea.Changed)
+    def _text_changed(self) -> None:
+        """Update the text size count."""
+        self._character_count.update(
+            f"Characters: {len(self._text.text)}" if self._text.text else ""
+        )
 
     @on(Button.Pressed, "#select-file")
     async def _select_file(self) -> None:
