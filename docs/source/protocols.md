@@ -7,5 +7,6 @@ Rogallo supports the following protocols:
 - [Gopher](./gopher.md)
 - [Nex](./nex.md)
 - [Spartan](./spartan.md)
+- [Titan](./titan.md)
 
 [//]: # (protocols.md ends here)

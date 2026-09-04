@@ -1,0 +1,6 @@
+# Titan upload example
+
+This is a page that includes a Titan link, which can be used to upload text or a file.
+
+=> titan://localhost/titan.gmi Upload something bigger than usual
+
