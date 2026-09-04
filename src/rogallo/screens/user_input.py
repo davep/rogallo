@@ -1,13 +1,6 @@
 """Provides a modal screen for getting user input."""
 
 ##############################################################################
-# Python imports.
-from os import getenv
-from pathlib import Path
-from subprocess import run
-from tempfile import NamedTemporaryFile
-
-##############################################################################
 # Sybaritic imports.
 from sybaritic import SpartanURI
 
@@ -26,8 +19,7 @@ from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
-from ..data import load_configuration
-from ..types import DEFAULT_GEMINI_EXTENSION
+from ..editor import edit_externally, external_editor
 
 
 ##############################################################################
@@ -122,20 +114,10 @@ class UserInput(ModalScreen[str | None]):
             and self._location.with_query(self._current_text).is_too_long
         )
 
-    @property
-    def _external_editor(self) -> str | None:
-        """The external editor to use, if any."""
-        return (
-            load_configuration().external_editor
-            or getenv("VISUAL")
-            or getenv("EDITOR")
-            or None
-        )
-
     def _update_subtitle(self) -> None:
         """Update the subtitle of the input area."""
         footer = "F2: Submit"
-        if bool(self._external_editor):
+        if external_editor():
             footer += " | F3: $EDITOR"
         if not self._input.text:
             self._input.border_subtitle = footer
@@ -167,20 +149,7 @@ class UserInput(ModalScreen[str | None]):
 
     def action_edit_externally(self) -> None:
         """Edit the input in an external editor."""
-        if not (editor := self._external_editor):
-            return
-        with NamedTemporaryFile(
-            mode="w+", delete=False, encoding="utf-8", suffix=DEFAULT_GEMINI_EXTENSION
-        ) as temp_file:
-            user_input = Path(temp_file.name)
-            temp_file.write(self._current_text)
-            temp_file.close()
-            try:
-                with self.app.suspend():
-                    run((editor, user_input))
-                self._input.text = user_input.read_text(encoding="utf-8")
-            finally:
-                user_input.unlink(missing_ok=True)
+        self._input.text = edit_externally(self.app, self._input.text)
 
 
 ### user_input.py ends here

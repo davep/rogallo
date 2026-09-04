@@ -6,10 +6,7 @@ This screen is intended to be used for Titan uploads.
 ##############################################################################
 # Python imports.
 from mimetypes import guess_type, types_map
-from os import getenv
 from pathlib import Path
-from subprocess import run
-from tempfile import NamedTemporaryFile
 from typing import NamedTuple
 
 ##############################################################################
@@ -36,9 +33,8 @@ from wasat import TitanURI
 
 ##############################################################################
 # Local imports.
-from ..data import load_configuration
+from ..editor import edit_externally, external_editor
 from ..presentation import short_location
-from ..types import DEFAULT_GEMINI_EXTENSION
 
 
 ##############################################################################
@@ -151,16 +147,6 @@ class UserUpload(ModalScreen[UploadData | None]):
         self._selected_file: Path | None = None
         """The selected file to upload."""
 
-    @property
-    def _external_editor(self) -> str | None:
-        """The external editor to use, if any."""
-        return (
-            load_configuration().external_editor
-            or getenv("VISUAL")
-            or getenv("EDITOR")
-            or None
-        )
-
     def compose(self) -> ComposeResult:
         """Compose the screen."""
         with VerticalGroup() as dialog:
@@ -172,7 +158,7 @@ class UserUpload(ModalScreen[UploadData | None]):
                         highlight_cursor_line=False,
                         placeholder="Enter text to upload...",
                     )
-                    if self._external_editor:
+                    if external_editor():
                         yield Label("[$accent]\\[f3][/] for $EDITOR", id="editor-help")
                 with TabPane("File [$accent]\\[^f][/]", id="file"):
                     yield Button("Select file...", id="select-file")
@@ -249,23 +235,8 @@ class UserUpload(ModalScreen[UploadData | None]):
 
     def action_edit_externally(self) -> None:
         """Edit the input in an external editor."""
-        if not (
-            (editor := self._external_editor) and self._text_or_file.active == "text"
-        ):
-            return
-        with NamedTemporaryFile(
-            mode="w+", delete=False, encoding="utf-8", suffix=DEFAULT_GEMINI_EXTENSION
-        ) as temp_file:
-            user_input = Path(temp_file.name)
-            temp_file.write(self._text.text)
-            temp_file.close()
-            try:
-                with self.app.suspend():
-                    run((editor, user_input))
-                self._text.text = user_input.read_text(encoding="utf-8")
-                self._text.focus()
-            finally:
-                user_input.unlink(missing_ok=True)
+        if self._text_or_file.active == "text":
+            self._text.text = edit_externally(self.app, self._text.text)
 
 
 ### user_upload.py ends here
