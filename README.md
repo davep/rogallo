@@ -20,7 +20,7 @@ Rogallo is a terminal-based client for browsing
 [Fingerspace](https://en.wikipedia.org/wiki/Finger_(protocol)). Its key
 features include:
 
-- Support for the `gemini`, `spartan`, `gopher`, `nex` and `finger` protocols
+- Support for the `gemini`, `titan`, `spartan`, `gopher`, `nex` and `finger` protocols
 - Bookmarks management with search
 - Location history tracking with search
 - Backward and forward page navigation
