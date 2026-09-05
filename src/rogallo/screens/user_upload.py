@@ -192,6 +192,12 @@ class UserUpload(ModalScreen[UploadData | None]):
                 yield Button(add_key("Upload", "f2", self), id="upload")
                 yield Button(add_key("Cancel", "Esc", self), id="cancel")
 
+    def on_mount(self) -> None:
+        """Focus the text area on mount."""
+        self._refresh_character_count()
+        if self._existing_content:
+            self._text.focus()
+
     def action_prepare_file(self) -> None:
         """Switch to the file tab."""
         self._text_or_file.active = "file"
@@ -205,7 +211,7 @@ class UserUpload(ModalScreen[UploadData | None]):
         self.call_after_refresh(self.focus_next)
 
     @on(TextArea.Changed)
-    def _text_changed(self) -> None:
+    def _refresh_character_count(self) -> None:
         """Update the text size count."""
         self._character_count.update(
             f"Characters: {len(self._text.text)}" if self._text.text else ""
