@@ -152,7 +152,13 @@ async def handle_titan_request(
                 token=upload.token,
             ) as response:
                 await _handle_response(response, request, client, owner)
-        except ConnectionError as error:
+        except (
+            URIError,
+            ConnectionError,
+            ProtocolError,
+            RedirectError,
+            TypeError,
+        ) as error:
             owner.notify(
                 f"Error loading {uri}:\n\n{error}",
                 severity="error",
