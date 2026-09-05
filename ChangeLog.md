@@ -11,6 +11,8 @@
   ([#417](https://github.com/davep/rogallo/pull/417))
 - Added support for the edit extension to the Titan protocol.
   ([#417](https://github.com/davep/rogallo/pull/417))
+- Improve the cosmetics of the Gemini user input dialog.
+  ([#419](https://github.com/davep/rogallo/pull/419))
 
 ## v2.2.0
 
