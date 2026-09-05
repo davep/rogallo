@@ -130,20 +130,21 @@ class UserInput(ModalScreen[str | None]):
 
     def _update_subtitle(self) -> None:
         """Update the subtitle of the input area."""
-        submit = "f2: Submit"
-        edit = " | f3: $EDITOR" if external_editor() else ""
+        escape = "[$accent]Esc[/]: Cancel"
+        submit = " | [$accent]f2[/]: Submit"
+        edit = " | [$accent]f3[/]: $EDITOR" if external_editor() else ""
         if not self._input.text:
-            self._dialog.border_subtitle = f"{submit}{edit}"
+            self._dialog.border_subtitle = f"{escape}{submit}{edit}"
         elif self._input_is_too_long:
-            self._dialog.border_subtitle = f"Input is too long!{edit}"
+            self._dialog.border_subtitle = f"Input is too long! | {escape}{edit}"
         elif isinstance(self._location, GeminiURI):
             self._dialog.border_subtitle = (
-                f"{submit}{edit} "
+                f"{escape}{submit}{edit} "
                 f"({self._location.with_query(self._current_text).bytes_left} left)"
             )
         else:
             self._dialog.border_subtitle = (
-                f"{submit}{edit} ({len(self._current_text)} used)"
+                f"{escape}{submit}{edit} ({len(self._current_text)} used)"
             )
 
     @on(TextArea.Changed)
