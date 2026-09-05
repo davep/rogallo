@@ -130,17 +130,21 @@ class UserInput(ModalScreen[str | None]):
 
     def _update_subtitle(self) -> None:
         """Update the subtitle of the input area."""
-        footer = "F2: Submit"
-        if external_editor():
-            footer += " | F3: $EDITOR"
+        submit = "f2: Submit"
+        edit = " | f3: $EDITOR" if external_editor() else ""
         if not self._input.text:
-            self._dialog.border_subtitle = footer
+            self._dialog.border_subtitle = f"{submit}{edit}"
         elif self._input_is_too_long:
-            self._dialog.border_subtitle = "Input is too long!"
+            self._dialog.border_subtitle = f"Input is too long!{edit}"
         elif isinstance(self._location, GeminiURI):
-            self._dialog.border_subtitle = f"{footer} ({self._location.with_query(self._current_text).bytes_left} left)"
+            self._dialog.border_subtitle = (
+                f"{submit}{edit} "
+                f"({self._location.with_query(self._current_text).bytes_left} left)"
+            )
         else:
-            self._dialog.border_subtitle = f"{footer} ({len(self._current_text)} used)"
+            self._dialog.border_subtitle = (
+                f"{submit}{edit} ({len(self._current_text)} used)"
+            )
 
     @on(TextArea.Changed)
     def _limit_check(self) -> None:
