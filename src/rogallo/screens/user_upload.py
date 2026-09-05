@@ -143,7 +143,7 @@ class UserUpload(ModalScreen[UploadData | None]):
     _token = query_one("#token", Input)
     """The token input."""
 
-    def __init__(self, location: TitanURI) -> None:
+    def __init__(self, location: TitanURI, existing_content: str) -> None:
         """Initialise the screen.
 
         Args:
@@ -152,6 +152,8 @@ class UserUpload(ModalScreen[UploadData | None]):
         super().__init__()
         self._location = location
         """The location to upload to."""
+        self._existing_content = existing_content
+        """The existing content at the location."""
         self._selected_file: Path | None = None
         """The selected file to upload."""
 
@@ -163,6 +165,7 @@ class UserUpload(ModalScreen[UploadData | None]):
             with TabbedContent():
                 with TabPane("Text [$accent]\\[^t][/]", id="text"):
                     yield TextArea(
+                        self._existing_content,
                         highlight_cursor_line=False,
                         placeholder="Enter text to upload...",
                     )

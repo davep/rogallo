@@ -9,6 +9,8 @@
   ([#415](https://github.com/davep/rogallo/pull/415))
 - Added support for the Titan Protocol.
   ([#417](https://github.com/davep/rogallo/pull/417))
+- Added support for the edit extension to the Titan protocol.
+  ([#417](https://github.com/davep/rogallo/pull/417))
 
 ## v2.2.0
 

@@ -6,7 +6,16 @@ from textual.widget import Widget
 
 ##############################################################################
 # Wasat imports.
-from wasat import Client, GeminiURI, Response, SecurityError, TitanURI
+from wasat import (
+    Client,
+    GeminiURI,
+    ProtocolError,
+    RedirectError,
+    Response,
+    SecurityError,
+    TitanURI,
+    URIError,
+)
 
 ##############################################################################
 # Local imports.
@@ -66,6 +75,53 @@ async def _handle_response(
 
 
 ##############################################################################
+async def _get_raw_content_to_edit(
+    uri: TitanURI, client: Client, owner: Widget
+) -> str | None:
+    """Get the raw content of a Titan document to edit.
+
+    Args:
+        uri: The URI of the document to edit.
+        client: The Titan client to use for the request.
+        owner: The widget that owns the request.
+
+    Returns:
+        The raw content of the document, or `None` if there was an error.
+    """
+    try:
+        async with await client.edit(uri) as response:
+            if not response.status.is_success:
+                owner.notify(
+                    f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
+                    severity="error",
+                    title="Request Error",
+                )
+                return None
+            return await decode_text(response)
+    except (
+        URIError,
+        ConnectionError,
+        ProtocolError,
+        RedirectError,
+        ValueError,
+        OSError,
+        RuntimeError,
+    ) as error:
+        owner.notify(
+            f"Error loading {uri}:\n\n{error}",
+            severity="error",
+            title="Connection Error",
+        )
+    except SecurityError as error:
+        owner.notify(
+            f"Error loading {uri}:\n\n{error}",
+            severity="error",
+            title="Security Error",
+        )
+    return None
+
+
+##############################################################################
 async def handle_titan_request(
     request: OpenLocation, owner: Widget, client: Client
 ) -> None:
@@ -80,7 +136,18 @@ async def handle_titan_request(
     uri = request.location
     assert isinstance(uri, TitanURI)
 
-    if upload := await owner.app.push_screen_wait(UserUpload(uri)):
+    # If it's a Titan request that is a request to edit existing content,
+    # get the existing content first.
+    raw_content = ""
+    if uri.is_edit:
+        if (
+            raw_from_server := await _get_raw_content_to_edit(uri, client, owner)
+        ) is None:
+            return
+        raw_content = raw_from_server
+
+    # Prompt the user for what they want to upload, and then upload it.
+    if upload := await owner.app.push_screen_wait(UserUpload(uri, raw_content)):
         try:
             async with await client.upload(
                 uri=uri,
