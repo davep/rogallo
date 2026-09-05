@@ -1,10 +1,6 @@
 """Provides code for handling a Gemini request."""
 
 ##############################################################################
-# Python imports.
-from collections.abc import Callable
-
-##############################################################################
 # Textual imports.
 from textual.widget import Widget
 
@@ -28,13 +24,13 @@ from ....messages import OpenLocation
 from ....mime_checks import is_displayable_mime_type
 from ...user_input import UserInput
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
-from ._glv import document, handle_client_certificate_request, handle_security_error
-
-##############################################################################
-type LastInputSetter = Callable[[InputContent | None], None]
-"""Type of a setter for the last input."""
-type LastInputGetter = Callable[[], InputContent | None]
-"""Type of a getter for the last input."""
+from ._glv import (
+    LastInputGetter,
+    LastInputSetter,
+    document,
+    handle_client_certificate_request,
+    handle_security_error,
+)
 
 
 ##############################################################################

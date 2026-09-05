@@ -1,6 +1,10 @@
 """Protocol handler code shared between Gemini and Titan."""
 
 ##############################################################################
+# Python imports.
+from collections.abc import Callable
+
+##############################################################################
 # Textual imports.
 from textual.widget import Widget
 
@@ -11,6 +15,7 @@ from wasat import AnyURI, Client, ClientCertificate, Response, SecurityError
 ##############################################################################
 # Local imports.
 from ....document import Document
+from ....input_content import InputContent
 from ....messages import ClientCertificatesModified, OpenLocation
 from ....text_decoder import decode_text
 from ...client_certificate import (
@@ -20,6 +25,12 @@ from ...client_certificate import (
     LocationSpecificClientCertificateMaker,
 )
 from ...security_alert import SecurityAlert
+
+##############################################################################
+type LastInputSetter = Callable[[InputContent | None], None]
+"""Type of a setter for the last input."""
+type LastInputGetter = Callable[[], InputContent | None]
+"""Type of a getter for the last input."""
 
 
 ##############################################################################

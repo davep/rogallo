@@ -99,6 +99,8 @@ def build_request(
             request=message,
             client=clients.gemini,
             owner=owner,
+            set_last_input=set_last_input,
+            get_last_input=get_last_input,
         )
     return None
 
