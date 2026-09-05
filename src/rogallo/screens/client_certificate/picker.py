@@ -21,7 +21,7 @@ from textual_enhanced.tools import add_key
 
 ##############################################################################
 # Wasat imports.
-from wasat import ClientCertificate, GeminiURI
+from wasat import AnyURI, ClientCertificate
 
 ##############################################################################
 type ClientCertificatePickerResult = ClientCertificate | Literal["create"] | None
@@ -90,9 +90,7 @@ class ClientCertificatePicker(ModalScreen[ClientCertificatePickerResult]):
     _certificate_choices = query_one(OptionList)
     """The option list that contains the certificate choices."""
 
-    def __init__(
-        self, uri: GeminiURI, certificates: Iterable[ClientCertificate]
-    ) -> None:
+    def __init__(self, uri: AnyURI, certificates: Iterable[ClientCertificate]) -> None:
         """Initialize the dialog.
 
         Args:

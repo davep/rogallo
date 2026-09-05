@@ -19,31 +19,37 @@ from wasat import (
 
 ##############################################################################
 # Local imports.
-from ....document import Document
 from ....messages import OpenLocation
 from ....mime_checks import is_displayable_mime_type
 from ....text_decoder import decode_text
 from ...user_upload import UserUpload
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
+from ._glv import document, handle_client_certificate_request
 
 
 ##############################################################################
 async def _handle_response(
-    response: Response, request: OpenLocation, owner: Widget
+    response: Response, request: OpenLocation, client: Client, owner: Widget
 ) -> None:
     """Handle a Titan response.
 
     Args:
         response: The response to handle.
+        request: The request that was made.
+        client: The Titan client to use for any follow-up requests.
         owner: The widget that owns the request.
     """
     uri = response.uri or response.requested_uri or request.location
     assert isinstance(uri, GeminiURI | TitanURI)
 
-    # TODO: Should I still handle a `is_client_certificate_required`
-    # response here?
+    # Handle a request for a client certificate.
+    if response.status.is_client_certificate_required:
+        await handle_client_certificate_request(
+            uri, response.meta.strip(), client, owner
+        )
+        return
 
-    # Handle any non-successful response.
+    # Handle any other non-successful response.
     if not response.status.is_success:
         owner.notify(
             f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
@@ -56,18 +62,8 @@ async def _handle_response(
     if is_displayable_mime_type(response.mime_type):
         owner.post_message(
             OpenDocument(
-                Document(
-                    location=uri,
-                    original_location=request.location,
-                    content=await decode_text(response),
-                    mime_type=response.mime_type,
-                    needed_client_certificate=response.client_cert_used,
-                    client_certificate=response.client_cert,
-                    verification_method=response.verification_method,
-                    server_certificate=response.server_cert,
-                    avoid_cache=response.client_cert_used,
-                    avoid_history=request.avoid_history,
-                )
+                await document(uri, request, response),
+                from_history=request.from_history,
             )
         )
     else:
@@ -155,7 +151,7 @@ async def handle_titan_request(
                 mime=upload.mime_type,
                 token=upload.token,
             ) as response:
-                await _handle_response(response, request, owner)
+                await _handle_response(response, request, client, owner)
         except ConnectionError as error:
             owner.notify(
                 f"Error loading {uri}:\n\n{error}",
