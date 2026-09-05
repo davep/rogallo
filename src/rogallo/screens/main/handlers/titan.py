@@ -8,6 +8,7 @@ from textual.widget import Widget
 # Wasat imports.
 from wasat import (
     Client,
+    ConnectionError,
     GeminiURI,
     ProtocolError,
     RedirectError,
