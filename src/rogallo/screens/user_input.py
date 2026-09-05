@@ -8,10 +8,11 @@ from sybaritic import SpartanURI
 # Textual imports.
 from textual import on
 from textual.app import ComposeResult
+from textual.containers import VerticalGroup
 from textual.content import Content
 from textual.getters import query_one
 from textual.screen import ModalScreen
-from textual.widgets import TextArea
+from textual.widgets import Label, TextArea
 
 ##############################################################################
 # Wasat imports.
@@ -30,17 +31,31 @@ class UserInput(ModalScreen[str | None]):
     UserInput {
         align: center middle;
 
-        TextArea, TextArea:focus {
+        &> VerticalGroup {
+            background: $panel;
             border: round $border;
             width: 60%;
             padding: 1;
             height: auto;
-            max-height: 60%;
+
+            Label {
+                color: $accent;
+            }
+
+            TextArea, TextArea:focus {
+                background: transparent;
+                border: none;
+                border-top: solid $border;
+                height: auto;
+                max-height: 60vh;
+                padding: 0;
+            }
 
             &.--too-long {
                 border: round $text-error;
                 background: $error;
             }
+
         }
 
         &.--sensitive TextArea {
@@ -55,6 +70,8 @@ class UserInput(ModalScreen[str | None]):
         ("f3", "edit_externally"),
     ]
 
+    _dialog = query_one(VerticalGroup)
+    """The dialog container."""
     _input = query_one(TextArea)
     """The input text area."""
 
@@ -85,21 +102,18 @@ class UserInput(ModalScreen[str | None]):
 
     def compose(self) -> ComposeResult:
         """Compose the input dialog."""
-        yield (
-            user_input := TextArea(
-                self._default,
-                highlight_cursor_line=False,
-                placeholder="Enter your input here...",
-            )
-        )
-        user_input.border_title = Content(
-            self._prompt
-            or (
+        with VerticalGroup() as dialog:
+            dialog.border_title = Content(
                 f"{'Sensitive input' if self._sensitive else 'Input'} for {self._location}"
                 if self._location
                 else "Input"
             )
-        )
+            yield Label(self._prompt, shrink=True, markup=False)
+            yield TextArea(
+                self._default,
+                highlight_cursor_line=False,
+                placeholder="Enter your input here...",
+            )
 
     @property
     def _current_text(self) -> str:
@@ -120,18 +134,18 @@ class UserInput(ModalScreen[str | None]):
         if external_editor():
             footer += " | F3: $EDITOR"
         if not self._input.text:
-            self._input.border_subtitle = footer
+            self._dialog.border_subtitle = footer
         elif self._input_is_too_long:
-            self._input.border_subtitle = "Input is too long!"
+            self._dialog.border_subtitle = "Input is too long!"
         elif isinstance(self._location, GeminiURI):
-            self._input.border_subtitle = f"{footer} ({self._location.with_query(self._current_text).bytes_left} left)"
+            self._dialog.border_subtitle = f"{footer} ({self._location.with_query(self._current_text).bytes_left} left)"
         else:
-            self._input.border_subtitle = f"{footer} ({len(self._current_text)} used)"
+            self._dialog.border_subtitle = f"{footer} ({len(self._current_text)} used)"
 
     @on(TextArea.Changed)
     def _limit_check(self) -> None:
         """Check if the input is too long."""
-        self._input.set_class(self._input_is_too_long, "--too-long")
+        self._dialog.set_class(self._input_is_too_long, "--too-long")
         self._update_subtitle()
 
     def on_mount(self) -> None:
