@@ -189,7 +189,7 @@ class UserUpload(ModalScreen[UploadData | None]):
                 yield Label("Token:", classes="--title")
                 yield Input(placeholder="Enter token (optional)", id="token")
             with HorizontalGroup(id="buttons"):
-                yield Button(add_key("Upload", "F2", self), id="upload")
+                yield Button(add_key("Upload", "f2", self), id="upload")
                 yield Button(add_key("Cancel", "Esc", self), id="cancel")
 
     def action_prepare_file(self) -> None:
