@@ -52,7 +52,7 @@ async def document(uri: AnyURI, request: OpenLocation, response: Response) -> Do
 async def handle_client_certificate_request(
     location: AnyURI, request_reason: str, client: Client, owner: Widget
 ) -> None:
-    """Handle a request for a client certificate from a Gemini request.
+    """Handle a request for a client certificate from a Gemini/Titan request.
 
     Args:
         location: The location making the request.
@@ -122,9 +122,10 @@ async def handle_client_certificate_request(
 async def handle_security_error(
     client: Client, error: SecurityError, uri: AnyURI, owner: Widget
 ) -> None:
-    """Handle a security error from a Gemini request.
+    """Handle a security error from a Gemini/Titan request.
 
     Args:
+        client: The client that contains the trust store.
         error: The security error to handle.
         uri: The URI that caused the security error.
         owner: The widget that owns the request.
