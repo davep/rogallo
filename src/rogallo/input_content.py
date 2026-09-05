@@ -6,14 +6,14 @@ from typing import NamedTuple
 
 ##############################################################################
 # Wasat imports.
-from wasat import GeminiURI
+from wasat import AnyURI
 
 
 ##############################################################################
 class InputContent(NamedTuple):
     """A class for holding a user's input content."""
 
-    location: GeminiURI
+    location: AnyURI
     """The location that the input was requested from."""
     prompt: str
     """The prompt that was shown to the user."""

@@ -26,7 +26,7 @@ from textual.widget import Widget
 
 ##############################################################################
 # Wasat imports.
-from wasat import GeminiURI
+from wasat import GeminiURI, TitanURI
 
 ##############################################################################
 # Local imports.
@@ -42,6 +42,7 @@ from .handlers import (
     handle_gopher_request,
     handle_nex_request,
     handle_spartan_request,
+    handle_titan_request,
 )
 
 
@@ -92,6 +93,14 @@ def build_request(
             client=clients.nex,
             owner=owner,
             cache=cache,
+        )
+    if isinstance(message.location, TitanURI):
+        return handle_titan_request(
+            request=message,
+            client=clients.gemini,
+            owner=owner,
+            set_last_input=set_last_input,
+            get_last_input=get_last_input,
         )
     return None
 

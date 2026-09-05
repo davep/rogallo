@@ -23,10 +23,12 @@ from sybaritic import SpartanURI
 
 ##############################################################################
 # Wasat imports.
-from wasat import GeminiURI
+from wasat import GeminiURI, TitanURI
 
 ##############################################################################
-type RogalloLocation = Path | GeminiURI | FingerURI | GopherURI | SpartanURI | NexURI
+type RogalloLocation = (
+    Path | GeminiURI | TitanURI | FingerURI | GopherURI | SpartanURI | NexURI
+)
 """The type of a location handled by Rogallo."""
 
 ##############################################################################
@@ -38,6 +40,7 @@ SUPPORTED_PROTOCOLS: Final[frozenset[str]] = frozenset(
         "gopher",
         "nex",
         "spartan",
+        "titan",
     }
 )
 """The set of protocols handled by Rogallo."""

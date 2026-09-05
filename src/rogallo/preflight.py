@@ -29,7 +29,7 @@ from sybaritic import URIError as SpartanURIError
 
 ##############################################################################
 # Wasat imports.
-from wasat import GeminiURI
+from wasat import GeminiURI, TitanURI
 from wasat import URIError as GeminiURIError
 from wasat.uri import GEMINI_PREFIX
 
@@ -124,6 +124,23 @@ def is_nex_uri(uri: str) -> bool:
     try:
         _ = NexURI(uri)
     except NexURIError:
+        return False
+    return True
+
+
+##############################################################################
+def is_titan_uri(uri: str) -> bool:
+    """Determine if a URI is a Titan URI.
+
+    Args:
+        uri: The URI to check.
+
+    Returns:
+        `True` if the URI is a Titan URI, `False` otherwise.
+    """
+    try:
+        _ = TitanURI(uri)
+    except GeminiURIError:
         return False
     return True
 

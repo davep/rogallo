@@ -22,7 +22,7 @@ from sybaritic import SpartanURI
 
 ##############################################################################
 # Wasat imports.
-from wasat import GeminiURI
+from wasat import GeminiURI, TitanURI
 from wasat.uri import GEMINI_PREFIX
 
 ##############################################################################
@@ -40,7 +40,7 @@ def short_location(location: RogalloLocation) -> str:
     Returns:
         A short string representation of the location.
     """
-    if isinstance(location, (FingerURI, GopherURI, SpartanURI, NexURI)):
+    if isinstance(location, (FingerURI, GopherURI, SpartanURI, NexURI, TitanURI)):
         return str(location)
     if isinstance(location, GeminiURI):
         return str(location).removeprefix(GEMINI_PREFIX)

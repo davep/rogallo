@@ -21,7 +21,7 @@ from textual_enhanced.tools import add_key
 
 ##############################################################################
 # Wasat imports.
-from wasat import GeminiURI
+from wasat import AnyURI
 
 ##############################################################################
 type CertificateData = dict[str, Any]
@@ -190,7 +190,7 @@ class BaseCertificateMaker(ModalScreen[CertificateData | None]):
 class LocationSpecificClientCertificateMaker(BaseCertificateMaker):
     """A modal screen to get a certificate from the user."""
 
-    def __init__(self, location: GeminiURI, reason: str) -> None:
+    def __init__(self, location: AnyURI, reason: str) -> None:
         """Initialise the object.
 
         Args:

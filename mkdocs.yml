@@ -11,6 +11,7 @@ nav:
       - gopher.md
       - nex.md
       - spartan.md
+      - titan.md
   - "UI":
       - ui.md
       - command-line.md

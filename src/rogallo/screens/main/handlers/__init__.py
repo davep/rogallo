@@ -2,12 +2,14 @@
 
 ##############################################################################
 # Local imports.
+from ._glv import LastInputGetter, LastInputSetter
 from .filesystem import handle_filesystem_request
 from .finger import handle_finger_request
-from .gemini import LastInputGetter, LastInputSetter, handle_gemini_request
+from .gemini import handle_gemini_request
 from .gopher import handle_gopher_request
 from .nex import handle_nex_request
 from .spartan import handle_spartan_request
+from .titan import handle_titan_request
 
 ##############################################################################
 # Exports.
@@ -18,6 +20,7 @@ __all__ = [
     "handle_gopher_request",
     "handle_nex_request",
     "handle_spartan_request",
+    "handle_titan_request",
     "LastInputGetter",
     "LastInputSetter",
 ]

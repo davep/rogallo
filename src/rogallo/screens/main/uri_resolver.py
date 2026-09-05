@@ -22,7 +22,7 @@ from sybaritic import URIError as SpartanURIError
 
 ##############################################################################
 # Wasat imports
-from wasat import GeminiURI
+from wasat import GeminiURI, TitanURI
 from wasat import URIError as GeminiURIError
 
 ##############################################################################
@@ -54,6 +54,7 @@ def uri_resolver(
     # Work through the supported URI types.
     for uri_type, uri_error in (
         (GeminiURI, GeminiURIError),
+        (TitanURI, GeminiURIError),
         (FingerURI, FingerURIError),
         (GopherURI, GopherURIError),
         (SpartanURI, SpartanURIError),
