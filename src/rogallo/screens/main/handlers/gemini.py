@@ -13,6 +13,7 @@ from wasat import (
     Response,
     SecurityError,
     StatusCode,
+    TitanURI,
     URIError,
 )
 
@@ -101,6 +102,15 @@ async def _handle_response(
         get_last_input: A function to get the last input from the user.
     """
     uri = response.uri or response.requested_uri or request.location
+
+    # While trying to work with a Gemini URI, we might get redirected to a
+    # Titan URI. In that case, we need to handle the Titan request instead.
+    if isinstance(uri, TitanURI):
+        owner.post_message(
+            OpenLocation(location=uri, allow_cached=False, avoid_history=True)
+        )
+        return
+
     assert isinstance(uri, GeminiURI)
 
     # Handle a request for user input.
