@@ -6,7 +6,7 @@ from textual.widget import Widget
 
 ##############################################################################
 # Wasat imports.
-from wasat import AnyURI, Client, ClientCertificate, Response
+from wasat import AnyURI, Client, ClientCertificate, Response, SecurityError
 
 ##############################################################################
 # Local imports.
@@ -19,6 +19,7 @@ from ...client_certificate import (
     ClientCertificatePickerResult,
     LocationSpecificClientCertificateMaker,
 )
+from ...security_alert import SecurityAlert
 
 
 ##############################################################################
@@ -115,6 +116,28 @@ async def handle_client_certificate_request(
     # location.
     owner.post_message(ClientCertificatesModified())
     owner.post_message(OpenLocation(location, allow_cached=False))
+
+
+##############################################################################
+async def handle_security_error(
+    client: Client, error: SecurityError, uri: AnyURI, owner: Widget
+) -> None:
+    """Handle a security error from a Gemini request.
+
+    Args:
+        error: The security error to handle.
+        uri: The URI that caused the security error.
+        owner: The widget that owns the request.
+    """
+    if await owner.app.push_screen_wait(SecurityAlert(uri, str(error))):
+        assert client.trust_store is not None
+        await client.trust_store.forget(uri.host, uri.port)
+        owner.post_message(OpenLocation(uri, allow_cached=False))
+        owner.notify(
+            f"Reset the trust status for {uri.host}:{uri.port}",
+            title="Security Alert",
+            severity="warning",
+        )
 
 
 ### _glv.py ends here

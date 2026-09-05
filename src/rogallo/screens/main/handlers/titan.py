@@ -24,7 +24,7 @@ from ....mime_checks import is_displayable_mime_type
 from ....text_decoder import decode_text
 from ...user_upload import UserUpload
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
-from ._glv import document, handle_client_certificate_request
+from ._glv import document, handle_client_certificate_request, handle_security_error
 
 
 ##############################################################################
@@ -109,11 +109,7 @@ async def _get_raw_content_to_edit(
             title="Connection Error",
         )
     except SecurityError as error:
-        owner.notify(
-            f"Error loading {uri}:\n\n{error}",
-            severity="error",
-            title="Security Error",
-        )
+        await handle_security_error(client, error, uri, owner)
     return None
 
 
@@ -165,11 +161,7 @@ async def handle_titan_request(
                 title="Connection Error",
             )
         except SecurityError as error:
-            owner.notify(
-                f"Error loading {uri}:\n\n{error}",
-                severity="error",
-                title="Security Error",
-            )
+            await handle_security_error(client, error, uri, owner)
 
 
 ### titan.py ends here
