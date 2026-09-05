@@ -161,7 +161,6 @@ class UserUpload(ModalScreen[UploadData | None]):
         """Compose the screen."""
         with VerticalGroup() as dialog:
             dialog.border_title = f"Upload to {self._location}"
-            dialog.border_subtitle = "Titan"
             with TabbedContent():
                 with TabPane("Text [$accent]\\[^t][/]", id="text"):
                     yield TextArea(
