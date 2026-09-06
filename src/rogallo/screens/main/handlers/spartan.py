@@ -32,8 +32,15 @@ async def _handle_response(
         owner: The widget that owns the request.
         cache: The content cache to use for caching documents.
     """
-    assert isinstance(request.location, SpartanURI)
     uri = response.uri or response.requested_uri or request.location
+
+    if not isinstance(uri, SpartanURI):
+        owner.post_message(
+            OpenLocation(
+                location=uri, allow_cached=False, avoid_history=request.avoid_history
+            )
+        )
+        return
 
     # Handle any non-successful response.
     if not response.status.is_success:
