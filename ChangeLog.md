@@ -6,6 +6,8 @@
 
 - Added better handling of potential cross-protocol redirection.
   ([#425](https://github.com/davep/rogallo/pull/425))
+- Added a trusted hosts browser/manager dialog.
+  ([#426](https://github.com/davep/rogallo/pull/426))
 
 ## v2.3.0
 

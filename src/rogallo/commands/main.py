@@ -89,4 +89,11 @@ class SaveSource(Command):
     BINDING_KEY = "ctrl+s"
 
 
+##############################################################################
+class BrowseTrustedHosts(Command):
+    """Browse the list of trusted hosts"""
+
+    BINDING_KEY = "ctrl+shift+t"
+
+
 ### main.py ends here
