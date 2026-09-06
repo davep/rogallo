@@ -13,7 +13,6 @@ from wasat import (
     Response,
     SecurityError,
     StatusCode,
-    TitanURI,
     URIError,
 )
 
@@ -103,15 +102,15 @@ async def _handle_response(
     """
     uri = response.uri or response.requested_uri or request.location
 
-    # While trying to work with a Gemini URI, we might get redirected to a
-    # Titan URI. In that case, we need to handle the Titan request instead.
-    if isinstance(uri, TitanURI):
+    # If we ended up with a response URI that is a different protocol,
+    # bounce to its handler.
+    if not isinstance(uri, GeminiURI):
         owner.post_message(
-            OpenLocation(location=uri, allow_cached=False, avoid_history=True)
+            OpenLocation(
+                location=uri, allow_cached=False, avoid_history=request.avoid_history
+            )
         )
         return
-
-    assert isinstance(uri, GeminiURI)
 
     # Handle a request for user input.
     if response.status.is_input:

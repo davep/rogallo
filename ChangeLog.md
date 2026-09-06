@@ -1,5 +1,12 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added better handling of potential cross-protocol redirection.
+  ([#425](https://github.com/davep/rogallo/pull/425))
+
 ## v2.3.0
 
 **Released: 2026-09-06**
