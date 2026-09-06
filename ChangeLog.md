@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v2.3.0
 
-**Released: WiP**
+**Released: 2026-09-06**
 
 - Fixed Rogallo not playing well with the scriptonite examples found at
   gemini://ultimatumlabs.com/scripto.gmi.
@@ -11,7 +11,7 @@
   ([#417](https://github.com/davep/rogallo/pull/417))
 - Added support for the edit extension to the Titan protocol.
   ([#417](https://github.com/davep/rogallo/pull/417))
-- Improve the cosmetics of the Gemini user input dialog.
+- Improved the cosmetics of the Gemini user input dialog.
   ([#419](https://github.com/davep/rogallo/pull/419))
 
 ## v2.2.0
