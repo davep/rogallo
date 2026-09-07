@@ -58,6 +58,7 @@ class GemtextLink(Widget, can_focus=True):
     COMPONENT_CLASSES = {
         "gemtext-link--icon",
         "gemtext-link--jump-number",
+        "gemtext--needle",
     }
 
     DEFAULT_CSS = """
@@ -135,6 +136,10 @@ class GemtextLink(Widget, can_focus=True):
         """The normalised URI to use when opening the link."""
         self._filtered_content: Text | str | None = None
         """The filtered content of the link."""
+        self._find_state: int = -1
+        """The current state of the search."""
+        self._needle: str | None = None
+        """The current search needle."""
 
     @property
     def normalised_uri(self) -> str:
@@ -230,6 +235,12 @@ class GemtextLink(Widget, can_focus=True):
             link_text.stylize(
                 self.screen.get_component_rich_style("screen--selection", partial=True)
             )
+        if self._needle and self._find_state >= 0:
+            link_text.stylize(
+                self.get_component_rich_style("gemtext--needle"),
+                self._find_state,
+                self._find_state + len(self._needle),
+            )
         link_data.append(link_text)
 
         # If we're showing link numbers and they're not "cosy".
@@ -258,6 +269,31 @@ class GemtextLink(Widget, can_focus=True):
     def _action_open_link_externally(self) -> None:
         """Open the link in the external browser."""
         open_in_browser(self._normalised_uri)
+
+    def find_next_text(self, needle: str) -> bool:
+        """Find the next occurrence of the needle in the Gemtext list item.
+
+        Args:
+            needle: The string to find.
+
+        Returns:
+            True if the needle was found, False otherwise.
+        """
+        self._needle = needle
+        self._find_state = (
+            (
+                Text(self._filtered_content)
+                if isinstance(self._filtered_content, str)
+                else self._filtered_content.copy()
+            )
+            .plain.casefold()
+            .find(
+                needle.casefold(),
+                self._find_state + 1 if self._find_state is not None else 0,
+            )
+        )
+        self.set_class(self._find_state >= 0, "--contains-search-hit")
+        return self._find_state >= 0
 
     def get_selection(self, selection: Selection) -> tuple[str, str] | None:
         return selection.extract(f"=> {self.normalised_uri} {self._link}"), "\n"
