@@ -279,6 +279,8 @@ class GemtextLink(Widget, can_focus=True):
         Returns:
             True if the needle was found, False otherwise.
         """
+        if self._filtered_content is None:
+            return False
         self._needle = needle
         self._find_state = (
             (
