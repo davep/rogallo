@@ -17,14 +17,16 @@ from gemtext import (
     SpartanPrompt,
 )
 
-from .content_filter import GemtextContent
-from .link import GemtextLink, SpartanPromptLink
-from .list_item import GemtextListItem
-from .preformatted import GemtextPreformatted
-
 ##############################################################################
 # Local imports.
-from .text import GemtextHeading, GemtextParagraph, GemtextQuote, GemtextText
+from .content_filter import GemtextContent
+from .heading import GemtextHeading
+from .link import GemtextLink, SpartanPromptLink
+from .list_item import GemtextListItem
+from .paragraph import GemtextParagraph
+from .preformatted import GemtextPreformatted
+from .quote import GemtextQuote
+from .text import GemtextText
 
 ##############################################################################
 type GemtextWidget = GemtextText | GemtextLink | GemtextListItem | GemtextPreformatted
