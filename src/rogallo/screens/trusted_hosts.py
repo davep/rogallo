@@ -31,7 +31,7 @@ class KnownHost(Option):
             host: The host name.
             port: The port number.
         """
-        super().__init__(f"{host}:{port}", f"{host}[dim italic]:{port}[/]")
+        super().__init__(f"{host}[dim italic]:{port}[/]")
         self._host = host
         """The host name."""
         self._port = port
