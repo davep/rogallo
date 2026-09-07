@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Textual imports.
-from textual import on
+from textual import on, work
 from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, VerticalGroup
 from textual.getters import query_one
@@ -12,6 +12,7 @@ from textual.widgets.option_list import Option
 
 ##############################################################################
 # Textual enhanced imports.
+from textual_enhanced.dialogs import Confirm
 from textual_enhanced.tools import add_key
 from textual_enhanced.widgets import EnhancedOptionList
 
@@ -36,6 +37,16 @@ class KnownHost(Option):
         """The host name."""
         self._port = port
         """The port number."""
+
+    @property
+    def host(self) -> str:
+        """The host name."""
+        return self._host
+
+    @property
+    def port(self) -> int:
+        """The port number."""
+        return self._port
 
     @property
     def uri(self) -> GeminiURI:
@@ -128,9 +139,23 @@ class TrustedHostsBrowser(ModalScreen[None | GeminiURI]):
             self.dismiss(known_host.uri)
 
     @on(Button.Pressed, "#forget")
-    def action_forget(self) -> None:
+    @work
+    async def action_forget(self) -> None:
         """Forget the selected host."""
-        self.notify("TODO: Forget the selected host.")
+        if self._host_list.highlighted is not None:
+            known_host = self._host_list.get_option_at_index(
+                self._host_list.highlighted
+            )
+            assert isinstance(known_host, KnownHost)
+            if await self.app.push_screen_wait(
+                Confirm(
+                    f"Forget {known_host.host}:{known_host.port}?",
+                    "Are you sure you want to forget the selected host?",
+                )
+            ):
+                await self._trust_store.forget(known_host.host, known_host.port)
+                with self._host_list.preserved_highlight:
+                    self._host_list.remove_option_at_index(self._host_list.highlighted)
 
     @on(Button.Pressed, "#close")
     def action_close(self) -> None:
