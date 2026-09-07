@@ -95,6 +95,10 @@ class TrustedHostsBrowser(ModalScreen[None | GeminiURI]):
 
     _host_list = query_one(EnhancedOptionList)
     """The list of trusted hosts."""
+    _visit = query_one("#visit", Button)
+    """The visit button."""
+    _forget = query_one("#forget", Button)
+    """The forget button."""
 
     def __init__(self, trust_store: TrustStore) -> None:
         """Initialise the screen.
@@ -120,12 +124,18 @@ class TrustedHostsBrowser(ModalScreen[None | GeminiURI]):
                     add_key("Close", "Esc", self), id="close", variant="primary"
                 )
 
+    def _refresh_buttons(self) -> None:
+        """Refresh the state of the buttons."""
+        self._visit.disabled = self._host_list.highlighted is None
+        self._forget.disabled = self._host_list.highlighted is None
+
     async def on_mount(self) -> None:
         """Called when the screen is mounted."""
         with self._host_list.preserved_highlight:
             self._host_list.add_options(
                 KnownHost(*host) for host in sorted(await self._trust_store.get_hosts())
             )
+        self._refresh_buttons()
 
     @on(Button.Pressed, "#visit")
     @on(EnhancedOptionList.OptionSelected)
@@ -156,6 +166,7 @@ class TrustedHostsBrowser(ModalScreen[None | GeminiURI]):
                 await self._trust_store.forget(known_host.host, known_host.port)
                 with self._host_list.preserved_highlight:
                     self._host_list.remove_option_at_index(self._host_list.highlighted)
+            self._refresh_buttons()
 
     @on(Button.Pressed, "#close")
     def action_close(self) -> None:
