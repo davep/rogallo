@@ -448,6 +448,7 @@ class Viewer(Vertical, can_focus=False):
         self._title.needed_certificate = self.document.needed_client_certificate
         self._title.location = self.document.location
         self._status.mime_type = self.document.mime_type or ""
+        self._needle = None
         self._jump_map = {}
         with self.app.batch_update():
             content = self._build_content()
