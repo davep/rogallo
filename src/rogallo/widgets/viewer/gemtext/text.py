@@ -10,14 +10,18 @@ from rich.text import Text
 from textual.content import Content
 from textual.widgets import Static
 
-##############################################################################
-# Local imports.
-from .content_filter import GemtextContent
-
 
 ##############################################################################
 class GemtextText(Static):
     """A widget for displaying a block of Gemtext text."""
+
+    DEFAULT_CSS = """
+    GemtextText {
+        &.--contains-search-hit {
+            background: $boost !important;
+        }
+    }
+    """
 
     def __init__(
         self, line: Line | Content | Text | str, classes: str | None = None
@@ -27,11 +31,42 @@ class GemtextText(Static):
         Args:
             line: The Gemtext line to display.
         """
-        super().__init__(
-            GemtextContent.filter(line) if isinstance(line, Line) else line,
-            markup=False,
-            classes=classes,
+        self._gemtext_content: Content
+        """The content of the Gemtext line."""
+        if isinstance(line, Content):
+            self._gemtext_content = line
+        elif isinstance(line, Text):
+            self._gemtext_content = Content.from_rich_text(line)
+        else:
+            self._gemtext_content = Content(str(line))
+        self._find_state: int = -1
+        """The current state of the search."""
+        super().__init__(self._gemtext_content, markup=False, classes=classes)
+
+    def find_next_text(self, needle: str) -> bool:
+        """Find the next occurrence of the needle in the Gemtext text.
+
+        Args:
+            needle: The string to find.
+
+        Returns:
+            True if the needle was found, False otherwise.
+        """
+        self._find_state = self._gemtext_content.plain.find(
+            needle, self._find_state + 1 if self._find_state is not None else 0
         )
+        self.set_class(self._find_state >= 0, "--contains-search-hit")
+        if self._find_state < 0:
+            self.update(self._gemtext_content)
+            return False
+        self.update(
+            self._gemtext_content.stylize(
+                "$text on $accent",
+                self._find_state,
+                self._find_state + len(needle),
+            )
+        )
+        return True
 
 
 ### text.py ends here

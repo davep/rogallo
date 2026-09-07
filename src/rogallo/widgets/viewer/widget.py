@@ -52,7 +52,7 @@ from sybaritic import SpartanURI
 
 ##############################################################################
 # Textual imports.
-from textual import on
+from textual import on, work
 from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, Vertical
 from textual.events import DescendantBlur, DescendantFocus, Key
@@ -70,6 +70,7 @@ from textual_enhanced.binding import HelpfulBinding
 
 ##############################################################################
 # Wasat imports.
+from textual_enhanced.dialogs import ModalInput
 from wasat import GeminiURI
 
 ##############################################################################
@@ -78,7 +79,12 @@ from ...data import LocationHistory, NavigationPosition, load_configuration
 from ...document import Document
 from ...types import GEMINI_MIME_TYPE, SUPPORTED_PROTOCOLS
 from .document_view import DocumentView
-from .gemtext import GemtextContent, GemtextLink, get_block_widget
+from .gemtext import (
+    GemtextContent,
+    GemtextLink,
+    Searchable,
+    get_block_widget,
+)
 from .gopher import to_gemtext
 from .languages import language_from_document
 from .status import ViewerStatus
@@ -129,6 +135,14 @@ class Viewer(Vertical, can_focus=False):
             "next_link",
             tooltip="Move forward through each of the links",
         ),
+        HelpfulBinding(
+            "ctrl+f", "start_search", tooltip="Start a search for text in the document"
+        ),
+        HelpfulBinding(
+            "ctrl+n",
+            "search_next",
+            tooltip="Look for the next search hit in the document",
+        ),
     ]
 
     document: var[Document] = var(Document(), toggle_class="--is-visiting")
@@ -161,6 +175,12 @@ class Viewer(Vertical, can_focus=False):
     """A timer to reset the jump progress after a short delay."""
     _jump_map: var[dict[int, GemtextLink]] = var(dict)
     """Keeps track of the jump numbers and their corresponding links."""
+    _needle: var[str | None] = var(None)
+    """The current search needle."""
+    _haystack: var[Iterator[Searchable] | None] = var(None)
+    """The current searchable widget."""
+    _search_site: var[Searchable | None] = var(None)
+    """The current searchable widget to search in."""
 
     def compose(self) -> ComposeResult:
         """Compose the viewer widget."""
@@ -395,6 +415,13 @@ class Viewer(Vertical, can_focus=False):
             )
         return self._best_presentation_for(self.document)
 
+    def _rebuild_haystack(self) -> None:
+        """Rebuild the haystack for searching."""
+        self._haystack = (
+            widget for widget in self._view.children if isinstance(widget, Searchable)
+        )
+        self._search_site = None
+
     @dataclass
     class DocumentLoaded(Message):
         """Message sent when a document has been loaded."""
@@ -438,6 +465,7 @@ class Viewer(Vertical, can_focus=False):
                     self._jump_map[link.jump_number] = link
             await self._view.remove_children()
             await self._view.mount_all(content)
+        self._rebuild_haystack()
         # This next bit of nonsense is because Textual fails to sort its
         # scrollbars out upon clearing down and remounting a new set of
         # children. So we have to force it to refresh and then scroll to the
@@ -552,6 +580,35 @@ class Viewer(Vertical, can_focus=False):
             self.jump = 1
         else:
             self.jump = current + 1
+
+    @work
+    async def action_start_search(self) -> None:
+        """Start a search for text in the document."""
+        if self._haystack is None:
+            self._rebuild_haystack()
+        if needle := await self.app.push_screen_wait(ModalInput("Search...")):
+            self._needle = needle
+            self.action_search_next()
+
+    def action_search_next(self) -> None:
+        """Search for the next occurrence of the search needle."""
+        if self._needle is None or self._haystack is None:
+            return
+        if self._search_site is None:
+            self._search_site = next(self._haystack, None)
+        while self._search_site is not None and not self._search_site.find_next_text(
+            self._needle
+        ):
+            self._search_site = next(self._haystack, None)
+        if isinstance(self._search_site, Widget):
+            self.scroll_to_widget(self._search_site)
+        else:
+            self.notify(
+                "No more results. Try again to search from the top.",
+                title="Search",
+                severity="warning",
+            )
+            self._rebuild_haystack()
 
 
 ### widget.py ends here

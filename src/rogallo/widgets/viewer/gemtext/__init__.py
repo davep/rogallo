@@ -26,6 +26,7 @@ from .list_item import GemtextListItem
 from .paragraph import GemtextParagraph
 from .preformatted import GemtextPreformatted
 from .quote import GemtextQuote
+from .searchable import Searchable
 from .text import GemtextText
 
 ##############################################################################
@@ -69,6 +70,7 @@ __all__ = [
     "GemtextContent",
     "GemtextLink",
     "get_block_widget",
+    "Searchable",
 ]
 
 ### __init__.py ends here
