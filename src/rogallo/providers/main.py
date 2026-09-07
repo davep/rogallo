@@ -17,6 +17,7 @@ from ..commands import (
     AboutThisPage,
     AddLocationToBookmarks,
     Backward,
+    BrowseTrustedHosts,
     ChangeCommandLineLocation,
     ClearCache,
     CopyDocumentToClipboard,
@@ -62,6 +63,7 @@ class MainCommands(CommandsProvider):
         yield from self.maybe(AboutThisPage)
         yield from self.maybe(AddLocationToBookmarks)
         yield from self.maybe(Backward)
+        yield BrowseTrustedHosts()
         yield ChangeCommandLineLocation()
         yield ChangeTheme()
         yield ClearCache()

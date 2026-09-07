@@ -50,6 +50,7 @@ from ...commands import (
     AboutThisPage,
     AddLocationToBookmarks,
     Backward,
+    BrowseTrustedHosts,
     ChangeCommandLineLocation,
     ClearCache,
     CopyDocumentToClipboard,
@@ -121,6 +122,7 @@ from ...widgets import (
 )
 from ..about_page import AboutPage
 from ..client_certificate import ClientCertificateViewer
+from ..trusted_hosts import TrustedHostsBrowser
 from .handlers import handle_filesystem_request
 from .local_messages import (
     OpenDocument,
@@ -219,6 +221,7 @@ class Main(EnhancedScreen[None]):
         AboutClientCertificate,
         AboutThisPage,
         AddLocationToBookmarks,
+        BrowseTrustedHosts,
         ChangeCommandLineLocation,
         ChangeTheme,
         ClearCache,
@@ -1004,6 +1007,20 @@ class Main(EnhancedScreen[None]):
                     severity="error",
                     title="Save Source Error",
                 )
+
+    @work
+    async def action_browse_trusted_hosts_command(self) -> None:
+        """Browse the trusted hosts."""
+        if (
+            self._clients.gemini.trust_store is not None
+            and (
+                visit := await self.app.push_screen_wait(
+                    TrustedHostsBrowser(self._clients.gemini.trust_store)
+                )
+            )
+            is not None
+        ):
+            self.post_message(OpenLocation(visit))
 
 
 ### main.py ends here
