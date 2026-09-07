@@ -597,7 +597,10 @@ class Viewer(Vertical, can_focus=False):
 
     def action_search_next(self) -> None:
         """Search for the next occurrence of the search needle."""
-        if self._needle is None or self._haystack is None:
+        if self._haystack is None:
+            return
+        if self._needle is None:
+            self.action_start_search()
             return
         if self._search_site is None:
             self._search_site = next(self._haystack, None)
