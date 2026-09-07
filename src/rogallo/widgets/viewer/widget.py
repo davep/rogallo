@@ -596,6 +596,7 @@ class Viewer(Vertical, can_focus=False):
         if self._haystack is None:
             self._rebuild_haystack()
         if needle := await self.app.push_screen_wait(ModalInput("Search...")):
+            self._search_site = None
             self._needle = needle
             self.action_search_next()
 
