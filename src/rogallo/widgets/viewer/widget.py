@@ -119,6 +119,10 @@ class Viewer(Vertical, can_focus=False):
 
         .--contains-search-hit {
             background: $accent 15% !important;
+            .gemtext--needle {
+                background: $accent;
+                color: $text;
+            }
         }
     }
     """

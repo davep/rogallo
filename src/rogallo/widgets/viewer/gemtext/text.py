@@ -8,12 +8,15 @@ from rich.text import Text
 ##############################################################################
 # Textual imports.
 from textual.content import Content
+from textual.style import Style
 from textual.widgets import Static
 
 
 ##############################################################################
 class GemtextText(Static):
     """A widget for displaying a block of Gemtext text."""
+
+    COMPONENT_CLASSES = {"gemtext--needle"}
 
     def __init__(
         self, line: Line | Content | Text | str, classes: str | None = None
@@ -44,8 +47,9 @@ class GemtextText(Static):
         Returns:
             True if the needle was found, False otherwise.
         """
-        self._find_state = self._gemtext_content.plain.find(
-            needle, self._find_state + 1 if self._find_state is not None else 0
+        self._find_state = self._gemtext_content.plain.casefold().find(
+            needle.casefold(),
+            self._find_state + 1 if self._find_state is not None else 0,
         )
         self.set_class(self._find_state >= 0, "--contains-search-hit")
         if self._find_state < 0:
@@ -53,7 +57,7 @@ class GemtextText(Static):
             return False
         self.update(
             self._gemtext_content.stylize(
-                "$text on $accent",
+                Style.from_rich_style(self.get_component_rich_style("gemtext--needle")),
                 self._find_state,
                 self._find_state + len(needle),
             )
