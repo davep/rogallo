@@ -15,14 +15,6 @@ from textual.widgets import Static
 class GemtextText(Static):
     """A widget for displaying a block of Gemtext text."""
 
-    DEFAULT_CSS = """
-    GemtextText {
-        &.--contains-search-hit {
-            background: $boost !important;
-        }
-    }
-    """
-
     def __init__(
         self, line: Line | Content | Text | str, classes: str | None = None
     ) -> None:

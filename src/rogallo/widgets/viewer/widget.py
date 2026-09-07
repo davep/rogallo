@@ -116,6 +116,10 @@ class Viewer(Vertical, can_focus=False):
                 background: $background 60%;
             }
         }
+
+        .--contains-search-hit {
+            background: $accent 15% !important;
+        }
     }
     """
 
