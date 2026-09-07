@@ -101,7 +101,7 @@ class GemtextListItem(Widget):
                 self._find_state + 1 if self._find_state is not None else 0,
             )
         )
-        self.set_class(self._find_state >= 0, "--contains-search-hit")
+        self.set_class(self._find_state >= 0, "--contains-search-hit").refresh()
         return self._find_state >= 0
 
     def get_selection(self, selection: Selection) -> tuple[str, str] | None:
