@@ -607,7 +607,7 @@ class Viewer(Vertical, can_focus=False):
         if needle := await self.app.push_screen_wait(ModalInput("Search...")):
             self._search_site = None
             self._needle = needle
-            self.action_search_next()
+            await self.run_action("search_next")
 
     def action_cancel_search(self) -> None:
         """Cancel the current search in the document."""
@@ -621,7 +621,7 @@ class Viewer(Vertical, can_focus=False):
         if self._haystack is None:
             return
         if self._needle is None:
-            self.action_start_search()
+            self.call_next(self.run_action, "start_search")
             return
         if self._search_site is None:
             self._search_site = next(self._haystack, None)
@@ -632,11 +632,7 @@ class Viewer(Vertical, can_focus=False):
         if isinstance(self._search_site, Widget):
             self.scroll_to_widget(self._search_site)
         else:
-            self.notify(
-                "No more results. Try again to search from the top.",
-                title="Search",
-                severity="warning",
-            )
+            self.notify("No matches found.", title="Search", severity="warning")
             self._rebuild_haystack()
 
 
