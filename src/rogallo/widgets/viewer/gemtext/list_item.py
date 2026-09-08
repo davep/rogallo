@@ -18,13 +18,14 @@ from textual.widget import Widget
 # Local imports.
 from .content_filter import GemtextContent
 from .icons import icon
+from .searchable import NEEDLE
 
 
 ##############################################################################
 class GemtextListItem(Widget):
     """A widget for displaying a Gemtext list item."""
 
-    COMPONENT_CLASSES = {"gemtext-list-item--bullet", "gemtext--needle"}
+    COMPONENT_CLASSES = {"gemtext-list-item--bullet", NEEDLE}
 
     DEFAULT_CSS = """
     GemtextListItem {
@@ -73,7 +74,7 @@ class GemtextListItem(Widget):
             )
         if self._needle and self._find_state >= 0:
             text.stylize(
-                self.get_component_rich_style("gemtext--needle"),
+                self.get_component_rich_style(NEEDLE),
                 self._find_state,
                 self._find_state + len(self._needle),
             )

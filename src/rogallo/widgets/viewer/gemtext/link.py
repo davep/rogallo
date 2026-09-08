@@ -49,6 +49,7 @@ from ....safe_escape import escape
 from ....types import RogalloLocation, SpartanURINeedingData
 from .content_filter import GemtextContent
 from .icons import icon
+from .searchable import NEEDLE
 
 
 ##############################################################################
@@ -58,7 +59,7 @@ class GemtextLink(Widget, can_focus=True):
     COMPONENT_CLASSES = {
         "gemtext-link--icon",
         "gemtext-link--jump-number",
-        "gemtext--needle",
+        NEEDLE,
     }
 
     DEFAULT_CSS = """
@@ -243,7 +244,7 @@ class GemtextLink(Widget, can_focus=True):
             )
         if self._needle and self._find_state >= 0:
             link_text.stylize(
-                self.get_component_rich_style("gemtext--needle"),
+                self.get_component_rich_style(NEEDLE),
                 self._find_state,
                 self._find_state + len(self._needle),
             )

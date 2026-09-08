@@ -2,7 +2,11 @@
 
 ##############################################################################
 # Python imports.
-from typing import Protocol, runtime_checkable
+from typing import Final, Protocol, runtime_checkable
+
+##############################################################################
+NEEDLE: Final[str] = "gemtext--needle"
+"""The CSS class name for the search needle."""
 
 
 ##############################################################################

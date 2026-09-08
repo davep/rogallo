@@ -11,12 +11,16 @@ from textual.content import Content
 from textual.style import Style
 from textual.widgets import Static
 
+##############################################################################
+# Local imports.
+from .searchable import NEEDLE
+
 
 ##############################################################################
 class GemtextText(Static):
     """A widget for displaying a block of Gemtext text."""
 
-    COMPONENT_CLASSES = {"gemtext--needle"}
+    COMPONENT_CLASSES = {NEEDLE}
 
     def __init__(
         self, line: Line | Content | Text | str, classes: str | None = None
@@ -63,7 +67,7 @@ class GemtextText(Static):
             return False
         self.update(
             self._gemtext_content.stylize(
-                Style.from_rich_style(self.get_component_rich_style("gemtext--needle")),
+                Style.from_rich_style(self.get_component_rich_style(NEEDLE)),
                 self._find_state,
                 self._find_state + len(needle),
             )
