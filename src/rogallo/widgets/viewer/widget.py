@@ -147,6 +147,11 @@ class Viewer(Vertical, can_focus=False):
             "ctrl+f", "start_search", tooltip="Start a search for text in the document"
         ),
         HelpfulBinding(
+            "ctrl+shift+f",
+            "cancel_search",
+            tooltip="Cancel the current search in the document",
+        ),
+        HelpfulBinding(
             "ctrl+n",
             "search_next",
             tooltip="Look for the next search hit in the document",
@@ -603,6 +608,13 @@ class Viewer(Vertical, can_focus=False):
             self._search_site = None
             self._needle = needle
             self.action_search_next()
+
+    def action_cancel_search(self) -> None:
+        """Cancel the current search in the document."""
+        self._needle = None
+        self._search_site = None
+        for searchable in self._searchable:
+            searchable.find_reset()
 
     def action_search_next(self) -> None:
         """Search for the next occurrence of the search needle."""
