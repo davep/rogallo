@@ -52,7 +52,7 @@ from sybaritic import SpartanURI
 
 ##############################################################################
 # Textual imports.
-from textual import on
+from textual import on, work
 from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, Vertical
 from textual.events import DescendantBlur, DescendantFocus, Key
@@ -62,7 +62,7 @@ from textual.message import Message
 from textual.reactive import var
 from textual.timer import Timer
 from textual.widget import Widget
-from textual.widgets import Markdown, Static
+from textual.widgets import Markdown
 
 ##############################################################################
 # Textual enhanced imports.
@@ -70,6 +70,7 @@ from textual_enhanced.binding import HelpfulBinding
 
 ##############################################################################
 # Wasat imports.
+from textual_enhanced.dialogs import ModalInput
 from wasat import GeminiURI
 
 ##############################################################################
@@ -78,9 +79,15 @@ from ...data import LocationHistory, NavigationPosition, load_configuration
 from ...document import Document
 from ...types import GEMINI_MIME_TYPE, SUPPORTED_PROTOCOLS
 from .document_view import DocumentView
-from .gemtext import GemtextContent, GemtextLink, get_block_widget
+from .gemtext import (
+    GemtextContent,
+    GemtextLink,
+    get_block_widget,
+)
 from .gopher import to_gemtext
 from .languages import language_from_document
+from .plain_text import PlainText
+from .searchable import Searchable
 from .status import ViewerStatus
 from .title import ViewerTitle
 
@@ -110,6 +117,11 @@ class Viewer(Vertical, can_focus=False):
                 background: $background 60%;
             }
         }
+
+        .searchable-widget--needle {
+            background: $accent;
+            color: $text;
+        }
     }
     """
 
@@ -128,6 +140,19 @@ class Viewer(Vertical, can_focus=False):
             "right, shift+down, l, n",
             "next_link",
             tooltip="Move forward through each of the links",
+        ),
+        HelpfulBinding(
+            "ctrl+f", "start_search", tooltip="Start a search for text in the document"
+        ),
+        HelpfulBinding(
+            "ctrl+shift+f",
+            "cancel_search",
+            tooltip="Cancel the current search in the document",
+        ),
+        HelpfulBinding(
+            "ctrl+n",
+            "search_next",
+            tooltip="Look for the next search hit in the document",
         ),
     ]
 
@@ -161,6 +186,14 @@ class Viewer(Vertical, can_focus=False):
     """A timer to reset the jump progress after a short delay."""
     _jump_map: var[dict[int, GemtextLink]] = var(dict)
     """Keeps track of the jump numbers and their corresponding links."""
+    _needle: var[str | None] = var(None)
+    """The current search needle."""
+    _searchable: var[list[Searchable]] = var(list)
+    """The list of searchable widgets."""
+    _haystack: var[Iterator[Searchable] | None] = var(None)
+    """An iterator of searchable widgets."""
+    _search_site: var[Searchable | None] = var(None)
+    """The current searchable widget to search in."""
 
     def compose(self) -> ComposeResult:
         """Compose the viewer widget."""
@@ -361,15 +394,14 @@ class Viewer(Vertical, can_focus=False):
 
         # Source is always the fallback position.
         return [
-            Static(
+            PlainText(
                 Text.from_ansi(document.content)
                 if "\x1b[" in document.content
                 else highlight(
                     document.content,
                     language=language_from_document(document),
                     theme=HighlightTheme,
-                ),
-                markup=False,
+                )
             )
         ]
 
@@ -382,9 +414,8 @@ class Viewer(Vertical, can_focus=False):
         if self.document.is_renderable_as_gemtext:
             if self.view_source:
                 return [
-                    Static(
+                    PlainText(
                         self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}"),
-                        markup=False,
                     )
                 ]
             return self._gemtext_widgets(
@@ -394,6 +425,11 @@ class Viewer(Vertical, can_focus=False):
                 with_spartan_support=isinstance(self.document.location, SpartanURI),
             )
         return self._best_presentation_for(self.document)
+
+    def _rebuild_haystack(self) -> None:
+        """Rebuild the haystack for searching."""
+        self._haystack = iter(self._searchable)
+        self._search_site = None
 
     @dataclass
     class DocumentLoaded(Message):
@@ -417,6 +453,7 @@ class Viewer(Vertical, can_focus=False):
         self._title.needed_certificate = self.document.needed_client_certificate
         self._title.location = self.document.location
         self._status.mime_type = self.document.mime_type or ""
+        self._needle = None
         self._jump_map = {}
         with self.app.batch_update():
             content = self._build_content()
@@ -438,6 +475,10 @@ class Viewer(Vertical, can_focus=False):
                     self._jump_map[link.jump_number] = link
             await self._view.remove_children()
             await self._view.mount_all(content)
+        self._searchable = [
+            widget for widget in content if isinstance(widget, Searchable)
+        ]
+        self._rebuild_haystack()
         # This next bit of nonsense is because Textual fails to sort its
         # scrollbars out upon clearing down and remounting a new set of
         # children. So we have to force it to refresh and then scroll to the
@@ -525,6 +566,21 @@ class Viewer(Vertical, can_focus=False):
         else:
             self._reset_jump_progress()
 
+    def _document_is_searchable(self) -> bool:
+        """Check if the document is searchable.
+
+        Returns:
+            True if the document is searchable, False otherwise.
+        """
+        if self._searchable:
+            return True
+        self.notify(
+            "Search is not implemented for this kind of document",
+            title="Search",
+            severity="warning",
+        )
+        return False
+
     def action_previous_link(self) -> None:
         """Focus the previous link."""
         if not self._jump_map:
@@ -552,6 +608,45 @@ class Viewer(Vertical, can_focus=False):
             self.jump = 1
         else:
             self.jump = current + 1
+
+    @work
+    async def action_start_search(self) -> None:
+        """Start a search for text in the document."""
+        if not self._document_is_searchable():
+            return
+        self._rebuild_haystack()
+        for searchable in self._searchable:
+            searchable.find_reset()
+        if needle := await self.app.push_screen_wait(ModalInput("Search...")):
+            self._search_site = None
+            self._needle = needle
+            await self.run_action("search_next")
+
+    def action_cancel_search(self) -> None:
+        """Cancel the current search in the document."""
+        self._needle = None
+        self._search_site = None
+        for searchable in self._searchable:
+            searchable.find_reset()
+
+    def action_search_next(self) -> None:
+        """Search for the next occurrence of the search needle."""
+        if self._haystack is None:
+            return
+        if self._needle is None:
+            self.call_next(self.run_action, "start_search")
+            return
+        if self._search_site is None:
+            self._search_site = next(self._haystack, None)
+        while self._search_site is not None and not self._search_site.find_next_text(
+            self._needle
+        ):
+            self._search_site = next(self._haystack, None)
+        if isinstance(self._search_site, Widget):
+            self._view.scroll_to_region(self._search_site.found_region())
+        else:
+            self.notify("No matches found.", title="Search", severity="warning")
+            self._rebuild_haystack()
 
 
 ### widget.py ends here

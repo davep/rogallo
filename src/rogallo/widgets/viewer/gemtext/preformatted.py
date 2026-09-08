@@ -11,13 +11,13 @@ from gemtext import Line, PreFormatted
 ##############################################################################
 # Textual imports.
 from textual.highlight import HighlightTheme, highlight
-from textual.widgets import Static
 
 ##############################################################################
 # Local imports.
 from ....data import load_configuration
 from ..languages import supported_language
 from .content_filter import GemtextContent
+from .text import GemtextText
 
 
 ##############################################################################
@@ -35,7 +35,7 @@ def _blended_types() -> set[str]:
 
 
 ##############################################################################
-class GemtextPreformatted(Static):
+class GemtextPreformatted(GemtextText):
     """A widget for displaying a Gemtext preformatted text block."""
 
     DEFAULT_CSS = """

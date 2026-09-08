@@ -8,6 +8,8 @@
   ([#425](https://github.com/davep/rogallo/pull/425))
 - Added a trusted hosts browser/manager dialog.
   ([#426](https://github.com/davep/rogallo/pull/426))
+- Added in-page Gemtext search.
+  ([#427](https://github.com/davep/rogallo/pull/427))
 
 ## v2.3.0
 
