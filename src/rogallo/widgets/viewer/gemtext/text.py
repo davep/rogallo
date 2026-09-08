@@ -12,11 +12,10 @@ from textual.geometry import Region
 from textual.style import Style
 from textual.widgets import Static
 
-from rogallo.widgets.viewer.gemtext.content_filter import GemtextContent
-
 ##############################################################################
 # Local imports.
 from ..searchable import NEEDLE
+from .content_filter import GemtextContent
 
 
 ##############################################################################
