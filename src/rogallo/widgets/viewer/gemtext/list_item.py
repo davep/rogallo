@@ -17,9 +17,9 @@ from textual.widget import Widget
 
 ##############################################################################
 # Local imports.
+from ..searchable import NEEDLE
 from .content_filter import GemtextContent
 from .icons import icon
-from .searchable import NEEDLE
 
 
 ##############################################################################

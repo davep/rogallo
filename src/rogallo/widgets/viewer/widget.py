@@ -82,11 +82,11 @@ from .document_view import DocumentView
 from .gemtext import (
     GemtextContent,
     GemtextLink,
-    Searchable,
     get_block_widget,
 )
 from .gopher import to_gemtext
 from .languages import language_from_document
+from .searchable import Searchable
 from .status import ViewerStatus
 from .title import ViewerTitle
 
@@ -117,7 +117,7 @@ class Viewer(Vertical, can_focus=False):
             }
         }
 
-        .gemtext--needle {
+        .searchable-widget--needle {
             background: $accent;
             color: $text;
         }

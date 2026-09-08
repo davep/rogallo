@@ -48,9 +48,9 @@ from ....preflight import (
 )
 from ....safe_escape import escape
 from ....types import RogalloLocation, SpartanURINeedingData
+from ..searchable import NEEDLE
 from .content_filter import GemtextContent
 from .icons import icon
-from .searchable import NEEDLE
 
 
 ##############################################################################

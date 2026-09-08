@@ -16,7 +16,7 @@ from rogallo.widgets.viewer.gemtext.content_filter import GemtextContent
 
 ##############################################################################
 # Local imports.
-from .searchable import NEEDLE
+from ..searchable import NEEDLE
 
 
 ##############################################################################
