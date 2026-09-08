@@ -5,6 +5,10 @@
 from typing import Final, Protocol, runtime_checkable
 
 ##############################################################################
+# Textual imports.
+from textual.geometry import Region
+
+##############################################################################
 NEEDLE: Final[str] = "gemtext--needle"
 """The CSS class name for the search needle."""
 
@@ -23,6 +27,14 @@ class Searchable(Protocol):
 
         Returns:
             `True` if the text was found, `False` otherwise.
+        """
+        ...
+
+    def found_region(self) -> Region:
+        """Get the region of the found text in the widget.
+
+        Returns:
+            The region of the found text, or the widget's region.
         """
         ...
 

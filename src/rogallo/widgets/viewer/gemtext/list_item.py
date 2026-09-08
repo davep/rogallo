@@ -11,6 +11,7 @@ from rich.text import Text
 
 ##############################################################################
 # Textual imports.
+from textual.geometry import Region
 from textual.selection import Selection
 from textual.widget import Widget
 
@@ -110,6 +111,14 @@ class GemtextListItem(Widget):
         )
         self.set_class(self._find_state >= 0, "--contains-search-hit").refresh()
         return self._find_state >= 0
+
+    def found_region(self) -> Region:
+        """Get the region of the found text in the widget.
+
+        Returns:
+            The region of the found text, or the widget's region.
+        """
+        return self.virtual_region_with_margin
 
     def get_selection(self, selection: Selection) -> tuple[str, str] | None:
         return selection.extract(f"* {self._list_item}"), "\n"

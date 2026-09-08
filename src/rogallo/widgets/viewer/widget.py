@@ -630,7 +630,7 @@ class Viewer(Vertical, can_focus=False):
         ):
             self._search_site = next(self._haystack, None)
         if isinstance(self._search_site, Widget):
-            self.scroll_to_widget(self._search_site)
+            self._view.scroll_to_region(self._search_site.found_region())
         else:
             self.notify("No matches found.", title="Search", severity="warning")
             self._rebuild_haystack()

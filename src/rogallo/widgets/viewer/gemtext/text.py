@@ -8,6 +8,7 @@ from rich.text import Text
 ##############################################################################
 # Textual imports.
 from textual.content import Content
+from textual.geometry import Region
 from textual.style import Style
 from textual.widgets import Static
 
@@ -67,12 +68,46 @@ class GemtextText(Static):
             return False
         self.update(
             self._gemtext_content.stylize(
-                Style.from_rich_style(self.get_component_rich_style(NEEDLE)),
+                Style.combine(
+                    (
+                        Style.from_rich_style(self.get_component_rich_style(NEEDLE)),
+                        Style.from_meta({NEEDLE: True}),
+                    )
+                ),
                 self._find_state,
                 self._find_state + len(needle),
             )
         )
         return True
+
+    def found_region(self) -> Region:
+        """Get the region of the found text in the widget.
+
+        Returns:
+            The region of the found text, or the widget's region.
+        """
+        if self._find_state < 0:
+            return self.virtual_region_with_margin
+        matching_lines: list[int] = []
+        gather_match = matching_lines.append
+        for y, line in enumerate(
+            self.visual.to_strips(
+                self, self.visual, self.size.width, self.size.height, Style()
+            )
+        ):
+            for segment in line:
+                if segment.style and segment.style.meta.get(NEEDLE) is True:
+                    gather_match(y)
+        return (
+            Region(
+                0,
+                self.virtual_region_with_margin.y + matching_lines[0],
+                self.size.width,
+                max(1, len(matching_lines)),
+            )
+            if matching_lines
+            else self.virtual_region_with_margin
+        )
 
 
 ### text.py ends here
