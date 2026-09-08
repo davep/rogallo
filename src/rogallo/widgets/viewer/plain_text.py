@@ -85,14 +85,14 @@ class PlainText(Static):
             return self.virtual_region_with_margin
         matching_lines: list[int] = []
         gather_match = matching_lines.append
-        for y, line in enumerate(
+        for line_number, line in enumerate(
             self.visual.to_strips(
                 self, self.visual, self.size.width, self.size.height, Style()
             )
         ):
             for segment in line:
                 if segment.style and segment.style.meta.get(NEEDLE) is True:
-                    gather_match(y)
+                    gather_match(line_number)
         return (
             Region(
                 0,
