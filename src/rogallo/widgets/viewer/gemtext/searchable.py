@@ -10,6 +10,10 @@ from typing import Protocol, runtime_checkable
 class Searchable(Protocol):
     """A protocol for searchable Gemtext widgets."""
 
+    def find_reset(self) -> None:
+        """Reset the search state of the widget."""
+        ...
+
     def find_next_text(self, text: str) -> bool:
         """Get the text to be searched in the widget.
 

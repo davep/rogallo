@@ -141,6 +141,12 @@ class GemtextLink(Widget, can_focus=True):
         self._needle: str | None = None
         """The current search needle."""
 
+    def find_reset(self) -> None:
+        """Reset the search state of the widget."""
+        self._find_state = -1
+        self._needle = None
+        self.set_class(False, "--contains-search-hit").refresh()
+
     @property
     def normalised_uri(self) -> str:
         """The normalised URI to use when opening the link."""

@@ -38,6 +38,12 @@ class GemtextText(Static):
         """The current state of the search."""
         super().__init__(self._gemtext_content, markup=False, classes=classes)
 
+    def find_reset(self) -> None:
+        """Reset the search state of the widget."""
+        self._find_state = -1
+        self.set_class(False, "--contains-search-hit")
+        self.update(self._gemtext_content)
+
     def find_next_text(self, needle: str) -> bool:
         """Find the next occurrence of the needle in the Gemtext text.
 

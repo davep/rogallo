@@ -185,8 +185,10 @@ class Viewer(Vertical, can_focus=False):
     """Keeps track of the jump numbers and their corresponding links."""
     _needle: var[str | None] = var(None)
     """The current search needle."""
+    _searchable: var[list[Searchable]] = var(list)
+    """The list of searchable widgets."""
     _haystack: var[Iterator[Searchable] | None] = var(None)
-    """The current searchable widget."""
+    """An iterator of searchable widgets."""
     _search_site: var[Searchable | None] = var(None)
     """The current searchable widget to search in."""
 
@@ -425,9 +427,7 @@ class Viewer(Vertical, can_focus=False):
 
     def _rebuild_haystack(self) -> None:
         """Rebuild the haystack for searching."""
-        self._haystack = (
-            widget for widget in self._view.children if isinstance(widget, Searchable)
-        )
+        self._haystack = iter(self._searchable)
         self._search_site = None
 
     @dataclass
@@ -474,6 +474,9 @@ class Viewer(Vertical, can_focus=False):
                     self._jump_map[link.jump_number] = link
             await self._view.remove_children()
             await self._view.mount_all(content)
+        self._searchable = [
+            widget for widget in content if isinstance(widget, Searchable)
+        ]
         self._rebuild_haystack()
         # This next bit of nonsense is because Textual fails to sort its
         # scrollbars out upon clearing down and remounting a new set of
@@ -593,8 +596,9 @@ class Viewer(Vertical, can_focus=False):
     @work
     async def action_start_search(self) -> None:
         """Start a search for text in the document."""
-        if self._haystack is None:
-            self._rebuild_haystack()
+        self._rebuild_haystack()
+        for searchable in self._searchable:
+            searchable.find_reset()
         if needle := await self.app.push_screen_wait(ModalInput("Search...")):
             self._search_site = None
             self._needle = needle
