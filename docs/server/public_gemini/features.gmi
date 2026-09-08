@@ -1,7 +1,6 @@
 # Welcome to Rogallo
 
-Rogallo is a terminal-based client for browsing Geminispace, Spartanspace, Gopherspace, Nexspace, and Fingerspace. Its key
-features include:
+Rogallo is a terminal-based client for browsing Geminispace, Spartanspace, Gopherspace, Nexspace, and Fingerspace. Its key features include:
 
 * Support for the `gemini`, `titan`, `spartan`, `gopher`, `nex`, and `finger` protocols
 * Bookmarks management with search
