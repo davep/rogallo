@@ -12,6 +12,8 @@ from textual.geometry import Region
 from textual.style import Style
 from textual.widgets import Static
 
+from rogallo.widgets.viewer.gemtext.content_filter import GemtextContent
+
 ##############################################################################
 # Local imports.
 from .searchable import NEEDLE
@@ -37,8 +39,13 @@ class GemtextText(Static):
             self._gemtext_content = line
         elif isinstance(line, Text):
             self._gemtext_content = Content.from_rich_text(line)
+        elif isinstance(line, str):
+            self._gemtext_content = Content(line)
         else:
-            self._gemtext_content = Content(str(line))
+            if isinstance(line := GemtextContent.filter(line), Text):
+                self._gemtext_content = Content.from_rich_text(line)
+            else:
+                self._gemtext_content = Content(line)
         self._find_state: int = -1
         """The current state of the search."""
         super().__init__(self._gemtext_content, markup=False, classes=classes)
