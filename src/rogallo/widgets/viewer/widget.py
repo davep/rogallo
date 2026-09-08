@@ -62,7 +62,7 @@ from textual.message import Message
 from textual.reactive import var
 from textual.timer import Timer
 from textual.widget import Widget
-from textual.widgets import Markdown, Static
+from textual.widgets import Markdown
 
 ##############################################################################
 # Textual enhanced imports.
@@ -86,6 +86,7 @@ from .gemtext import (
 )
 from .gopher import to_gemtext
 from .languages import language_from_document
+from .plain_text import PlainText
 from .searchable import Searchable
 from .status import ViewerStatus
 from .title import ViewerTitle
@@ -393,15 +394,14 @@ class Viewer(Vertical, can_focus=False):
 
         # Source is always the fallback position.
         return [
-            Static(
+            PlainText(
                 Text.from_ansi(document.content)
                 if "\x1b[" in document.content
                 else highlight(
                     document.content,
                     language=language_from_document(document),
                     theme=HighlightTheme,
-                ),
-                markup=False,
+                )
             )
         ]
 
@@ -414,9 +414,8 @@ class Viewer(Vertical, can_focus=False):
         if self.document.is_renderable_as_gemtext:
             if self.view_source:
                 return [
-                    Static(
+                    PlainText(
                         self.document.content.replace(chr(27), "\N{SYMBOL FOR ESCAPE}"),
-                        markup=False,
                     )
                 ]
             return self._gemtext_widgets(
