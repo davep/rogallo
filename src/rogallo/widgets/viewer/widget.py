@@ -567,6 +567,21 @@ class Viewer(Vertical, can_focus=False):
         else:
             self._reset_jump_progress()
 
+    def _document_is_searchable(self) -> bool:
+        """Check if the document is searchable.
+
+        Returns:
+            True if the document is searchable, False otherwise.
+        """
+        if self._searchable:
+            return True
+        self.notify(
+            "Search is not implemented for this kind of document",
+            title="Search",
+            severity="warning",
+        )
+        return False
+
     def action_previous_link(self) -> None:
         """Focus the previous link."""
         if not self._jump_map:
@@ -598,6 +613,8 @@ class Viewer(Vertical, can_focus=False):
     @work
     async def action_start_search(self) -> None:
         """Start a search for text in the document."""
+        if not self._document_is_searchable():
+            return
         self._rebuild_haystack()
         for searchable in self._searchable:
             searchable.find_reset()
