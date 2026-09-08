@@ -64,7 +64,7 @@ class GemtextListItem(Widget):
         """Reset the search state of the widget."""
         self._find_state = -1
         self._needle = None
-        self.set_class(False, "--contains-search-hit").refresh()
+        self.refresh()
 
     def render(self) -> Table:
         """Render the Gemtext list item widget."""
@@ -109,7 +109,7 @@ class GemtextListItem(Widget):
                 self._find_state + 1 if self._find_state is not None else 0,
             )
         )
-        self.set_class(self._find_state >= 0, "--contains-search-hit").refresh()
+        self.refresh()
         return self._find_state >= 0
 
     def found_region(self) -> Region:

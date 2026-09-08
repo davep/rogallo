@@ -53,7 +53,6 @@ class GemtextText(Static):
     def find_reset(self) -> None:
         """Reset the search state of the widget."""
         self._find_state = -1
-        self.set_class(False, "--contains-search-hit")
         self.update(self._gemtext_content)
 
     def find_next_text(self, needle: str) -> bool:
@@ -69,7 +68,6 @@ class GemtextText(Static):
             needle.casefold(),
             self._find_state + 1 if self._find_state is not None else 0,
         )
-        self.set_class(self._find_state >= 0, "--contains-search-hit")
         if self._find_state < 0:
             self.update(self._gemtext_content)
             return False
