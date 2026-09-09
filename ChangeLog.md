@@ -1,14 +1,14 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v2.4.0
 
-**Released: WiP**
+**Released: 2026-09-09**
 
 - Added better handling of potential cross-protocol redirection.
   ([#425](https://github.com/davep/rogallo/pull/425))
 - Added a trusted hosts browser/manager dialog.
   ([#426](https://github.com/davep/rogallo/pull/426))
-- Added in-page Gemtext search.
+- Added in-page search.
   ([#427](https://github.com/davep/rogallo/pull/427))
 
 ## v2.3.0
