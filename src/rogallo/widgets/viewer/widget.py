@@ -131,7 +131,7 @@ class Viewer(Vertical, can_focus=False):
 
     BINDINGS = [
         HelpfulBinding(
-            "left, shift+up, L",
+            "left, shift+up, L, h",
             "previous_link",
             tooltip="Move backwards through each of the links",
         ),
