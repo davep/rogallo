@@ -13,12 +13,8 @@ from pathlib import Path
 
 ##############################################################################
 # Port79 imports.
-from port79 import FingerURI
-
 ##############################################################################
 # Wasat imports.
-from wasat import GeminiURI
-
 ##############################################################################
 # Local imports.
 from ..preflight import make_location
