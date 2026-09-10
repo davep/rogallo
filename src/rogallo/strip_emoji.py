@@ -2,12 +2,10 @@
 
 ##############################################################################
 # Python imports.
-from functools import cache
 from unicodedata import category
 
 
 ##############################################################################
-@cache
 def _is_likely_emoji(character: str) -> bool:
     """Determine if a character is likely to be an emoji.
 
