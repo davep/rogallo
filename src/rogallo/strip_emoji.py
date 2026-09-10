@@ -2,12 +2,15 @@
 
 ##############################################################################
 # Python imports.
-from functools import cache
+from typing import Final
 from unicodedata import category
+
+##############################################################################
+_EMOJI_SYMBOL_CATEGORIES: Final[frozenset[str]] = frozenset({"So", "Sk"})
+_EMOJI_CONTINUATION_CATEGORIES: Final[frozenset[str]] = frozenset({"Mn", "Cf", "Me"})
 
 
 ##############################################################################
-@cache
 def _is_likely_emoji(character: str) -> bool:
     """Determine if a character is likely to be an emoji.
 
@@ -26,7 +29,7 @@ def _is_likely_emoji(character: str) -> bool:
         codepoint in (0x231A, 0x231B)  # Watch, Hourglass
         or 0x23E9 <= codepoint <= 0x23FA  # Media controls & Clocks
         or codepoint >= 0x2600  # Symbols, Dingbats, Modern emojis
-    ) and category(character) in ("So", "Sk")
+    ) and category(character) in _EMOJI_SYMBOL_CATEGORIES
 
 
 ##############################################################################
@@ -52,7 +55,7 @@ def strip_emoji(text: str) -> str:
             skip = True
             continue
         if skip:
-            if category(character) in ("Mn", "Cf", "Me"):
+            if category(character) in _EMOJI_CONTINUATION_CATEGORIES:
                 continue
             skip = False
             if character == " ":
