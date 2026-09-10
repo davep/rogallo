@@ -12,14 +12,6 @@ from json import dumps, loads
 from pathlib import Path
 
 ##############################################################################
-# Port79 imports.
-from port79 import FingerURI
-
-##############################################################################
-# Wasat imports.
-from wasat import GeminiURI
-
-##############################################################################
 # Local imports.
 from ..preflight import make_location
 from ..types import RogalloLocation
@@ -69,14 +61,6 @@ class Bookmark:
     def __eq__(self, other: object, /) -> bool:
         if isinstance(other, Bookmark):
             return self.location == other.location
-        if isinstance(other, str):
-            return self.title.casefold() == other.casefold()
-        if isinstance(other, Path):
-            return isinstance(self.location, Path) and self.location == other
-        if isinstance(other, GeminiURI):
-            return isinstance(self.location, GeminiURI) and self.location == other
-        if isinstance(other, FingerURI):
-            return isinstance(self.location, FingerURI) and self.location == other
         return NotImplemented
 
 
