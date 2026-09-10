@@ -12,10 +12,6 @@ from json import dumps, loads
 from pathlib import Path
 
 ##############################################################################
-# Port79 imports.
-##############################################################################
-# Wasat imports.
-##############################################################################
 # Local imports.
 from ..preflight import make_location
 from ..types import RogalloLocation
