@@ -10,7 +10,7 @@ server.
 Rogallo will handle any valid `finger://` URI, either as a link to be
 followed from content returned by a [Gemini](./gemini.md),
 [Spartan](./spartan.md) or [Gopher](./gopher.md) server, or as entered in
-the [command line](./command-line.md).
+the [command line](../ui/command-line.md).
 
 ```{.textual path="docs/screenshots/empty_screenshot.py" title="Entering a Finger URI" lines=30 columns=90 press="f,i,n,g,e,r,:,/,/,l,o,c,a,l,h,o,s,t,/,d,a,v,e,p"}
 ```
@@ -21,7 +21,7 @@ the [command line](./command-line.md).
 ## Finger command
 
 There is also support for a `!finger` command in the [command
-line](./command-line.md). The parameter it takes is the more traditional
+line](../ui/command-line.md). The parameter it takes is the more traditional
 `user@host` format.
 
 ```{.textual path="docs/screenshots/empty_screenshot.py" title="Using the finger command" lines=30 columns=90 press="!,f,i,n,g,e,r, ,d,a,v,e,p,@,l,o,c,a,l,h,o,s,t"}

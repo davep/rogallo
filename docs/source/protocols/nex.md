@@ -16,7 +16,6 @@ wish to visit. Nex URIs begin with `nex://`.
 
 Rogallo will handle any valid `nex://` URI, either as a link to be followed
 from content returned by a Nex, [Gemini](./gemini.md), [Gopher](./gopher.md)
-or [Spartan](./spartan.md) server, or as entered in the [command
-line](./command-line.md).
+or [Spartan](./spartan.md) server, or as entered in the [command line](../ui/command-line.md).
 
 [//]: # (nex.md ends here)

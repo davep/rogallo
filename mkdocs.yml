@@ -5,20 +5,20 @@ repo_url: https://github.com/davep/rogallo
 nav:
   - "Getting Started": index.md
   - "Protocols":
-      - protocols.md
-      - finger.md
-      - gemini.md
-      - gopher.md
-      - nex.md
-      - spartan.md
-      - titan.md
+      - protocols/index.md
+      - protocols/finger.md
+      - protocols/gemini.md
+      - protocols/gopher.md
+      - protocols/nex.md
+      - protocols/spartan.md
+      - protocols/titan.md
   - "UI":
-      - ui.md
-      - command-line.md
-      - side-panel.md
-      - toolbar.md
-      - viewer.md
-      - custom-themes.md
+      - ui/index.md
+      - ui/command-line.md
+      - ui/side-panel.md
+      - ui/toolbar.md
+      - ui/viewer.md
+      - ui/custom-themes.md
   - "Configuration":
       - configuration/index.md
       - configuration/directory.md

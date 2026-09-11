@@ -12,7 +12,7 @@ provide a way to add your own themes to the application.
 ## Themes location
 
 To add your own themes you create `json` files in a `themes` directory below
-where the [configuration file lives](./configuration.md). For example:
+where the [configuration file lives](../configuration/directory.md). For example:
 
 ```sh
 ~/.config/rogallo/themes$ ls -1

@@ -17,7 +17,7 @@ that sites can do all sorts of wonderfully colourful things:
 If you would prefer that ANSI escape sequences *aren't* processed, and
 instead are stripped from the content, you can use the `Toggle ANSI Escape
 Sequence Handling` command
-([`ToggleANSIEscapeSequenceHandling`](#bindable-commands), bound to
+([`ToggleANSIEscapeSequenceHandling`](bindings.md#bindable-commands), bound to
 <kbd>Shift</kbd>+<kbd>F6</kbd> by default).
 
 ```{.textual path="docs/screenshots/ansi_screenshot.py" title="Turning off ANSI" lines=43 columns=80 press="shift+f6"}
@@ -77,7 +77,7 @@ by default.
 By default, Rogallo's command line appears at the bottom of the screen,
 above the footer of the application. It can be moved to the top of the
 screen, below the application header, with the `Change Command Line
-Location` command ([`ChangeCommandLineLocation`](#bindable-commands), bound
+Location` command ([`ChangeCommandLineLocation`](bindings.md#bindable-commands), bound
 to <kbd>Ctrl</kbd>+<kbd>Up</kbd> by default).
 
 ```{.textual path="docs/screenshots/main_screenshot.py" title="Rogallo with the command line on top" lines=35 columns=90 press="ctrl+up,ctrl+1"}
@@ -128,7 +128,7 @@ changing this value *adds* to that list.
 
 Some people find the use of emoji in Gemtext off-putting. Rogallo has a
 configuration option for those people. The `Toggle Emoji Removal` command
-([`ToggleEmojiRemoval`](#bindable-commands), bound to <kbd>F6</kbd> by
+([`ToggleEmojiRemoval`](bindings.md#bindable-commands), bound to <kbd>F6</kbd> by
 default) can be used to clean things up.
 
 So, if presented with this:
@@ -218,7 +218,7 @@ types. For example, if you wanted to use simple three-latter codes:
 ## Home page
 
 Rogallo has a home page setting. This can be set using the `Set Home`
-command ([`SetHome`](#bindable-commands), bound to
+command ([`SetHome`](bindings.md#bindable-commands), bound to
 <kbd>Alt</kbd>+<kbd>h</kbd> by default). This sets the currently-visited
 page as the home page. If you wish you can also modify it in the
 configuration file:
@@ -264,7 +264,7 @@ be highlighted:
 ```
 
 If anyone finds this distracting, you can turn the labels off with the
-`Toggle Link Numbers` ([`ToggleLinkNumbers`](#bindable-commands), bound to
+`Toggle Link Numbers` ([`ToggleLinkNumbers`](bindings.md#bindable-commands), bound to
 <kbd>Shift</kbd>+<kbd>F8</kbd> by default) command.
 
 ```{.textual path="docs/screenshots/stripes_screenshot.py" title="Link number jumps turned off" lines=30 columns=70 press="shift+f8"}
@@ -285,7 +285,7 @@ the display. This is done to keep a readable flow of text. While [link
 stripes](#striped-links) are provided to make it easier to know which label
 goes with which link, some people might prefer the labels to really cosy up
 with the links. For those folk the `Toggle Cosy Link Numbers`
-([`ToggleCosyLinkNumbers`](#bindable-commands) command, bound to
+([`ToggleCosyLinkNumbers`](bindings.md#bindable-commands) command, bound to
 <kbd>Super</kbd>+<kbd>F8</kbd> by default) command is available. The result
 of using it will be:
 
@@ -377,7 +377,7 @@ make it trickier to know which label matches which link.
 To help with this you can turn on "striped links", which alternates the
 background colour of links to help make them stand out and connect with
 their labels. This is toggled using the `Stripe Links`
-([`StripeLinks`](#bindable-commands) command, bound to <kbd>F8</kbd> by
+([`StripeLinks`](bindings.md#bindable-commands) command, bound to <kbd>F8</kbd> by
 default).
 
 ```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with stripes" lines=30 columns=70 press="f8"}
@@ -394,7 +394,7 @@ be `false` (no stripes) by default:
 ## Theme
 
 Rogallo has a number of themes available. You can select a theme using the
-`Change Theme` ([`ChangeTheme`](#bindable-commands) command, bound to
+`Change Theme` ([`ChangeTheme`](bindings.md#bindable-commands) command, bound to
 <kbd>F9</kbd> by default) command. The available themes include:
 
 ```bash exec="on"
@@ -403,7 +403,7 @@ rogallo themes | grep -v "\(terminal\|micro\)-" | sed 's/^/- /'
 
 !!! tip
 
-    You can also [set the theme via the command line](index.md#-t-theme). This can
+    You can also [set the theme via the command line](../index.md#-t-theme). This can
     be useful if you want to ensure that Rogallo runs up with a specific theme.
     Note that this *also* configures the theme for future runs of Rogallo.
 

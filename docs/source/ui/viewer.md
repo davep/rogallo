@@ -3,8 +3,8 @@
 ## Introduction
 
 The viewer is the main widget in Rogallo's display. If you are viewing a
-[Gemini page](./gemini.md), a [Gopher server](./gopher.md) or the response
-from a [Finger server](./finger.md), this is where the result will be
+[Gemini page](../protocols/gemini.md), a [Gopher server](../protocols/gopher.md) or the response
+from a [Finger server](../protocols/finger.md), this is where the result will be
 displayed.
 
 When it has focus, the viewer has a number of keys that let you navigate the
@@ -25,7 +25,7 @@ navigated.
 ### Next/previous navigation
 
 Links within the viewer are navigable widgets, just like other elements in
-[Rogallo's user interface](./ui.md). As such you can move between them with
+[Rogallo's user interface](./index.md). As such you can move between them with
 <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd>. Because these keys will
 eventually navigate you out of the viewer and on to other widgets in the
 user interface, there are some other keys that let you move between links
@@ -41,7 +41,7 @@ and stay within the viewer:
 To speed up navigating to a specific link, Rogallo also provides a method of
 jumping to a specific link. By default each link in a document will have a
 numbered label shown to the right of the viewer (the position [is
-configurable](./configuration.md#link-jumps)).
+configurable](../configuration/index.md#link-jumps)).
 
 ```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with labels" lines=30 columns=70}
 ```

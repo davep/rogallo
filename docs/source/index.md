@@ -154,7 +154,7 @@ Use the `--theme` switch to set a theme from the command line.
 ### `-t`, `--theme`
 
 Sets Rogallo's theme; this overrides and changes any previous theme choice
-made [via the user interface](configuration.md#theme).
+made [via the user interface](configuration/index.md#theme).
 
 ### `-v`, `--version`
 

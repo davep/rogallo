@@ -13,7 +13,7 @@ on the `Help` command (bound to <kbd>F1</kbd> by default).
 ## URIs
 
 If you wish to type in a location to visit, the command line is where you do
-this. What you type will depend on the [protocol](./protocols.md) you're
+this. What you type will depend on the [protocol](../protocols/index.md) you're
 working with. Generally they will be:
 
 - **Gemini**: `gemini://example.com/`
@@ -54,7 +54,7 @@ for help_line in sorted(chain(*(command.help_text() for command in COMMANDS))):
 Rogallo supports a simple form of aliases for its command line. Primarily
 they're useful for defining things such as performing searches using popular
 Gemini and Gopher search engines. Aliases are defined in the [configuration
-file](./configuration.md), like this:
+file](../configuration/index.md), like this:
 
 ```json
 "aliases": {
