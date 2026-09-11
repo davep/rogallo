@@ -1840,12 +1840,14 @@ dependencies = [
     { name = "port70" },
     { name = "port79" },
     { name = "pyperclip" },
+    { name = "pyyaml" },
     { name = "sybaritic" },
     { name = "textual" },
     { name = "textual-enhanced" },
     { name = "textual-fspicker" },
     { name = "types-pygments" },
     { name = "types-pyperclip" },
+    { name = "types-pyyaml" },
     { name = "wasat" },
     { name = "xdg-base-dirs" },
 ]
@@ -1879,12 +1881,14 @@ requires-dist = [
     { name = "port70", specifier = ">=1.0.0" },
     { name = "port79", specifier = ">=1.1.0" },
     { name = "pyperclip", specifier = ">=1.11.0" },
+    { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "sybaritic", specifier = ">=1.0.0" },
     { name = "textual", specifier = ">=8.2.7" },
     { name = "textual-enhanced", specifier = ">=1.6.0" },
     { name = "textual-fspicker", specifier = ">=1.0.1" },
     { name = "types-pygments", specifier = ">=2.20.0.20260518" },
     { name = "types-pyperclip", specifier = ">=1.11.0.20260508" },
+    { name = "types-pyyaml", specifier = ">=6.0.12.20260906" },
     { name = "wasat", specifier = ">=1.9.1" },
     { name = "xdg-base-dirs", specifier = ">=6.0.2" },
 ]
@@ -2051,6 +2055,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/7a/ab/189f37a135df54686543ab99e8e1e6f8892efedc389beb80a72e038416e9/types_pyperclip-1.11.0.20260508.tar.gz", hash = "sha256:e5dafdc929874f3f6bf495171d06cbc22483954a9ac0699ca53abbf9eadc592d", size = 7323, upload-time = "2026-05-08T04:48:18.355Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d2/61/02207b51ce9f3967d52e72749118d77a730cc29acad1ad623aa9b49a4e2f/types_pyperclip-1.11.0.20260508-py3-none-any.whl", hash = "sha256:4c55f5d7d2224804c54d936881a0e53d8e41b909a64611333662eb04e9bfd1e4", size = 7628, upload-time = "2026-05-08T04:48:17.593Z" },
+]
+
+[[package]]
+name = "types-pyyaml"
+version = "6.0.12.20260906"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/90/6e/abec85b9013db5b934b0280a6dd104904d84f7bcbaab2e2f3def87ac7463/types_pyyaml-6.0.12.20260906.tar.gz", hash = "sha256:f59c1cc05010b833d2d72287bbaa72610106b28d42d89a907313117faba85212", size = 18649, upload-time = "2026-09-06T06:35:35.362Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/15/c0/fc0644b7ddcfb969e95845837143cb5173ddd6e06ee4ba5fc493cd9329b7/types_pyyaml-6.0.12.20260906-py3-none-any.whl", hash = "sha256:bca893ff0d51df5c9053137d5d0e6ccd36e939a196356f1d5c16372422f5137b", size = 21282, upload-time = "2026-09-06T06:35:34.372Z" },
 ]
 
 [[package]]

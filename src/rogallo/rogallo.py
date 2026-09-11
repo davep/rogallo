@@ -20,6 +20,7 @@ from textual_enhanced.app import EnhancedApp
 # Local imports.
 from . import __version__
 from .data import (
+    load_bindings,
     load_configuration,
     load_themes,
     update_configuration,
@@ -102,7 +103,10 @@ class Rogallo(EnhancedApp[None]):
                 self.theme = arguments.theme or configuration.theme
             except InvalidThemeError:
                 pass
-        self.update_keymap(configuration.bindings)
+        # TODO: For the moment, I'm retaining the bindings in the
+        # configuration but deprecating them. Eventually I'll drop them from
+        # the configuration and just use load_bindings().
+        self.update_keymap(configuration.bindings | dict(load_bindings()))
         if configuration.disable_animations:
             self.animation_level = "none"
 

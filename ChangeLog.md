@@ -1,5 +1,13 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added support for loading keyboard bindings from a separate file
+  (`bindings.yaml`) in the configuration directory.
+  ([#436](https://github.com/davep/rogallo/pull/436))
+
 ## v2.4.0
 
 **Released: 2026-09-09**

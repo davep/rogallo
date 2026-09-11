@@ -19,7 +19,10 @@ nav:
       - toolbar.md
       - viewer.md
       - custom-themes.md
-  - "Configuration": configuration.md
+  - "Configuration":
+      - configuration/index.md
+      - configuration/directory.md
+      - configuration/bindings.md
   - "License": license.md
   - "Change Log": changelog.md
 

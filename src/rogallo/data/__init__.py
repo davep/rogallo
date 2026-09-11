@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Local imports.
+from .bindings import load_bindings
 from .bookmarks import Bookmark, Bookmarks, load_bookmarks, save_bookmarks
 from .client_certificates import client_certificates_directory
 from .command_history import (
@@ -40,6 +41,7 @@ __all__ = [
     "client_certificates_directory",
     "CommandLineHistory",
     "Configuration",
+    "load_bindings",
     "load_bookmarks",
     "load_command_history",
     "load_configuration",
