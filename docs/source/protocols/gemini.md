@@ -20,7 +20,7 @@ internal command line will be focused.
 ```{.textual path="docs/screenshots/empty_screenshot.py" title="Empty Rogallo" lines=30 columns=90}
 ```
 
-You can type [many different commands in here](./command-line.md), as well
+You can type [many different commands in here](../command-line.md), as well
 as URIs. To visit a Gemini capsule you type in a `gemini://` URI. For
 example, if you want to visit a locally-hosted capsule, you'd type
 `gemini://localhost/`:
