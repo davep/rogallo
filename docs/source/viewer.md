@@ -3,8 +3,8 @@
 ## Introduction
 
 The viewer is the main widget in Rogallo's display. If you are viewing a
-[Gemini page](./gemini.md), a [Gopher server](./gopher.md) or the response
-from a [Finger server](./finger.md), this is where the result will be
+[Gemini page](protocols/gemini.md), a [Gopher server](protocols/gopher.md) or the response
+from a [Finger server](protocols/finger.md), this is where the result will be
 displayed.
 
 When it has focus, the viewer has a number of keys that let you navigate the
@@ -41,7 +41,7 @@ and stay within the viewer:
 To speed up navigating to a specific link, Rogallo also provides a method of
 jumping to a specific link. By default each link in a document will have a
 numbered label shown to the right of the viewer (the position [is
-configurable](./configuration.md#link-jumps)).
+configurable](./configuration/index.md#link-jumps)).
 
 ```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with labels" lines=30 columns=70}
 ```

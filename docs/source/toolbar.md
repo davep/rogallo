@@ -18,7 +18,7 @@ be seen at the top of the screen.
 
 The content of the toolbar can be configured in the configuration file,
 using the `toolbar_contents` setting. The value is a list of [bindable
-commands](./configuration.md#bindable-commands), along with an optional text
+commands](./configuration/bindings.md#bindable-commands), along with an optional text
 to show in the toolbar. By default the value is set to this:
 
 ```json

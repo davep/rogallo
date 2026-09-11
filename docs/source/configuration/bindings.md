@@ -58,7 +58,7 @@ generally use a name (`number_sign`, `at`, `asterisk`, etc...).
     `textual keys` command.
 
     If you need help with keyboard bindings [please feel free to
-    ask](index.md#questions-and-feedback).
+    ask](../index.md#questions-and-feedback).
 
 A fuller example of a custom keyboard binding file might look like:
 
