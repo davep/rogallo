@@ -7,7 +7,9 @@ from unicodedata import category
 
 ##############################################################################
 _EMOJI_SYMBOL_CATEGORIES: Final[frozenset[str]] = frozenset({"So", "Sk"})
+"""The Unicode categories that are likely to contain emoji symbols."""
 _EMOJI_CONTINUATION_CATEGORIES: Final[frozenset[str]] = frozenset({"Mn", "Cf", "Me"})
+"""The Unicode categories that are likely to contain emoji continuation characters."""
 
 
 ##############################################################################
