@@ -31,6 +31,7 @@ dependencies = [
     "port70>=1.0.0",
     "port79>=1.1.0",
     "pyperclip>=1.11.0",
+    "pyyaml>=6.0.3",
     "sybaritic>=1.0.0",
     "textual>=8.2.7",
     "textual-enhanced>=1.6.0",
