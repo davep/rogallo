@@ -13,12 +13,12 @@ nav:
       - protocols/spartan.md
       - protocols/titan.md
   - "UI":
-      - ui.md
-      - command-line.md
-      - side-panel.md
-      - toolbar.md
-      - viewer.md
-      - custom-themes.md
+      - ui/index.md
+      - ui/command-line.md
+      - ui/side-panel.md
+      - ui/toolbar.md
+      - ui/viewer.md
+      - ui/custom-themes.md
   - "Configuration":
       - configuration/index.md
       - configuration/directory.md
