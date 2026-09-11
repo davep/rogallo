@@ -25,6 +25,9 @@ class Searchable(Protocol):
     def find_next_text(self, text: str) -> bool:
         """Get the text to be searched in the widget.
 
+        Args:
+            text: The text to search for.
+
         Returns:
             `True` if the text was found, `False` otherwise.
         """
