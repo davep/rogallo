@@ -101,7 +101,7 @@ However, if you would prefer to be able to use the keyboard to navigate into
 the toolbar, this can be turned on by changing this configuration setting:
 
 ```yaml
-can_get_focus: false,
+can_get_focus: false
 ```
 
 Setting this to `true` means that all of the toolbar buttons will be capable
