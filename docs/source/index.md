@@ -105,9 +105,9 @@ This prints each of the directories where Rogallo stores cache,
 configuration and data files. The output will look something like this:
 
 ```
-/Users/davep/.cache/rogallo
-/Users/davep/.config/rogallo
-/Users/davep/.local/share/rogallo
+~/.cache/rogallo
+~/.config/rogallo
+~/.local/share/rogallo
 ```
 
 The exact values will, of course, depend on [your own

@@ -13,9 +13,9 @@ command](../index.md#directories).
 ```sh
 $ rogallo directories
 
-/Users/davep/.cache/rogallo
-/Users/davep/.config/rogallo
-/Users/davep/.local/share/rogallo
+~/.cache/rogallo
+~/.config/rogallo
+~/.local/share/rogallo
 ```
 
 ## Contents
