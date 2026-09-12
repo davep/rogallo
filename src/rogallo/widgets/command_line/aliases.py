@@ -7,7 +7,7 @@ from urllib.parse import quote, quote_plus
 
 ##############################################################################
 # Local imports.
-from ...data import load_configuration
+from ...data import load_aliases
 
 
 ##############################################################################
@@ -25,7 +25,7 @@ def expand_aliases(command_line: str) -> str:
     Returns:
         The expanded command line.
     """
-    aliases = load_configuration().aliases
+    aliases = load_aliases()
     car, _, cdr = command_line.partition(" ")
     if car in aliases:
         cdr = cdr.strip()

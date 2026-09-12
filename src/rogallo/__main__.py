@@ -9,6 +9,7 @@ from operator import attrgetter
 ##############################################################################
 # Local imports.
 from . import __doc__, __version__
+from .data import initial_load
 from .data.locations import cache_dir, config_dir, data_dir
 from .rogallo import Rogallo
 
@@ -217,6 +218,7 @@ def main() -> None:
         case "themes":
             show_themes()
         case _:
+            initial_load()
             Rogallo(args).run()
 
 

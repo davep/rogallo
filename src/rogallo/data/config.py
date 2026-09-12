@@ -175,16 +175,6 @@ class Configuration:
     )
     """The badges to use for Gopher item types."""
 
-    aliases: dict[str, str] = field(
-        default_factory=lambda: {
-            "fg": "gopher://gopher.floodgap.com/1/v2/vs?{q}",
-            "gp": "gemini://gemi.dev/cgi-bin/wp.cgi/search?{q}",
-            "ken": "gemini://kennedy.gemi.dev/search?{q}",
-            "tlgs": "gemini://tlgs.one/search?{q}",
-        }
-    )
-    """Aliases to use in the command line."""
-
     guess_language_for_syntax_highlighting_text_documents: bool = True
     """Whether to guess the language for syntax highlighting of text documents."""
 
