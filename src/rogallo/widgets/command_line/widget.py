@@ -41,6 +41,7 @@ from ...data import (
     CommandLineHistory,
     LocationHistory,
     NavigationHistory,
+    load_aliases,
     load_configuration,
 )
 from ...presentation import short_location
@@ -137,9 +138,9 @@ class CommandLine(Vertical):
         aliases="\n    ".join(
             sorted(
                 f"| {alias} | {expansion} |"
-                for alias, expansion in load_configuration().aliases.items()
+                for alias, expansion in load_aliases().items()
             )
-            if load_configuration().aliases
+            if load_aliases()
             else ["| (none) | (none) |"]
         ),
     )

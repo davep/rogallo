@@ -53,16 +53,17 @@ for help_line in sorted(chain(*(command.help_text() for command in COMMANDS))):
 
 Rogallo supports a simple form of aliases for its command line. Primarily
 they're useful for defining things such as performing searches using popular
-Gemini and Gopher search engines. Aliases are defined in the [configuration
-file](../configuration/index.md), like this:
+Gemini and Gopher search engines. Aliases are defined in a file called
+`aliases.yaml`, which is placed in the [configuration
+directory](../configuration/directory.md).
 
-```json
-"aliases": {
-    "fg": "gopher://gopher.floodgap.com/1/v2/vs?{q}",
-    "gp": "gemini://gemi.dev/cgi-bin/wp.cgi/search?{q}",
-    "ken": "gemini://kennedy.gemi.dev/search?{q}",
-    "tlgs": "gemini://tlgs.one/search?{q}"
-}
+The default version of the file looks like this:
+
+```yaml
+fg: gopher://gopher.floodgap.com/1/v2/vs?{q}
+gp: gemini://gemi.dev/cgi-bin/wp.cgi/search?{q}
+ken: gemini://kennedy.gemi.dev/search?{q}
+tlgs: gemini://tlgs.one/search?{q}
 ```
 
 Aliases can include template variables (`{q}`, `{qp}`, `{r}`) that are
@@ -92,9 +93,15 @@ searches with search engines, this isn't the only application. For example,
 if you preferred to type `whois` rather than `!finger` to call on a finger
 server, you could have:
 
-```json
-"whois": "!finger {r}"
+```yaml
+whois: "!finger {r}"
 ```
+
+!!! tip
+
+    The aliases file is a [YAML](https://yaml.org/) file. If you set up an alias and it doesn't
+    seem to work in the way you hoped, try wrapping the right-hand side in
+    quotes, as you can see in the `whois` example above.
 
 ## History and completion
 

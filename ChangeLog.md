@@ -7,6 +7,9 @@
 - Added support for loading keyboard bindings from a separate file
   (`bindings.yaml`) in the configuration directory.
   ([#436](https://github.com/davep/rogallo/pull/436))
+- **BREAKING CHANGE:** Command line aliases are now loaded from
+  `aliases.yaml` rather than `configuration.json`.
+  ([#438](https://github.com/davep/rogallo/pull/438))
 
 ## v2.4.0
 
