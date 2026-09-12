@@ -31,6 +31,7 @@ from .navigation_history import (
     save_naviagation_history,
 )
 from .themes import load_themes
+from .toolbar import load_toolbar
 from .trust import trust_file
 from .trusted_mime_types import load_trusted_mime_types, save_trusted_mime_types
 from .trusted_schemes import load_trusted_schemes, save_trusted_schemes
@@ -43,15 +44,16 @@ __all__ = [
     "client_certificates_directory",
     "CommandLineHistory",
     "Configuration",
+    "initial_load",
     "load_aliases",
     "load_bindings",
     "load_bookmarks",
     "load_command_history",
     "load_configuration",
-    "initial_load",
     "load_location_history",
     "load_navigation_history",
     "load_themes",
+    "load_toolbar",
     "load_trusted_mime_types",
     "load_trusted_schemes",
     "LocationHistory",

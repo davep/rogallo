@@ -20,6 +20,10 @@ from textual.widgets import Label
 from textual_enhanced.commands import Command
 from textual_enhanced.commands.bindings import primary_key_for
 
+##############################################################################
+# Local imports.
+from ..data.toolbar import ToolbarConfiguration
+
 
 ##############################################################################
 class CommandButton(Widget):
@@ -127,46 +131,37 @@ class Toolbar(Horizontal):
 
     def __init__(
         self,
-        buttons: Iterable[str | list[str]],
+        configuration: ToolbarConfiguration,
         commands: Iterable[type[Command]],
         version: str | None = None,
-        can_focus: bool = False,
-        show_tooltips: bool = True,
     ):
         """Initialise the toolbar.
 
         Args:
-            buttons: The buttons to show in the toolbar.
+            configuration: The configuration for the toolbar.
             commands: The commands available to the toolbar.
             version: The version to show in the toolbar.
-            can_focus: Whether the toolbar can be focused.
-            show_tooltips: Whether to show tooltips for the buttons in the toolbar.
         """
         super().__init__()
-        self._buttons = list(buttons)
+        self._buttons = list(configuration.buttons)
         """The buttons to show in the toolbar."""
         self._commands = {command.__name__: command for command in commands}
         """The commands available to the toolbar."""
         self._version = version
         """The version to show in the toolbar."""
-        self._can_focus_buttons = can_focus
+        self._can_focus_buttons = configuration.can_get_focus
         """Whether the buttons in the toolbar can be focused."""
-        self._show_button_tooltips = show_tooltips
+        self._show_button_tooltips = configuration.show_tooltips
         """Whether to show tooltips for the buttons in the toolbar."""
 
     def compose(self) -> ComposeResult:
         """Compose the toolbar."""
         for toolbar_button in self._buttons:
             try:
-                command_name, title = (
-                    toolbar_button
-                    if isinstance(toolbar_button, list)
-                    else (toolbar_button, None)
-                )
-            except ValueError:
-                yield Label("Error", classes="error").with_tooltip(
-                    "Invalid command button configuration item"
-                )
+                command_name = toolbar_button["command"]
+                title = toolbar_button.get("label", command_name)
+            except (KeyError, TypeError):
+                yield Label("Invalid toolbar button configuration", classes="error")
                 continue
             if command := self._commands.get(command_name):
                 yield CommandButton(
