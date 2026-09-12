@@ -6,7 +6,7 @@ from __future__ import annotations
 
 ##############################################################################
 # Python imports.
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from functools import cache
 from pathlib import Path
 from typing import NotRequired, TypedDict, cast
@@ -80,23 +80,6 @@ class ToolbarConfiguration:
     )
     """The contents of the toolbar."""
 
-    @property
-    def as_dict(self) -> ToolbarConfigurationData:
-        """Convert the toolbar configuration to a dictionary.
-
-        Returns:
-            The toolbar configuration as a dictionary.
-        """
-        return {
-            "visible": self.visible,
-            "can_get_focus": self.can_get_focus,
-            "show_tooltips": self.show_tooltips,
-            "buttons": [
-                {"command": button["command"], "label": button.get("label")}
-                for button in self.buttons
-            ],
-        }
-
     @classmethod
     def from_dict(cls, data: ToolbarConfigurationData) -> ToolbarConfiguration:
         """Load a toolbar configuration from a dictionary.
@@ -125,14 +108,14 @@ def load_toolbar() -> ToolbarConfiguration:
     """
     if not toolbar_file().exists():
         toolbar_file().write_text(
-            safe_dump(ToolbarConfiguration().as_dict), encoding="utf-8"
+            safe_dump(asdict(ToolbarConfiguration())), encoding="utf-8"
         )
     try:
         return ToolbarConfiguration.from_dict(
             cast(
                 ToolbarConfigurationData,
                 safe_load(toolbar_file().read_text(encoding="utf-8"))
-                or ToolbarConfiguration().as_dict,
+                or asdict(ToolbarConfiguration()),
             )
         )
     except (OSError, YAMLError):
