@@ -25,5 +25,6 @@ The usual contents of the configuration directory are:
 - [`aliases.yaml`](../ui/command-line.md#aliases)
 - [`bindings.yaml`](./bindings.md)
 - [`configuration.json`](./index.md)
+- [`themes/*.json`](../ui/custom-themes.md)
 
 [//]: # (directory.md ends here)
