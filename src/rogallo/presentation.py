@@ -31,6 +31,22 @@ from .types import RogalloLocation
 
 
 ##############################################################################
+def short_path(path: Path) -> Path:
+    """Get a short path representation of a path.
+
+    Args:
+        path: The path to get a short representation of.
+
+    Returns:
+        A short path representation of the path.
+    """
+    try:
+        return Path("~") / path.relative_to(Path.home())
+    except ValueError:
+        return path
+
+
+##############################################################################
 def short_location(location: RogalloLocation) -> str:
     """Get a short string representation of a location.
 
@@ -44,10 +60,7 @@ def short_location(location: RogalloLocation) -> str:
         return str(location)
     if isinstance(location, GeminiURI):
         return str(location).removeprefix(GEMINI_PREFIX)
-    try:
-        return (Path("~") / location.relative_to(Path.home())).as_posix()
-    except ValueError:
-        return location.as_posix()
+    return short_path(location).as_posix()
 
 
 ### presentation.py ends here
