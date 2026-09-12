@@ -10,6 +10,9 @@
 - **BREAKING CHANGE:** Command line aliases are now loaded from
   `aliases.yaml` rather than `configuration.json`.
   ([#438](https://github.com/davep/rogallo/pull/438))
+- **BREAKING CHANGE:** Toolbar configuration is now loaded from
+  `toolbar.yaml` rather than `configuration.json`.
+  ([#442](https://github.com/davep/rogallo/pull/442))
 
 ## v2.4.0
 

@@ -14,66 +14,58 @@ be seen at the top of the screen.
 ```{.textual path="docs/screenshots/main_screenshot.py" title="The toolbar" lines=40 columns=85}
 ```
 
+## Toolbar configuration
+
+The toolbar is configured in a file called `toolbar.yaml`, which can be
+found in the [configuration directory](../configuration/directory.md).
+
+!!! note
+
+    The default `toolbar.yaml` file will be created for you the first time
+    you run Rogallo.
+
 ## Toolbar content
 
-The content of the toolbar can be configured in the configuration file,
-using the `toolbar_contents` setting. The value is a list of [bindable
-commands](../configuration/bindings.md#bindable-commands), along with an optional text
-to show in the toolbar. By default the value is set to this:
+The buttons that make up the content of the toolbar are configured with the
+`buttons` value in the `toolbar.yaml` file. It is a list of `command` and
+`label` properties, where `command` is one of the [bindable
+commands](../configuration/bindings.md#bindable-commands) and `label` is the
+label you want to appear in the button.
 
-```json
-"toolbar_contents": [
-    [
-        "GoHome",
-        "\u2302"
-    ],
-    [
-        "Reload",
-        "\u21bb"
-    ],
-    [
-        "Backward",
-        "\u25c0\u25c0"
-    ],
-    [
-        "Forward",
-        "\u25b6\u25b6"
-    ],
-    [
-        "GoToParent",
-        "\u2191"
-    ],
-    [
-        "GoToRoot",
-        "\u21c8"
-    ],
-    [
-        "SearchHistory",
-        "\u25f7"
-    ],
-    [
-        "SearchBookmarks",
-        "\u2605"
-    ],
-    [
-        "ToggleView",
-        "\u21cb"
-    ]
-]
+The settings for the default buttons look like this:
+
+```yaml
+buttons:
+- command: GoHome
+  label: "\u2302"
+- command: Reload
+  label: "\u21BB"
+- command: Backward
+  label: "\u25C0\u25C0"
+- command: Forward
+  label: "\u25B6\u25B6"
+- command: GoToParent
+  label: "\u2191"
+- command: GoToRoot
+  label: "\u21C8"
+- command: SearchHistory
+  label: "\u25F7"
+- command: SearchBookmarks
+  label: "\u2605"
+- command: ToggleView
+  label: "\u21CB"
 ```
 
-In each case it's a command name, along with the text to show in the toolbar
-(in these cases, icon-type values to help save space). To configure the
-content of the toolbar, edit the configuration file to add or remove
-commands.
+To configure the content of the toolbar, edit this list to add or remove
+buttons.
 
 ## Hiding the toolbar
 
 If you are someone who is keyboard-only and has no use for the toolbar, you
-can turn it off with this configuration file value:
+can turn it off with the `visible` setting:
 
-```json
-"toolbar_visible": true,
+```yaml
+visible: true
 ```
 
 Set it to `false` to hide the toolbar.
@@ -92,9 +84,11 @@ over a button.
 If you would prefer that these tooltips don't show, change this
 configuration file setting:
 
-```json
-"toolbar_tooltips": true
+```yaml
+show_tooltips: true
 ```
+
+Set it to `false` to remove the tooltips.
 
 ## Using the toolbar with the keyboard
 
@@ -106,8 +100,8 @@ learn and use them (or run the commands via the command palette).
 However, if you would prefer to be able to use the keyboard to navigate into
 the toolbar, this can be turned on by changing this configuration setting:
 
-```json
-"toolbar_can_get_focus": false,
+```yaml
+can_get_focus: false
 ```
 
 Setting this to `true` means that all of the toolbar buttons will be capable

@@ -93,6 +93,7 @@ from ...data import (
     load_configuration,
     load_location_history,
     load_navigation_history,
+    load_toolbar,
     load_trusted_mime_types,
     load_trusted_schemes,
     save_bookmarks,
@@ -319,13 +320,12 @@ class Main(EnhancedScreen[None]):
     def compose(self) -> ComposeResult:
         """Compose the content of the main screen."""
         with VerticalGroup():
-            if load_configuration().toolbar_visible:
+            toolbar = load_toolbar()
+            if toolbar.visible and toolbar.buttons:
                 yield Toolbar(
-                    buttons=load_configuration().toolbar_contents,
+                    toolbar,
                     commands=Main.COMMAND_MESSAGES,
                     version=__version__,
-                    can_focus=load_configuration().toolbar_can_get_focus,
-                    show_tooltips=load_configuration().toolbar_tooltips,
                 )
             with Workspace():
                 yield Viewer().data_bind(location_history=Main._location_history)
