@@ -1,5 +1,7 @@
 # Configuration directory
 
+## Location
+
 Rogallo's configuration directory lives below
 [`$XDG_CONFIG_HOME`](https://specifications.freedesktop.org/basedir-spec/latest/),
 in a `rogallo` subdirectory. Mostly this will translate to the directory
@@ -15,5 +17,13 @@ $ rogallo directories
 /Users/davep/.config/rogallo
 /Users/davep/.local/share/rogallo
 ```
+
+## Contents
+
+The usual contents of the configuration directory are:
+
+- [`aliases.yaml`](../ui/command-line.md#aliases)
+- [`bindings.yaml`](./bindings.md)
+- [`configuration.json`](./index.md)
 
 [//]: # (directory.md ends here)
