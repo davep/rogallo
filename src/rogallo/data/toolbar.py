@@ -110,6 +110,7 @@ class ToolbarConfiguration:
         return cls(
             visible=data.get("visible", True),
             can_get_focus=data.get("can_get_focus", False),
+            show_tooltips=data.get("show_tooltips", True),
             buttons=data.get("buttons", []),
         )
 
