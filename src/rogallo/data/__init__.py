@@ -9,17 +9,15 @@ from .command_history import (
     load_command_history,
     save_command_history,
 )
-from .config import (
-    Configuration,
-    load_configuration,
-    save_configuration,
-    update_configuration,
-)
 from .configuration import (
+    Configuration,
     load_aliases,
     load_bindings,
+    load_configuration,
     load_themes,
     load_toolbar,
+    save_configuration,
+    update_configuration,
 )
 from .initial_load import initial_load
 from .location_history import (
