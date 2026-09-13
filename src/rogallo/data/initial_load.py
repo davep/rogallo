@@ -10,13 +10,14 @@ This module provides a function to do that initial load/create.
 
 ##############################################################################
 # Local imports.
-from .configuration import load_aliases, load_toolbar
+from .configuration import load_aliases, load_icons, load_toolbar
 
 
 ##############################################################################
 def initial_load() -> None:
     """Perform an initial load of some application data."""
     load_aliases()
+    load_icons()
     load_toolbar()
 
 

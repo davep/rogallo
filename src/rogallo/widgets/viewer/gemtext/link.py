@@ -34,7 +34,7 @@ from textual_enhanced.binding import HelpfulBinding
 
 ##############################################################################
 # Local imports.
-from ....data import load_configuration
+from ....data import load_configuration, load_icons
 from ....messages import CopyToClipboard, OpenLocation, OpenURI
 from ....preflight import (
     has_navigable_path,
@@ -50,7 +50,6 @@ from ....safe_escape import escape
 from ....types import RogalloLocation, SpartanURINeedingData
 from ..searchable import NEEDLE
 from .content_filter import GemtextContent
-from .icons import icon
 
 
 ##############################################################################
@@ -156,18 +155,19 @@ class GemtextLink(Widget, can_focus=True):
 
     def _best_icon(self) -> str:
         """Get the best icon for the link based on its URI."""
-        for checker, icon_name in (
-            (is_finger_uri, "fingerspace_link_icon"),
-            (is_gopher_uri, "gopherspace_link_icon"),
-            (is_likely_capsule, "geminispace_link_icon"),
-            (is_local_gemtext_file, "geminispace_link_icon"),
-            (is_nex_uri, "nexspace_link_icon"),
-            (is_spartan_uri, "spartanspace_link_icon"),
-            (is_titan_uri, "titanspace_link_icon"),
+        icons = load_icons()
+        for checker, icon in (
+            (is_finger_uri, icons["fingerspace_link"]),
+            (is_gopher_uri, icons["gopherspace_link"]),
+            (is_likely_capsule, icons["geminispace_link"]),
+            (is_local_gemtext_file, icons["geminispace_link"]),
+            (is_nex_uri, icons["nexspace_link"]),
+            (is_spartan_uri, icons["spartanspace_link"]),
+            (is_titan_uri, icons["titanspace_link"]),
         ):
             if checker(self.normalised_uri):
-                return icon(icon_name)
-        return icon("otherspace_link_icon")
+                return icon
+        return icons["otherspace_link"]
 
     def normalise_uri(self, base_uri: RogalloLocation | None) -> None:
         """Normalise the URI of the link against a base URI.

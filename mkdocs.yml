@@ -23,6 +23,7 @@ nav:
       - configuration/index.md
       - configuration/directory.md
       - configuration/bindings.md
+      - configuration/icons.md
   - "License": license.md
   - "Change Log": changelog.md
 

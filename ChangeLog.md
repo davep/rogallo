@@ -13,6 +13,9 @@
 - **BREAKING CHANGE:** Toolbar configuration is now loaded from
   `toolbar.yaml` rather than `configuration.json`.
   ([#442](https://github.com/davep/rogallo/pull/442))
+- **BREAKING CHANGE:** Icon configuration is now loaded from `icons.yaml`
+  rather than `configuration.json`.
+  ([#444](https://github.com/davep/rogallo/pull/444))
 
 ## v2.4.0
 
