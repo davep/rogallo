@@ -26,7 +26,7 @@ from rogallo.data import (
     save_naviagation_history,
     update_configuration,
 )
-from rogallo.data.themes import themes_dir
+from rogallo.data.configuration.themes import themes_dir
 from rogallo.rogallo import Rogallo
 
 ##############################################################################
