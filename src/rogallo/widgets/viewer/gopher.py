@@ -16,7 +16,7 @@ from port70 import GopherURI, URIError
 
 ##############################################################################
 # Local imports.
-from ...data import load_configuration
+from ...data import load_gopher
 
 ##############################################################################
 TELNET: Final[int] = getservbyname("telnet", "tcp")
@@ -33,11 +33,8 @@ def to_gemtext(gophermap: str) -> Iterator[str]:
     Yields:
         The Gemtext representation of the Gophermap.
     """
-    badges = (
-        load_configuration().gopher_type_badges
-        if load_configuration().gopher_show_type_badges
-        else {}
-    )
+    gopher_config = load_gopher()
+    badges = gopher_config.type_badges if gopher_config.show_type_badges else {}
     for item in GopherMap(gophermap).items:
         if badge := badges.get(item.type, ""):
             badge += " "
