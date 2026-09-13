@@ -10,8 +10,8 @@ This module provides a function to do that initial load/create.
 
 ##############################################################################
 # Local imports.
-from .aliases import load_aliases
-from .toolbar import load_toolbar
+from .configuration.aliases import load_aliases
+from .configuration.toolbar import load_toolbar
 
 
 ##############################################################################

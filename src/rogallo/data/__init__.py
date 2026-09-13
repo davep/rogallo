@@ -2,8 +2,6 @@
 
 ##############################################################################
 # Local imports.
-from .aliases import load_aliases
-from .bindings import load_bindings
 from .bookmarks import Bookmark, Bookmarks, load_bookmarks, save_bookmarks
 from .client_certificates import client_certificates_directory
 from .command_history import (
@@ -16,6 +14,12 @@ from .config import (
     load_configuration,
     save_configuration,
     update_configuration,
+)
+from .configuration import (
+    load_aliases,
+    load_bindings,
+    load_themes,
+    load_toolbar,
 )
 from .initial_load import initial_load
 from .location_history import (
@@ -30,8 +34,6 @@ from .navigation_history import (
     load_navigation_history,
     save_naviagation_history,
 )
-from .themes import load_themes
-from .toolbar import load_toolbar
 from .trust import trust_file
 from .trusted_mime_types import load_trusted_mime_types, save_trusted_mime_types
 from .trusted_schemes import load_trusted_schemes, save_trusted_schemes

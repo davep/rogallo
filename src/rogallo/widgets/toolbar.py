@@ -22,7 +22,7 @@ from textual_enhanced.commands.bindings import primary_key_for
 
 ##############################################################################
 # Local imports.
-from ..data.toolbar import ToolbarConfiguration
+from ..data.configuration import ToolbarConfiguration
 
 
 ##############################################################################
