@@ -27,9 +27,6 @@ class Configuration:
     theme: str | None = None
     """The theme for the application."""
 
-    bindings: dict[str, str] = field(default_factory=dict)
-    """Command keyboard binding overrides."""
-
     command_line_on_top: bool = False
     """Should the command line live at the top of the screen?"""
 

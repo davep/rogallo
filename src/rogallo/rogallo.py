@@ -103,10 +103,7 @@ class Rogallo(EnhancedApp[None]):
                 self.theme = arguments.theme or configuration.theme
             except InvalidThemeError:
                 pass
-        # TODO: For the moment, I'm retaining the bindings in the
-        # configuration but deprecating them. Eventually I'll drop them from
-        # the configuration and just use load_bindings().
-        self.update_keymap(configuration.bindings | dict(load_bindings()))
+        self.update_keymap(load_bindings())
         if configuration.disable_animations:
             self.animation_level = "none"
 
