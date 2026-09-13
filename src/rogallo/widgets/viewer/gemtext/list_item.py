@@ -17,9 +17,9 @@ from textual.widget import Widget
 
 ##############################################################################
 # Local imports.
+from ....data import load_icons
 from ..searchable import NEEDLE
 from .content_filter import GemtextContent
-from .icons import icon
 
 
 ##############################################################################
@@ -49,7 +49,7 @@ class GemtextListItem(Widget):
             list_item: The Gemtext list item to display.
         """
         super().__init__()
-        self._bullet = icon("list_item_bullet_icon")
+        self._bullet = load_icons()["list_item_bullet"]
         """The bullet icon for the Gemtext list item."""
         self._list_item = list_item
         """The Gemtext list item to display."""

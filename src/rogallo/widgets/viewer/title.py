@@ -16,7 +16,7 @@ from wasat import VerificationMethod
 ##############################################################################
 # Local imports.
 from ...commands import AboutClientCertificate, AboutThisPage
-from ...data import load_configuration
+from ...data import load_icons
 from ...types import RogalloLocation
 
 
@@ -100,9 +100,7 @@ class ViewerTitle(Horizontal):
     def _watch_needed_certificate(self) -> None:
         """React to the needed_certificate changing."""
         self._lock_icon.update(
-            load_configuration().client_certificate_used_icon
-            if self.needed_certificate
-            else " "
+            load_icons()["client_certificate_used"] if self.needed_certificate else " "
         )
         self._lock_icon.set_class(self.needed_certificate, "--needed-certificate")
         self._lock_icon.tooltip = (
@@ -118,26 +116,18 @@ class ViewerTitle(Horizontal):
         )
         match self.verification_method:
             case "ca":
-                self._verification_method_icon.update(
-                    load_configuration().verified_ca_icon
-                )
+                self._verification_method_icon.update(load_icons()["verified_ca"])
                 self._verification_method_icon.tooltip = (
                     "Verification: Certificate Authority"
                 )
             case "tofu":
-                self._verification_method_icon.update(
-                    load_configuration().verified_tofu_icon
-                )
+                self._verification_method_icon.update(load_icons()["verified_tofu"])
                 self._verification_method_icon.tooltip = "Verification: TOFU"
             case "off":
-                self._verification_method_icon.update(
-                    load_configuration().verified_off_icon
-                )
+                self._verification_method_icon.update(load_icons()["verified_off"])
                 self._verification_method_icon.tooltip = "Verification: Off"
             case _:
-                self._verification_method_icon.update(
-                    load_configuration().unverified_icon
-                )
+                self._verification_method_icon.update(load_icons()["unverified"])
                 self._verification_method_icon.tooltip = "About this page"
 
     def on_resize(self) -> None:
