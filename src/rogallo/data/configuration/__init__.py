@@ -14,6 +14,7 @@ from .general import (
     save_configuration,
     update_configuration,
 )
+from .icons import load_icons
 from .themes import load_themes
 from .toolbar import ToolbarConfiguration, load_toolbar
 
@@ -24,6 +25,7 @@ __all__ = [
     "load_aliases",
     "load_bindings",
     "load_configuration",
+    "load_icons",
     "load_themes",
     "load_toolbar",
     "save_configuration",

@@ -99,45 +99,6 @@ class Configuration:
     jump_progress_timeout: float = 1.0
     """The time in seconds before the jump progress resets."""
 
-    geminispace_link_icon: str = "⪢"
-    """The icon to use for links to gemini:// URIs."""
-
-    fingerspace_link_icon: str = "☛"
-    """The icon to use for links to finger:// URIs."""
-
-    gopherspace_link_icon: str = "○"
-    """The icon to use for links to gopher:// URIs."""
-
-    spartanspace_link_icon: str = "⪧"
-    """The icon to use for links to spartan:// URIs."""
-
-    nexspace_link_icon: str = "☽"
-    """The icon to use for links to nex:// URIs."""
-
-    titanspace_link_icon: str = "⩓"
-    """The icon to use for links to titan:// URIs."""
-
-    otherspace_link_icon: str = "↗"
-    """The icon to use for non-gemini URIs."""
-
-    list_item_bullet_icon: str = "•"
-    """The icon to use for list item bullets."""
-
-    client_certificate_used_icon: str = "⚿"
-    """The icon to use for indicating that a client certificate was used."""
-
-    verified_ca_icon: str = "⛉"
-    """The icon to use for indicating that a server was verified by a CA."""
-
-    verified_tofu_icon: str = "✓"
-    """The icon to use for indicating that a server was verified by TOFU."""
-
-    verified_off_icon: str = "✗"
-    """The icon to use for indicating that server was off."""
-
-    unverified_icon: str = "•"
-    """The icon to use for indicating that a server was not verified."""
-
     external_editor: str | None = None
     """The external editor to use for editing text content."""
 
