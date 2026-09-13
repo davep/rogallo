@@ -14,7 +14,7 @@ from yaml import YAMLError, safe_load
 
 ##############################################################################
 # Local imports.
-from .locations import config_dir
+from ..locations import config_dir
 
 
 ##############################################################################

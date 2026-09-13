@@ -14,7 +14,7 @@ from textual.theme import Theme
 
 ##############################################################################
 # Local imports.
-from .locations import config_dir
+from ..locations import config_dir
 
 
 ##############################################################################
