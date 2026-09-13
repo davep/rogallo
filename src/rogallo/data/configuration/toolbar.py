@@ -13,11 +13,11 @@ from typing import NotRequired, TypedDict, cast
 
 ##############################################################################
 # PyYAML imports.
-from yaml import YAMLError, safe_dump, safe_load
+from ..locations import config_dir
 
 ##############################################################################
 # Local imports.
-from ..locations import config_dir
+from ._loader import load_configuration
 
 
 ##############################################################################
@@ -106,20 +106,12 @@ def load_toolbar() -> ToolbarConfiguration:
     Returns:
         The loaded toolbar configuration.
     """
-    if not toolbar_file().exists():
-        toolbar_file().write_text(
-            safe_dump(asdict(ToolbarConfiguration())), encoding="utf-8"
+    return ToolbarConfiguration.from_dict(
+        cast(
+            ToolbarConfigurationData,
+            load_configuration("toolbar", default=asdict(ToolbarConfiguration())),
         )
-    try:
-        return ToolbarConfiguration.from_dict(
-            cast(
-                ToolbarConfigurationData,
-                safe_load(toolbar_file().read_text(encoding="utf-8"))
-                or asdict(ToolbarConfiguration()),
-            )
-        )
-    except (OSError, YAMLError):
-        return ToolbarConfiguration()
+    )
 
 
 ### toolbar.py ends here

@@ -3,26 +3,13 @@
 ##############################################################################
 # Python imports.
 from functools import cache
-from pathlib import Path
 from typing import Final, TypedDict
 
 ##############################################################################
 # PyYAML imports.
-from yaml import YAMLError, safe_dump, safe_load
-
 ##############################################################################
 # Local imports.
-from ..locations import config_dir
-
-
-##############################################################################
-def icons_file() -> Path:
-    """The path to the file that configures the icons.
-
-    Returns:
-        The path to the icons file.
-    """
-    return config_dir() / "icons.yaml"
+from ._loader import load_configuration
 
 
 ##############################################################################
@@ -83,12 +70,7 @@ def load_icons() -> Icons:
     Returns:
         The icons configuration.
     """
-    if not icons_file().exists():
-        icons_file().write_text(safe_dump(_DEFAULT_ICONS), encoding="utf-8")
-    try:
-        return safe_load(icons_file().read_text(encoding="utf-8")) or _DEFAULT_ICONS
-    except (OSError, YAMLError):
-        return _DEFAULT_ICONS
+    return load_configuration("icons", _DEFAULT_ICONS)
 
 
 ### icons.py ends here
