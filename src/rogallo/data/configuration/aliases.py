@@ -3,16 +3,11 @@
 ##############################################################################
 # Python imports.
 from functools import cache
-from pathlib import Path
 from typing import Final
 
 ##############################################################################
-# PyYAML imports.
-from yaml import YAMLError, safe_dump, safe_load
-
-##############################################################################
 # Local imports.
-from ..locations import config_dir
+from ._loader import load_configuration
 
 ##############################################################################
 type Aliases = dict[str, str]
@@ -29,16 +24,6 @@ _DEFAULT_ALIASES: Final[Aliases] = {
 
 
 ##############################################################################
-def aliases_file() -> Path:
-    """The path to the file that holds the aliases.
-
-    Returns:
-        The path to the aliases file.
-    """
-    return config_dir() / "aliases.yaml"
-
-
-##############################################################################
 @cache
 def load_aliases() -> Aliases:
     """Load the aliases.
@@ -46,12 +31,7 @@ def load_aliases() -> Aliases:
     Returns:
         The loaded aliases.
     """
-    if not aliases_file().exists():
-        aliases_file().write_text(safe_dump(_DEFAULT_ALIASES), encoding="utf-8")
-    try:
-        return safe_load(aliases_file().read_text(encoding="utf-8")) or {}
-    except (OSError, YAMLError):
-        return {}
+    return load_configuration("aliases", _DEFAULT_ALIASES)
 
 
 ### aliases.py ends here
