@@ -192,6 +192,9 @@ def update_configuration() -> Iterator[Configuration]:
         with update_configuration() as config:
             config.meaning = 42
         ```
+
+    Yields:
+        The configuration.
     """
     configuration = load_configuration()
     try:
