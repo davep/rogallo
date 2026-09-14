@@ -645,11 +645,7 @@ class Main(EnhancedScreen[None]):
 
     @on(HistoryModified)
     def _save_location_history(self) -> None:
-        """Save the location history when it is modified.
-
-        Args:
-            message: The message containing the modified history.
-        """
+        """Save the location history when it is modified."""
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
 
