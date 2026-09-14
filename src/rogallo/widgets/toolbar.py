@@ -85,7 +85,11 @@ class CommandButton(Widget):
         self.can_focus = can_focus
 
     def render(self) -> str:
-        """Render the button."""
+        """Render the button.
+
+        Returns:
+            The rendered button.
+        """
         return self._title or self._command().context_command
 
     def on_mount(self) -> None:

@@ -71,7 +71,11 @@ class BestGuessCommand(InputCommand):
 
     @classmethod
     def help_text(cls) -> tuple[str, ...]:
-        """Ensure there is no help text for guessed commands."""
+        """Ensure there is no help text for guessed commands.
+
+        Returns:
+            An empty tuple.
+        """
         return ()
 
 

@@ -67,7 +67,11 @@ class GemtextListItem(Widget):
         self.refresh()
 
     def render(self) -> Table:
-        """Render the Gemtext list item widget."""
+        """Render the Gemtext list item widget.
+
+        Returns:
+            A Rich Table object representing the Gemtext list item.
+        """
         text = Text(self._text) if isinstance(self._text, str) else self._text.copy()
         if self.text_selection:
             text.stylize(

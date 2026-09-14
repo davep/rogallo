@@ -214,7 +214,11 @@ class GemtextLink(Widget, can_focus=True):
         )
 
     def render(self) -> Table:
-        """Render the Gemtext link widget."""
+        """Render the Gemtext link widget.
+
+        Returns:
+            A Rich Table representing the Gemtext link.
+        """
         link = Table.grid(expand=True)
         link_jump: str | Text = (
             self._jump_link_content if self.with_link_numbers else ""
