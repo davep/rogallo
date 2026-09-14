@@ -147,6 +147,9 @@ class SidePanel(Container):
 
         Args:
             scroll_visible: Whether to scroll the focused widget into view.
+
+        Returns:
+            Self.
         """
         if self._tabs.active_pane is not None:
             self._tabs.active_pane.children[0].focus(scroll_visible=scroll_visible)
