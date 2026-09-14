@@ -33,7 +33,6 @@ class BookmarkOption(Option):
 
         Args:
             bookmark: The bookmark to display.
-            index: The index of the bookmark in the list.
         """
         super().__init__(
             (
