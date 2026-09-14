@@ -124,10 +124,10 @@ class GemtextLink(Widget, can_focus=True):
     """The icon to display for the link."""
 
     def __init__(self, link: Line) -> None:
-        """Initialize a Gemtext link widget.
+        """Initialise a Gemtext link widget.
 
         Args:
-            line: The Gemtext link to display.
+            link: The Gemtext link to display.
         """
         super().__init__()
         assert isinstance(link, Link)
