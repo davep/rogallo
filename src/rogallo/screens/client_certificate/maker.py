@@ -168,7 +168,11 @@ class BaseCertificateMaker(ModalScreen[CertificateData | None]):
         self._maybe_add(data, "country")
 
     def _build_certificate_data(self) -> CertificateData:
-        """Build the certificate data from the inputs."""
+        """Build the certificate data from the inputs.
+
+        Returns:
+            The certificate data.
+        """
         raise NotImplementedError
 
     def _can_create(self) -> bool:
@@ -226,7 +230,11 @@ class LocationSpecificClientCertificateMaker(BaseCertificateMaker):
             yield from self._common_buttons
 
     def _build_certificate_data(self) -> CertificateData:
-        """Create the certificate."""
+        """Create the certificate.
+
+        Returns:
+            The certificate data.
+        """
         certificate_data: CertificateData = {
             "name": str(uuid4()),
             "scopes": [
@@ -262,7 +270,11 @@ class ClientCertificateMaker(BaseCertificateMaker):
         self.query_one("#create", Button).disabled = True
 
     def _build_certificate_data(self) -> CertificateData:
-        """Create the certificate."""
+        """Create the certificate.
+
+        Returns:
+            The certificate data.
+        """
         certificate_data: CertificateData = {"name": str(uuid4()), "scopes": ()}
         self._add_common_data(certificate_data)
         return certificate_data
