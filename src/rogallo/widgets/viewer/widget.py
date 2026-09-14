@@ -526,7 +526,11 @@ class Viewer(Vertical, can_focus=False):
 
     @on(DescendantFocus)
     def _maybe_update_status(self, event: DescendantFocus) -> None:
-        """Update the status bar when a descendant widget is focused."""
+        """Update the status bar when a descendant widget is focused.
+
+        Args:
+            event: The event that triggered the focus.
+        """
         if isinstance(event.widget, GemtextLink):
             self._status.message = str(event.widget.normalised_uri)
         else:
