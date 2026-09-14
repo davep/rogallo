@@ -77,8 +77,8 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
     def compose(self) -> ComposeResult:
         """Compose the screen.
 
-        Returns:
-            The composed screen.
+        Yields:
+            The widgets for the screen.
         """
         with VerticalGroup() as dialog:
             dialog.border_title = f"Open {self._uri}?"
