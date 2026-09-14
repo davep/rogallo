@@ -36,8 +36,8 @@ _WANTED: Final[set[str]] = {field.name for field in fields(Theme)}
 def load_themes() -> Iterator[Theme]:
     """Get the list of themes.
 
-    Returns:
-        The list of themes.
+    Yields:
+        The available themes.
     """
     for theme in themes_dir().glob("*.json"):
         try:
