@@ -146,6 +146,8 @@ async def handle_titan_request(
         request: The request to handle.
         owner: The widget that owns the request.
         client: The Titan client to use for the request.
+        set_last_input: A function to set the last input from the user.
+        get_last_input: A function to get the last input from the user.
     """
 
     uri = request.location
