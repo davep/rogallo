@@ -251,8 +251,12 @@ class ClientCertificateManager(EnhancedOptionList):
     async def _history_suggester(self) -> SuggestFromList:
         """A suggester for the history of input.
 
-        If there us no history yet then a list of commands and aliases will
-        be used.
+        Returns:
+            A suggester for the history of input.
+
+        Note:
+            If there us no history yet then a list of commands and aliases will
+            be used.
         """
         return SuggestFromList(
             [
