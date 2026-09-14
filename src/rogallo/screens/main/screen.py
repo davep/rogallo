@@ -619,7 +619,11 @@ class Main(EnhancedScreen[None]):
     @on(OpenFromFileSystem)
     @work
     async def _open_from_filesystem(self, message: OpenFromFileSystem) -> None:
-        """Open a file."""
+        """Open a file.
+
+        Args:
+            message: The message containing the file open request.
+        """
         if chosen_file := await self.app.push_screen_wait(
             FileOpen(
                 message.start_from,
