@@ -167,7 +167,11 @@ class ClientCertificateManager(EnhancedOptionList):
     current_document: var[Document] = var(Document)
 
     def __init__(self, store: ClientCertificateStore) -> None:
-        """Initialize the client certificate manager widget."""
+        """Initialize the client certificate manager widget.
+
+        Args:
+            store: The client certificate store to use.
+        """
         super().__init__()
         self._store = store
         """The client certificate store."""
