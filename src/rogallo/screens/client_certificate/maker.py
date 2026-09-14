@@ -269,7 +269,11 @@ class ClientCertificateMaker(BaseCertificateMaker):
 
     @on(Input.Changed, "#common_name")
     def _ensure_common_name(self, message: Input.Changed) -> None:
-        """Ensure the common name is not empty."""
+        """Ensure the common name is not empty.
+
+        Args:
+            message: The input changed message.
+        """
         self.query_one("#create", Button).disabled = not bool(message.value.strip())
 
     def _can_create(self) -> bool:
