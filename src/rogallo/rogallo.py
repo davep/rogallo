@@ -90,7 +90,7 @@ class Rogallo(EnhancedApp[None]):
         """Initialise the application.
 
         Args:
-            The command line arguments passed to the application.
+            arguments: The command line arguments passed to the application.
         """
         self._arguments = arguments
         """The command line arguments passed to the application."""
