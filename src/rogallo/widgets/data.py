@@ -29,7 +29,12 @@ class Data(HorizontalGroup):
     """
 
     def __init__(self, label: str, value: str | bool) -> None:
-        """Initialise the widget."""
+        """Initialise the widget.
+
+        Args:
+            label: The label of the data.
+            value: The value of the data.
+        """
         super().__init__()
         self._data_label = label
         """The label of the data."""
@@ -39,7 +44,11 @@ class Data(HorizontalGroup):
         """The value of the data."""
 
     def compose(self) -> ComposeResult:
-        """Compose the widget."""
+        """Compose the widget.
+
+        Yields:
+            The widgets that make up the data widget.
+        """
         yield Label(f"{self._data_label}:", id="label")
         yield Label(self._data_value, id="value", markup=False)
 
