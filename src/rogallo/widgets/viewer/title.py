@@ -135,7 +135,11 @@ class ViewerTitle(Horizontal):
         self.location = self.location
 
     async def on_click(self, event: Click) -> None:
-        """Handle the widget being clicked."""
+        """Handle the widget being clicked.
+
+        Args:
+            event: The click event.
+        """
         if event.widget is self._verification_method_icon:
             await self.screen.run_action(AboutThisPage.action_name())
         elif event.widget is self._lock_icon:
