@@ -60,8 +60,8 @@ class SecurityAlert(ModalScreen[bool]):
         """Initialise the screen.
 
         Args:
-            location (RogalloLocation): The location of the security alert.
-            message (str): The security alert message.
+            uri: The location of the security alert.
+            message: The security alert message.
         """
         super().__init__()
         self._uri = uri
