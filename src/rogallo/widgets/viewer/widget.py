@@ -327,8 +327,8 @@ class Viewer(Vertical, can_focus=False):
         Args:
             document: The document to convert.
 
-        Returns:
-            The widget for the Nex content.
+        Yields:
+            The widgets for the Nex content.
         """
         for line in document.content.splitlines():
             if line.startswith("=>"):
