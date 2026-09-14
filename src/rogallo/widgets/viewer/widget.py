@@ -563,7 +563,11 @@ class Viewer(Vertical, can_focus=False):
 
     @on(Key)
     def _jumper(self, event: Key) -> None:
-        """Handle jump key presses."""
+        """Handle jump key presses.
+
+        Args:
+            event: The key event.
+        """
         if not self.with_link_numbers:
             return
         if event.key.isdigit():
