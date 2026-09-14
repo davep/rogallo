@@ -6,9 +6,8 @@ from __future__ import annotations
 
 ##############################################################################
 # Python imports.
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from functools import cache
-from typing import TypedDict, cast
 
 ##############################################################################
 # GopherMap imports.
@@ -16,21 +15,7 @@ from gophermap import ItemType
 
 ##############################################################################
 # Local imports.
-from ._loader import load_configuration
-
-##############################################################################
-type GopherTypeBadges = dict[str, str]
-"""Type for Gopher type badges."""
-
-
-##############################################################################
-class GopherConfigurationData(TypedDict):
-    """The shape of the Gopher configuration data."""
-
-    show_type_badges: bool
-    """Whether to show type badges in the Gopher view."""
-    type_badges: GopherTypeBadges
-    """The type badges to use in the Gopher view."""
+from ._loader import load_configuration_into
 
 
 ##############################################################################
@@ -40,7 +25,7 @@ class GopherConfiguration:
 
     show_type_badges: bool = True
     """Whether to show type badges in the Gopher view."""
-    type_badges: GopherTypeBadges = field(
+    type_badges: dict[str, str] = field(
         default_factory=lambda: {
             ItemType.TEXT.value: "📄",
             ItemType.MENU.value: "📁",
@@ -65,21 +50,6 @@ class GopherConfiguration:
     )
     """The type badges to use in the Gopher view."""
 
-    @classmethod
-    def from_dict(cls, data: GopherConfigurationData) -> GopherConfiguration:
-        """Load a Gopher configuration from a dictionary.
-
-        Args:
-            data: The data to load from.
-
-        Returns:
-            A fresh instance of a Gopher configuration.
-        """
-        return cls(
-            show_type_badges=data.get("show_type_badges", True),
-            type_badges=data.get("type_badges", {}),
-        )
-
 
 ##############################################################################
 @cache
@@ -89,12 +59,7 @@ def load_gopher() -> GopherConfiguration:
     Returns:
         The loaded Gopher configuration.
     """
-    return GopherConfiguration.from_dict(
-        cast(
-            GopherConfigurationData,
-            load_configuration("gopher", asdict(GopherConfiguration())),
-        )
-    )
+    return load_configuration_into(GopherConfiguration, "gopher")
 
 
 ### gopher.py ends here
