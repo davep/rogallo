@@ -90,20 +90,12 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
 
     @on(Button.Pressed, "#once")
     def action_open_once(self) -> None:
-        """Allow opening this once.
-
-        Args:
-            message: The button pressed message.
-        """
+        """Allow opening this once."""
         self.dismiss("once")
 
     @on(Button.Pressed, "#always")
     def action_open_always(self) -> None:
-        """Allow always opening.
-
-        Args:
-            message: The button pressed message.
-        """
+        """Allow always opening."""
         self.dismiss("always")
 
     @on(Button.Pressed, "#cancel")
