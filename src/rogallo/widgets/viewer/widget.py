@@ -539,7 +539,11 @@ class Viewer(Vertical, can_focus=False):
             self._status.message = ""
 
     def _reset_jump_timer(self, start_new: bool = False) -> None:
-        """Reset the jump timer."""
+        """Reset the jump timer.
+
+        Args:
+            start_new: Whether to start a new timer after resetting the current one.
+        """
         if self._jump_timer is not None:
             self._jump_timer.stop()
             self._jump_timer = None
