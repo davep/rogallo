@@ -503,11 +503,7 @@ class Main(EnhancedScreen[None]):
 
     @on(Viewer.DocumentLoaded)
     def _document_loaded(self) -> None:
-        """Handle a document being loaded in the viewer.
-
-        Args:
-            message: The message containing the document that was loaded.
-        """
+        """Handle a document being loaded in the viewer."""
         self.refresh_bindings()
         self._side_panel.current_document = self._viewer.document
         self._viewer.take_control()
