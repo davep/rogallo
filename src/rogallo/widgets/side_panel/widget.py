@@ -143,7 +143,11 @@ class SidePanel(Container):
             config.side_panel_chosen_tab = self._tabs.active
 
     def focus(self, scroll_visible: bool = True) -> Self:
-        """Focus the first tab in the side-panel."""
+        """Focus the first tab in the side-panel.
+
+        Args:
+            scroll_visible: Whether to scroll the focused widget into view.
+        """
         if self._tabs.active_pane is not None:
             self._tabs.active_pane.children[0].focus(scroll_visible=scroll_visible)
         return self
