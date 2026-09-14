@@ -85,7 +85,7 @@ class UserInput(ModalScreen[str | None]):
         """Initialise the object.
 
         Args:
-            request_from: The request that prompted this input.
+            location: The location making the request.
             prompt: The prompt to display to the user.
             sensitive: Whether the input is sensitive.
             default: The default value to display in the input area.
