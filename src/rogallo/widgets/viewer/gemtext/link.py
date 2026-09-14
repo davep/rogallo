@@ -154,7 +154,11 @@ class GemtextLink(Widget, can_focus=True):
         return self._normalised_uri
 
     def _best_icon(self) -> str:
-        """Get the best icon for the link based on its URI."""
+        """Get the best icon for the link based on its URI.
+
+        Returns:
+            The best icon for the link.
+        """
         icons = load_icons()
         for checker, icon in (
             (is_finger_uri, icons["fingerspace_link"]),
