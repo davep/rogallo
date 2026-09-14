@@ -27,6 +27,7 @@ class PlainText(Static):
 
         Args:
             text: The plain text to display.
+            classes: The CSS classes to apply to the widget.
         """
         self._text: Content
         """The content of the plain text."""
