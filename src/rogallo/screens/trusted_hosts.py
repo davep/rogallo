@@ -104,7 +104,7 @@ class TrustedHostsBrowser(ModalScreen[None | GeminiURI]):
         """Initialise the screen.
 
         Args:
-            client: The Gemini client.
+            trust_store: The trust store to manage.
         """
         super().__init__()
         self._trust_store = trust_store
