@@ -138,16 +138,19 @@ class SidePanel(Container):
 
     @on(TabbedContent.TabActivated)
     def _remember_chosen_tab(self) -> None:
-        """Remember the active tab in the side-panel.
-
-        Args:
-            event: The tab activated event.
-        """
+        """Remember the active tab in the side-panel."""
         with update_configuration() as config:
             config.side_panel_chosen_tab = self._tabs.active
 
     def focus(self, scroll_visible: bool = True) -> Self:
-        """Focus the first tab in the side-panel."""
+        """Focus the first tab in the side-panel.
+
+        Args:
+            scroll_visible: Whether to scroll the focused widget into view.
+
+        Returns:
+            Self.
+        """
         if self._tabs.active_pane is not None:
             self._tabs.active_pane.children[0].focus(scroll_visible=scroll_visible)
         return self

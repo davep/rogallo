@@ -100,7 +100,11 @@ class HistorySearchCommands(CommandsProvider):
 
     @classmethod
     def prompt(cls) -> str:
-        """The prompt for the command provider."""
+        """Get the prompt for the command provider.
+
+        Returns:
+            The prompt for the command provider.
+        """
         return "Search history..."
 
     def commands(self) -> CommandHits:

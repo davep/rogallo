@@ -132,7 +132,7 @@ def save_configuration(configuration: Configuration) -> Configuration:
     """Save the given configuration.
 
     Args:
-        The configuration to store.
+        configuration: The configuration to store.
 
     Returns:
         The configuration.
@@ -192,6 +192,9 @@ def update_configuration() -> Iterator[Configuration]:
         with update_configuration() as config:
             config.meaning = 42
         ```
+
+    Yields:
+        The configuration.
     """
     configuration = load_configuration()
     try:

@@ -45,7 +45,7 @@ def uri_resolver(
     """Turn a URI request into a location.
 
     Args:
-        uri: The URI request to turn into a location.
+        request: The request to resolve.
 
     Returns:
         A message for opening the location.

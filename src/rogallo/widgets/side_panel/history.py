@@ -131,7 +131,11 @@ class HistoryViewer(EnhancedOptionList):
 
     @on(EnhancedOptionList.OptionSelected)
     def _jump_to_history(self, event: EnhancedOptionList.OptionSelected) -> None:
-        """Jump to the selected history location."""
+        """Jump to the selected history location.
+
+        Args:
+            event: The event.
+        """
         event.stop()
         assert isinstance(event.option, HistoryOption)
         self.post_message(OpenLocation(event.option.location))

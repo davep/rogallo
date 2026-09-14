@@ -25,7 +25,7 @@ async def handle_finger_request(
     Args:
         request: The finger request to handle.
         client: The client to use for the request.
-        screen: The screen to post the document to.
+        owner: The widget that owns the request.
         cache: The content cache to use for caching documents.
     """
     uri = request.location

@@ -148,6 +148,7 @@ class UserUpload(ModalScreen[UploadData | None]):
 
         Args:
             location: The location to upload to.
+            existing_content: The existing content at the location.
         """
         super().__init__()
         self._location = location

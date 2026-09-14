@@ -52,6 +52,7 @@ async def _handle_response(
         client: The Titan client to use for any follow-up requests.
         owner: The widget that owns the request.
         set_last_input: A function to set the last input from the user.
+        savable_input: The input content to save if the request fails.
     """
     uri = response.uri or response.requested_uri or request.location
     assert isinstance(uri, GeminiURI | TitanURI)
@@ -146,6 +147,8 @@ async def handle_titan_request(
         request: The request to handle.
         owner: The widget that owns the request.
         client: The Titan client to use for the request.
+        set_last_input: A function to set the last input from the user.
+        get_last_input: A function to get the last input from the user.
     """
 
     uri = request.location

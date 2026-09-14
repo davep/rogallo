@@ -30,7 +30,7 @@ class Scope(Option):
 
     @property
     def scope(self) -> str:
-        """Return the scope."""
+        """The scope."""
         return self._scope
 
 
@@ -68,12 +68,17 @@ class ScopePicker(ModalScreen[str | None]):
     ]
 
     def __init__(self, certificate: ClientCertificate, caption: str) -> None:
-        """Initialise the screen."""
+        """Initialise the screen.
+
+        Args:
+            certificate: The client certificate to pick a scope from.
+            caption: The caption to show.
+        """
         super().__init__()
         self._certificate = certificate
         """The client certificate to pick a scope from."""
         self._caption = caption
-        """The caption to show above the select widget."""
+        """The caption to show."""
 
     def compose(self) -> ComposeResult:
         """Compose the screen."""
@@ -83,7 +88,11 @@ class ScopePicker(ModalScreen[str | None]):
 
     @on(OptionList.OptionSelected)
     def action_select(self, event: OptionList.OptionSelected) -> None:
-        """Select the scope."""
+        """Select the scope.
+
+        Args:
+            event: The event.
+        """
         assert isinstance(event.option, Scope)
         self.dismiss(event.option.scope)
 

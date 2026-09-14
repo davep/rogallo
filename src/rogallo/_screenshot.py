@@ -18,9 +18,8 @@ def _ansi_representation_of(app: App[Any]) -> Iterator[str]:
     Args:
         app: The Textual app to get the ANSI representation of.
 
-    Returns:
-        An iterator of strings representing the ANSI representation of the
-        app's screen.
+    Yields:
+        Strings representing lines of ANSI content of the app's screen.
     """
     for strip in app.screen._compositor.render_strips():
         yield "".join(

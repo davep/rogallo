@@ -327,8 +327,8 @@ class Viewer(Vertical, can_focus=False):
         Args:
             document: The document to convert.
 
-        Returns:
-            The widget for the Nex content.
+        Yields:
+            The widgets for the Nex content.
         """
         for line in document.content.splitlines():
             if line.startswith("=>"):
@@ -526,7 +526,11 @@ class Viewer(Vertical, can_focus=False):
 
     @on(DescendantFocus)
     def _maybe_update_status(self, event: DescendantFocus) -> None:
-        """Update the status bar when a descendant widget is focused."""
+        """Update the status bar when a descendant widget is focused.
+
+        Args:
+            event: The event that triggered the focus.
+        """
         if isinstance(event.widget, GemtextLink):
             self._status.message = str(event.widget.normalised_uri)
         else:
@@ -539,7 +543,11 @@ class Viewer(Vertical, can_focus=False):
             self._status.message = ""
 
     def _reset_jump_timer(self, start_new: bool = False) -> None:
-        """Reset the jump timer."""
+        """Reset the jump timer.
+
+        Args:
+            start_new: Whether to start a new timer after resetting the current one.
+        """
         if self._jump_timer is not None:
             self._jump_timer.stop()
             self._jump_timer = None
@@ -555,7 +563,11 @@ class Viewer(Vertical, can_focus=False):
 
     @on(Key)
     def _jumper(self, event: Key) -> None:
-        """Handle jump key presses."""
+        """Handle jump key presses.
+
+        Args:
+            event: The key event.
+        """
         if not self.with_link_numbers:
             return
         if event.key.isdigit():

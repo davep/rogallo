@@ -68,6 +68,9 @@ class GemtextContent:
     def filter(cls, line: Line) -> str | Text:
         """Filter a Gemtext line.
 
+        Args:
+            line: The Gemtext line to filter.
+
         Returns:
             The filtered line content.
         """
@@ -76,6 +79,9 @@ class GemtextContent:
     @classmethod
     def ansi_filter(cls, line: Line) -> str | Text:
         """Filter a Gemtext line, affecting only ANSI escape sequences.
+
+        Args:
+            line: The Gemtext line to filter.
 
         Returns:
             The filtered line content.

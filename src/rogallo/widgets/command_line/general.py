@@ -96,12 +96,20 @@ class UnknownCommand(GeneralCommand):
 
     @classmethod
     def suggestions(cls) -> tuple[str, ...]:
-        """Ensure there are no suggestions for unknown commands."""
+        """Ensure there are no suggestions for unknown commands.
+
+        Returns:
+            An empty tuple.
+        """
         return ()
 
     @classmethod
     def help_text(cls) -> tuple[str, ...]:
-        """Ensure there is no help text for unknown commands."""
+        """Ensure there is no help text for unknown commands.
+
+        Returns:
+            An empty tuple.
+        """
         return ()
 
 

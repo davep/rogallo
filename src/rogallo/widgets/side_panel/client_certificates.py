@@ -167,7 +167,11 @@ class ClientCertificateManager(EnhancedOptionList):
     current_document: var[Document] = var(Document)
 
     def __init__(self, store: ClientCertificateStore) -> None:
-        """Initialize the client certificate manager widget."""
+        """Initialize the client certificate manager widget.
+
+        Args:
+            store: The client certificate store to use.
+        """
         super().__init__()
         self._store = store
         """The client certificate store."""
@@ -247,8 +251,12 @@ class ClientCertificateManager(EnhancedOptionList):
     async def _history_suggester(self) -> SuggestFromList:
         """A suggester for the history of input.
 
-        If there us no history yet then a list of commands and aliases will
-        be used.
+        Returns:
+            A suggester for the history of input.
+
+        Note:
+            If there us no history yet then a list of commands and aliases will
+            be used.
         """
         return SuggestFromList(
             [

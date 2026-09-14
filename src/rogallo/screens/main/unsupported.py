@@ -34,6 +34,7 @@ async def maybe_open_unsupported_uri(
 
     Args:
         message: The message containing the unsupported URI.
+        owner: The widget that owns the message.
     """
 
     # Because we want to gatekeep which schemes get passed on, let's
@@ -78,6 +79,7 @@ async def maybe_open_unsupported_mime_type(
 
     Args:
         message: The message containing the unsupported MIME type.
+        owner: The widget that owns the message.
     """
 
     # There's no reason why we should be here for Finger URIs.

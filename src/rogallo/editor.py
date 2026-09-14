@@ -22,7 +22,12 @@ from .types import DEFAULT_GEMINI_EXTENSION
 ##############################################################################
 @cache
 def external_editor() -> str | None:
-    """The external editor to use, if any."""
+    """Get the external editor to use, if any.
+
+    Returns:
+        The external editor to use, or `None` if no external editor is
+            configured.
+    """
     return (
         load_configuration().external_editor
         or getenv("VISUAL")
@@ -36,6 +41,7 @@ def edit_externally(application: App[Any], text: str) -> str:
     """Edit the given text in an external editor.
 
     Args:
+        application: The Textual application.
         text: The text to edit.
 
     Returns:

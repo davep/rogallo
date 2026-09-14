@@ -124,10 +124,10 @@ class GemtextLink(Widget, can_focus=True):
     """The icon to display for the link."""
 
     def __init__(self, link: Line) -> None:
-        """Initialize a Gemtext link widget.
+        """Initialise a Gemtext link widget.
 
         Args:
-            line: The Gemtext link to display.
+            link: The Gemtext link to display.
         """
         super().__init__()
         assert isinstance(link, Link)
@@ -154,7 +154,11 @@ class GemtextLink(Widget, can_focus=True):
         return self._normalised_uri
 
     def _best_icon(self) -> str:
-        """Get the best icon for the link based on its URI."""
+        """Get the best icon for the link based on its URI.
+
+        Returns:
+            The best icon for the link.
+        """
         icons = load_icons()
         for checker, icon in (
             (is_finger_uri, icons["fingerspace_link"]),
@@ -210,7 +214,11 @@ class GemtextLink(Widget, can_focus=True):
         )
 
     def render(self) -> Table:
-        """Render the Gemtext link widget."""
+        """Render the Gemtext link widget.
+
+        Returns:
+            A Rich Table representing the Gemtext link.
+        """
         link = Table.grid(expand=True)
         link_jump: str | Text = (
             self._jump_link_content if self.with_link_numbers else ""

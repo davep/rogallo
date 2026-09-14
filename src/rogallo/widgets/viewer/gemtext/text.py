@@ -26,6 +26,7 @@ class GemtextText(PlainText):
 
         Args:
             line: The Gemtext line to display.
+            classes: The CSS classes to apply to the widget.
         """
         if isinstance(line, Line):
             line = GemtextContent.filter(line)

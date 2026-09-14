@@ -72,6 +72,9 @@ class LocationHistory(RecencyHistory[LocationVisit]):
 
         Args:
             item: The visit to add.
+
+        Returns:
+            Self.
         """
         return super().add(item)
 

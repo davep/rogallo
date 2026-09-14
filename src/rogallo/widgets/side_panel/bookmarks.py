@@ -33,7 +33,6 @@ class BookmarkOption(Option):
 
         Args:
             bookmark: The bookmark to display.
-            index: The index of the bookmark in the list.
         """
         super().__init__(
             (
@@ -97,7 +96,11 @@ class BookmarksViewer(EnhancedOptionList):
 
     @on(EnhancedOptionList.OptionSelected)
     def _jump_to_bookmark(self, event: EnhancedOptionList.OptionSelected) -> None:
-        """Jump to the selected bookmark."""
+        """Jump to the selected bookmark.
+
+        Args:
+            event: The event that triggered the jump.
+        """
         event.stop()
         assert isinstance(event.option, BookmarkOption)
         self.post_message(OpenLocation(event.option.bookmark.location))

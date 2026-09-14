@@ -24,6 +24,9 @@ def expand_aliases(command_line: str) -> str:
 
     Returns:
         The expanded command line.
+
+    Raises:
+        AliasError: If an alias is invalid.
     """
     aliases = load_aliases()
     car, _, cdr = command_line.partition(" ")

@@ -503,11 +503,7 @@ class Main(EnhancedScreen[None]):
 
     @on(Viewer.DocumentLoaded)
     def _document_loaded(self) -> None:
-        """Handle a document being loaded in the viewer.
-
-        Args:
-            message: The message containing the document that was loaded.
-        """
+        """Handle a document being loaded in the viewer."""
         self.refresh_bindings()
         self._side_panel.current_document = self._viewer.document
         self._viewer.take_control()
@@ -623,7 +619,11 @@ class Main(EnhancedScreen[None]):
     @on(OpenFromFileSystem)
     @work
     async def _open_from_filesystem(self, message: OpenFromFileSystem) -> None:
-        """Open a file."""
+        """Open a file.
+
+        Args:
+            message: The message containing the file open request.
+        """
         if chosen_file := await self.app.push_screen_wait(
             FileOpen(
                 message.start_from,
@@ -649,21 +649,13 @@ class Main(EnhancedScreen[None]):
 
     @on(HistoryModified)
     def _save_location_history(self) -> None:
-        """Save the location history when it is modified.
-
-        Args:
-            message: The message containing the modified history.
-        """
+        """Save the location history when it is modified."""
         self.mutate_reactive(Main._location_history)
         save_location_history(self._location_history)
 
     @on(BookmarksModified)
     def _save_bookmarks(self) -> None:
-        """Save the bookmarks when they are modified.
-
-        Args:
-            message: The message containing the modified bookmarks.
-        """
+        """Save the bookmarks when they are modified."""
         self.mutate_reactive(Main._bookmarks)
         save_bookmarks(self._bookmarks)
 

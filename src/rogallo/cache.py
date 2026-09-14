@@ -153,7 +153,12 @@ class ContentCache(CacheManager):
             pass
 
     def expire(self, cancelled: Callable[[], bool]) -> None:
-        """Expire the cache."""
+        """Expire the cache.
+
+        Args:
+            cancelled: A callable that returns `True` if the operation
+                should be cancelled, and `False` otherwise.
+        """
         if self._disabled or cancelled():
             return
 
