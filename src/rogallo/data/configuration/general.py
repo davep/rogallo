@@ -132,7 +132,7 @@ def save_configuration(configuration: Configuration) -> Configuration:
     """Save the given configuration.
 
     Args:
-        The configuration to store.
+        configuration: The configuration to store.
 
     Returns:
         The configuration.
