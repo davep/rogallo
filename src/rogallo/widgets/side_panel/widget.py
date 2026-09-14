@@ -138,11 +138,7 @@ class SidePanel(Container):
 
     @on(TabbedContent.TabActivated)
     def _remember_chosen_tab(self) -> None:
-        """Remember the active tab in the side-panel.
-
-        Args:
-            event: The tab activated event.
-        """
+        """Remember the active tab in the side-panel."""
         with update_configuration() as config:
             config.side_panel_chosen_tab = self._tabs.active
 
