@@ -48,4 +48,9 @@ you for the query before following the link.
 If an item is declared as being HTML, and the selector starts with `URL:`,
 what follows the `URL:` will be turned into a URI that can be followed.
 
+## Configuration
+
+There are [a couple of configuration settings](../configuration/gopher.md)
+that affect how Gopher is rendered in Rogallo.
+
 [//]: # (gopher.md ends here)

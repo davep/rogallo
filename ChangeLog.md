@@ -17,6 +17,9 @@
 - **BREAKING CHANGE:** Icon configuration is now loaded from `icons.yaml`
   rather than `configuration.json`.
   ([#444](https://github.com/davep/rogallo/pull/444))
+- **BREAKING CHANGE:** Gopher configuration is now loaded from `gopher.yaml`
+  rather than `configuration.json`.
+  ([#448](https://github.com/davep/rogallo/pull/448))
 
 ## v2.4.0
 

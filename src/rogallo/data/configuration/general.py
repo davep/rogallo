@@ -11,10 +11,6 @@ from pathlib import Path
 from typing import Final, Literal
 
 ##############################################################################
-# GopherMap imports.
-from gophermap import ItemType
-
-##############################################################################
 # Local imports.
 from ..locations import config_dir
 
@@ -104,34 +100,6 @@ class Configuration:
 
     hide_preformatted: list[tuple[str, str]] = field(default_factory=list)
     """List of (URI-prefix, alt-text) tuples of pre-formatted text to hide."""
-
-    gopher_show_type_badges: bool = True
-    """Whether to show badges for Gopher item types."""
-
-    gopher_type_badges: dict[str, str] = field(
-        default_factory=lambda: {
-            ItemType.TEXT.value: "📄",
-            ItemType.MENU.value: "📁",
-            ItemType.CSO.value: "📇",
-            ItemType.ERROR.value: "❌",
-            ItemType.BINHEX.value: "📦",
-            ItemType.DOS_FILE.value: "💾",
-            ItemType.UUENCODED.value: "📜",
-            ItemType.INDEX_SEARCH.value: "🔍",
-            ItemType.TELNET.value: "🖥️",
-            ItemType.BINARY.value: "📦",
-            ItemType.INFO.value: "ℹ️",
-            ItemType.GIF.value: "🖼️",
-            ItemType.IMAGE.value: "🖼️",
-            ItemType.HTML.value: "🌐",
-            ItemType.DOCUMENT.value: "📄",
-            ItemType.AUDIO.value: "🎵",
-            ItemType.PDF.value: "📄",
-            ItemType.XML.value: "📄",
-            ItemType.UNKNOWN.value: "❓",
-        }
-    )
-    """The badges to use for Gopher item types."""
 
     guess_language_for_syntax_highlighting_text_documents: bool = True
     """Whether to guess the language for syntax highlighting of text documents."""
