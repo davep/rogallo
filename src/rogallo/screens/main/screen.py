@@ -651,11 +651,7 @@ class Main(EnhancedScreen[None]):
 
     @on(BookmarksModified)
     def _save_bookmarks(self) -> None:
-        """Save the bookmarks when they are modified.
-
-        Args:
-            message: The message containing the modified bookmarks.
-        """
+        """Save the bookmarks when they are modified."""
         self.mutate_reactive(Main._bookmarks)
         save_bookmarks(self._bookmarks)
 
