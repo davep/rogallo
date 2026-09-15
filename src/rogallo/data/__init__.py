@@ -17,20 +17,18 @@ from .configuration import (
     update_configuration,
 )
 from .initial_load import initial_load
-from .navigation_history import (
-    NavigationHistory,
-    NavigationPosition,
-    load_navigation_history,
-    save_naviagation_history,
-)
 from .state import (
     CommandLineHistory,
     LocationHistory,
     LocationVisit,
+    NavigationHistory,
+    NavigationPosition,
     load_command_history,
     load_location_history,
+    load_navigation_history,
     save_command_history,
     save_location_history,
+    save_naviagation_history,
 )
 from .trust import trust_file
 from .trusted_mime_types import load_trusted_mime_types, save_trusted_mime_types

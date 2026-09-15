@@ -24,6 +24,8 @@
   ([#452](https://github.com/davep/rogallo/pull/452))
 - Location history is now stored in the application's state directory.
   ([#452](https://github.com/davep/rogallo/pull/452))
+- Navigation history is now stored in the application's state directory.
+  ([#452](https://github.com/davep/rogallo/pull/452))
 
 ## v2.4.0
 

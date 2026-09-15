@@ -17,6 +17,12 @@ from .location_history import (
     load_location_history,
     save_location_history,
 )
+from .navigation_history import (
+    NavigationHistory,
+    NavigationPosition,
+    load_navigation_history,
+    save_naviagation_history,
+)
 
 ##############################################################################
 # Exports.
@@ -24,10 +30,14 @@ __all__ = [
     "CommandLineHistory",
     "load_command_history",
     "load_location_history",
+    "load_navigation_history",
     "LocationHistory",
     "LocationVisit",
+    "NavigationHistory",
+    "NavigationPosition",
     "save_command_history",
     "save_location_history",
+    "save_naviagation_history",
 ]
 
 ### __init__.py ends here
