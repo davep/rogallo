@@ -17,12 +17,6 @@ from .configuration import (
     update_configuration,
 )
 from .initial_load import initial_load
-from .location_history import (
-    LocationHistory,
-    LocationVisit,
-    load_location_history,
-    save_location_history,
-)
 from .navigation_history import (
     NavigationHistory,
     NavigationPosition,
@@ -31,8 +25,12 @@ from .navigation_history import (
 )
 from .state import (
     CommandLineHistory,
+    LocationHistory,
+    LocationVisit,
     load_command_history,
+    load_location_history,
     save_command_history,
+    save_location_history,
 )
 from .trust import trust_file
 from .trusted_mime_types import load_trusted_mime_types, save_trusted_mime_types
