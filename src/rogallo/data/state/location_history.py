@@ -14,9 +14,9 @@ from bagofstuff.history import RecencyHistory
 
 ##############################################################################
 # Local imports.
-from ..preflight import make_location
-from ..types import RogalloLocation
-from .locations import data_dir
+from ...preflight import make_location
+from ...types import RogalloLocation
+from ..locations import data_dir, state_dir
 
 
 ##############################################################################
@@ -80,13 +80,23 @@ class LocationHistory(RecencyHistory[LocationVisit]):
 
 
 ##############################################################################
+def _deprecated_location_history_file() -> Path:
+    """Get the path for the deprecated location history file.
+
+    Returns:
+        The path for the deprecated location history file.
+    """
+    return data_dir() / "location-history.json"
+
+
+##############################################################################
 def location_history_file() -> Path:
     """Get the path for the location history file.
 
     Returns:
         The path for the location history file.
     """
-    return data_dir() / "location-history.json"
+    return state_dir() / "location-history.json"
 
 
 ##############################################################################
@@ -109,6 +119,18 @@ def load_location_history() -> LocationHistory:
     Returns:
         The location history.
     """
+    # BEGIN DEPRECATED SUPPORT
+    if (deprecated_history := _deprecated_location_history_file()).exists():
+        save_location_history(
+            LocationHistory(
+                [
+                    LocationVisit.from_json(entry)
+                    for entry in loads(deprecated_history.read_text(encoding="utf-8"))
+                ]
+            )
+        )
+        deprecated_history.unlink()
+    # END DEPRECATED SUPPORT
     return LocationHistory(
         [
             LocationVisit.from_json(entry)

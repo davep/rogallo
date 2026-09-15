@@ -4,11 +4,6 @@
 # Local imports.
 from .bookmarks import Bookmark, Bookmarks, load_bookmarks, save_bookmarks
 from .client_certificates import client_certificates_directory
-from .command_history import (
-    CommandLineHistory,
-    load_command_history,
-    save_command_history,
-)
 from .configuration import (
     Configuration,
     load_aliases,
@@ -22,16 +17,17 @@ from .configuration import (
     update_configuration,
 )
 from .initial_load import initial_load
-from .location_history import (
+from .state import (
+    CommandLineHistory,
     LocationHistory,
     LocationVisit,
-    load_location_history,
-    save_location_history,
-)
-from .navigation_history import (
     NavigationHistory,
     NavigationPosition,
+    load_command_history,
+    load_location_history,
     load_navigation_history,
+    save_command_history,
+    save_location_history,
     save_naviagation_history,
 )
 from .trust import trust_file

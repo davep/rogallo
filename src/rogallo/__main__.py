@@ -10,7 +10,7 @@ from operator import attrgetter
 # Local imports.
 from . import __doc__, __version__
 from .data import initial_load
-from .data.locations import cache_dir, config_dir, data_dir
+from .data.locations import cache_dir, config_dir, data_dir, state_dir
 from .presentation import short_path
 from .rogallo import Rogallo
 
@@ -207,7 +207,7 @@ def main() -> None:
     """Main entry point for the rogallo application."""
     match (args := get_args()).command:
         case "d" | "dirs" | "directories":
-            for directory in (cache_dir(), config_dir(), data_dir()):
+            for directory in (cache_dir(), config_dir(), data_dir(), state_dir()):
                 print(short_path(directory))
         case "diag" | "diagnostics":
             show_dignoastics()

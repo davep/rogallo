@@ -11,12 +11,22 @@ from bagofstuff.history import RecencyHistory
 
 ##############################################################################
 # Local imports.
-from .locations import data_dir
+from ..locations import data_dir, state_dir
 
 
 ##############################################################################
 class CommandLineHistory(RecencyHistory[str]):
     """The history for the command line."""
+
+
+##############################################################################
+def _deprecated_command_history_file() -> Path:
+    """Get the path for the deprecated command history file.
+
+    Returns:
+        The path for the deprecated command history file.
+    """
+    return data_dir() / "command-history.json"
 
 
 ##############################################################################
@@ -26,7 +36,7 @@ def command_history_file() -> Path:
     Returns:
         The path for the command history file.
     """
-    return data_dir() / "command-history.json"
+    return state_dir() / "command-history.json"
 
 
 ##############################################################################
@@ -49,6 +59,13 @@ def load_command_history() -> CommandLineHistory:
     Returns:
         The loaded command history.
     """
+    # BEGIN DEPRECATED SUPPORT
+    if (deprecated_history := _deprecated_command_history_file()).exists():
+        save_command_history(
+            CommandLineHistory(loads(deprecated_history.read_text(encoding="utf-8")))
+        )
+        deprecated_history.unlink()
+    # END DEPRECATED SUPPORT
     return CommandLineHistory(
         loads(history.read_text(encoding="utf-8"))
         if (history := command_history_file()).exists()
