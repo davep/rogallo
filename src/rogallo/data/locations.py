@@ -6,7 +6,7 @@ from pathlib import Path
 
 ##############################################################################
 # XDG imports.
-from xdg_base_dirs import xdg_cache_home, xdg_config_home, xdg_data_home
+from xdg_base_dirs import xdg_cache_home, xdg_config_home, xdg_data_home, xdg_state_home
 
 
 ##############################################################################
@@ -63,6 +63,16 @@ def cache_dir() -> Path:
         The path to the cache directory for the application.
     """
     return _app_dir(xdg_cache_home())
+
+
+##############################################################################
+def state_dir() -> Path:
+    """The path to the state directory for the application.
+
+    Returns:
+        The path to the state directory for the application.
+    """
+    return _app_dir(xdg_state_home())
 
 
 ### locations.py ends here
