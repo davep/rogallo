@@ -20,6 +20,8 @@
 - **BREAKING CHANGE:** Gopher configuration is now loaded from `gopher.yaml`
   rather than `configuration.json`.
   ([#448](https://github.com/davep/rogallo/pull/448))
+- Command line history is now stored in the application's state directory.
+  ([#451](https://github.com/davep/rogallo/pull/451))
 
 ## v2.4.0
 
