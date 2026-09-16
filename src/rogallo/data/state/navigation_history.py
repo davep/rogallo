@@ -13,9 +13,9 @@ from bagofstuff.history import NavigableHistory
 
 ##############################################################################
 # Local imports.
-from ..preflight import make_location
-from ..types import RogalloLocation
-from .locations import data_dir
+from ...preflight import make_location
+from ...types import RogalloLocation
+from ..locations import data_dir, state_dir
 
 
 ##############################################################################
@@ -68,13 +68,23 @@ class NavigationHistory(NavigableHistory[NavigationPosition]):
 
 
 ##############################################################################
+def _deprecated_navigation_history_file() -> Path:
+    """Get the path for the deprecated navigation history file.
+
+    Returns:
+        The path for the deprecated navigation history file.
+    """
+    return data_dir() / "navigation-history.json"
+
+
+##############################################################################
 def navigation_history_file() -> Path:
     """Get the path for the navigation history file.
 
     Returns:
         The path for the navigation history file.
     """
-    return data_dir() / "navigation-history.json"
+    return state_dir() / "navigation-history.json"
 
 
 ##############################################################################
@@ -97,6 +107,18 @@ def load_navigation_history() -> NavigationHistory:
     Returns:
         The navigation history.
     """
+    # BEGIN DEPRECATED SUPPORT
+    if (deprecated_history := _deprecated_navigation_history_file()).exists():
+        save_naviagation_history(
+            NavigationHistory(
+                [
+                    NavigationPosition.from_json(entry)
+                    for entry in loads(deprecated_history.read_text(encoding="utf-8"))
+                ]
+            )
+        )
+        deprecated_history.unlink()
+    # END DEPRECATED SUPPORT
     return NavigationHistory(
         [
             NavigationPosition.from_json(entry)
