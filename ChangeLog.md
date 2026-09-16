@@ -26,6 +26,9 @@
   ([#452](https://github.com/davep/rogallo/pull/452))
 - Navigation history is now stored in the application's state directory.
   ([#452](https://github.com/davep/rogallo/pull/452))
+- **BREAKING CHANGE: Moved `side_panel_visible`, `side_panel_on_right` and
+  `side_panel_chosen_tab` out of configuration and turned them into UI state
+  properties. ([#453](https://github.com/davep/rogallo/pull/453))
 
 ## v2.4.0
 

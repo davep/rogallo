@@ -26,9 +26,11 @@ from .state import (
     load_command_history,
     load_location_history,
     load_navigation_history,
+    load_ui_state,
     save_command_history,
     save_location_history,
     save_naviagation_history,
+    update_ui_state,
 )
 from .trust import trust_file
 from .trusted_mime_types import load_trusted_mime_types, save_trusted_mime_types
@@ -56,6 +58,7 @@ __all__ = [
     "load_toolbar",
     "load_trusted_mime_types",
     "load_trusted_schemes",
+    "load_ui_state",
     "LocationHistory",
     "LocationVisit",
     "NavigationHistory",
@@ -69,6 +72,7 @@ __all__ = [
     "save_trusted_schemes",
     "trust_file",
     "update_configuration",
+    "update_ui_state",
 ]
 
 ### __init__.py ends here

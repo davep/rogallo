@@ -28,8 +28,8 @@ from ...data import (
     Bookmarks,
     LocationHistory,
     NavigationHistory,
-    load_configuration,
-    update_configuration,
+    load_ui_state,
+    update_ui_state,
 )
 from ...document import Document
 from .bookmarks import BookmarksViewer
@@ -132,15 +132,15 @@ class SidePanel(Container):
     def on_mount(self) -> None:
         """Called when the side-panel is mounted."""
         try:
-            self._tabs.active = load_configuration().side_panel_chosen_tab
+            self._tabs.active = load_ui_state().side_panel_chosen_tab
         except Tabs.TabError:
             pass
 
     @on(TabbedContent.TabActivated)
     def _remember_chosen_tab(self) -> None:
         """Remember the active tab in the side-panel."""
-        with update_configuration() as config:
-            config.side_panel_chosen_tab = self._tabs.active
+        with update_ui_state() as state:
+            state.side_panel_chosen_tab = self._tabs.active
 
     def focus(self, scroll_visible: bool = True) -> Self:
         """Focus the first tab in the side-panel.

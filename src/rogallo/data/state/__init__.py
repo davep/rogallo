@@ -23,6 +23,7 @@ from .navigation_history import (
     load_navigation_history,
     save_naviagation_history,
 )
+from .ui import load_ui_state, update_ui_state
 
 ##############################################################################
 # Exports.
@@ -31,6 +32,7 @@ __all__ = [
     "load_command_history",
     "load_location_history",
     "load_navigation_history",
+    "load_ui_state",
     "LocationHistory",
     "LocationVisit",
     "NavigationHistory",
@@ -38,6 +40,7 @@ __all__ = [
     "save_command_history",
     "save_location_history",
     "save_naviagation_history",
+    "update_ui_state",
 ]
 
 ### __init__.py ends here

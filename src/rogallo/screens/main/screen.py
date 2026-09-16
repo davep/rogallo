@@ -96,11 +96,13 @@ from ...data import (
     load_toolbar,
     load_trusted_mime_types,
     load_trusted_schemes,
+    load_ui_state,
     save_bookmarks,
     save_command_history,
     save_location_history,
     save_naviagation_history,
     update_configuration,
+    update_ui_state,
 )
 from ...input_content import InputContent
 from ...messages import (
@@ -314,7 +316,7 @@ class Main(EnhancedScreen[None]):
 
     def _watch__side_panel_visible(self) -> None:
         """Watch for changes to the side panel visibility."""
-        with update_configuration() as config:
+        with update_ui_state() as config:
             config.side_panel_visible = self._side_panel_visible
 
     def compose(self) -> ComposeResult:
@@ -359,8 +361,9 @@ class Main(EnhancedScreen[None]):
             await self._clients.gemini.client_cert_store.list_certificates()
         )
         config = load_configuration()
-        self._side_panel_visible = config.side_panel_visible
-        self._side_panel.dock_right = config.side_panel_on_right
+        ui_state = load_ui_state()
+        self._side_panel_visible = ui_state.side_panel_visible
+        self._side_panel.dock_right = ui_state.side_panel_on_right
         self._command_line.dock_top = config.command_line_on_top
         if self._clients.gemini.trust_store:
             self._command_line.known_hosts = [
