@@ -120,39 +120,49 @@ class ClientCertificateManager(EnhancedOptionList):
             "new",
             "New",
             tooltip="Add a new certificate",
+            id="client_certificates.new",
         ),
         HelpfulBinding(
-            "d", "delete", "Delete", tooltip="Delete the selected certificate"
+            "d",
+            "delete",
+            "Delete",
+            tooltip="Delete the selected certificate",
+            id="client_certificates.delete",
         ),
         HelpfulBinding(
             "a",
             "add_association",
             "Associate",
             tooltip="Add an association to the selected certificate",
+            id="client_certificates.add_association",
         ),
         HelpfulBinding(
             "r",
             "remove_association",
             "Disassociate",
             tooltip="Remove an association from the selected certificate",
+            id="client_certificates.remove_association",
         ),
         HelpfulBinding(
             "v",
             "view",
             "View",
             tooltip="View the selected certificate",
+            id="client_certificates.view",
         ),
         HelpfulBinding(
             "x",
             "export",
             "Export",
             tooltip="Export the selected certificate",
+            id="client_certificates.export",
         ),
         HelpfulBinding(
             "i",
             "import",
             "Import",
             tooltip="Import a certificate",
+            id="client_certificates.import",
         ),
     ]
 
