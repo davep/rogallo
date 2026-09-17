@@ -65,9 +65,6 @@ class Configuration:
     maximum_redirects: int = 5
     """The maximum number of redirects to follow for network requests."""
 
-    cosy_link_jumps: bool = False
-    """Should the numeric labels be displayed in a cosy way?"""
-
     maximum_document_width: int = 0
     """The maximum width of a document, in characters. A value of 0 means no limit."""
 

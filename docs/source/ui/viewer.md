@@ -54,7 +54,7 @@ To jump to that link, simply type its number.
 Linking jumping and the numbers that let you jump are toggled with the
 <kbd>J</kbd> (that's <kbd>Shift</kbd>+<kbd>J</kbd>) key.
 
-## Link stripes
+### Link stripes
 
 Placing the jump number labels to the right helps keep a readable flow of
 text, but can possibly make it trickier to know which label matches which
@@ -68,6 +68,18 @@ background colour of links to help make them stand out and connect with
 their labels. Press <kbd>s</kbd> to toggle the stripes.
 
 ```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with stripes" lines=30 columns=70 press="s"}
+```
+
+### Cosy link jumps
+
+By default the numeric labels for the jumps are positioned to the right of
+the display. This is done to keep a readable flow of text. While [link
+stripes](#link-stripes) are provided to make it easier to know which label
+goes with which link, some people might prefer the labels to really cosy up
+with the links. The position can be toggled with
+<kbd>Ctrl</kbd>+<kbd>j</kbd>.
+
+```{.textual path="docs/screenshots/stripes_screenshot.py" title="Cosy link number labels" lines=30 columns=70 press="super+f8"}
 ```
 
 ## Emoji removal

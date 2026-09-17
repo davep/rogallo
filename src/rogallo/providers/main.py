@@ -39,7 +39,6 @@ from ..commands import (
     SetHome,
     SetHomeToCurrentLocation,
     ToggleANSIEscapeSequenceHandling,
-    ToggleCosyLinkNumbers,
     ToggleSidePanel,
     ToggleView,
     ViewChangeLog,
@@ -85,7 +84,6 @@ class MainCommands(CommandsProvider):
         yield SetHome()
         yield from self.maybe(SetHomeToCurrentLocation)
         yield ToggleANSIEscapeSequenceHandling()
-        yield ToggleCosyLinkNumbers()
         yield ToggleSidePanel()
         yield from self.maybe(ToggleView)
         yield ViewChangeLog()

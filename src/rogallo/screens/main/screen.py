@@ -72,7 +72,6 @@ from ...commands import (
     SetHome,
     SetHomeToCurrentLocation,
     ToggleANSIEscapeSequenceHandling,
-    ToggleCosyLinkNumbers,
     ToggleSidePanel,
     ToggleView,
     ViewChangeLog,
@@ -241,7 +240,6 @@ class Main(EnhancedScreen[None]):
         SetHome,
         SetHomeToCurrentLocation,
         ToggleANSIEscapeSequenceHandling,
-        ToggleCosyLinkNumbers,
         ToggleSidePanel,
         ToggleView,
         ViewChangeLog,
@@ -364,7 +362,6 @@ class Main(EnhancedScreen[None]):
             ]
             HistorySearchCommands.known_hosts = self._command_line.known_hosts
         self._viewer.handle_ansi_escape_sequences = config.handle_ansi_escape_sequences
-        self._viewer.cosy_link_numbers = config.cosy_link_jumps
         if self._arguments.command == "open" and (
             location := getattr(self._arguments, "location", None)
         ):
@@ -860,12 +857,6 @@ class Main(EnhancedScreen[None]):
         ):
             self._cache.clear()
             self.notify("All cached content has been cleared.", title="Cache")
-
-    def action_toggle_cosy_link_numbers_command(self) -> None:
-        """Toggle cosy link numbers."""
-        self._viewer.cosy_link_numbers = not self._viewer.cosy_link_numbers
-        with update_configuration() as config:
-            config.cosy_link_jumps = self._viewer.cosy_link_numbers
 
     def action_go_to_parent_command(self) -> None:
         """Go to the parent of the current document's location."""

@@ -175,14 +175,17 @@ class Viewer(Vertical, can_focus=False):
             "toggle_link_numbers",
             tooltip="Toggle whether links are given numeric labels for jumping to them",
         ),
+        HelpfulBinding(
+            "ctrl+j",
+            "toggle_cosy_link_numbers",
+            tooltip="Toggle whether the numeric labels are displayed on the left or right of the link",
+        ),
     ]
 
     document: var[Document] = var(Document(), toggle_class="--is-visiting")
     """The details of the document to show in the viewer."""
     view_source: var[bool] = var(False)
     """Whether the viewer is showing the source of the document or not."""
-    cosy_link_numbers: var[bool] = var(False)
-    """Whether the viewer is showing link numbers in a cosy way or not."""
     location_history: var[LocationHistory] = var(LocationHistory)
     """The location history for the viewer."""
     handle_ansi_escape_sequences: var[bool] = var(True)
@@ -207,6 +210,8 @@ class Viewer(Vertical, can_focus=False):
     """Whether the viewer is showing links with stripes or not."""
     _with_link_numbers: var[bool] = var(False)
     """Whether the viewer is showing link numbers or not."""
+    _cosy_link_numbers: var[bool] = var(False)
+    """Whether the viewer is showing link numbers in a cosy way or not."""
     _needle: var[str | None] = var(None)
     """The current search needle."""
     _searchable: var[list[Searchable]] = var(list)
@@ -233,6 +238,7 @@ class Viewer(Vertical, can_focus=False):
         self.set_reactive(Viewer._strip_emoji, ui_state.strip_emoji)
         self._stripe_links = ui_state.stripe_links
         self._with_link_numbers = ui_state.with_link_jumps
+        self._cosy_link_numbers = ui_state.cosy_link_jumps
 
     @staticmethod
     def _consolidate(lines: Iterable[Line]) -> Iterator[Line]:
@@ -498,7 +504,7 @@ class Viewer(Vertical, can_focus=False):
                 for jump_number, link in enumerate(links):
                     link.data_bind(
                         with_link_numbers=Viewer._with_link_numbers,
-                        cosy_link_numbers=Viewer.cosy_link_numbers,
+                        cosy_link_numbers=Viewer._cosy_link_numbers,
                     )
                     link.normalise_uri(self.document.location)
                     link.visited = link.normalised_uri in visited_links
@@ -708,6 +714,12 @@ class Viewer(Vertical, can_focus=False):
         self._with_link_numbers = not self._with_link_numbers
         with update_ui_state() as state:
             state.with_link_jumps = self._with_link_numbers
+
+    def action_toggle_cosy_link_numbers(self) -> None:
+        """Toggle whether the numeric labels are displayed on the left or right of the link."""
+        self._cosy_link_numbers = not self._cosy_link_numbers
+        with update_ui_state() as state:
+            state.cosy_link_jumps = self._cosy_link_numbers
 
 
 ### widget.py ends here
