@@ -24,9 +24,11 @@ from rogallo.data import (
     save_command_history,
     save_location_history,
     save_naviagation_history,
+    save_ui_state,
     update_configuration,
 )
 from rogallo.data.configuration.themes import themes_dir
+from rogallo.data.state.ui import UIState
 from rogallo.rogallo import Rogallo
 
 ##############################################################################
@@ -47,6 +49,7 @@ docs_build_dir = docs_dir / "build"
 os.environ["XDG_CACHE_HOME"] = str(docs_build_dir / "cache")
 os.environ["XDG_CONFIG_HOME"] = str(docs_build_dir / "config")
 os.environ["XDG_DATA_HOME"] = str(docs_build_dir / "data")
+os.environ["XDG_STATE_HOME"] = str(docs_build_dir / "state")
 
 ##############################################################################
 # Create some bookmarks for the screenshots.
@@ -121,6 +124,7 @@ def make_app(
 ) -> Rogallo:
     save_naviagation_history(NavigationHistory([]))
     save_command_history(CommandLineHistory([]))
+    save_ui_state(UIState())
     if with_fake_history:
         fake_history()
     else:
