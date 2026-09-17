@@ -141,44 +141,55 @@ class Viewer(Vertical, can_focus=False):
             "left, shift+up, L, h",
             "previous_link",
             tooltip="Move backwards through each of the links",
+            id="viewer.previous_link",
         ),
         HelpfulBinding(
             "right, shift+down, l, n",
             "next_link",
             tooltip="Move forward through each of the links",
+            id="viewer.next_link",
         ),
         HelpfulBinding(
-            "ctrl+f", "start_search", tooltip="Start a search for text in the document"
+            "ctrl+f",
+            "start_search",
+            tooltip="Start a search for text in the document",
+            id="viewer.start_search",
         ),
         HelpfulBinding(
             "ctrl+shift+f",
             "cancel_search",
             tooltip="Cancel the current search in the document",
+            id="viewer.cancel_search",
         ),
         HelpfulBinding(
             "ctrl+n",
             "search_next",
             tooltip="Look for the next search hit in the document",
+            id="viewer.search_next",
         ),
         HelpfulBinding(
             "ctrl+e",
             "toggle_emoji",
             tooltip="Toggle whether emoji are stripped from text content",
+            id="viewer.toggle_emoji",
         ),
         HelpfulBinding(
             "s",
             "toggle_stripe_links",
             tooltip="Toggle whether links are given alternating backgrounds",
+            id="viewer.toggle_stripe_links",
         ),
         HelpfulBinding(
             "J",
             "toggle_link_numbers",
             tooltip="Toggle whether links are given numeric labels for jumping to them",
+            id="viewer.toggle_link_numbers",
         ),
         HelpfulBinding(
             "ctrl+j",
             "toggle_cosy_link_numbers",
             tooltip="Toggle whether the numeric labels are displayed on the left or right of the link",
+            id="viewer.toggle_cosy_link_numbers",
         ),
     ]
 
