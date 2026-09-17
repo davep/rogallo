@@ -51,6 +51,23 @@ To jump to that link, simply type its number.
 ```{.textual path="docs/screenshots/stripes_screenshot.py" title="A highlighted link after typing its number" lines=30 columns=70 press="5"}
 ```
 
+## Link stripes
+
+Rogallo provides a method of quick-jumping to links that is based around
+numeric labels that appear on the right in the viewer area. Placing the
+labels to the right helps keep a readable flow of text, but can possibly
+make it trickier to know which label matches which link.
+
+```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links and labels with no stripes" lines=30 columns=70}
+```
+
+To help with this you can turn on "link stripes", which alternates the
+background colour of links to help make them stand out and connect with
+their labels. Press <kbd>s</kbd> to toggle the stripes.
+
+```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with stripes" lines=30 columns=70 press="s"}
+```
+
 ## Emoji removal
 
 Some people find the use of emoji in Gemtext off-putting. With this in mind,

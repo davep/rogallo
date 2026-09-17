@@ -254,33 +254,6 @@ If this feels too cluttered it can be turned off with the
 "show_preformat_tooltips": true
 ```
 
-## Striped links
-
-Rogallo provides a method of quick-jumping to links that is based around
-numeric labels that appear on the right in the viewer area. Placing the
-labels to the right helps keep a readable flow of text, but can possibly
-make it trickier to know which label matches which link.
-
-```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links and labels with no stripes" lines=30 columns=70}
-```
-
-To help with this you can turn on "striped links", which alternates the
-background colour of links to help make them stand out and connect with
-their labels. This is toggled using the `Stripe Links`
-([`StripeLinks`](bindings.md#bindable-commands) command, bound to <kbd>F8</kbd> by
-default).
-
-```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with stripes" lines=30 columns=70 press="f8"}
-```
-
-The setting itself is saved in the configuration file as the `stripe_links`
-configuration setting. It accepts `true` or `false` as valid values. It will
-be `false` (no stripes) by default:
-
-```json
-"stripe_links": false
-```
-
 ## Theme
 
 Rogallo has a number of themes available. You can select a theme using the

@@ -165,6 +165,11 @@ class Viewer(Vertical, can_focus=False):
             "toggle_emoji",
             tooltip="Toggle whether emoji are stripped from text content",
         ),
+        HelpfulBinding(
+            "s",
+            "toggle_stripe_links",
+            tooltip="Toggle whether links are given alternating backgrounds",
+        ),
     ]
 
     document: var[Document] = var(Document(), toggle_class="--is-visiting")
@@ -175,8 +180,6 @@ class Viewer(Vertical, can_focus=False):
     """Whether the viewer is showing link numbers or not."""
     cosy_link_numbers: var[bool] = var(False)
     """Whether the viewer is showing link numbers in a cosy way or not."""
-    stripe_links: var[bool] = var(False, toggle_class="--stripe-links")
-    """Whether the viewer is showing links with stripes or not."""
     location_history: var[LocationHistory] = var(LocationHistory)
     """The location history for the viewer."""
     handle_ansi_escape_sequences: var[bool] = var(True)
@@ -197,6 +200,8 @@ class Viewer(Vertical, can_focus=False):
     """Keeps track of the jump numbers and their corresponding links."""
     _strip_emoji: var[bool] = var(False)
     """Whether the viewer is stripping emoji or not."""
+    _stripe_links: var[bool] = var(False, toggle_class="--stripe-links")
+    """Whether the viewer is showing links with stripes or not."""
     _needle: var[str | None] = var(None)
     """The current search needle."""
     _searchable: var[list[Searchable]] = var(list)
@@ -219,7 +224,9 @@ class Viewer(Vertical, can_focus=False):
 
     def on_mount(self) -> None:
         """Configure the widget once mounted."""
-        self.set_reactive(Viewer._strip_emoji, load_ui_state().strip_emoji)
+        ui_state = load_ui_state()
+        self.set_reactive(Viewer._strip_emoji, ui_state.strip_emoji)
+        self._stripe_links = ui_state.stripe_links
 
     @staticmethod
     def _consolidate(lines: Iterable[Line]) -> Iterator[Line]:
@@ -680,6 +687,12 @@ class Viewer(Vertical, can_focus=False):
     def action_toggle_emoji(self) -> None:
         """Toggle whether emoji are stripped from text content."""
         self._strip_emoji = not self._strip_emoji
+
+    def action_toggle_stripe_links(self) -> None:
+        """Toggle whether links are given alternating backgrounds."""
+        self._stripe_links = not self._stripe_links
+        with update_ui_state() as state:
+            state.stripe_links = self._stripe_links
 
 
 ### widget.py ends here

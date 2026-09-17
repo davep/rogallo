@@ -32,6 +32,9 @@ class UIState:
     strip_emoji: bool = False
     """Should emoji be stripped from text content?"""
 
+    stripe_links: bool = False
+    """Should links be given alternating backgrounds to help them stand out?"""
+
 
 ##############################################################################
 def ui_state_file() -> Path:
