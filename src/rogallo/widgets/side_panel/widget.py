@@ -94,9 +94,6 @@ class SidePanel(Container):
     ### Useful keys
     """
 
-    dock_right: var[bool] = var(False, toggle_class="--dock-right")
-    """Should the panel dock to the right?"""
-
     location_history: var[LocationHistory] = var(LocationHistory)
     """The history of locations visited."""
     navigation_history: var[NavigationHistory] = var(NavigationHistory)
@@ -107,6 +104,9 @@ class SidePanel(Container):
     """The client certificates for the application."""
     current_document: var[Document] = var(Document)
     """The current document being viewed."""
+
+    _dock_right: var[bool] = var(False, toggle_class="--dock-right")
+    """Should the panel dock to the right?"""
 
     _tabs = query_one(TabbedContent)
     """The tabbed content widget."""
@@ -141,7 +141,7 @@ class SidePanel(Container):
 
     def on_mount(self) -> None:
         """Called when the side-panel is mounted."""
-        self.dock_right = load_ui_state().side_panel_on_right
+        self._dock_right = load_ui_state().side_panel_on_right
         try:
             self._tabs.active = load_ui_state().side_panel_chosen_tab
         except Tabs.TabError:
@@ -198,7 +198,7 @@ class SidePanel(Container):
         Args:
             dock: Whether to dock the side panel to the right.
         """
-        self.dock_right = dock
+        self._dock_right = dock
         with update_ui_state() as state:
             state.side_panel_on_right = dock
 
