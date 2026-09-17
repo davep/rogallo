@@ -35,6 +35,9 @@
 - **BREAKING CHANGE:** Removed the `StripeLinks` command. This is now
   controlled by a key binding specific to the viewer widget.
   ([#453](https://github.com/davep/rogallo/pull/453))
+- **BREAKING CHANGE:** Removed the `ToggleLinkNumbers` command. This is now
+  controlled by a key binding specific to the viewer widget.
+  ([#453](https://github.com/davep/rogallo/pull/453))
 
 ## v2.4.0
 

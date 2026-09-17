@@ -136,38 +136,6 @@ configuration file:
 "home_page": "gemini://geminiprotocol.net/"
 ```
 
-## Link jumps
-
-In Rogallo, you can navigate to links using <kbd>Tab</kbd> and
-<kbd>Shift</kbd>+<kbd>Tab</kbd> (the method of navigating between most UI
-elements in the application), and you can also use the mouse. Sometimes,
-though, if there's lots of links, it's handy to be able to jump straight to
-a link. To this end Rogallo provides numeric labels:
-
-```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with labels" lines=30 columns=70}
-```
-
-When the viewer is focused, if you type the number of a link, that link will
-be highlighted:
-
-```{.textual path="docs/screenshots/stripes_screenshot.py" title="A highlighted link after typing its number" lines=30 columns=70 press="5"}
-```
-
-If anyone finds this distracting, you can turn the labels off with the
-`Toggle Link Numbers` ([`ToggleLinkNumbers`](bindings.md#bindable-commands), bound to
-<kbd>Shift</kbd>+<kbd>F8</kbd> by default) command.
-
-```{.textual path="docs/screenshots/stripes_screenshot.py" title="Link number jumps turned off" lines=30 columns=70 press="shift+f8"}
-```
-
-The setting itself is saved in the configuration file as the
-`with_link_jumps` configuration setting. It accepts `true` or `false` as
-valid values. It will be `true` (with labels) by default.
-
-```json
-"with_link_jumps": true
-```
-
 ### Cosy link jumps
 
 By default the numeric labels for the jumps are positioned to the right of

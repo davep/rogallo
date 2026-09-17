@@ -27,7 +27,6 @@ from .ui import (
     JumpToSidePanel,
     ToggleANSIEscapeSequenceHandling,
     ToggleCosyLinkNumbers,
-    ToggleLinkNumbers,
     ToggleSidePanel,
 )
 
@@ -61,7 +60,6 @@ __all__ = [
     "SetHomeToCurrentLocation",
     "ToggleANSIEscapeSequenceHandling",
     "ToggleCosyLinkNumbers",
-    "ToggleLinkNumbers",
     "ToggleSidePanel",
     "ToggleView",
     "ViewChangeLog",

@@ -51,12 +51,14 @@ To jump to that link, simply type its number.
 ```{.textual path="docs/screenshots/stripes_screenshot.py" title="A highlighted link after typing its number" lines=30 columns=70 press="5"}
 ```
 
+Linking jumping and the numbers that let you jump are toggled with the
+<kbd>J</kbd> (that's <kbd>Shift</kbd>+<kbd>J</kbd>) key.
+
 ## Link stripes
 
-Rogallo provides a method of quick-jumping to links that is based around
-numeric labels that appear on the right in the viewer area. Placing the
-labels to the right helps keep a readable flow of text, but can possibly
-make it trickier to know which label matches which link.
+Placing the jump number labels to the right helps keep a readable flow of
+text, but can possibly make it trickier to know which label matches which
+link.
 
 ```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links and labels with no stripes" lines=30 columns=70}
 ```

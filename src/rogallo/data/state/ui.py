@@ -35,6 +35,9 @@ class UIState:
     stripe_links: bool = False
     """Should links be given alternating backgrounds to help them stand out?"""
 
+    with_link_jumps: bool = True
+    """Should the application support jumping to links via numeric labels?"""
+
 
 ##############################################################################
 def ui_state_file() -> Path:

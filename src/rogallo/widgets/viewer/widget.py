@@ -170,14 +170,17 @@ class Viewer(Vertical, can_focus=False):
             "toggle_stripe_links",
             tooltip="Toggle whether links are given alternating backgrounds",
         ),
+        HelpfulBinding(
+            "J",
+            "toggle_link_numbers",
+            tooltip="Toggle whether links are given numeric labels for jumping to them",
+        ),
     ]
 
     document: var[Document] = var(Document(), toggle_class="--is-visiting")
     """The details of the document to show in the viewer."""
     view_source: var[bool] = var(False)
     """Whether the viewer is showing the source of the document or not."""
-    with_link_numbers: var[bool] = var(False)
-    """Whether the viewer is showing link numbers or not."""
     cosy_link_numbers: var[bool] = var(False)
     """Whether the viewer is showing link numbers in a cosy way or not."""
     location_history: var[LocationHistory] = var(LocationHistory)
@@ -202,6 +205,8 @@ class Viewer(Vertical, can_focus=False):
     """Whether the viewer is stripping emoji or not."""
     _stripe_links: var[bool] = var(False, toggle_class="--stripe-links")
     """Whether the viewer is showing links with stripes or not."""
+    _with_link_numbers: var[bool] = var(False)
+    """Whether the viewer is showing link numbers or not."""
     _needle: var[str | None] = var(None)
     """The current search needle."""
     _searchable: var[list[Searchable]] = var(list)
@@ -227,6 +232,7 @@ class Viewer(Vertical, can_focus=False):
         ui_state = load_ui_state()
         self.set_reactive(Viewer._strip_emoji, ui_state.strip_emoji)
         self._stripe_links = ui_state.stripe_links
+        self._with_link_numbers = ui_state.with_link_jumps
 
     @staticmethod
     def _consolidate(lines: Iterable[Line]) -> Iterator[Line]:
@@ -490,7 +496,10 @@ class Viewer(Vertical, can_focus=False):
                     )
                 }
                 for jump_number, link in enumerate(links):
-                    link.data_bind(Viewer.with_link_numbers, Viewer.cosy_link_numbers)
+                    link.data_bind(
+                        with_link_numbers=Viewer._with_link_numbers,
+                        cosy_link_numbers=Viewer.cosy_link_numbers,
+                    )
                     link.normalise_uri(self.document.location)
                     link.visited = link.normalised_uri in visited_links
                     link.jump_number = jump_number + 1
@@ -515,7 +524,7 @@ class Viewer(Vertical, can_focus=False):
         """Watch for changes to the view_source property and update the viewer."""
         self.mutate_reactive(Viewer.document)
 
-    def _watch_with_link_numbers(self) -> None:
+    def _watch__with_link_numbers(self) -> None:
         """Watch for changes to the with_link_numbers property."""
         self.jump = None
 
@@ -593,7 +602,7 @@ class Viewer(Vertical, can_focus=False):
         Args:
             event: The key event.
         """
-        if not self.with_link_numbers:
+        if not self._with_link_numbers:
             return
         if event.key.isdigit():
             event.stop()
@@ -693,6 +702,12 @@ class Viewer(Vertical, can_focus=False):
         self._stripe_links = not self._stripe_links
         with update_ui_state() as state:
             state.stripe_links = self._stripe_links
+
+    def action_toggle_link_numbers(self) -> None:
+        """Toggle whether links are given numeric labels for jumping to them."""
+        self._with_link_numbers = not self._with_link_numbers
+        with update_ui_state() as state:
+            state.with_link_jumps = self._with_link_numbers
 
 
 ### widget.py ends here

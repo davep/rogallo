@@ -65,9 +65,6 @@ class Configuration:
     maximum_redirects: int = 5
     """The maximum number of redirects to follow for network requests."""
 
-    with_link_jumps: bool = True
-    """Should the application support jumping to links via numeric labels?"""
-
     cosy_link_jumps: bool = False
     """Should the numeric labels be displayed in a cosy way?"""
 

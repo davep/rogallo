@@ -73,7 +73,6 @@ from ...commands import (
     SetHomeToCurrentLocation,
     ToggleANSIEscapeSequenceHandling,
     ToggleCosyLinkNumbers,
-    ToggleLinkNumbers,
     ToggleSidePanel,
     ToggleView,
     ViewChangeLog,
@@ -243,7 +242,6 @@ class Main(EnhancedScreen[None]):
         SetHomeToCurrentLocation,
         ToggleANSIEscapeSequenceHandling,
         ToggleCosyLinkNumbers,
-        ToggleLinkNumbers,
         ToggleSidePanel,
         ToggleView,
         ViewChangeLog,
@@ -365,7 +363,6 @@ class Main(EnhancedScreen[None]):
                 for host, port in await self._clients.gemini.trust_store.get_hosts()
             ]
             HistorySearchCommands.known_hosts = self._command_line.known_hosts
-        self._viewer.with_link_numbers = config.with_link_jumps
         self._viewer.handle_ansi_escape_sequences = config.handle_ansi_escape_sequences
         self._viewer.cosy_link_numbers = config.cosy_link_jumps
         if self._arguments.command == "open" and (
@@ -863,12 +860,6 @@ class Main(EnhancedScreen[None]):
         ):
             self._cache.clear()
             self.notify("All cached content has been cleared.", title="Cache")
-
-    def action_toggle_link_numbers_command(self) -> None:
-        """Toggle link numbers."""
-        self._viewer.with_link_numbers = not self._viewer.with_link_numbers
-        with update_configuration() as config:
-            config.with_link_jumps = self._viewer.with_link_numbers
 
     def action_toggle_cosy_link_numbers_command(self) -> None:
         """Toggle cosy link numbers."""
