@@ -67,17 +67,6 @@ class LocationVisit:
 class LocationHistory(RecencyHistory[LocationVisit]):
     """The location history."""
 
-    def add(self, item: LocationVisit) -> Self:
-        """Add a visit to the history.
-
-        Args:
-            item: The visit to add.
-
-        Returns:
-            Self.
-        """
-        return super().add(item)
-
 
 ##############################################################################
 def _deprecated_location_history_file() -> Path:
