@@ -32,18 +32,6 @@ class Configuration:
     handle_ansi_escape_sequences: bool = True
     """Should ANSI escape sequences be handled in text content?"""
 
-    strip_emoji: bool = False
-    """Should emoji be stripped from text content?"""
-
-    side_panel_visible: bool = False
-    """Should the sidepanel be visible?"""
-
-    side_panel_on_right: bool = False
-    """Should the sidepanel be on the right?"""
-
-    side_panel_chosen_tab: str = "bookmarks"
-    """The tab that should be chosen in the sidepanel."""
-
     show_link_tooltips: bool = True
     """Should tooltips be shown for links?"""
 
@@ -76,15 +64,6 @@ class Configuration:
 
     maximum_redirects: int = 5
     """The maximum number of redirects to follow for network requests."""
-
-    stripe_links: bool = False
-    """Should links be given alternating backgrounds to help them stand out?"""
-
-    with_link_jumps: bool = True
-    """Should the application support jumping to links via numeric labels?"""
-
-    cosy_link_jumps: bool = False
-    """Should the numeric labels be displayed in a cosy way?"""
 
     maximum_document_width: int = 0
     """The maximum width of a document, in characters. A value of 0 means no limit."""

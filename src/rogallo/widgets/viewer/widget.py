@@ -75,7 +75,13 @@ from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
-from ...data import LocationHistory, NavigationPosition, load_configuration
+from ...data import (
+    LocationHistory,
+    NavigationPosition,
+    load_configuration,
+    load_ui_state,
+    update_ui_state,
+)
 from ...document import Document
 from ...types import GEMINI_MIME_TYPE, SUPPORTED_PROTOCOLS
 from .document_view import DocumentView
@@ -126,7 +132,8 @@ class Viewer(Vertical, can_focus=False):
     """
 
     HELP = """
-    You can also navigate links and search the document using the following keys:
+    You can also navigate links, search the document, and modify its
+    presentation using the following keys:
     """
 
     BINDINGS = [
@@ -153,24 +160,36 @@ class Viewer(Vertical, can_focus=False):
             "search_next",
             tooltip="Look for the next search hit in the document",
         ),
+        HelpfulBinding(
+            "ctrl+e",
+            "toggle_emoji",
+            tooltip="Toggle whether emoji are stripped from text content",
+        ),
+        HelpfulBinding(
+            "s",
+            "toggle_stripe_links",
+            tooltip="Toggle whether links are given alternating backgrounds",
+        ),
+        HelpfulBinding(
+            "J",
+            "toggle_link_numbers",
+            tooltip="Toggle whether links are given numeric labels for jumping to them",
+        ),
+        HelpfulBinding(
+            "ctrl+j",
+            "toggle_cosy_link_numbers",
+            tooltip="Toggle whether the numeric labels are displayed on the left or right of the link",
+        ),
     ]
 
     document: var[Document] = var(Document(), toggle_class="--is-visiting")
     """The details of the document to show in the viewer."""
     view_source: var[bool] = var(False)
     """Whether the viewer is showing the source of the document or not."""
-    with_link_numbers: var[bool] = var(False)
-    """Whether the viewer is showing link numbers or not."""
-    cosy_link_numbers: var[bool] = var(False)
-    """Whether the viewer is showing link numbers in a cosy way or not."""
-    stripe_links: var[bool] = var(False, toggle_class="--stripe-links")
-    """Whether the viewer is showing links with stripes or not."""
     location_history: var[LocationHistory] = var(LocationHistory)
     """The location history for the viewer."""
     handle_ansi_escape_sequences: var[bool] = var(True)
     """Whether the viewer is handling ANSI escape sequences or not."""
-    strip_emoji: var[bool] = var(False)
-    """Whether the viewer is stripping emoji or not."""
 
     _title = query_one(ViewerTitle)
     """The title widget."""
@@ -185,6 +204,14 @@ class Viewer(Vertical, can_focus=False):
     """A timer to reset the jump progress after a short delay."""
     _jump_map: var[dict[int, GemtextLink]] = var(dict)
     """Keeps track of the jump numbers and their corresponding links."""
+    _strip_emoji: var[bool] = var(False)
+    """Whether the viewer is stripping emoji or not."""
+    _stripe_links: var[bool] = var(False, toggle_class="--stripe-links")
+    """Whether the viewer is showing links with stripes or not."""
+    _with_link_numbers: var[bool] = var(False)
+    """Whether the viewer is showing link numbers or not."""
+    _cosy_link_numbers: var[bool] = var(False)
+    """Whether the viewer is showing link numbers in a cosy way or not."""
     _needle: var[str | None] = var(None)
     """The current search needle."""
     _searchable: var[list[Searchable]] = var(list)
@@ -204,6 +231,14 @@ class Viewer(Vertical, can_focus=False):
         else:
             yield document
         yield ViewerStatus()
+
+    def on_mount(self) -> None:
+        """Configure the widget once mounted."""
+        ui_state = load_ui_state()
+        self.set_reactive(Viewer._strip_emoji, ui_state.strip_emoji)
+        self._stripe_links = ui_state.stripe_links
+        self._with_link_numbers = ui_state.with_link_jumps
+        self._cosy_link_numbers = ui_state.cosy_link_jumps
 
     @staticmethod
     def _consolidate(lines: Iterable[Line]) -> Iterator[Line]:
@@ -467,7 +502,10 @@ class Viewer(Vertical, can_focus=False):
                     )
                 }
                 for jump_number, link in enumerate(links):
-                    link.data_bind(Viewer.with_link_numbers, Viewer.cosy_link_numbers)
+                    link.data_bind(
+                        with_link_numbers=Viewer._with_link_numbers,
+                        cosy_link_numbers=Viewer._cosy_link_numbers,
+                    )
                     link.normalise_uri(self.document.location)
                     link.visited = link.normalised_uri in visited_links
                     link.jump_number = jump_number + 1
@@ -492,7 +530,7 @@ class Viewer(Vertical, can_focus=False):
         """Watch for changes to the view_source property and update the viewer."""
         self.mutate_reactive(Viewer.document)
 
-    def _watch_with_link_numbers(self) -> None:
+    def _watch__with_link_numbers(self) -> None:
         """Watch for changes to the with_link_numbers property."""
         self.jump = None
 
@@ -500,15 +538,17 @@ class Viewer(Vertical, can_focus=False):
         """Watch for changes to the handle_ansi_escape_sequences property and update the viewer."""
         GemtextContent.set_filter(
             allow_ansi_escape_sequences=self.handle_ansi_escape_sequences,
-            strip_emoji=self.strip_emoji,
+            strip_emoji=self._strip_emoji,
         )
         self.mutate_reactive(Viewer.document)
 
-    def _watch_strip_emoji(self) -> None:
+    def _watch__strip_emoji(self) -> None:
         """Watch for changes to the strip_emoji property and update the viewer."""
+        with update_ui_state() as state:
+            state.strip_emoji = self._strip_emoji
         GemtextContent.set_filter(
             allow_ansi_escape_sequences=self.handle_ansi_escape_sequences,
-            strip_emoji=self.strip_emoji,
+            strip_emoji=self._strip_emoji,
         )
         self.mutate_reactive(Viewer.document)
 
@@ -568,7 +608,7 @@ class Viewer(Vertical, can_focus=False):
         Args:
             event: The key event.
         """
-        if not self.with_link_numbers:
+        if not self._with_link_numbers:
             return
         if event.key.isdigit():
             event.stop()
@@ -658,6 +698,28 @@ class Viewer(Vertical, can_focus=False):
         else:
             self.notify("No matches found.", title="Search", severity="warning")
             self._rebuild_haystack()
+
+    def action_toggle_emoji(self) -> None:
+        """Toggle whether emoji are stripped from text content."""
+        self._strip_emoji = not self._strip_emoji
+
+    def action_toggle_stripe_links(self) -> None:
+        """Toggle whether links are given alternating backgrounds."""
+        self._stripe_links = not self._stripe_links
+        with update_ui_state() as state:
+            state.stripe_links = self._stripe_links
+
+    def action_toggle_link_numbers(self) -> None:
+        """Toggle whether links are given numeric labels for jumping to them."""
+        self._with_link_numbers = not self._with_link_numbers
+        with update_ui_state() as state:
+            state.with_link_jumps = self._with_link_numbers
+
+    def action_toggle_cosy_link_numbers(self) -> None:
+        """Toggle whether the numeric labels are displayed on the left or right of the link."""
+        self._cosy_link_numbers = not self._cosy_link_numbers
+        with update_ui_state() as state:
+            state.cosy_link_jumps = self._cosy_link_numbers
 
 
 ### widget.py ends here

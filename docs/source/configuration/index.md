@@ -124,31 +124,6 @@ changing this value *adds* to that list.
     showing either rendered Gemtext or plain text. Adding other MIME types
     might cause unwanted or unpredictable results.
 
-## Emoji removal
-
-Some people find the use of emoji in Gemtext off-putting. Rogallo has a
-configuration option for those people. The `Toggle Emoji Removal` command
-([`ToggleEmojiRemoval`](bindings.md#bindable-commands), bound to <kbd>F6</kbd> by
-default) can be used to clean things up.
-
-So, if presented with this:
-
-```{.textual path="docs/screenshots/emoji_screenshot.py" title="Lots of emoji" lines=30 columns=80}
-```
-
-you can run the command and the content will look more like this:
-
-```{.textual path="docs/screenshots/emoji_screenshot.py" title="Cleaned of emoji" lines=30 columns=80 press="f6"}
-```
-
-The setting itself is saved in the configuration file as the `strip_emoji`
-configuration setting. It accepts `true` or `false` as valid values. It will
-be `false` (don't remove) by default.
-
-```json
-"strip_emoji": false
-```
-
 ## Home page
 
 Rogallo has a home page setting. This can be set using the `Set Home`
@@ -159,60 +134,6 @@ configuration file:
 
 ```json
 "home_page": "gemini://geminiprotocol.net/"
-```
-
-## Link jumps
-
-In Rogallo, you can navigate to links using <kbd>Tab</kbd> and
-<kbd>Shift</kbd>+<kbd>Tab</kbd> (the method of navigating between most UI
-elements in the application), and you can also use the mouse. Sometimes,
-though, if there's lots of links, it's handy to be able to jump straight to
-a link. To this end Rogallo provides numeric labels:
-
-```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with labels" lines=30 columns=70}
-```
-
-When the viewer is focused, if you type the number of a link, that link will
-be highlighted:
-
-```{.textual path="docs/screenshots/stripes_screenshot.py" title="A highlighted link after typing its number" lines=30 columns=70 press="5"}
-```
-
-If anyone finds this distracting, you can turn the labels off with the
-`Toggle Link Numbers` ([`ToggleLinkNumbers`](bindings.md#bindable-commands), bound to
-<kbd>Shift</kbd>+<kbd>F8</kbd> by default) command.
-
-```{.textual path="docs/screenshots/stripes_screenshot.py" title="Link number jumps turned off" lines=30 columns=70 press="shift+f8"}
-```
-
-The setting itself is saved in the configuration file as the
-`with_link_jumps` configuration setting. It accepts `true` or `false` as
-valid values. It will be `true` (with labels) by default.
-
-```json
-"with_link_jumps": true
-```
-
-### Cosy link jumps
-
-By default the numeric labels for the jumps are positioned to the right of
-the display. This is done to keep a readable flow of text. While [link
-stripes](#striped-links) are provided to make it easier to know which label
-goes with which link, some people might prefer the labels to really cosy up
-with the links. For those folk the `Toggle Cosy Link Numbers`
-([`ToggleCosyLinkNumbers`](bindings.md#bindable-commands) command, bound to
-<kbd>Super</kbd>+<kbd>F8</kbd> by default) command is available. The result
-of using it will be:
-
-```{.textual path="docs/screenshots/stripes_screenshot.py" title="Cosy link number labels" lines=30 columns=70 press="super+f8"}
-```
-
-The setting itself is saved in the configuration file as the `cosy_link_jumps`
-configuration setting. It accepts `true` or `false` as valid values. It will
-be `false` (labels on the right) by default:
-
-```json
-"cosy_link_jumps": false
 ```
 
 ## Link tooltips
@@ -277,33 +198,6 @@ If this feels too cluttered it can be turned off with the
 
 ```json
 "show_preformat_tooltips": true
-```
-
-## Striped links
-
-Rogallo provides a method of quick-jumping to links that is based around
-numeric labels that appear on the right in the viewer area. Placing the
-labels to the right helps keep a readable flow of text, but can possibly
-make it trickier to know which label matches which link.
-
-```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links and labels with no stripes" lines=30 columns=70}
-```
-
-To help with this you can turn on "striped links", which alternates the
-background colour of links to help make them stand out and connect with
-their labels. This is toggled using the `Stripe Links`
-([`StripeLinks`](bindings.md#bindable-commands) command, bound to <kbd>F8</kbd> by
-default).
-
-```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with stripes" lines=30 columns=70 press="f8"}
-```
-
-The setting itself is saved in the configuration file as the `stripe_links`
-configuration setting. It accepts `true` or `false` as valid values. It will
-be `false` (no stripes) by default:
-
-```json
-"stripe_links": false
 ```
 
 ## Theme

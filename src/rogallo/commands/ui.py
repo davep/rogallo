@@ -41,31 +41,10 @@ class ToggleSidePanel(Command):
 
 
 ##############################################################################
-class StripeLinks(Command):
-    """Toggle the striping of links in the document viewer"""
-
-    BINDING_KEY = "f8"
-
-
-##############################################################################
-class ToggleLinkNumbers(Command):
-    """Toggle the display of link numbers in the document viewer"""
-
-    BINDING_KEY = "shift+f8"
-
-
-##############################################################################
 class ToggleCosyLinkNumbers(Command):
     """Toggle the position of link numbers when they're being displayed"""
 
     BINDING_KEY = "super+f8"
-
-
-##############################################################################
-class ToggleEmojiRemoval(Command):
-    """Toggle the removal of emoji from text content"""
-
-    BINDING_KEY = "f6"
 
 
 ##############################################################################

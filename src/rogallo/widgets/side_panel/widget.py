@@ -28,8 +28,8 @@ from ...data import (
     Bookmarks,
     LocationHistory,
     NavigationHistory,
-    load_configuration,
-    update_configuration,
+    load_ui_state,
+    update_ui_state,
 )
 from ...document import Document
 from .bookmarks import BookmarksViewer
@@ -73,6 +73,16 @@ class SidePanel(Container):
             priority=True,
             tooltip="Move to the next side panel tab",
         ),
+        HelpfulBinding(
+            "[",
+            "dock_right(False)",
+            tooltip="Dock the side panel to the left",
+        ),
+        HelpfulBinding(
+            "]",
+            "dock_right(True)",
+            tooltip="Dock the side panel to the right",
+        ),
     ]
 
     HELP = """
@@ -84,9 +94,6 @@ class SidePanel(Container):
     ### Useful keys
     """
 
-    dock_right: var[bool] = var(False, toggle_class="--dock-right")
-    """Should the panel dock to the right?"""
-
     location_history: var[LocationHistory] = var(LocationHistory)
     """The history of locations visited."""
     navigation_history: var[NavigationHistory] = var(NavigationHistory)
@@ -97,6 +104,9 @@ class SidePanel(Container):
     """The client certificates for the application."""
     current_document: var[Document] = var(Document)
     """The current document being viewed."""
+
+    _dock_right: var[bool] = var(False, toggle_class="--dock-right")
+    """Should the panel dock to the right?"""
 
     _tabs = query_one(TabbedContent)
     """The tabbed content widget."""
@@ -131,16 +141,17 @@ class SidePanel(Container):
 
     def on_mount(self) -> None:
         """Called when the side-panel is mounted."""
+        self._dock_right = load_ui_state().side_panel_on_right
         try:
-            self._tabs.active = load_configuration().side_panel_chosen_tab
+            self._tabs.active = load_ui_state().side_panel_chosen_tab
         except Tabs.TabError:
             pass
 
     @on(TabbedContent.TabActivated)
     def _remember_chosen_tab(self) -> None:
         """Remember the active tab in the side-panel."""
-        with update_configuration() as config:
-            config.side_panel_chosen_tab = self._tabs.active
+        with update_ui_state() as state:
+            state.side_panel_chosen_tab = self._tabs.active
 
     def focus(self, scroll_visible: bool = True) -> Self:
         """Focus the first tab in the side-panel.
@@ -180,6 +191,16 @@ class SidePanel(Container):
         await tabs.run_action(f"{switcher}_tab")
         if dig_in:
             self.call_after_refresh(self.run_action, "dig_in")
+
+    def action_dock_right(self, dock: bool) -> None:
+        """Dock the side panel to the right.
+
+        Args:
+            dock: Whether to dock the side panel to the right.
+        """
+        self._dock_right = dock
+        with update_ui_state() as state:
+            state.side_panel_on_right = dock
 
 
 ### widget.py ends here

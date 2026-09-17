@@ -25,11 +25,7 @@ from .ui import (
     JumpToCommandLine,
     JumpToDocument,
     JumpToSidePanel,
-    StripeLinks,
     ToggleANSIEscapeSequenceHandling,
-    ToggleCosyLinkNumbers,
-    ToggleEmojiRemoval,
-    ToggleLinkNumbers,
     ToggleSidePanel,
 )
 
@@ -61,11 +57,7 @@ __all__ = [
     "SearchHistory",
     "SetHome",
     "SetHomeToCurrentLocation",
-    "StripeLinks",
     "ToggleANSIEscapeSequenceHandling",
-    "ToggleCosyLinkNumbers",
-    "ToggleEmojiRemoval",
-    "ToggleLinkNumbers",
     "ToggleSidePanel",
     "ToggleView",
     "ViewChangeLog",
