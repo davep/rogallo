@@ -66,22 +66,26 @@ class SidePanel(Container):
             "switch('previous')",
             priority=True,
             tooltip="Move to the previous side panel tab",
+            id="side_panel.switch_previous_tab",
         ),
         HelpfulBinding(
             "ctrl+right, l, right",
             "switch('next')",
             priority=True,
             tooltip="Move to the next side panel tab",
+            id="side_panel.switch_next_tab",
         ),
         HelpfulBinding(
             "[",
             "dock_right(False)",
             tooltip="Dock the side panel to the left",
+            id="side_panel.dock_left",
         ),
         HelpfulBinding(
             "]",
             "dock_right(True)",
             tooltip="Dock the side panel to the right",
+            id="side_panel.dock_right",
         ),
     ]
 
