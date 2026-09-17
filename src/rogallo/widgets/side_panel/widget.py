@@ -73,6 +73,16 @@ class SidePanel(Container):
             priority=True,
             tooltip="Move to the next side panel tab",
         ),
+        HelpfulBinding(
+            "[",
+            "dock_right(False)",
+            tooltip="Dock the side panel to the left",
+        ),
+        HelpfulBinding(
+            "]",
+            "dock_right(True)",
+            tooltip="Dock the side panel to the right",
+        ),
     ]
 
     HELP = """
@@ -180,6 +190,14 @@ class SidePanel(Container):
         await tabs.run_action(f"{switcher}_tab")
         if dig_in:
             self.call_after_refresh(self.run_action, "dig_in")
+
+    def action_dock_right(self, dock: bool) -> None:
+        """Dock the side panel to the right.
+
+        Args:
+            dock: Whether to dock the side panel to the right.
+        """
+        self.dock_right = dock
 
 
 ### widget.py ends here
