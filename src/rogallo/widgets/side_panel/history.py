@@ -107,6 +107,7 @@ class HistoryViewer(EnhancedOptionList):
             "Delete",
             show=True,
             tooltip="Delete the selected location from the history",
+            id="history.delete_location",
         ),
         HelpfulBinding(
             "D",
@@ -114,6 +115,7 @@ class HistoryViewer(EnhancedOptionList):
             "Clear",
             show=True,
             tooltip="Delete all locations from the history",
+            id="history.delete_all_locations",
         ),
     ]
 
