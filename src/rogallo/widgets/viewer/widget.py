@@ -132,7 +132,8 @@ class Viewer(Vertical, can_focus=False):
     """
 
     HELP = """
-    You can also navigate links and search the document using the following keys:
+    You can also navigate links, search the document, and modify its
+    presentation using the following keys:
     """
 
     BINDINGS = [
