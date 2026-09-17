@@ -41,6 +41,8 @@
 - **BREAKING CHANGE:** Removed the `ToggleCosyLinkNumbers` command. This is
   now controlled by a key binding specific to the viewer widget.
   ([#453](https://github.com/davep/rogallo/pull/453))
+- Added the ability to configure many of the bindings specific to the main
+  widgets in the display. ([#456](https://github.com/davep/rogallo/pull/456))
 
 ## v2.4.0
 
