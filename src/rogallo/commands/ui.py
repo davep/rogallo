@@ -62,13 +62,6 @@ class ToggleCosyLinkNumbers(Command):
 
 
 ##############################################################################
-class ToggleEmojiRemoval(Command):
-    """Toggle the removal of emoji from text content"""
-
-    BINDING_KEY = "f6"
-
-
-##############################################################################
 class ToggleANSIEscapeSequenceHandling(Command):
     """Toggle the handling of ANSI escape sequences in text content"""
 

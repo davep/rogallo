@@ -28,7 +28,6 @@ from .ui import (
     StripeLinks,
     ToggleANSIEscapeSequenceHandling,
     ToggleCosyLinkNumbers,
-    ToggleEmojiRemoval,
     ToggleLinkNumbers,
     ToggleSidePanel,
 )
@@ -64,7 +63,6 @@ __all__ = [
     "StripeLinks",
     "ToggleANSIEscapeSequenceHandling",
     "ToggleCosyLinkNumbers",
-    "ToggleEmojiRemoval",
     "ToggleLinkNumbers",
     "ToggleSidePanel",
     "ToggleView",

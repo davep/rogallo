@@ -32,9 +32,6 @@ class Configuration:
     handle_ansi_escape_sequences: bool = True
     """Should ANSI escape sequences be handled in text content?"""
 
-    strip_emoji: bool = False
-    """Should emoji be stripped from text content?"""
-
     show_link_tooltips: bool = True
     """Should tooltips be shown for links?"""
 

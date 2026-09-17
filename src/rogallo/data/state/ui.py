@@ -29,6 +29,9 @@ class UIState:
     side_panel_chosen_tab: str = "bookmarks"
     """The tab that should be chosen in the sidepanel."""
 
+    strip_emoji: bool = False
+    """Should emoji be stripped from text content?"""
+
 
 ##############################################################################
 def ui_state_file() -> Path:

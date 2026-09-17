@@ -75,7 +75,13 @@ from wasat import GeminiURI
 
 ##############################################################################
 # Local imports.
-from ...data import LocationHistory, NavigationPosition, load_configuration
+from ...data import (
+    LocationHistory,
+    NavigationPosition,
+    load_configuration,
+    load_ui_state,
+    update_ui_state,
+)
 from ...document import Document
 from ...types import GEMINI_MIME_TYPE, SUPPORTED_PROTOCOLS
 from .document_view import DocumentView
@@ -153,6 +159,11 @@ class Viewer(Vertical, can_focus=False):
             "search_next",
             tooltip="Look for the next search hit in the document",
         ),
+        HelpfulBinding(
+            "ctrl+e",
+            "toggle_emoji",
+            tooltip="Toggle whether emoji are stripped from text content",
+        ),
     ]
 
     document: var[Document] = var(Document(), toggle_class="--is-visiting")
@@ -169,8 +180,6 @@ class Viewer(Vertical, can_focus=False):
     """The location history for the viewer."""
     handle_ansi_escape_sequences: var[bool] = var(True)
     """Whether the viewer is handling ANSI escape sequences or not."""
-    strip_emoji: var[bool] = var(False)
-    """Whether the viewer is stripping emoji or not."""
 
     _title = query_one(ViewerTitle)
     """The title widget."""
@@ -185,6 +194,8 @@ class Viewer(Vertical, can_focus=False):
     """A timer to reset the jump progress after a short delay."""
     _jump_map: var[dict[int, GemtextLink]] = var(dict)
     """Keeps track of the jump numbers and their corresponding links."""
+    _strip_emoji: var[bool] = var(False)
+    """Whether the viewer is stripping emoji or not."""
     _needle: var[str | None] = var(None)
     """The current search needle."""
     _searchable: var[list[Searchable]] = var(list)
@@ -204,6 +215,10 @@ class Viewer(Vertical, can_focus=False):
         else:
             yield document
         yield ViewerStatus()
+
+    def on_mount(self) -> None:
+        """Configure the widget once mounted."""
+        self.set_reactive(Viewer._strip_emoji, load_ui_state().strip_emoji)
 
     @staticmethod
     def _consolidate(lines: Iterable[Line]) -> Iterator[Line]:
@@ -500,15 +515,17 @@ class Viewer(Vertical, can_focus=False):
         """Watch for changes to the handle_ansi_escape_sequences property and update the viewer."""
         GemtextContent.set_filter(
             allow_ansi_escape_sequences=self.handle_ansi_escape_sequences,
-            strip_emoji=self.strip_emoji,
+            strip_emoji=self._strip_emoji,
         )
         self.mutate_reactive(Viewer.document)
 
-    def _watch_strip_emoji(self) -> None:
+    def _watch__strip_emoji(self) -> None:
         """Watch for changes to the strip_emoji property and update the viewer."""
+        with update_ui_state() as state:
+            state.strip_emoji = self._strip_emoji
         GemtextContent.set_filter(
             allow_ansi_escape_sequences=self.handle_ansi_escape_sequences,
-            strip_emoji=self.strip_emoji,
+            strip_emoji=self._strip_emoji,
         )
         self.mutate_reactive(Viewer.document)
 
@@ -658,6 +675,10 @@ class Viewer(Vertical, can_focus=False):
         else:
             self.notify("No matches found.", title="Search", severity="warning")
             self._rebuild_haystack()
+
+    def action_toggle_emoji(self) -> None:
+        """Toggle whether emoji are stripped from text content."""
+        self._strip_emoji = not self._strip_emoji
 
 
 ### widget.py ends here

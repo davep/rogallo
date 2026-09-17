@@ -51,6 +51,22 @@ To jump to that link, simply type its number.
 ```{.textual path="docs/screenshots/stripes_screenshot.py" title="A highlighted link after typing its number" lines=30 columns=70 press="5"}
 ```
 
+## Emoji removal
+
+Some people find the use of emoji in Gemtext off-putting. With this in mind,
+when the viewer has focus, you can press <kbd>Ctrl</kbd>+<kbd>e</kbd> to
+toggle them off and on.
+
+So, if presented with this:
+
+```{.textual path="docs/screenshots/emoji_screenshot.py" title="Lots of emoji" lines=30 columns=80}
+```
+
+and you press <kbd>Ctrl</kbd>+<kbd>e</kbd>, you get this:
+
+```{.textual path="docs/screenshots/emoji_screenshot.py" title="Cleaned of emoji" lines=30 columns=80 press="ctrl+e"}
+```
+
 ## Configuration
 
 ### Filtering out pre-formatted text

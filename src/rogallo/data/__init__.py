@@ -30,6 +30,7 @@ from .state import (
     save_command_history,
     save_location_history,
     save_naviagation_history,
+    save_ui_state,
     update_ui_state,
 )
 from .trust import trust_file
@@ -70,6 +71,7 @@ __all__ = [
     "save_naviagation_history",
     "save_trusted_mime_types",
     "save_trusted_schemes",
+    "save_ui_state",
     "trust_file",
     "update_configuration",
     "update_ui_state",
