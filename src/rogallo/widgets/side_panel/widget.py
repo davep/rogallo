@@ -141,6 +141,7 @@ class SidePanel(Container):
 
     def on_mount(self) -> None:
         """Called when the side-panel is mounted."""
+        self.dock_right = load_ui_state().side_panel_on_right
         try:
             self._tabs.active = load_ui_state().side_panel_chosen_tab
         except Tabs.TabError:
@@ -198,6 +199,8 @@ class SidePanel(Container):
             dock: Whether to dock the side panel to the right.
         """
         self.dock_right = dock
+        with update_ui_state() as state:
+            state.side_panel_on_right = dock
 
 
 ### widget.py ends here

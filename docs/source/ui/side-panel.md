@@ -11,6 +11,14 @@ manager](#client-certificates-manager).
 ```{.textual path="docs/screenshots/main_screenshot.py" title="The side panel popped open" lines=40 columns=100 press="ctrl+l"}
 ```
 
+## Left/right dock
+
+You can control if the side panel docks to the left or right of the screen.
+When focus is within the side panel, use either of:
+
+- `[` - Dock the side panel to the left
+- `]` - Dock the side panel to the right
+
 ## Bookmarks manager
 
 The bookmarks manager allows you to view, edit, and remove your bookmarks.
@@ -41,19 +49,5 @@ the following keys perform the following actions:
 - `r` - Remove an association from the highlighted certificate.
 - `x` - Export the highlighted certificate.
 - `i` - Import a certificate.
-
-## Configuration
-
-### Left or right side
-
-By default the Rogallo side panel is on the left side of the screen. If you
-would prefer that it's on the right side, you can modify the
-`side_panel_on_right` setting in the configuration file:
-
-```json
-"side_panel_on_right": false
-```
-
-Set it to `true` to position the side panel on the right.
 
 [//]: # (side-panel.md ends here)

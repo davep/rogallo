@@ -361,9 +361,7 @@ class Main(EnhancedScreen[None]):
             await self._clients.gemini.client_cert_store.list_certificates()
         )
         config = load_configuration()
-        ui_state = load_ui_state()
-        self._side_panel_visible = ui_state.side_panel_visible
-        self._side_panel.dock_right = ui_state.side_panel_on_right
+        self._side_panel_visible = load_ui_state().side_panel_visible
         self._command_line.dock_top = config.command_line_on_top
         if self._clients.gemini.trust_store:
             self._command_line.known_hosts = [
