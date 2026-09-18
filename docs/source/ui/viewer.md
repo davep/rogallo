@@ -41,7 +41,7 @@ and stay within the viewer:
 To speed up navigating to a specific link, Rogallo also provides a method of
 jumping to a specific link. By default each link in a document will have a
 numbered label shown to the right of the viewer (the position [is
-configurable](../configuration/index.md#link-jumps)).
+configurable](#cosy-link-jumps)).
 
 ```{.textual path="docs/screenshots/stripes_screenshot.py" title="Links with labels" lines=30 columns=70}
 ```
