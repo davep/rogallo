@@ -37,7 +37,7 @@ selected depending on the URI:
 - `nexspace_link` - [`nex://`](../protocols/nex.md)
 - `otherspace_link` - Any other type of URI
 - `spartanspace_link` - [`spartan://`](../protocols/spartan.md)
-- `titanspace_link` - [`titan://`](../prootocols/titan.md)
+- `titanspace_link` - [`titan://`](../protocols/titan.md)
 
 List items within the viewer use the value defined by `list_item_bullet`.
 
