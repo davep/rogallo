@@ -17,6 +17,7 @@ from .general import (
 )
 from .gopher import load_gopher
 from .icons import load_icons
+from .preformatted import load_preformatted
 from .themes import load_themes
 from .toolbar import ToolbarConfiguration, load_toolbar
 
@@ -30,6 +31,7 @@ __all__ = [
     "load_displayable_content_types",
     "load_gopher",
     "load_icons",
+    "load_preformatted",
     "load_themes",
     "load_toolbar",
     "save_configuration",

@@ -164,23 +164,6 @@ to 80 characters, for example:
 ```{.textual path="docs/screenshots/max_width_on_screenshot.py" title="Document widget capped at 80 characters wide" lines=60 columns=120}
 ```
 
-## Pre-formatted text tooltips
-
-By default, when using a mouse, Rogallo will show any alt-text associated
-with some pre-formatted text when you hover the mouse cursor over the block
-of text.
-
-```{.textual path="docs/screenshots/preformat_screenshot.py" title="Rogallo showing a pre-format tooltip" lines=35 columns=90 hover="GemtextPreformatted:last-of-type"}
-```
-
-If this feels too cluttered it can be turned off with the
-`show_preformat_tooltips` setting. Valid values are `true` and `false`, with
-`true` (show the tooltips) being the default.
-
-```json
-"show_preformat_tooltips": true
-```
-
 ## Theme
 
 Rogallo has a number of themes available. You can select a theme using the

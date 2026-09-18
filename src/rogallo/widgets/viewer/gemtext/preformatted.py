@@ -14,7 +14,7 @@ from textual.highlight import HighlightTheme, highlight
 
 ##############################################################################
 # Local imports.
-from ....data import load_configuration
+from ....data import load_preformatted
 from ..languages import supported_language
 from .content_filter import GemtextContent
 from .text import GemtextText
@@ -29,8 +29,7 @@ def _blended_types() -> set[str]:
         The set of preformatted types that should be blended with the background.
     """
     return set(
-        alt_text.casefold()
-        for alt_text in load_configuration().blend_pre_formatted_with_background
+        alt_text.casefold() for alt_text in load_preformatted().blend_with_background
     )
 
 
@@ -75,8 +74,7 @@ class GemtextPreformatted(GemtextText):
         )
         self.tooltip = (
             preformatted.alt_text
-            if preformatted.has_alt_text
-            and load_configuration().show_preformat_tooltips
+            if preformatted.has_alt_text and load_preformatted().tooltips
             else None
         )
 

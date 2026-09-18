@@ -110,28 +110,67 @@ for hiding specific pre-formatted text. It is based on the idea that such
 pre-formatted blocks will have alt-text, and that we will normally only want
 to do it for a specific URI. As an example: suppose I wanted to hide *my*
 avatar image on [Station](gemini://station.martinrue.com/), and also the
-site logo to save some space, I can set the following in the configuration
-file:
+site logo to save some space, I can set the following in `preformatted.yaml`
+in the [configuration directory](../configuration/directory.md):
 
-```json
-"hide_preformatted": [
-    [
-        "gemini://station.martinrue.com/",
-        "Station logo"
-    ],
-    [
-        "gemini://station.martinrue.com/davep",
-        "User image"
-    ]
-]
+```yaml
+hide:
+- uri_prefix: "gemini://station.martinrue.com/"
+  alt_text: "Station logo"
+- uri_prefix: "gemini://station.martinrue.com/davep"
+  alt_text: "User image"
 ```
 
-As you can see, the filters are defined as a list of lists. The first value
-in each is the URI to match. This will match *that location and all below
-it*. So in the above `gemini://station.martinrue.com/` would match that
-location, and also `gemini://station.martinrue.com/davep` and
-`gemini://station.martinrue.com/example-user` and so on. The second value is
-the alt-text for the pre-formatted text.
+As you can see, the filters are defined as a list of objects. The
+`uri_prefix` property in each is the URI to match. This will match *that
+location and all below it*. So in the above
+`gemini://station.martinrue.com/` would match that location, and also
+`gemini://station.martinrue.com/davep` and
+`gemini://station.martinrue.com/example-user` and so on. The `alt_text`
+property is the alt-text for the pre-formatted text.
+
+### Blending pre-formatted text background
+
+By default, for any pre-formatted text *with* alt-text, Rogallo will use a
+background colour that is distinct from the background colour of the viewer.
+On the other hand, by default, pre-formatted text without alt-text will use
+the viewer's background. If you wish to change this, you can configure it
+via `preformatted.yaml` in the [configuration
+directory](../configuration/directory.md), using the `blend` setting. It
+takes a list of alt-text values, and will blend any listed. By default it is
+set to:
+
+```yaml
+blend_with_background:
+- ''
+```
+
+If, for example, you wanted to blend `Station logo` and `User image` too:
+
+```yaml
+blend_with_background:
+- ''
+- 'Station logo'
+- 'User image'
+```
+
+### Pre-formatted text tooltips
+
+By default, when using a mouse, Rogallo will show any alt-text associated
+with some pre-formatted text when you hover the mouse cursor over the block
+of text.
+
+```{.textual path="docs/screenshots/preformat_screenshot.py" title="Rogallo showing a pre-format tooltip" lines=35 columns=90 hover="GemtextPreformatted:last-of-type"}
+```
+
+If this feels too cluttered it can be turned off with the `tooltips` setting
+in the `preformatted.yaml` file in the [configuration
+directory](../configuration/directory.md). Valid values are `true` and
+`false`, with `true` (show the tooltips) being the default.
+
+```yaml
+tooltips: true
+```
 
 ### Markdown rendering
 

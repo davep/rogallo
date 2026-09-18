@@ -4,7 +4,7 @@
 # Python imports.
 from collections.abc import Iterator
 from contextlib import contextmanager
-from dataclasses import asdict, dataclass, field, fields
+from dataclasses import asdict, dataclass, fields
 from functools import cache
 from json import dumps, loads
 from pathlib import Path
@@ -31,9 +31,6 @@ class Configuration:
 
     show_link_tooltips: bool = True
     """Should tooltips be shown for links?"""
-
-    show_preformat_tooltips: bool = True
-    """Should tooltips be shown for preformatted text?"""
 
     disable_animations: bool = False
     """Should animations be disabled?"""
@@ -70,12 +67,6 @@ class Configuration:
 
     external_editor: str | None = None
     """The external editor to use for editing text content."""
-
-    blend_pre_formatted_with_background: list[str] = field(default_factory=lambda: [""])
-    """List of types of pre-formatted text to blend with the background."""
-
-    hide_preformatted: list[tuple[str, str]] = field(default_factory=list)
-    """List of (URI-prefix, alt-text) tuples of pre-formatted text to hide."""
 
     guess_language_for_syntax_highlighting_text_documents: bool = True
     """Whether to guess the language for syntax highlighting of text documents."""
