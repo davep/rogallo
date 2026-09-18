@@ -76,10 +76,20 @@ class BookmarksViewer(EnhancedOptionList):
 
     BINDINGS = [
         HelpfulBinding(
-            "r", "rename", "Rename", show=True, tooltip="Rename the selected bookmark"
+            "r",
+            "rename",
+            "Rename",
+            show=True,
+            tooltip="Rename the selected bookmark",
+            id="bookmarks.rename",
         ),
         HelpfulBinding(
-            "d", "delete", "Delete", show=True, tooltip="Delete the selected bookmark"
+            "d",
+            "delete",
+            "Delete",
+            show=True,
+            tooltip="Delete the selected bookmark",
+            id="bookmarks.delete",
         ),
     ]
 

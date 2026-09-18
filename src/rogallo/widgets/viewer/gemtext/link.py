@@ -99,13 +99,22 @@ class GemtextLink(Widget, can_focus=True):
     """
 
     BINDINGS = [
-        HelpfulBinding("enter", "open_link", "Open link", show=False),
-        HelpfulBinding("c", "copy_link", "Copy link to clipboard", show=False),
+        HelpfulBinding(
+            "enter", "open_link", "Open link", show=False, id="gemtext_link.open_link"
+        ),
+        HelpfulBinding(
+            "c",
+            "copy_link",
+            "Copy link to clipboard",
+            show=False,
+            id="gemtext_link.copy_link",
+        ),
         HelpfulBinding(
             "o",
             "open_link_externally",
             "Hand the current link off to the operating system for opening",
             show=False,
+            id="gemtext_link.open_link_externally",
         ),
     ]
 

@@ -151,11 +151,13 @@ class CommandLine(Vertical):
             "up",
             "history_previous",
             tooltip="Navigate backwards through the command history",
+            id="command_line.history_previous",
         ),
         HelpfulBinding(
             "down",
             "history_next",
             tooltip="Navigate forward through the command history",
+            id="command_line.history_next",
         ),
     ]
 

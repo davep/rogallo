@@ -157,4 +157,11 @@ use:
 "busy_indicator_cells": "🌑🌒🌓🌔🌕🌖🌗🌘"
 ```
 
+## Available bindings
+
+The following actions can [have their bindings overridden](../configuration/bindings.md):
+
+- `command_line.history_previous` - Move back through the command history
+- `command_line.history_next` - Move forward through the command history
+
 [//]: # (command-line.md ends here)
