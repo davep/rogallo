@@ -105,25 +105,6 @@ setting. It accepts `true` or `false` as valid values. It will be `false`
 "disable_animations": false
 ```
 
-## Displayable content types
-
-By default Rogallo only considers a narrow set of MIME types as displayable
-in the application. In the event that you need to expand this list, you can
-change the value of `displayable_content_types`:
-
-```json
-"displayable_content_types": []
-```
-
-Note that there is a hard-coded set of types that will always be handled;
-changing this value *adds* to that list.
-
-!!! important
-
-    Rogallo is currently only capable of displaying text-based content,
-    showing either rendered Gemtext or plain text. Adding other MIME types
-    might cause unwanted or unpredictable results.
-
 ## Home page
 
 Rogallo has a home page setting. This can be set using the `Set Home`

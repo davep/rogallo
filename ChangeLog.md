@@ -43,6 +43,10 @@
   ([#453](https://github.com/davep/rogallo/pull/453))
 - Added the ability to configure many of the bindings specific to the main
   widgets in the display. ([#456](https://github.com/davep/rogallo/pull/456))
+- **BREAKING CHANGE:** Moved the displayable content types configuration
+  item out of `configuration.json` and into
+  `displayable-content-types.yaml`.
+  ([#457](https://github.com/davep/rogallo/pull/457))
 
 ## v2.4.0
 

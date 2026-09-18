@@ -26,9 +26,6 @@ class Configuration:
     command_line_on_top: bool = False
     """Should the command line live at the top of the screen?"""
 
-    displayable_content_types: list[str] = field(default_factory=list)
-    """The content types that can be displayed in the viewer."""
-
     handle_ansi_escape_sequences: bool = True
     """Should ANSI escape sequences be handled in text content?"""
 
