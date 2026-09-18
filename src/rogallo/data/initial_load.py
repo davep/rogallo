@@ -10,7 +10,13 @@ This module provides a function to do that initial load/create.
 
 ##############################################################################
 # Local imports.
-from .configuration import load_aliases, load_gopher, load_icons, load_toolbar
+from .configuration import (
+    load_aliases,
+    load_gopher,
+    load_icons,
+    load_preformatted,
+    load_toolbar,
+)
 
 
 ##############################################################################
@@ -19,6 +25,7 @@ def initial_load() -> None:
     load_aliases()
     load_gopher()
     load_icons()
+    load_preformatted()
     load_toolbar()
 
 

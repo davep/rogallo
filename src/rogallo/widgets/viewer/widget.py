@@ -79,6 +79,7 @@ from ...data import (
     LocationHistory,
     NavigationPosition,
     load_configuration,
+    load_preformatted,
     load_ui_state,
     update_ui_state,
 )
@@ -320,14 +321,9 @@ class Viewer(Vertical, can_focus=False):
         Returns:
             The set of preformatted types that should be hidden.
         """
-        cleaned = (
-            entry
-            for entry in load_configuration().hide_preformatted
-            if len(entry) == 2 and all(isinstance(element, str) for element in entry)
-        )
         return set(
-            (uri_prefix.casefold(), alt_text.casefold())
-            for uri_prefix, alt_text in cleaned
+            (hide["uri_prefix"].casefold(), hide["alt_text"].casefold())
+            for hide in load_preformatted().hide
         )
 
     def _gemtext_widgets(
