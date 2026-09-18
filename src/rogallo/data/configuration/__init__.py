@@ -8,6 +8,7 @@ will live in XDG_CONFIG_HOME.
 # Local imports.
 from .aliases import load_aliases
 from .bindings import load_bindings
+from .content_types import load_displayable_content_types
 from .general import (
     Configuration,
     load_configuration,
@@ -26,6 +27,7 @@ __all__ = [
     "load_aliases",
     "load_bindings",
     "load_configuration",
+    "load_displayable_content_types",
     "load_gopher",
     "load_icons",
     "load_themes",

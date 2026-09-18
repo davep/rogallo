@@ -10,7 +10,7 @@ from gophermap import ItemType
 
 ##############################################################################
 # Local imports.
-from .data import load_configuration
+from .data import load_displayable_content_types
 from .types import GEMINI_MIME_TYPE
 
 
@@ -64,7 +64,7 @@ def is_displayable_mime_type(mime_type: str | None) -> bool:
     return mime_type.startswith("text/") or mime_type in {
         ItemType.MENU.mime_type,
         ItemType.INDEX_SEARCH.mime_type,
-        *load_configuration().displayable_content_types,
+        *load_displayable_content_types(),
     }
 
 
