@@ -159,4 +159,18 @@ will be trickier to navigate if you don't have a mouse (the issue being that
 [Textual's Markdown widget](https://textual.textualize.io/widgets/markdown/)
 is keyboard-hostile when it comes to navigation of links).
 
+## Available bindings
+
+The following actions can [have their bindings overridden](../configuration/bindings.md):
+
+- `viewer.cancel_search` - Cancel the current search in the document
+- `viewer.next_link` - Move forward through each of the links
+- `viewer.previous_link` - Move backwards through each of the links
+- `viewer.search_next` - Look for the next search hit in the document
+- `viewer.start_search` - Start a search for text in the document
+- `viewer.toggle_cosy_link_numbers` - Toggle whether the numeric labels are displayed on the left or right of the link
+- `viewer.toggle_emoji` - Toggle whether emoji are stripped from text content
+- `viewer.toggle_link_numbers` - Toggle whether links are given numeric labels for jumping to them
+- `viewer.toggle_stripe_links` - Toggle whether links are given alternating backgrounds
+
 [//]: # (viewer.md ends here)

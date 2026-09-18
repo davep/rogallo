@@ -12,7 +12,7 @@ The following commands can have their keyboard bindings set:
 rogallo bindings | sed -e 's/^\([A-Z].*\) - \(.*\)$/- `\1` - *\2*/' -e 's/^    \(Default:\) \(.*\)$/    - *\1* `\2`/'
 ```
 
-## Changing a binding
+## Changing a command binding
 
 Rogallo's default bindings for all of the above commands can be overridden
 using a `bindings.yaml` file placed in the [configuration directory](./index.md).
@@ -67,6 +67,27 @@ Backward: "ctrl+h"
 Forward: "ctrl+l"
 ToggleView: "ctrl+t"
 GoHome: "ctrl+shift+h"
+```
+
+## User interface element bindings
+
+Each of the [main user interface elements](../ui/index.md) also allows for a
+degree of keyboard binding override. In their cases the *command* that you
+override is in the form of `<ui_element>.<action>`. You can find the list of
+actions for each UI element in the *"Available bindings"* section of each of
+the following:
+
+- [Command line](../ui/command-line.md#available-bindings)
+- [Side panel](../ui/side-panel.md#available-bindings)
+- [Viewer](../ui/viewer.md#available-bindings)
+
+As mentioned above, if you wish to override one of these UI element actions,
+you set the binding as you would with an application command. For example,
+if you wanted to have <kbd>F12</kbd> be the key to start a search in the
+viewer:
+
+```yaml
+viewer.start_search: "f12"
 ```
 
 [//]: # (bindings.md ends here)
