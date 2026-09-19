@@ -12,7 +12,7 @@ from pygments.util import ClassNotFound
 
 ##############################################################################
 # Local imports.
-from ...data import load_configuration
+from ...data import load_general
 from ...document import Document
 
 
@@ -63,7 +63,7 @@ def language_from_document(document: Document) -> str | None:
             pass
 
     # Allow not guessing.
-    if not load_configuration().guess_language_for_syntax_highlighting_text_documents:
+    if not load_general().guess_language_for_syntax_highlighting_text_documents:
         return None
 
     # Failing that, see if we can work out a good guess from the content.

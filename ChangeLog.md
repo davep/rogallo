@@ -59,6 +59,9 @@
 - **BREAKING CHANGE:**: Moved home page setting out of configuration and
   into a dedicated file in the data directory.
   ([#465](https://github.com/davep/rogallo/pull/465))
+- **BREAKING CHANGE:**: The configuration values that haven't been moved
+  elsewhere in the above changes have been moved to `general.yaml`.
+  ([#466](https://github.com/davep/rogallo/pull/466))
 
 ## v2.4.0
 

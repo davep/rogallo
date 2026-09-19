@@ -26,7 +26,7 @@ from wasat import Client as GeminiClient
 
 ##############################################################################
 # Local imports.
-from .data import client_certificates_directory, known_hosts, load_configuration
+from .data import client_certificates_directory, known_hosts, load_general
 
 
 ##############################################################################
@@ -59,7 +59,7 @@ class Clients(NamedTuple):
         Returns:
             A new instance of the clients class.
         """
-        config = load_configuration()
+        config = load_general()
         return cls(
             finger=FingerClient(timeout=config.connection_timeout),
             gemini=GeminiClient(

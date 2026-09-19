@@ -42,7 +42,7 @@ from ...data import (
     LocationHistory,
     NavigationHistory,
     load_aliases,
-    load_configuration,
+    load_general,
 )
 from ...presentation import short_location
 from .aliases import AliasError, expand_aliases
@@ -190,10 +190,10 @@ class CommandLine(Vertical):
     def __init__(self) -> None:
         """Initialise the command line."""
         super().__init__()
-        self._input_prompt = load_configuration().command_line_prompt
+        self._input_prompt = load_general().command_line_prompt
         """The prompt for the command line."""
         self._busy_cells = cycle(
-            load_configuration().busy_indicator_cells
+            load_general().busy_indicator_cells
             or "⠁⠉⠘⠰⠤⠤⠆⠃⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏⠟⠿⠽⠾⠽⠿⠟⠯⠽⠾⠶⠦⠤⠤⠰⠘⠉⠁"
         )
         """The cells used for the busy indicator."""
