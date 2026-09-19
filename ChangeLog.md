@@ -50,6 +50,9 @@
 - **BREAKING CHANGE:** Removed the `ToggleANSIEscapeSequenceHandling`
   command. This is now controlled by a key binding specific to the viewer
   widget. ([#460](https://github.com/davep/rogallo/pull/460))
+- **BREAKING CHANGE:** Removed the `ChangeCommandLineLocation` command. The
+  command line location is now changed purely by the configuration file.
+  ([#463](https://github.com/davep/rogallo/pull/463))
 
 ## v2.4.0
 

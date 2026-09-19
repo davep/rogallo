@@ -21,7 +21,6 @@ from .main import (
 from .navigation import Backward, Forward, GoHome, GoToParent, GoToRoot, OpenFile
 from .search import SearchBookmarks, SearchHistory
 from .ui import (
-    ChangeCommandLineLocation,
     JumpToCommandLine,
     JumpToDocument,
     JumpToSidePanel,
@@ -36,7 +35,6 @@ __all__ = [
     "AddLocationToBookmarks",
     "Backward",
     "BrowseTrustedHosts",
-    "ChangeCommandLineLocation",
     "ClearCache",
     "CopyDocumentToClipboard",
     "CopyLocationToClipboard",
