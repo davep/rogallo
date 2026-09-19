@@ -47,6 +47,9 @@
   item out of `configuration.json` and into
   `displayable-content-types.yaml`.
   ([#457](https://github.com/davep/rogallo/pull/457))
+- **BREAKING CHANGE:** Removed the `ToggleANSIEscapeSequenceHandling`
+  command. This is now controlled by a key binding specific to the viewer
+  widget. ([#460](https://github.com/davep/rogallo/pull/460))
 
 ## v2.4.0
 

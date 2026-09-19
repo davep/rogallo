@@ -71,7 +71,6 @@ from ...commands import (
     SearchHistory,
     SetHome,
     SetHomeToCurrentLocation,
-    ToggleANSIEscapeSequenceHandling,
     ToggleSidePanel,
     ToggleView,
     ViewChangeLog,
@@ -239,7 +238,6 @@ class Main(EnhancedScreen[None]):
         SaveSource,
         SetHome,
         SetHomeToCurrentLocation,
-        ToggleANSIEscapeSequenceHandling,
         ToggleSidePanel,
         ToggleView,
         ViewChangeLog,
@@ -361,7 +359,6 @@ class Main(EnhancedScreen[None]):
                 for host, port in await self._clients.gemini.trust_store.get_hosts()
             ]
             HistorySearchCommands.known_hosts = self._command_line.known_hosts
-        self._viewer.handle_ansi_escape_sequences = config.handle_ansi_escape_sequences
         if self._arguments.command == "open" and (
             location := getattr(self._arguments, "location", None)
         ):
@@ -873,16 +870,6 @@ class Main(EnhancedScreen[None]):
             and location.root != location
         ):
             self.post_message(OpenLocation(location.root))
-
-    def action_toggle_ansi_escape_sequence_handling_command(self) -> None:
-        """Toggle ANSI escape sequence handling."""
-        self._viewer.handle_ansi_escape_sequences = (
-            not self._viewer.handle_ansi_escape_sequences
-        )
-        with update_configuration() as config:
-            config.handle_ansi_escape_sequences = (
-                self._viewer.handle_ansi_escape_sequences
-            )
 
     def action_open_file_command(self) -> None:
         """Open a file."""

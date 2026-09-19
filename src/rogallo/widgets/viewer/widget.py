@@ -175,6 +175,12 @@ class Viewer(Vertical, can_focus=False):
             id="viewer.toggle_emoji",
         ),
         HelpfulBinding(
+            "a",
+            "toggle_ansi",
+            tooltip="Toggle whether ANSI escape sequences are handled in text content",
+            id="viewer.toggle_ansi",
+        ),
+        HelpfulBinding(
             "s",
             "toggle_stripe_links",
             tooltip="Toggle whether links are given alternating backgrounds",
@@ -200,8 +206,6 @@ class Viewer(Vertical, can_focus=False):
     """Whether the viewer is showing the source of the document or not."""
     location_history: var[LocationHistory] = var(LocationHistory)
     """The location history for the viewer."""
-    handle_ansi_escape_sequences: var[bool] = var(True)
-    """Whether the viewer is handling ANSI escape sequences or not."""
 
     _title = query_one(ViewerTitle)
     """The title widget."""
@@ -224,6 +228,8 @@ class Viewer(Vertical, can_focus=False):
     """Whether the viewer is showing link numbers or not."""
     _cosy_link_numbers: var[bool] = var(False)
     """Whether the viewer is showing link numbers in a cosy way or not."""
+    _handle_ansi_escape_sequences: var[bool] = var(True)
+    """Whether the viewer is handling ANSI escape sequences or not."""
     _needle: var[str | None] = var(None)
     """The current search needle."""
     _searchable: var[list[Searchable]] = var(list)
@@ -247,10 +253,11 @@ class Viewer(Vertical, can_focus=False):
     def on_mount(self) -> None:
         """Configure the widget once mounted."""
         ui_state = load_ui_state()
-        self.set_reactive(Viewer._strip_emoji, ui_state.strip_emoji)
+        self._strip_emoji = ui_state.strip_emoji
         self._stripe_links = ui_state.stripe_links
         self._with_link_numbers = ui_state.with_link_jumps
         self._cosy_link_numbers = ui_state.cosy_link_jumps
+        self._handle_ansi_escape_sequences = ui_state.handle_ansi_escape_sequences
 
     @staticmethod
     def _consolidate(lines: Iterable[Line]) -> Iterator[Line]:
@@ -541,23 +548,22 @@ class Viewer(Vertical, can_focus=False):
         """Watch for changes to the with_link_numbers property."""
         self.jump = None
 
-    def _watch_handle_ansi_escape_sequences(self) -> None:
-        """Watch for changes to the handle_ansi_escape_sequences property and update the viewer."""
+    def _update_document_filters(self) -> None:
+        """Update the document filters based on the current settings."""
         GemtextContent.set_filter(
-            allow_ansi_escape_sequences=self.handle_ansi_escape_sequences,
+            allow_ansi_escape_sequences=self._handle_ansi_escape_sequences,
             strip_emoji=self._strip_emoji,
         )
-        self.mutate_reactive(Viewer.document)
+        if self.is_mounted:
+            self.mutate_reactive(Viewer.document)
+
+    def _watch__handle_ansi_escape_sequences(self) -> None:
+        """Watch for changes to the handle_ansi_escape_sequences property and update the viewer."""
+        self._update_document_filters()
 
     def _watch__strip_emoji(self) -> None:
         """Watch for changes to the strip_emoji property and update the viewer."""
-        with update_ui_state() as state:
-            state.strip_emoji = self._strip_emoji
-        GemtextContent.set_filter(
-            allow_ansi_escape_sequences=self.handle_ansi_escape_sequences,
-            strip_emoji=self._strip_emoji,
-        )
-        self.mutate_reactive(Viewer.document)
+        self._update_document_filters()
 
     def _watch_jump(self) -> None:
         """Watch for changes to the jump property and update the viewer."""
@@ -709,6 +715,8 @@ class Viewer(Vertical, can_focus=False):
     def action_toggle_emoji(self) -> None:
         """Toggle whether emoji are stripped from text content."""
         self._strip_emoji = not self._strip_emoji
+        with update_ui_state() as state:
+            state.strip_emoji = self._strip_emoji
 
     def action_toggle_stripe_links(self) -> None:
         """Toggle whether links are given alternating backgrounds."""
@@ -727,6 +735,12 @@ class Viewer(Vertical, can_focus=False):
         self._cosy_link_numbers = not self._cosy_link_numbers
         with update_ui_state() as state:
             state.cosy_link_jumps = self._cosy_link_numbers
+
+    def action_toggle_ansi(self) -> None:
+        """Toggle whether ANSI escape sequences are handled in text content."""
+        self._handle_ansi_escape_sequences = not self._handle_ansi_escape_sequences
+        with update_ui_state() as state:
+            state.handle_ansi_escape_sequences = self._handle_ansi_escape_sequences
 
 
 ### widget.py ends here
