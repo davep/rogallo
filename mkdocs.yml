@@ -24,6 +24,7 @@ nav:
       - configuration/directory.md
       - configuration/bindings.md
       - configuration/content_types.md
+      - configuration/general.md
       - configuration/gopher.md
       - configuration/icons.md
   - "License": license.md
