@@ -23,7 +23,8 @@ from .data import (
     load_bindings,
     load_configuration,
     load_themes,
-    update_configuration,
+    load_ui_state,
+    update_ui_state,
 )
 from .screens import Main
 
@@ -97,20 +98,19 @@ class Rogallo(EnhancedApp[None]):
         super().__init__()
         for theme in load_themes():
             self.register_theme(theme)
-        configuration = load_configuration()
-        if configuration.theme is not None:
+        if isinstance(chosen_theme := arguments.theme or load_ui_state().theme, str):
             try:
-                self.theme = arguments.theme or configuration.theme
+                self.theme = chosen_theme
             except InvalidThemeError:
                 pass
         self.update_keymap(load_bindings())
-        if configuration.disable_animations:
+        if load_configuration().disable_animations:
             self.animation_level = "none"
 
     def watch_theme(self) -> None:
         """Save the application's theme when it's changed."""
-        with update_configuration() as config:
-            config.theme = self.theme
+        with update_ui_state() as state:
+            state.theme = self.theme
 
     def get_default_screen(self) -> Screen[None]:
         return Main(self._arguments)

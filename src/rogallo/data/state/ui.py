@@ -20,6 +20,9 @@ from ..locations import state_dir
 class UIState:
     """The state of the UI."""
 
+    theme: str | None = None
+    """The theme for the application."""
+
     side_panel_visible: bool = False
     """Should the sidepanel be visible?"""
 

@@ -53,6 +53,9 @@
 - **BREAKING CHANGE:** Removed the `ChangeCommandLineLocation` command. The
   command line location is now changed purely by the configuration file.
   ([#463](https://github.com/davep/rogallo/pull/463))
+- **BREAKING CHANGE:**: Moved the theme configuration value into the
+  application's UI state storage.
+  ([#464](https://github.com/davep/rogallo/pull/464))
 
 ## v2.4.0
 
