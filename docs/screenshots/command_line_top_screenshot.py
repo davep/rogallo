@@ -1,8 +1,8 @@
 """Screenshot to show the command line on top."""
 
-from support.maker import Configuration, make_app
+from support.maker import GeneralConfiguration, make_app
 
-app = make_app(general=Configuration(command_line_on_top=True))
+app = make_app(general=GeneralConfiguration(command_line_on_top=True))
 
 if __name__ == "__main__":
     app.run()

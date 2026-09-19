@@ -15,8 +15,8 @@ from ._io import load_configuration_into, save_configuration_from
 
 ##############################################################################
 @dataclass
-class Configuration:
-    """The configuration data for the application."""
+class GeneralConfiguration:
+    """The general configuration data for the application."""
 
     command_line_on_top: bool = False
     """Should the command line live at the top of the screen?"""
@@ -74,7 +74,7 @@ class Configuration:
 
 
 ##############################################################################
-def save_general(configuration: Configuration) -> Configuration:
+def save_general(configuration: GeneralConfiguration) -> GeneralConfiguration:
     """Save the general configuration.
 
     Args:
@@ -90,7 +90,7 @@ def save_general(configuration: Configuration) -> Configuration:
 
 ##############################################################################
 @cache
-def load_general() -> Configuration:
+def load_general() -> GeneralConfiguration:
     """Load the general configuration.
 
     Returns:
@@ -101,12 +101,12 @@ def load_general() -> Configuration:
         repeatedly call it. The configuration is cached and will only be
         loaded from storage when necessary.
     """
-    return load_configuration_into(Configuration, "general")
+    return load_configuration_into(GeneralConfiguration, "general")
 
 
 ##############################################################################
 @contextmanager
-def update_general() -> Iterator[Configuration]:
+def update_general() -> Iterator[GeneralConfiguration]:
     """Context manager for updating the general configuration.
 
     Loads the general configuration and makes it available, then ensures it

@@ -2,11 +2,9 @@
 
 import os
 from argparse import Namespace
-from dataclasses import fields
 from datetime import datetime, timedelta
 from pathlib import Path
 from random import randint
-from typing import Any
 
 import port70.uri
 import port79.uri
@@ -27,11 +25,7 @@ from rogallo.data import (
     save_ui_state,
 )
 from rogallo.data.configuration._io import save_configuration_from
-from rogallo.data.configuration.general import (
-    Configuration,
-    save_general,
-    update_general,
-)
+from rogallo.data.configuration.general import GeneralConfiguration, save_general
 from rogallo.data.configuration.themes import themes_dir
 from rogallo.data.configuration.toolbar import ToolbarConfiguration
 from rogallo.data.state.ui import UIState
@@ -129,14 +123,14 @@ def make_app(
     viewing: str = "features",
     with_fake_history: bool = True,
     *,
-    general: Configuration | None = None,
+    general: GeneralConfiguration | None = None,
     ui_state: UIState | None = None,
     toolbar: ToolbarConfiguration | None = None,
 ) -> Rogallo:
     save_naviagation_history(NavigationHistory([]))
     save_command_history(CommandLineHistory([]))
     save_ui_state(ui_state or UIState(theme="textual-mono"))
-    general = general or Configuration()
+    general = general or GeneralConfiguration()
     general.cache_ttl = 1
     save_general(general)
     save_homepage("gemini://localhost/")
@@ -159,10 +153,10 @@ def make_app(
 
 
 __all__ = [
+    "GeneralConfiguration",
     "make_app",
-    "Configuration",
-    "UIState",
     "ToolbarConfiguration",
+    "UIState",
 ]
 
 ### maker.py ends here
