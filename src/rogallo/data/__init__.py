@@ -35,9 +35,13 @@ from .state import (
     save_ui_state,
     update_ui_state,
 )
-from .trust import trust_file
-from .trusted_mime_types import load_trusted_mime_types, save_trusted_mime_types
-from .trusted_schemes import load_trusted_schemes, save_trusted_schemes
+from .trusted_sets import (
+    known_hosts,
+    load_trusted_mime_types,
+    load_trusted_schemes,
+    save_trusted_mime_types,
+    save_trusted_schemes,
+)
 
 ##############################################################################
 # Exports.
@@ -76,7 +80,7 @@ __all__ = [
     "save_trusted_mime_types",
     "save_trusted_schemes",
     "save_ui_state",
-    "trust_file",
+    "known_hosts",
     "update_configuration",
     "update_ui_state",
 ]
