@@ -98,6 +98,25 @@ and you press <kbd>Ctrl</kbd>+<kbd>e</kbd>, you get this:
 ```{.textual path="docs/screenshots/emoji_screenshot.py" title="Cleaned of emoji" lines=30 columns=80 press="ctrl+e"}
 ```
 
+## ANSI escape sequence support
+
+Rogallo supports ANSI escape sequences in the content of pages. This means
+that sites can do all sorts of wonderfully colourful things:
+
+```{.textual path="docs/screenshots/ansi_screenshot.py" title="Some fun with ANSI" lines=43 columns=80}
+```
+
+If you would prefer that ANSI escape sequences *aren't* processed, and
+instead are stripped from the content, you can press <kbd>a</kbd> to toggle
+support off or back on.
+
+```{.textual path="docs/screenshots/ansi_screenshot.py" title="Turning off ANSI" lines=43 columns=80 press="a"}
+```
+
+Admittedly, in this case the stripped version isn't anywhere near as
+interesting, but in most cases you'll get the content you were seeing, just
+without colour.
+
 ## Configuration
 
 ### Filtering out pre-formatted text
@@ -207,6 +226,7 @@ The following actions can [have their bindings overridden](../configuration/bind
 - `viewer.previous_link` - Move backwards through each of the links
 - `viewer.search_next` - Look for the next search hit in the document
 - `viewer.start_search` - Start a search for text in the document
+- `viewer.toggle_ansi` - Toggle whether ANSI escape sequences are handled in text content
 - `viewer.toggle_cosy_link_numbers` - Toggle whether the numeric labels are displayed on the left or right of the link
 - `viewer.toggle_emoji` - Toggle whether emoji are stripped from text content
 - `viewer.toggle_link_numbers` - Toggle whether links are given numeric labels for jumping to them

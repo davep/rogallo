@@ -25,7 +25,6 @@ from .ui import (
     JumpToCommandLine,
     JumpToDocument,
     JumpToSidePanel,
-    ToggleANSIEscapeSequenceHandling,
     ToggleSidePanel,
 )
 
@@ -57,7 +56,6 @@ __all__ = [
     "SearchHistory",
     "SetHome",
     "SetHomeToCurrentLocation",
-    "ToggleANSIEscapeSequenceHandling",
     "ToggleSidePanel",
     "ToggleView",
     "ViewChangeLog",

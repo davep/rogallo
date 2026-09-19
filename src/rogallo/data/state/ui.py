@@ -41,6 +41,9 @@ class UIState:
     cosy_link_jumps: bool = False
     """Should the numeric labels be displayed in a cosy way?"""
 
+    handle_ansi_escape_sequences: bool = True
+    """Should ANSI escape sequences be handled in text content?"""
+
 
 ##############################################################################
 def ui_state_file() -> Path:

@@ -47,12 +47,4 @@ class ToggleCosyLinkNumbers(Command):
     BINDING_KEY = "super+f8"
 
 
-##############################################################################
-class ToggleANSIEscapeSequenceHandling(Command):
-    """Toggle the handling of ANSI escape sequences in text content"""
-
-    BINDING_KEY = "shift+f6"
-    ACTION = "toggle_ansi_escape_sequence_handling_command"
-
-
 ### ui.py ends here

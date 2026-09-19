@@ -26,9 +26,6 @@ class Configuration:
     command_line_on_top: bool = False
     """Should the command line live at the top of the screen?"""
 
-    handle_ansi_escape_sequences: bool = True
-    """Should ANSI escape sequences be handled in text content?"""
-
     show_link_tooltips: bool = True
     """Should tooltips be shown for links?"""
 
