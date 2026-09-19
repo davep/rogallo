@@ -29,9 +29,6 @@ class Configuration:
     disable_animations: bool = False
     """Should animations be disabled?"""
 
-    home_page: str = "gemini://geminiprotocol.net/"
-    """The home page for the application."""
-
     with_cache: bool = True
     """Should the application use a cache for remote content?"""
 

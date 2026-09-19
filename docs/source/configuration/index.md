@@ -57,18 +57,6 @@ setting. It accepts `true` or `false` as valid values. It will be `false`
 "disable_animations": false
 ```
 
-## Home page
-
-Rogallo has a home page setting. This can be set using the `Set Home`
-command ([`SetHome`](bindings.md#bindable-commands), bound to
-<kbd>Alt</kbd>+<kbd>h</kbd> by default). This sets the currently-visited
-page as the home page. If you wish you can also modify it in the
-configuration file:
-
-```json
-"home_page": "gemini://geminiprotocol.net/"
-```
-
 ## Link tooltips
 
 By default, when using a mouse, Rogallo will show a tooltip containing the

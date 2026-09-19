@@ -85,6 +85,7 @@ from ...data import (
     load_bookmarks,
     load_command_history,
     load_configuration,
+    load_homepage,
     load_location_history,
     load_navigation_history,
     load_toolbar,
@@ -93,9 +94,9 @@ from ...data import (
     load_ui_state,
     save_bookmarks,
     save_command_history,
+    save_homepage,
     save_location_history,
     save_naviagation_history,
-    update_configuration,
     update_ui_state,
 )
 from ...input_content import InputContent
@@ -445,7 +446,7 @@ class Main(EnhancedScreen[None]):
         if action == ToggleView.action_name():
             return bool(self._viewer.document) and self._viewer.can_view_source
         if action == GoHome.action_name():
-            return bool(load_configuration().home_page.strip())
+            return bool(load_homepage())
         if action == AddLocationToBookmarks.action_name():
             return bool(self._viewer.document.location) and (
                 self._viewer.document.location not in self._bookmarks
@@ -775,7 +776,7 @@ class Main(EnhancedScreen[None]):
 
     def action_go_home_command(self) -> None:
         """Go to the home page."""
-        if home_page := load_configuration().home_page.strip():
+        if home_page := load_homepage():
             self.post_message(OpenURI(home_page))
 
     @work
@@ -784,21 +785,19 @@ class Main(EnhancedScreen[None]):
         if user_input := await self.app.push_screen_wait(
             ModalInput(
                 "New home page",
-                load_configuration().home_page.strip(),
+                load_homepage(),
                 suggester=SuggestFromList(
                     sorted(str(visit.location) for visit in self._location_history)
                 ),
             ),
         ):
-            with update_configuration() as config:
-                config.home_page = user_input.strip()
+            save_homepage(user_input.strip())
             self.notify(f"Set to {user_input}", title="Home Page Set")
 
     def action_set_home_to_current_location_command(self) -> None:
         """Set the home page to the current document's location."""
         if self._viewer.document.location:
-            with update_configuration() as config:
-                config.home_page = str(self._viewer.document.location)
+            save_homepage(str(self._viewer.document.location))
             self.notify(
                 f"Set to {self._viewer.document.location}",
                 title="Home Page Set",
