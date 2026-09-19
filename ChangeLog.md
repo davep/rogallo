@@ -56,6 +56,9 @@
 - **BREAKING CHANGE:**: Moved the theme configuration value into the
   application's UI state storage.
   ([#464](https://github.com/davep/rogallo/pull/464))
+- **BREAKING CHANGE:**: Moved home page setting out of configuration and
+  into a dedicated file in the data directory.
+  ([#465](https://github.com/davep/rogallo/pull/465))
 
 ## v2.4.0
 

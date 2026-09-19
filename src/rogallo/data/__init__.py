@@ -18,6 +18,7 @@ from .configuration import (
     save_configuration,
     update_configuration,
 )
+from .homepage import load_homepage, save_homepage
 from .initial_load import initial_load
 from .state import (
     CommandLineHistory,
@@ -59,6 +60,7 @@ __all__ = [
     "load_configuration",
     "load_displayable_content_types",
     "load_gopher",
+    "load_homepage",
     "load_icons",
     "load_location_history",
     "load_navigation_history",
@@ -75,6 +77,7 @@ __all__ = [
     "save_bookmarks",
     "save_command_history",
     "save_configuration",
+    "save_homepage",
     "save_location_history",
     "save_naviagation_history",
     "save_trusted_mime_types",
