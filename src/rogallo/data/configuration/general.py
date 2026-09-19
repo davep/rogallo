@@ -20,9 +20,6 @@ from ..locations import config_dir
 class Configuration:
     """The configuration data for the application."""
 
-    theme: str | None = None
-    """The theme for the application."""
-
     command_line_on_top: bool = False
     """Should the command line live at the top of the screen?"""
 
