@@ -26,7 +26,7 @@ from wasat import Client as GeminiClient
 
 ##############################################################################
 # Local imports.
-from .data import client_certificates_directory, load_configuration, trust_file
+from .data import client_certificates_directory, known_hosts, load_configuration
 
 
 ##############################################################################
@@ -67,7 +67,7 @@ class Clients(NamedTuple):
                 connect_timeout=config.connection_timeout,
                 max_redirects=config.maximum_redirects,
                 read_timeout=config.read_timeout,
-                trust_store_path=trust_file(),
+                trust_store_path=known_hosts(),
                 verify_mode=config.capsule_certificate_verify_mode,
             ),
             gopher=GopherClient(timeout=config.connection_timeout),
