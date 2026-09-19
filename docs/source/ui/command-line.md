@@ -157,6 +157,23 @@ use:
 "busy_indicator_cells": "🌑🌒🌓🌔🌕🌖🌗🌘"
 ```
 
+### Location
+
+By default, Rogallo's command line appears at the bottom of the screen,
+above the footer of the application. It can be moved to the top of the
+screen, below the application toolbar (if the toolbar is being used):
+
+```{.textual path="docs/screenshots/command_line_top_screenshot.py" title="Rogallo with the command line on top" lines=35 columns=90}
+```
+
+The setting in the configuration file is `command_line_on_top`, which takes
+`true` or `false` as valid values. It will be `false` (at the bottom) by
+default:
+
+```json
+"command_line_on_top": false
+```
+
 ## Available bindings
 
 The following actions can [have their bindings overridden](../configuration/bindings.md):
