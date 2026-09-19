@@ -16,27 +16,33 @@ from wasat import GeminiURI
 from rogallo.data import (
     Bookmark,
     CommandLineHistory,
-    Configuration,
     LocationHistory,
     LocationVisit,
     NavigationHistory,
     save_bookmarks,
     save_command_history,
+    save_homepage,
     save_location_history,
     save_naviagation_history,
     save_ui_state,
-    update_configuration,
+)
+from rogallo.data.configuration._io import save_configuration_from
+from rogallo.data.configuration.general import (
+    Configuration,
+    save_general,
+    update_general,
 )
 from rogallo.data.configuration.themes import themes_dir
+from rogallo.data.configuration.toolbar import ToolbarConfiguration
 from rogallo.data.state.ui import UIState
 from rogallo.rogallo import Rogallo
 
 ##############################################################################
 # Patch the ports for Gopher, Finger and Spartan so the screenshots don't
 # show non-standard ports.
-port70.uri.GOPHER_DEFAULT_PORT = 7070
-port79.uri.FINGER_DEFAULT_PORT = 7979
-sybaritic.uri.SPARTAN_DEFAULT_PORT = 3000
+port70.uri.GOPHER_DEFAULT_PORT = 7070  # type: ignore[misc]
+port79.uri.FINGER_DEFAULT_PORT = 7979  # type: ignore[misc]
+sybaritic.uri.SPARTAN_DEFAULT_PORT = 3000  # type: ignore[misc]
 
 ##############################################################################
 # Work our the root of the documentation directory and the build directory.
@@ -120,27 +126,25 @@ def fake_history() -> None:
 ##############################################################################
 # Create the Rogallo app with the specified command line arguments.
 def make_app(
-    viewing: str = "features", with_fake_history: bool = True, **config_overrides: Any
+    viewing: str = "features",
+    with_fake_history: bool = True,
+    *,
+    general: Configuration | None = None,
+    ui_state: UIState | None = None,
+    toolbar: ToolbarConfiguration | None = None,
 ) -> Rogallo:
     save_naviagation_history(NavigationHistory([]))
     save_command_history(CommandLineHistory([]))
-    save_ui_state(UIState())
+    save_ui_state(ui_state or UIState(theme="textual-mono"))
+    general = general or Configuration()
+    general.cache_ttl = 1
+    save_general(general)
+    save_homepage("gemini://localhost/")
+    save_configuration_from("toolbar", toolbar or ToolbarConfiguration())
     if with_fake_history:
         fake_history()
     else:
         save_location_history(LocationHistory([]))
-    with update_configuration() as config:
-        # Spin up a default configuration.
-        defaults = Configuration()
-        for prop in fields(Configuration):
-            setattr(config, prop.name, getattr(defaults, prop.name))
-        # Override some details that are better for the docs.
-        config.home_page = "gemini://localhost/"
-        config.theme = "textual-mono"
-        config.cache_ttl = 1
-        # Then apply any overrides that were passed in.
-        for prop, value in config_overrides.items():
-            setattr(config, prop, value)
     if viewing and "." not in viewing:
         viewing = f"{viewing}.gmi"
     return Rogallo(
@@ -153,5 +157,12 @@ def make_app(
         else Namespace(command="", theme=None)
     )
 
+
+__all__ = [
+    "make_app",
+    "Configuration",
+    "UIState",
+    "ToolbarConfiguration",
+]
 
 ### maker.py ends here

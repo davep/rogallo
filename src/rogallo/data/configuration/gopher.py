@@ -15,7 +15,7 @@ from gophermap import ItemType
 
 ##############################################################################
 # Local imports.
-from ._loader import load_configuration_into
+from ._io import load_configuration_into
 
 
 ##############################################################################

@@ -1,8 +1,8 @@
 """Generate screenshots of Markdown support."""
 
-from support.maker import make_app
+from support.maker import Configuration, make_app
 
-app = make_app("example.md", convert_markdown_to_gemtext=False)
+app = make_app("example.md", general=Configuration(convert_markdown_to_gemtext=False))
 
 if __name__ == "__main__":
     app.run()

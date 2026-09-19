@@ -15,7 +15,7 @@ from bagofstuff.cache import CacheManager
 
 ##############################################################################
 # Local imports.
-from .data import load_configuration
+from .data import load_general
 from .data.locations import cache_dir
 from .document import Document
 from .preflight import make_location
@@ -34,9 +34,9 @@ class ContentCache(CacheManager):
     def __init__(self) -> None:
         """Initialise the content cache."""
         super().__init__(cache_dir())
-        self._disabled = not load_configuration().with_cache
+        self._disabled = not load_general().with_cache
         """Whether the cache is disabled."""
-        self._ttl = load_configuration().cache_ttl
+        self._ttl = load_general().cache_ttl
         """The time-to-live for cached content, in seconds."""
 
     def _cache_files(self, uri: RogalloLocation) -> tuple[Path, Path]:

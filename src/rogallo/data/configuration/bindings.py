@@ -6,7 +6,7 @@ from textual.binding import Keymap
 
 ##############################################################################
 # Local imports.
-from ._loader import load_configuration
+from ._io import load_configuration
 
 
 ##############################################################################

@@ -4,15 +4,13 @@
 # Python imports.
 from collections.abc import Iterator
 from contextlib import contextmanager
-from dataclasses import asdict, dataclass, fields
+from dataclasses import dataclass
 from functools import cache
-from json import dumps, loads
-from pathlib import Path
-from typing import Final, Literal
+from typing import Literal
 
 ##############################################################################
 # Local imports.
-from ..locations import config_dir
+from ._io import load_configuration_into, save_configuration_from
 
 
 ##############################################################################
@@ -76,18 +74,8 @@ class Configuration:
 
 
 ##############################################################################
-def configuration_file() -> Path:
-    """The path to the file that holds the application configuration.
-
-    Returns:
-        The path to the configuration file.
-    """
-    return config_dir() / "configuration.json"
-
-
-##############################################################################
-def save_configuration(configuration: Configuration) -> Configuration:
-    """Save the given configuration.
+def save_general(configuration: Configuration) -> Configuration:
+    """Save the general configuration.
 
     Args:
         configuration: The configuration to store.
@@ -95,70 +83,49 @@ def save_configuration(configuration: Configuration) -> Configuration:
     Returns:
         The configuration.
     """
-    load_configuration.cache_clear()
-    configuration_file().write_text(
-        dumps(asdict(configuration), indent=4), encoding="utf-8"
-    )
-    return load_configuration()
-
-
-##############################################################################
-_WANTED: Final[set[str]] = {field.name for field in fields(Configuration)}
-"""The set of fields that are wanted from the configuration file."""
+    load_general.cache_clear()
+    save_configuration_from("general", configuration)
+    return load_general()
 
 
 ##############################################################################
 @cache
-def load_configuration() -> Configuration:
-    """Load the configuration.
+def load_general() -> Configuration:
+    """Load the general configuration.
 
     Returns:
-        The configuration.
+        The general configuration.
 
     Note:
-        As a side-effect, if the configuration doesn't exist a default one
-        will be saved to storage.
-
         This function is designed so that it's safe and low-cost to
         repeatedly call it. The configuration is cached and will only be
         loaded from storage when necessary.
     """
-    source = configuration_file()
-    return (
-        Configuration(
-            **{
-                field: value
-                for field, value in loads(source.read_text(encoding="utf-8")).items()
-                if field in _WANTED
-            }
-        )
-        if source.exists()
-        else save_configuration(Configuration())
-    )
+    return load_configuration_into(Configuration, "general")
 
 
 ##############################################################################
 @contextmanager
-def update_configuration() -> Iterator[Configuration]:
-    """Context manager for updating the configuration.
+def update_general() -> Iterator[Configuration]:
+    """Context manager for updating the general configuration.
 
-    Loads the configuration and makes it available, then ensures it is
-    saved.
+    Loads the general configuration and makes it available, then ensures it
+    is saved.
 
     Example:
         ```python
-        with update_configuration() as config:
+        with update_general() as config:
             config.meaning = 42
         ```
 
     Yields:
-        The configuration.
+        The general configuration.
     """
-    configuration = load_configuration()
+    configuration = load_general()
     try:
         yield configuration
     finally:
-        save_configuration(configuration)
+        save_general(configuration)
 
 
 ### config.py ends here

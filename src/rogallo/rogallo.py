@@ -21,7 +21,7 @@ from textual_enhanced.app import EnhancedApp
 from . import __version__
 from .data import (
     load_bindings,
-    load_configuration,
+    load_general,
     load_themes,
     load_ui_state,
     update_ui_state,
@@ -104,7 +104,7 @@ class Rogallo(EnhancedApp[None]):
             except InvalidThemeError:
                 pass
         self.update_keymap(load_bindings())
-        if load_configuration().disable_animations:
+        if load_general().disable_animations:
             self.animation_level = "none"
 
     def watch_theme(self) -> None:
