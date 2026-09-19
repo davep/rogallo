@@ -689,12 +689,6 @@ class Main(EnhancedScreen[None]):
         """Handle the change theme action."""
         await self.run_action("change_theme_command")
 
-    def action_change_command_line_location_command(self) -> None:
-        """Change the location of the command line."""
-        self._command_line.dock_top = not self._command_line.dock_top
-        with update_configuration() as config:
-            config.command_line_on_top = self._command_line.dock_top
-
     def action_jump_to_command_line_command(self) -> None:
         """Jump to the command line."""
         assert self.AUTO_FOCUS is not None
