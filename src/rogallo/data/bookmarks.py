@@ -60,7 +60,7 @@ class Bookmark:
 
     def __eq__(self, other: object, /) -> bool:
         if isinstance(other, Bookmark):
-            return self.location == other.location
+            return self.title == other.title
         return NotImplemented
 
 
