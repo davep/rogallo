@@ -16,6 +16,7 @@ $ rogallo directories
 ~/.cache/rogallo
 ~/.config/rogallo
 ~/.local/share/rogallo
+~/.local/state/rogallo
 ```
 
 ## Contents
@@ -26,7 +27,7 @@ The usual contents of the configuration directory are:
 - [`bindings.yaml`](./bindings.md)
 - [`displayable-content-types.yaml`](./content_types.md)
 - [`general.yaml`](./general.md)
-- [`gopher.yaml`](./gopher.md)
+- [`gopher.yaml`](../protocols/gopher.md#configuration)
 - [`icons.yaml`](./icons.md)
 - [`preformatted.yaml`](../ui/viewer.md#configuration)
 - [`themes/*.json`](../ui/custom-themes.md)

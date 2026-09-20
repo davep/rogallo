@@ -11,7 +11,6 @@ Other configuration items can be found in this section:
 - [Application command keyboard bindings](bindings.md)
 - [Displayable content types](content_types.md)
 - [General configuration](general.md)
-- [Gopher-specific configuration](gopher.md)
 - [Icon configuration](icons.md)
 
 [//]: # (configuration.md ends here)
