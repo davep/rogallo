@@ -200,11 +200,11 @@ render it. This makes it easier to navigate links, etc.
 ```
 
 If you would prefer that Rogallo renders the text using its builtin Markdown
-widget, you can set `convert_markdown_to_gemtext` in the configuration file
-to `false`:
+widget, you can set `convert_markdown_to_gemtext` in `general.yaml` (found
+in the [configuration directory](../configuration/directory.md)) to `false`:
 
-```json
-"convert_markdown_to_gemtext": false
+```yaml
+convert_markdown_to_gemtext: false
 ```
 
 The result of viewing Markdown will be more like this:
