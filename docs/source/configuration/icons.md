@@ -11,19 +11,19 @@ you wish to change any of the defaults, you can edit them in the
 The default file will look something like this:
 
 ```yaml
-client_certificate_used: "\u26BF"
-fingerspace_link: "\u261B"
-geminispace_link: "\u2AA2"
-gopherspace_link: "\u25CB"
-list_item_bullet: "\u2022"
-nexspace_link: "\u263D"
-otherspace_link: "\u2197"
-spartanspace_link: "\u2AA7"
-titanspace_link: "\u2A53"
-unverified: "\u2022"
-verified_ca: "\u26C9"
-verified_off: "\u2717"
-verified_tofu: "\u2713"
+client_certificate_used: ⚿
+fingerspace_link: ☛
+geminispace_link: ⪢
+gopherspace_link: ○
+list_item_bullet: •
+nexspace_link: ☽
+otherspace_link: ↗
+spartanspace_link: ⪧
+titanspace_link: ⩓
+unverified: •
+verified_ca: ⛉
+verified_off: ✗
+verified_tofu: ✓
 ```
 
 ## Icon meanings
