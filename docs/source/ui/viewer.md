@@ -200,11 +200,11 @@ render it. This makes it easier to navigate links, etc.
 ```
 
 If you would prefer that Rogallo renders the text using its builtin Markdown
-widget, you can set `convert_markdown_to_gemtext` in the configuration file
-to `false`:
+widget, you can set `convert_markdown_to_gemtext` in `general.yaml` (found
+in the [configuration directory](../configuration/directory.md)) to `false`:
 
-```json
-"convert_markdown_to_gemtext": false
+```yaml
+convert_markdown_to_gemtext: false
 ```
 
 The result of viewing Markdown will be more like this:
@@ -216,6 +216,55 @@ While the result is more in keeping with the document being Markdown, it
 will be trickier to navigate if you don't have a mouse (the issue being that
 [Textual's Markdown widget](https://textual.textualize.io/widgets/markdown/)
 is keyboard-hostile when it comes to navigation of links).
+
+### Maximum document width
+
+By default a document being displayed in Rogallo will take up as much
+horizontal width as possible. So, if the terminal is 80 characters wide,
+it'll look like this:
+
+```{.textual path="docs/screenshots/max_width_off_screenshot.py" title="Text at 80 characters wide" lines=40 columns=80}
+```
+
+At 120:
+
+```{.textual path="docs/screenshots/max_width_off_screenshot.py" title="Text at 120 characters wide" lines=60 columns=120}
+```
+
+And even wider:
+
+```{.textual path="docs/screenshots/max_width_off_screenshot.py" title="Text at 430 characters wide" lines=215 columns=430}
+```
+
+If you prefer that Rogallo always caps the width of text at a specific
+value, set `maximum_document_width` in `general.yaml` the [configuration
+directory](../configuration/directory.md). A value of `0` means "no limit"
+(the default value). If you would prefer that it's set to 80 characters, for
+example:
+
+```yaml
+maximum_document_width: 80
+```
+
+```{.textual path="docs/screenshots/max_width_on_screenshot.py" title="Document widget capped at 80 characters wide" lines=60 columns=120}
+```
+
+### Link tooltips
+
+By default, when using a mouse, Rogallo will show a tooltip containing the
+target URI when you hover the mouse cursor over a link.
+
+```{.textual path="docs/screenshots/links_screenshot.py" title="Rogallo showing a link tooltip" lines=35 columns=90 hover="GemtextLink"}
+```
+
+If this feels too cluttered it can be turned off with the
+`show_link_tooltips` setting in `general.yaml` in the [configuration
+directory](../configuration/directory.md). Valid values are `true` and
+`false`, with `true` (show the tooltips) being the default.
+
+```yaml
+show_link_tooltips: true
+```
 
 ## Available bindings
 

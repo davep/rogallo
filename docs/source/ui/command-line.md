@@ -123,11 +123,12 @@ matches known commands, etc, a dimmed completion will be suggested. Press
 ### Input prompt
 
 By default the input prompt in the command line is `>`. If you would prefer
-it's something else, you can configure this via the configuration file.
-Suppose, instead, you wanted a nice colourful rocket:
+it's something else, you can configure this via `general.yaml` in the
+[configuration directory](../configuration/directory.md). Suppose, instead,
+you wanted a nice colourful rocket:
 
-```json
-"command_line_prompt": "\ud83d\ude80"
+```yaml
+command_line_prompt: "\ud83d\ude80"
 ```
 
 resulting in:
@@ -146,32 +147,33 @@ By default it's the following string of characters:
 
 Each character is a "cell" in the animation that is played. If you would
 prefer that the busy indication is something different, you can edit the
-`busy_indicator_cells` setting in the configuration file. By default it will
-be an empty string, indicating that Rogallo should use its default
-animation.
+`busy_indicator_cells` setting in `general.yaml` in the [configuration
+directory](../configuration/directory.md). By default it will be an empty
+string, indicating that Rogallo should use its default animation.
 
 Suppose you wanted the busy prompt to be the phases of the Moon, you could
 use:
 
-```json
-"busy_indicator_cells": "🌑🌒🌓🌔🌕🌖🌗🌘"
+```yaml
+busy_indicator_cells: "🌑🌒🌓🌔🌕🌖🌗🌘"
 ```
 
 ### Location
 
 By default, Rogallo's command line appears at the bottom of the screen,
 above the footer of the application. It can be moved to the top of the
-screen, below the application toolbar (if the toolbar is being used):
+screen:
 
 ```{.textual path="docs/screenshots/command_line_top_screenshot.py" title="Rogallo with the command line on top" lines=35 columns=90}
 ```
 
-The setting in the configuration file is `command_line_on_top`, which takes
-`true` or `false` as valid values. It will be `false` (at the bottom) by
-default:
+The setting in `general.yaml` in the [configuration
+directory](../configuration/directory.md) is `command_line_on_top`, which
+takes `true` or `false` as valid values. It will be `false` (at the bottom)
+by default:
 
-```json
-"command_line_on_top": false
+```yaml
+command_line_on_top: false
 ```
 
 ## Available bindings

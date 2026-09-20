@@ -84,7 +84,7 @@ from ...data import (
     NavigationPosition,
     load_bookmarks,
     load_command_history,
-    load_configuration,
+    load_general,
     load_homepage,
     load_location_history,
     load_navigation_history,
@@ -332,7 +332,7 @@ class Main(EnhancedScreen[None]):
                 navigation_history=Main._navigation_history,
                 bookmarks=Main._bookmarks,
             )
-        if load_configuration().footer_visible:
+        if load_general().footer_visible:
             yield Footer()
 
     def _navigation_changed(self) -> None:
@@ -349,7 +349,7 @@ class Main(EnhancedScreen[None]):
         self._client_certificates = (
             await self._clients.gemini.client_cert_store.list_certificates()
         )
-        config = load_configuration()
+        config = load_general()
         self._side_panel_visible = load_ui_state().side_panel_visible
         self._command_line.dock_top = config.command_line_on_top
         if self._clients.gemini.trust_store:

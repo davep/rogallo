@@ -1,4 +1,4 @@
-"""Provides a utility function for loading configuration data."""
+"""Provides a code for performing I/O on configuration data."""
 
 ##############################################################################
 # Python imports.
@@ -68,4 +68,20 @@ def load_configuration_into[T: ConfigurationClass](
     )
 
 
-### _loader.py ends here
+##############################################################################
+def save_configuration_from(name: str, configuration: ConfigurationClass) -> None:
+    """Save the given configuration data to the given file.
+
+    Args:
+        name: The name of the configuration file.
+        configuration: The configuration data to save.
+
+    Returns:
+        The saved configuration data.
+    """
+    (config_dir() / name).with_suffix(".yaml").write_text(
+        safe_dump(asdict(configuration)), encoding="utf-8"
+    )
+
+
+### _io.py ends here

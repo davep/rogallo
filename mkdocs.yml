@@ -22,10 +22,10 @@ nav:
   - "Configuration":
       - configuration/index.md
       - configuration/directory.md
-      - configuration/bindings.md
       - configuration/content_types.md
-      - configuration/gopher.md
+      - configuration/general.md
       - configuration/icons.md
+      - configuration/bindings.md
   - "License": license.md
   - "Change Log": changelog.md
 

@@ -15,7 +15,7 @@ from textual.app import App
 
 ##############################################################################
 # Local imports.
-from .data import load_configuration
+from .data import load_general
 from .types import DEFAULT_GEMINI_EXTENSION
 
 
@@ -29,10 +29,7 @@ def external_editor() -> str | None:
             configured.
     """
     return (
-        load_configuration().external_editor
-        or getenv("VISUAL")
-        or getenv("EDITOR")
-        or None
+        load_general().external_editor or getenv("VISUAL") or getenv("EDITOR") or None
     )
 
 

@@ -7,7 +7,7 @@ from typing import Final
 
 ##############################################################################
 # Local imports.
-from ._loader import load_configuration
+from ._io import load_configuration
 
 ##############################################################################
 type Aliases = dict[str, str]

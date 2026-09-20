@@ -84,7 +84,7 @@ typecheck:			# Perform static type checks with mypy
 
 .PHONY: stricttypecheck
 stricttypecheck:	        # Perform a strict static type checks with mypy
-	$(mypy) --scripts-are-modules --strict $(src) $(tests)
+	$(mypy) --scripts-are-modules --strict $(src) $(tests) $(docs)
 
 .PHONY: test
 test:				# Run the unit tests

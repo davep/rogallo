@@ -5,18 +5,15 @@
 from .bookmarks import Bookmark, Bookmarks, load_bookmarks, save_bookmarks
 from .client_certificates import client_certificates_directory
 from .configuration import (
-    Configuration,
     load_aliases,
     load_bindings,
-    load_configuration,
     load_displayable_content_types,
+    load_general,
     load_gopher,
     load_icons,
     load_preformatted,
     load_themes,
     load_toolbar,
-    save_configuration,
-    update_configuration,
 )
 from .homepage import load_homepage, save_homepage
 from .initial_load import initial_load
@@ -51,13 +48,12 @@ __all__ = [
     "Bookmarks",
     "client_certificates_directory",
     "CommandLineHistory",
-    "Configuration",
     "initial_load",
     "load_aliases",
     "load_bindings",
     "load_bookmarks",
     "load_command_history",
-    "load_configuration",
+    "load_general",
     "load_displayable_content_types",
     "load_gopher",
     "load_homepage",
@@ -76,7 +72,6 @@ __all__ = [
     "NavigationPosition",
     "save_bookmarks",
     "save_command_history",
-    "save_configuration",
     "save_homepage",
     "save_location_history",
     "save_naviagation_history",
@@ -84,7 +79,7 @@ __all__ = [
     "save_trusted_schemes",
     "save_ui_state",
     "known_hosts",
-    "update_configuration",
+    "load_general",
     "update_ui_state",
 ]
 

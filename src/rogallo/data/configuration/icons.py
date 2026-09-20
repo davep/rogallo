@@ -9,7 +9,7 @@ from typing import Final, TypedDict
 # PyYAML imports.
 ##############################################################################
 # Local imports.
-from ._loader import load_configuration
+from ._io import load_configuration
 
 
 ##############################################################################

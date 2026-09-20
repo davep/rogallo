@@ -78,7 +78,7 @@ from wasat import GeminiURI
 from ...data import (
     LocationHistory,
     NavigationPosition,
-    load_configuration,
+    load_general,
     load_preformatted,
     load_ui_state,
     update_ui_state,
@@ -243,7 +243,7 @@ class Viewer(Vertical, can_focus=False):
         """Compose the viewer widget."""
         yield ViewerTitle()
         document = DocumentView()
-        if (max_width := load_configuration().maximum_document_width) > 0:
+        if (max_width := load_general().maximum_document_width) > 0:
             document.styles.max_width = max_width
             yield HorizontalGroup(document, id="document-wrapper", classes="dead-space")
         else:
@@ -419,7 +419,7 @@ class Viewer(Vertical, can_focus=False):
                             ),
                         )
                     )
-                    if load_configuration().convert_markdown_to_gemtext
+                    if load_general().convert_markdown_to_gemtext
                     else [Markdown(document.content)]
                 )
 
@@ -606,7 +606,7 @@ class Viewer(Vertical, can_focus=False):
             self._jump_timer = None
         if start_new:
             self._jump_timer = self.set_timer(
-                load_configuration().jump_progress_timeout, self._reset_jump_progress
+                load_general().jump_progress_timeout, self._reset_jump_progress
             )
 
     def _reset_jump_progress(self) -> None:

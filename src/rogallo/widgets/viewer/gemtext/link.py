@@ -34,7 +34,7 @@ from textual_enhanced.binding import HelpfulBinding
 
 ##############################################################################
 # Local imports.
-from ....data import load_configuration, load_icons
+from ....data import load_general, load_icons
 from ....messages import CopyToClipboard, OpenLocation, OpenURI
 from ....preflight import (
     has_navigable_path,
@@ -200,7 +200,7 @@ class GemtextLink(Widget, can_focus=True):
     def _watch__normalised_uri(self) -> None:
         """Watch for changes to the normalised URI."""
         self._icon = self._best_icon()
-        if load_configuration().show_link_tooltips:
+        if load_general().show_link_tooltips:
             self.tooltip = self._normalised_uri
 
     @property
