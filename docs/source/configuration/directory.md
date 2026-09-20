@@ -24,7 +24,12 @@ The usual contents of the configuration directory are:
 
 - [`aliases.yaml`](../ui/command-line.md#aliases)
 - [`bindings.yaml`](./bindings.md)
-- [`configuration.json`](./index.md)
+- [`displayable-content-types.yaml`](./content_types.md)
+- [`general.yaml`](./general.md)
+- [`gopher.yaml`](./gopher.md)
+- [`icons.yaml`](./icons.md)
+- [`preformatted.yaml`](../ui/viewer.md#configuration)
 - [`themes/*.json`](../ui/custom-themes.md)
+- [`toolbar.yaml`](../ui/toolbar.md#toolbar-configuration)
 
 [//]: # (directory.md ends here)
