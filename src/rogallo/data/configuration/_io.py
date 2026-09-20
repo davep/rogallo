@@ -15,6 +15,19 @@ from ..locations import config_dir
 
 
 ##############################################################################
+def _dump(data: Any) -> str:
+    """Dump the given data to a YAML string.
+
+    Args:
+        data: The data to dump.
+
+    Returns:
+        The dumped YAML string.
+    """
+    return safe_dump(data, allow_unicode=True)
+
+
+##############################################################################
 def load_configuration[T](name: str, default: T) -> T:
     """Load the configuration data from the given file.
 
@@ -28,7 +41,7 @@ def load_configuration[T](name: str, default: T) -> T:
     if not (
         config_file := (config_dir() / name).with_suffix(".yaml")
     ).exists() and bool(default):
-        config_file.write_text(safe_dump(default), encoding="utf-8")
+        config_file.write_text(_dump(default), encoding="utf-8")
     try:
         return safe_load(config_file.read_text(encoding="utf-8")) or default
     except (OSError, YAMLError):
@@ -80,7 +93,7 @@ def save_configuration_from(name: str, configuration: ConfigurationClass) -> Non
         The saved configuration data.
     """
     (config_dir() / name).with_suffix(".yaml").write_text(
-        safe_dump(asdict(configuration)), encoding="utf-8"
+        _dump(asdict(configuration)), encoding="utf-8"
     )
 
 

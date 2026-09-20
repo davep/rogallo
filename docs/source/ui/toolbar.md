@@ -37,23 +37,23 @@ The settings for the default buttons look like this:
 ```yaml
 buttons:
 - command: GoHome
-  label: "\u2302"
+  label: ⌂
 - command: Reload
-  label: "\u21BB"
+  label: ↻
 - command: Backward
-  label: "\u25C0\u25C0"
+  label: ◀◀
 - command: Forward
-  label: "\u25B6\u25B6"
+  label: ▶▶
 - command: GoToParent
-  label: "\u2191"
+  label: ↑
 - command: GoToRoot
-  label: "\u21C8"
+  label: ⇈
 - command: SearchHistory
-  label: "\u25F7"
+  label: ◷
 - command: SearchBookmarks
-  label: "\u2605"
+  label: ★
 - command: ToggleView
-  label: "\u21CB"
+  label: ⇋
 ```
 
 To configure the content of the toolbar, edit this list to add or remove

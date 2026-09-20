@@ -63,25 +63,25 @@ The default configuration looks like this:
 ```yaml
 show_type_badges: true
 type_badges:
-  '0': "\U0001F4C4"
-  '1': "\U0001F4C1"
-  '2': "\U0001F4C7"
-  '3': "\u274C"
-  '4': "\U0001F4E6"
-  '5': "\U0001F4BE"
-  '6': "\U0001F4DC"
-  '7': "\U0001F50D"
-  '8': "\U0001F5A5\uFE0F"
-  '9': "\U0001F4E6"
-  I: "\U0001F5BC\uFE0F"
-  P: "\U0001F4C4"
-  X: "\U0001F4C4"
-  d: "\U0001F4C4"
-  g: "\U0001F5BC\uFE0F"
-  h: "\U0001F310"
-  i: "\u2139\uFE0F"
-  s: "\U0001F3B5"
-  unknown: "\u2753"
+  '0': 📄
+  '1': 📁
+  '2': 📇
+  '3': ❌
+  '4': 📦
+  '5': 💾
+  '6': 📜
+  '7': 🔍
+  '8': 🖥️
+  '9': 📦
+  I: 🖼️
+  P: 📄
+  X: 📄
+  d: 📄
+  g: 🖼️
+  h: 🌐
+  i: ℹ️
+  s: 🎵
+  unknown: ❓
 ```
 
 ### Using badges
