@@ -128,7 +128,7 @@ it's something else, you can configure this via `general.yaml` in the
 you wanted a nice colourful rocket:
 
 ```yaml
-command_line_prompt: "\ud83d\ude80"
+command_line_prompt: "🚀"
 ```
 
 resulting in:
