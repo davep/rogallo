@@ -33,8 +33,7 @@ def to_gemtext(gophermap: str) -> Iterator[str]:
     Yields:
         The Gemtext representation of the Gophermap.
     """
-    gopher_config = load_gopher()
-    badges = gopher_config.type_badges if gopher_config.show_type_badges else {}
+    badges = load_gopher().badge_mappings
     for item in GopherMap(gophermap).items:
         if badge := badges.get(item.type, ""):
             badge += " "
