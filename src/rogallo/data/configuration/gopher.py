@@ -38,6 +38,8 @@ _DEFAULT_TYPE_BADGES: Final[BadgeMapping] = {
     ItemType.INFO.value: "ℹ️",
     ItemType.MENU.value: "📁",
     ItemType.PDF.value: "📄",
+    ItemType.PNG.value: "🖼️",
+    ItemType.RTF.value: "📄",
     ItemType.TELNET.value: "🖥️",
     ItemType.TEXT.value: "📄",
     ItemType.UUENCODED.value: "📜",
