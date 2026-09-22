@@ -62,6 +62,10 @@
 - **BREAKING CHANGE:**: The configuration values that haven't been moved
   elsewhere in the above changes have been moved to `general.yaml`.
   ([#466](https://github.com/davep/rogallo/pull/466))
+- Added PNG as a Gophermap item type badge.
+  ([#470](https://github.com/davep/rogallo/pull/472))
+- Added RTF as a Gophermap item type badge.
+  ([#470](https://github.com/davep/rogallo/pull/472))
 
 ## v2.4.0
 
