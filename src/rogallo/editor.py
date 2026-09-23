@@ -34,12 +34,15 @@ def external_editor() -> str | None:
 
 
 ##############################################################################
-def edit_externally(application: App[Any], text: str) -> str:
+def edit_externally(
+    application: App[Any], text: str, suffix: str = DEFAULT_GEMINI_EXTENSION
+) -> str:
     """Edit the given text in an external editor.
 
     Args:
         application: The Textual application.
         text: The text to edit.
+        suffix: The suffix to use for the temporary file.
 
     Returns:
         The edited text, or the original text if no external editor is
@@ -48,7 +51,7 @@ def edit_externally(application: App[Any], text: str) -> str:
     if not (editor := external_editor()):
         return text
     with NamedTemporaryFile(
-        mode="w+", delete=False, encoding="utf-8", suffix=DEFAULT_GEMINI_EXTENSION
+        mode="w+", delete=False, encoding="utf-8", suffix=suffix
     ) as temp_file:
         user_input = Path(temp_file.name)
         temp_file.write(text)
