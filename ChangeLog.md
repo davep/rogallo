@@ -4,7 +4,7 @@
 
 **Released: WiP**
 
-- **BREAKING CHANGE**: Keyboard bindings are now loaded from `bindings.yaml`
+- **BREAKING CHANGE:** Keyboard bindings are now loaded from `bindings.yaml`
   rather than `configuration.json`.
   ([#436](https://github.com/davep/rogallo/pull/436) and
   [#446](https://github.com/davep/rogallo/pull/446))
@@ -53,13 +53,13 @@
 - **BREAKING CHANGE:** Removed the `ChangeCommandLineLocation` command. The
   command line location is now changed purely by the configuration file.
   ([#463](https://github.com/davep/rogallo/pull/463))
-- **BREAKING CHANGE:**: Moved the theme configuration value into the
+- **BREAKING CHANGE:** Moved the theme configuration value into the
   application's UI state storage.
   ([#464](https://github.com/davep/rogallo/pull/464))
-- **BREAKING CHANGE:**: Moved home page setting out of configuration and
+- **BREAKING CHANGE:** Moved home page setting out of configuration and
   into a dedicated file in the data directory.
   ([#465](https://github.com/davep/rogallo/pull/465))
-- **BREAKING CHANGE:**: The configuration values that haven't been moved
+- **BREAKING CHANGE:** The configuration values that haven't been moved
   elsewhere in the above changes have been moved to `general.yaml`.
   ([#466](https://github.com/davep/rogallo/pull/466))
 - Added PNG as a Gophermap item type badge.
