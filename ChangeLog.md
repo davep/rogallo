@@ -66,6 +66,8 @@
   ([#470](https://github.com/davep/rogallo/pull/472))
 - Added RTF as a Gophermap item type badge.
   ([#470](https://github.com/davep/rogallo/pull/472))
+- **BREAKING CHANGE:** Dropped `d` as an alias for the `directories` CLI
+  command. ([#474](https://github.com/davep/rogallo/pull/474))
 
 ## v2.4.0
 

@@ -67,7 +67,7 @@ def get_args() -> Namespace:
     # Add the 'directories' command.
     sub_parser.add_parser(
         "directories",
-        aliases=["dirs", "d"],
+        aliases=["dirs"],
         help="Show the directories created and used by Rogallo",
     )
 
