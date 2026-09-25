@@ -127,9 +127,8 @@ rogallo licence
 ### `open`
 
 The open command can be used to open either a Gemtext file in the local
-filesystem, or a connection to content on a supported remote service
-(normally a URI starting with either `gemini://`, `gopher://` or
-`finger://`).
+filesystem, or a connection to content served using [a supported
+protocol](./protocols/index.md).
 
 ```sh
 rogallo open --help
