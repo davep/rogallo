@@ -352,7 +352,6 @@ def migrate_legacy_configuration() -> None:
         ),
     )
 
-    # preformatted
     # toolbar
 
     save_legacy_configuration(replace(legacy_config, migrated=True))
