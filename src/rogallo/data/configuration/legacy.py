@@ -221,5 +221,18 @@ def migrate_legacy_configuration() -> None:
 
     save_legacy_configuration(replace(legacy_config, migrated=True))
 
+    # TODO:
+    # - Theme
+    # - Displayable content types
+    # - Handle ANSI escape sequences
+    # - Strip emoji
+    # - Side panel visible
+    # - Side panel on right
+    # - Side panel chosen tab
+    # - Stripe links
+    # - With link jumps
+    # - Cosy link jumps
+    # - Anything else I've forgotten.
+
 
 ### legacy.py ends here
