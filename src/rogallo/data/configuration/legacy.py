@@ -314,7 +314,24 @@ def migrate_legacy_configuration() -> None:
             type_badges=legacy_config.gopher_type_badges,
         ),
     )
-    # icons
+    save_configuration(
+        "icons",
+        {
+            "geminispace_link": legacy_config.geminispace_link_icon,
+            "fingerspace_link": legacy_config.fingerspace_link_icon,
+            "gopherspace_link": legacy_config.gopherspace_link_icon,
+            "spartanspace_link": legacy_config.spartanspace_link_icon,
+            "nexspace_link": legacy_config.nexspace_link_icon,
+            "titanspace_link": legacy_config.titanspace_link_icon,
+            "otherspace_link": legacy_config.otherspace_link_icon,
+            "list_item_bullet": legacy_config.list_item_bullet_icon,
+            "client_certificate_used": legacy_config.client_certificate_used_icon,
+            "verified_ca": legacy_config.verified_ca_icon,
+            "verified_tofu": legacy_config.verified_tofu_icon,
+            "verified_off": legacy_config.verified_off_icon,
+            "unverified": legacy_config.unverified_icon,
+        },
+    )
     # preformatted
     # toolbar
 
