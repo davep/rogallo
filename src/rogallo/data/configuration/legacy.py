@@ -14,7 +14,7 @@ from gophermap import ItemType
 ##############################################################################
 # Local imports.
 from ..locations import config_dir
-from ._io import save_configuration
+from ._io import save_configuration, save_configuration_from
 
 
 ##############################################################################
@@ -283,6 +283,7 @@ def migrate_legacy_configuration() -> None:
         return
     print("Migrating legacy configuration to new format...")
     from .general import GeneralConfiguration, save_general
+    from .gopher import GopherConfiguration
 
     save_general(
         GeneralConfiguration(
@@ -309,7 +310,13 @@ def migrate_legacy_configuration() -> None:
     save_configuration("aliases", legacy_config.aliases)
     if legacy_config.bindings:
         save_configuration("bindings", legacy_config.bindings)
-    # gopher
+    save_configuration_from(
+        "gopher",
+        GopherConfiguration(
+            show_type_badges=legacy_config.gopher_show_type_badges,
+            type_badges=legacy_config.gopher_type_badges,
+        ),
+    )
     # icons
     # preformatted
     # toolbar
