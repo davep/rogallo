@@ -82,6 +82,19 @@ def load_configuration_into[T: ConfigurationClass](
 
 
 ##############################################################################
+def save_configuration[T](name: str, configuration: T) -> None:
+    """Save the given configuration data to the given file.
+
+    Args:
+        name: The name of the configuration file.
+        configuration: The configuration data to save.
+    """
+    (config_dir() / name).with_suffix(".yaml").write_text(
+        _dump(configuration), encoding="utf-8"
+    )
+
+
+##############################################################################
 def save_configuration_from(name: str, configuration: ConfigurationClass) -> None:
     """Save the given configuration data to the given file.
 
@@ -92,9 +105,7 @@ def save_configuration_from(name: str, configuration: ConfigurationClass) -> Non
     Returns:
         The saved configuration data.
     """
-    (config_dir() / name).with_suffix(".yaml").write_text(
-        _dump(asdict(configuration)), encoding="utf-8"
-    )
+    save_configuration(name, asdict(configuration))
 
 
 ### _io.py ends here

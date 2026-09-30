@@ -203,6 +203,14 @@ def show_dignoastics() -> None:
 
 
 ##############################################################################
+def maybe_migrate_legacy_configuration() -> None:
+    """Migrate legacy configuration if necessary."""
+    from .data.configuration.legacy import migrate_legacy_configuration
+
+    migrate_legacy_configuration()
+
+
+##############################################################################
 def main() -> None:
     """Main entry point for the rogallo application."""
     match (args := get_args()).command:
@@ -218,6 +226,7 @@ def main() -> None:
         case "themes":
             show_themes()
         case _:
+            maybe_migrate_legacy_configuration()
             initial_load()
             Rogallo(args).run()
 
