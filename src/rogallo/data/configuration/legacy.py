@@ -279,8 +279,8 @@ def migrate_legacy_configuration() -> None:
     if legacy_config.migrated:
         return
     print("Migrating legacy configuration to new format...")
+
     from .general import GeneralConfiguration, save_general
-    from .gopher import GopherConfiguration
 
     save_general(
         GeneralConfiguration(
@@ -305,8 +305,12 @@ def migrate_legacy_configuration() -> None:
     )
 
     save_configuration("aliases", legacy_config.aliases)
+
     if legacy_config.bindings:
         save_configuration("bindings", legacy_config.bindings)
+
+    from .gopher import GopherConfiguration
+
     save_configuration_from(
         "gopher",
         GopherConfiguration(
@@ -314,6 +318,7 @@ def migrate_legacy_configuration() -> None:
             type_badges=legacy_config.gopher_type_badges,
         ),
     )
+
     save_configuration(
         "icons",
         {
