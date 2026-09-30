@@ -8,10 +8,6 @@ from pathlib import Path
 from typing import Final, Literal
 
 ##############################################################################
-# GopherMap imports.
-from gophermap import ItemType
-
-##############################################################################
 # Local imports.
 from ..locations import config_dir
 from ._io import save_configuration, save_configuration_from
@@ -23,207 +19,58 @@ class LegacyConfiguration:
     """The pre-v3 legacy configuration."""
 
     migrated: bool = False
-    """Whether the configuration has been migrated to the new format."""
-
     theme: str | None = None
-    """The theme for the application."""
-
     bindings: dict[str, str] = field(default_factory=dict)
-    """Command keyboard binding overrides."""
-
     command_line_on_top: bool = False
-    """Should the command line live at the top of the screen?"""
-
     displayable_content_types: list[str] = field(default_factory=list)
-    """The content types that can be displayed in the viewer."""
-
     handle_ansi_escape_sequences: bool = True
-    """Should ANSI escape sequences be handled in text content?"""
-
     strip_emoji: bool = False
-    """Should emoji be stripped from text content?"""
-
     side_panel_visible: bool = False
-    """Should the sidepanel be visible?"""
-
     side_panel_on_right: bool = False
-    """Should the sidepanel be on the right?"""
-
     side_panel_chosen_tab: str = "bookmarks"
-    """The tab that should be chosen in the sidepanel."""
-
     show_link_tooltips: bool = True
-    """Should tooltips be shown for links?"""
-
     show_preformat_tooltips: bool = True
-    """Should tooltips be shown for preformatted text?"""
-
     disable_animations: bool = False
-    """Should animations be disabled?"""
-
     home_page: str = "gemini://geminiprotocol.net/"
-    """The home page for the application."""
-
     with_cache: bool = True
-    """Should the application use a cache for remote content?"""
-
     cache_ttl: int = 3_600
-    """The time-to-live for cached content, in seconds."""
-
     capsule_certificate_verify_mode: Literal["ca", "tofu", "hybrid", "off"] = "hybrid"
-    """The certificate verification mode Gemini capsules.
-
-    One of: `ca`, `tofu`, `hybrid` or `off`.
-    """
-
     connection_timeout: int = 10
-    """The connection timeout for network requests, in seconds."""
-
     read_timeout: int = 30
-    """The read timeout for network requests, in seconds."""
-
     maximum_redirects: int = 5
-    """The maximum number of redirects to follow for network requests."""
-
     stripe_links: bool = False
-    """Should links be given alternating backgrounds to help them stand out?"""
-
     with_link_jumps: bool = True
-    """Should the application support jumping to links via numeric labels?"""
-
     cosy_link_jumps: bool = False
-    """Should the numeric labels be displayed in a cosy way?"""
-
     maximum_document_width: int = 0
-    """The maximum width of a document, in characters. A value of 0 means no limit."""
-
     jump_progress_timeout: float = 1.0
-    """The time in seconds before the jump progress resets."""
-
     geminispace_link_icon: str = "⪢"
-    """The icon to use for links to gemini:// URIs."""
-
     fingerspace_link_icon: str = "☛"
-    """The icon to use for links to finger:// URIs."""
-
     gopherspace_link_icon: str = "○"
-    """The icon to use for links to gopher:// URIs."""
-
     spartanspace_link_icon: str = "⪧"
-    """The icon to use for links to spartan:// URIs."""
-
     nexspace_link_icon: str = "☽"
-    """The icon to use for links to nex:// URIs."""
-
     titanspace_link_icon: str = "⩓"
-    """The icon to use for links to titan:// URIs."""
-
     otherspace_link_icon: str = "↗"
-    """The icon to use for non-gemini URIs."""
-
     list_item_bullet_icon: str = "•"
-    """The icon to use for list item bullets."""
-
     client_certificate_used_icon: str = "⚿"
-    """The icon to use for indicating that a client certificate was used."""
-
     verified_ca_icon: str = "⛉"
-    """The icon to use for indicating that a server was verified by a CA."""
-
     verified_tofu_icon: str = "✓"
-    """The icon to use for indicating that a server was verified by TOFU."""
-
     verified_off_icon: str = "✗"
-    """The icon to use for indicating that server was off."""
-
     unverified_icon: str = "•"
-    """The icon to use for indicating that a server was not verified."""
-
     external_editor: str | None = None
-    """The external editor to use for editing text content."""
-
     blend_pre_formatted_with_background: list[str] = field(default_factory=lambda: [""])
-    """List of types of pre-formatted text to blend with the background."""
-
     hide_preformatted: list[tuple[str, str]] = field(default_factory=list)
-    """List of (URI-prefix, alt-text) tuples of pre-formatted text to hide."""
-
     gopher_show_type_badges: bool = True
-    """Whether to show badges for Gopher item types."""
-
-    gopher_type_badges: dict[str, str] = field(
-        default_factory=lambda: {
-            ItemType.TEXT.value: "📄",
-            ItemType.MENU.value: "📁",
-            ItemType.CSO.value: "📇",
-            ItemType.ERROR.value: "❌",
-            ItemType.BINHEX.value: "📦",
-            ItemType.DOS_FILE.value: "💾",
-            ItemType.UUENCODED.value: "📜",
-            ItemType.INDEX_SEARCH.value: "🔍",
-            ItemType.TELNET.value: "🖥️",
-            ItemType.BINARY.value: "📦",
-            ItemType.INFO.value: "ℹ️",
-            ItemType.GIF.value: "🖼️",
-            ItemType.IMAGE.value: "🖼️",
-            ItemType.HTML.value: "🌐",
-            ItemType.DOCUMENT.value: "📄",
-            ItemType.AUDIO.value: "🎵",
-            ItemType.PDF.value: "📄",
-            ItemType.XML.value: "📄",
-            ItemType.UNKNOWN.value: "❓",
-        }
-    )
-    """The badges to use for Gopher item types."""
-
-    aliases: dict[str, str] = field(
-        default_factory=lambda: {
-            "fg": "gopher://gopher.floodgap.com/1/v2/vs?{q}",
-            "gp": "gemini://gemi.dev/cgi-bin/wp.cgi/search?{q}",
-            "ken": "gemini://kennedy.gemi.dev/search?{q}",
-            "tlgs": "gemini://tlgs.one/search?{q}",
-        }
-    )
-    """Aliases to use in the command line."""
-
+    gopher_type_badges: dict[str, str] = field(default_factory=dict)
+    aliases: dict[str, str] = field(default_factory=dict)
     guess_language_for_syntax_highlighting_text_documents: bool = True
-    """Whether to guess the language for syntax highlighting of text documents."""
-
     convert_markdown_to_gemtext: bool = True
-    """Whether to convert Markdown documents to Gemtext for display."""
-
     toolbar_visible: bool = True
-    """Whether the toolbar is visible."""
-
-    toolbar_contents: list[str | list[str]] = field(
-        default_factory=lambda: [
-            ["GoHome", "⌂"],
-            ["Reload", "↻"],
-            ["Backward", "◀◀"],
-            ["Forward", "▶▶"],
-            ["GoToParent", "↑"],
-            ["GoToRoot", "⇈"],
-            ["SearchHistory", "◷"],
-            ["SearchBookmarks", "★"],
-            ["ToggleView", "⇋"],
-        ]
-    )
-    """The contents of the toolbar."""
-
+    toolbar_contents: list[str | list[str]] = field(default_factory=list)
     toolbar_can_get_focus: bool = False
-    """Whether the toolbar can get focus."""
-
     toolbar_tooltips: bool = True
-    """Whether the toolbar buttons have tooltips."""
-
     footer_visible: bool = True
-    """Whether the footer is visible."""
-
     command_line_prompt: str = ">"
-    """The prompt to use for the command line."""
-
     busy_indicator_cells: str = ""
-    """The characters to use for the busy indicator."""
 
 
 ##############################################################################
@@ -309,15 +156,16 @@ def migrate_legacy_configuration() -> None:
     if legacy_config.bindings:
         save_configuration("bindings", legacy_config.bindings)
 
-    from .gopher import GopherConfiguration
+    if legacy_config.gopher_type_badges:
+        from .gopher import GopherConfiguration
 
-    save_configuration_from(
-        "gopher",
-        GopherConfiguration(
-            show_type_badges=legacy_config.gopher_show_type_badges,
-            type_badges=legacy_config.gopher_type_badges,
-        ),
-    )
+        save_configuration_from(
+            "gopher",
+            GopherConfiguration(
+                show_type_badges=legacy_config.gopher_show_type_badges,
+                type_badges=legacy_config.gopher_type_badges,
+            ),
+        )
 
     save_configuration(
         "icons",
@@ -338,36 +186,38 @@ def migrate_legacy_configuration() -> None:
         },
     )
 
-    from .preformatted import PreformattedConfiguration
+    if legacy_config.hide_preformatted:
+        from .preformatted import PreformattedConfiguration
 
-    save_configuration_from(
-        "preformatted",
-        PreformattedConfiguration(
-            blend_with_background=legacy_config.blend_pre_formatted_with_background,
-            hide=[
-                {"uri_prefix": uri, "alt_text": alt_text}
-                for uri, alt_text in legacy_config.hide_preformatted
-            ],
-            tooltips=legacy_config.show_preformat_tooltips,
-        ),
-    )
+        save_configuration_from(
+            "preformatted",
+            PreformattedConfiguration(
+                blend_with_background=legacy_config.blend_pre_formatted_with_background,
+                hide=[
+                    {"uri_prefix": uri, "alt_text": alt_text}
+                    for uri, alt_text in legacy_config.hide_preformatted
+                ],
+                tooltips=legacy_config.show_preformat_tooltips,
+            ),
+        )
 
-    from .toolbar import ToolbarConfiguration
+    if legacy_config.toolbar_contents:
+        from .toolbar import ToolbarConfiguration
 
-    save_configuration_from(
-        "toolbar",
-        ToolbarConfiguration(
-            buttons=[
-                {"command": button, "label": None}
-                if isinstance(button, str)
-                else {"command": button[0], "label": button[1]}
-                for button in legacy_config.toolbar_contents
-            ],
-            can_get_focus=legacy_config.toolbar_can_get_focus,
-            show_tooltips=legacy_config.toolbar_tooltips,
-            visible=legacy_config.toolbar_visible,
-        ),
-    )
+        save_configuration_from(
+            "toolbar",
+            ToolbarConfiguration(
+                buttons=[
+                    {"command": button, "label": None}
+                    if isinstance(button, str)
+                    else {"command": button[0], "label": button[1]}
+                    for button in legacy_config.toolbar_contents
+                ],
+                can_get_focus=legacy_config.toolbar_can_get_focus,
+                show_tooltips=legacy_config.toolbar_tooltips,
+                visible=legacy_config.toolbar_visible,
+            ),
+        )
 
     save_legacy_configuration(replace(legacy_config, migrated=True))
 
