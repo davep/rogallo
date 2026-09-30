@@ -260,17 +260,14 @@ def load_legacy_configuration() -> LegacyConfiguration | None:
     Returns:
         The configuration, or None if it doesn't exist.
     """
-    source = configuration_file()
-    return (
-        LegacyConfiguration(
-            **{
-                field: value
-                for field, value in loads(source.read_text(encoding="utf-8")).items()
-                if field in _WANTED
-            }
-        )
-        if source.exists()
-        else None
+    if not (source := configuration_file()).is_file():
+        return None
+    return LegacyConfiguration(
+        **{
+            field: value
+            for field, value in loads(source.read_text(encoding="utf-8")).items()
+            if field in _WANTED
+        }
     )
 
 
