@@ -337,6 +337,21 @@ def migrate_legacy_configuration() -> None:
             "unverified": legacy_config.unverified_icon,
         },
     )
+
+    from .preformatted import PreformattedConfiguration
+
+    save_configuration_from(
+        "preformatted",
+        PreformattedConfiguration(
+            blend_with_background=legacy_config.blend_pre_formatted_with_background,
+            hide=[
+                {"uri_prefix": uri, "alt_text": alt_text}
+                for uri, alt_text in legacy_config.hide_preformatted
+            ],
+            tooltips=legacy_config.show_preformat_tooltips,
+        ),
+    )
+
     # preformatted
     # toolbar
 
