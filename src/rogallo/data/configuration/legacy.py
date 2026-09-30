@@ -352,7 +352,22 @@ def migrate_legacy_configuration() -> None:
         ),
     )
 
-    # toolbar
+    from .toolbar import ToolbarConfiguration
+
+    save_configuration_from(
+        "toolbar",
+        ToolbarConfiguration(
+            buttons=[
+                {"command": button, "label": None}
+                if isinstance(button, str)
+                else {"command": button[0], "label": button[1]}
+                for button in legacy_config.toolbar_contents
+            ],
+            can_get_focus=legacy_config.toolbar_can_get_focus,
+            show_tooltips=legacy_config.toolbar_tooltips,
+            visible=legacy_config.toolbar_visible,
+        ),
+    )
 
     save_legacy_configuration(replace(legacy_config, migrated=True))
 
