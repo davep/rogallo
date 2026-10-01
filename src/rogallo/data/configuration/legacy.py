@@ -235,6 +235,10 @@ def migrate_legacy_configuration() -> None:
         )
     )
 
+    from ..homepage import save_homepage
+
+    save_homepage(legacy_config.home_page)
+
     save_legacy_configuration(replace(legacy_config, migrated=True))
 
 
