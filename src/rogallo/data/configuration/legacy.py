@@ -268,5 +268,9 @@ def migrate_legacy_configuration() -> None:
     # Mark the configuration as having been migrated.
     save_legacy_configuration(replace(legacy_config, migrated=True))
 
+    ##########################################################################
+    # Finally, rename the old configuration file.
+    configuration_file().rename(configuration_file().with_suffix(".migrated.json"))
+
 
 ### legacy.py ends here
