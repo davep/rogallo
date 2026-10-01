@@ -219,20 +219,23 @@ def migrate_legacy_configuration() -> None:
             ),
         )
 
-    save_legacy_configuration(replace(legacy_config, migrated=True))
+    from ..state.ui import UIState, save_ui_state
 
-    # TODO:
-    # - Theme
-    # - Displayable content types
-    # - Handle ANSI escape sequences
-    # - Strip emoji
-    # - Side panel visible
-    # - Side panel on right
-    # - Side panel chosen tab
-    # - Stripe links
-    # - With link jumps
-    # - Cosy link jumps
-    # - Anything else I've forgotten.
+    save_ui_state(
+        UIState(
+            theme=legacy_config.theme,
+            side_panel_visible=legacy_config.side_panel_visible,
+            side_panel_on_right=legacy_config.side_panel_on_right,
+            side_panel_chosen_tab=legacy_config.side_panel_chosen_tab,
+            strip_emoji=legacy_config.strip_emoji,
+            stripe_links=legacy_config.stripe_links,
+            with_link_jumps=legacy_config.with_link_jumps,
+            cosy_link_jumps=legacy_config.cosy_link_jumps,
+            handle_ansi_escape_sequences=legacy_config.handle_ansi_escape_sequences,
+        )
+    )
+
+    save_legacy_configuration(replace(legacy_config, migrated=True))
 
 
 ### legacy.py ends here
