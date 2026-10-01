@@ -4,29 +4,24 @@
 
 **Released: WiP**
 
-- **BREAKING CHANGE:** Keyboard bindings are now loaded from `bindings.yaml`
-  rather than `configuration.json`.
-  ([#436](https://github.com/davep/rogallo/pull/436) and
-  [#446](https://github.com/davep/rogallo/pull/446))
-- **BREAKING CHANGE:** Command line aliases are now loaded from
-  `aliases.yaml` rather than `configuration.json`.
-  ([#438](https://github.com/davep/rogallo/pull/438))
-- **BREAKING CHANGE:** Toolbar configuration is now loaded from
-  `toolbar.yaml` rather than `configuration.json`.
-  ([#442](https://github.com/davep/rogallo/pull/442))
-- **BREAKING CHANGE:** Icon configuration is now loaded from `icons.yaml`
-  rather than `configuration.json`.
-  ([#444](https://github.com/davep/rogallo/pull/444))
-- **BREAKING CHANGE:** Gopher configuration is now loaded from `gopher.yaml`
-  rather than `configuration.json`.
-  ([#448](https://github.com/davep/rogallo/pull/448))
+- Keyboard bindings are now loaded from `bindings.yaml` rather than
+  `configuration.json`. ([#436](https://github.com/davep/rogallo/pull/436)
+  and [#446](https://github.com/davep/rogallo/pull/446))
+- Command line aliases are now loaded from `aliases.yaml` rather than
+  `configuration.json`. ([#438](https://github.com/davep/rogallo/pull/438))
+- Toolbar configuration is now loaded from `toolbar.yaml` rather than
+  `configuration.json`. ([#442](https://github.com/davep/rogallo/pull/442))
+- Icon configuration is now loaded from `icons.yaml` rather than
+  `configuration.json`. ([#444](https://github.com/davep/rogallo/pull/444))
+- Gopher configuration is now loaded from `gopher.yaml` rather than
+  `configuration.json`. ([#448](https://github.com/davep/rogallo/pull/448))
 - Command line history is now stored in the application's state directory.
   ([#452](https://github.com/davep/rogallo/pull/452))
 - Location history is now stored in the application's state directory.
   ([#452](https://github.com/davep/rogallo/pull/452))
 - Navigation history is now stored in the application's state directory.
   ([#452](https://github.com/davep/rogallo/pull/452))
-- **BREAKING CHANGE:** Moved `side_panel_visible`, `side_panel_on_right` and
+- Moved `side_panel_visible`, `side_panel_on_right` and
   `side_panel_chosen_tab` out of configuration and turned them into UI state
   properties. ([#453](https://github.com/davep/rogallo/pull/453))
 - **BREAKING CHANGE:** Removed the `ToggleEmojiRemoval` command. This is now
@@ -43,9 +38,8 @@
   ([#453](https://github.com/davep/rogallo/pull/453))
 - Added the ability to configure many of the bindings specific to the main
   widgets in the display. ([#456](https://github.com/davep/rogallo/pull/456))
-- **BREAKING CHANGE:** Moved the displayable content types configuration
-  item out of `configuration.json` and into
-  `displayable-content-types.yaml`.
+- Moved the displayable content types configuration item out of
+  `configuration.json` and into `displayable-content-types.yaml`.
   ([#457](https://github.com/davep/rogallo/pull/457))
 - **BREAKING CHANGE:** Removed the `ToggleANSIEscapeSequenceHandling`
   command. This is now controlled by a key binding specific to the viewer
@@ -53,14 +47,12 @@
 - **BREAKING CHANGE:** Removed the `ChangeCommandLineLocation` command. The
   command line location is now changed purely by the configuration file.
   ([#463](https://github.com/davep/rogallo/pull/463))
-- **BREAKING CHANGE:** Moved the theme configuration value into the
-  application's UI state storage.
-  ([#464](https://github.com/davep/rogallo/pull/464))
-- **BREAKING CHANGE:** Moved home page setting out of configuration and
-  into a dedicated file in the data directory.
-  ([#465](https://github.com/davep/rogallo/pull/465))
-- **BREAKING CHANGE:** The configuration values that haven't been moved
-  elsewhere in the above changes have been moved to `general.yaml`.
+- Moved the theme configuration value into the application's UI state
+  storage. ([#464](https://github.com/davep/rogallo/pull/464))
+- Moved home page setting out of configuration and into a dedicated file in
+  the data directory. ([#465](https://github.com/davep/rogallo/pull/465))
+- The configuration values that haven't been moved elsewhere in the above
+  changes have been moved to `general.yaml`.
   ([#466](https://github.com/davep/rogallo/pull/466))
 - Added PNG as a Gophermap item type badge.
   ([#470](https://github.com/davep/rogallo/pull/472))
