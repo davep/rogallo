@@ -1,4 +1,7 @@
-"""Code for loading up and migrating Rogallo's pre-v3 configuration."""
+"""Code for loading up and migrating Rogallo's pre-v3 configuration.
+
+This will be removed in a future version.
+"""
 
 ##############################################################################
 # Python imports.
@@ -121,12 +124,18 @@ def load_legacy_configuration() -> LegacyConfiguration | None:
 ##############################################################################
 def migrate_legacy_configuration() -> None:
     """Migrate the legacy configuration to the new format."""
+
+    # If there is still some configuration.
     if (legacy_config := load_legacy_configuration()) is None:
         return
+    # Don't do anything if it's been migrated already.
     if legacy_config.migrated:
         return
+
     print("Migrating legacy configuration to new format...")
 
+    ##########################################################################
+    # Migrate the general configuration.
     from .general import GeneralConfiguration, save_general
 
     save_general(
@@ -151,11 +160,17 @@ def migrate_legacy_configuration() -> None:
         )
     )
 
+    ##########################################################################
+    # Migrate the aliases.
     save_configuration("aliases", legacy_config.aliases)
 
+    ##########################################################################
+    # Migrate the bindings.
     if legacy_config.bindings:
         save_configuration("bindings", legacy_config.bindings)
 
+    ##########################################################################
+    # Migrate the gopher badges.
     if legacy_config.gopher_type_badges:
         from .gopher import GopherConfiguration
 
@@ -167,6 +182,8 @@ def migrate_legacy_configuration() -> None:
             ),
         )
 
+    ##########################################################################
+    # Migrate the icons.
     save_configuration(
         "icons",
         {
@@ -186,6 +203,8 @@ def migrate_legacy_configuration() -> None:
         },
     )
 
+    ##########################################################################
+    # Migrate the preformatted text settings.
     if legacy_config.hide_preformatted:
         from .preformatted import PreformattedConfiguration
 
@@ -201,6 +220,8 @@ def migrate_legacy_configuration() -> None:
             ),
         )
 
+    ##########################################################################
+    # Migrate the toolbar configuration.
     if legacy_config.toolbar_contents:
         from .toolbar import ToolbarConfiguration
 
@@ -219,6 +240,8 @@ def migrate_legacy_configuration() -> None:
             ),
         )
 
+    ##########################################################################
+    # Migrate the UI state.
     from ..state.ui import UIState, save_ui_state
 
     save_ui_state(
@@ -235,10 +258,14 @@ def migrate_legacy_configuration() -> None:
         )
     )
 
+    ##########################################################################
+    # Migrate the home page.
     from ..homepage import save_homepage
 
     save_homepage(legacy_config.home_page)
 
+    ##########################################################################
+    # Mark the configuration as having been migrated.
     save_legacy_configuration(replace(legacy_config, migrated=True))
 
 
