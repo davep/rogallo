@@ -270,6 +270,8 @@ show_link_tooltips: true
 
 The following actions can [have their bindings overridden](../configuration/bindings.md):
 
+- `gemtext_link.copy_link` - Copy the current link's URI to clipboard
+- `gemtext_link.open_link_externally` - Hand the current link off to the operating system for opening
 - `viewer.cancel_search` - Cancel the current search in the document
 - `viewer.next_link` - Move forward through each of the links
 - `viewer.previous_link` - Move backwards through each of the links
