@@ -6,7 +6,7 @@ down by subject matter. You will find configuration information related to
 user interface elements under each entry in the [UI
 section](../ui/index.md).
 
-Other configuration items can be found in this section:
+Other configuration items can be found in these sections:
 
 - [Application command keyboard bindings](bindings.md)
 - [Displayable content types](content_types.md)
