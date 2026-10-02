@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v3.0.0
 
-**Released: WiP**
+**Released: 2026-10-02**
 
 - Keyboard bindings are now loaded from `bindings.yaml` rather than
   `configuration.json`. ([#436](https://github.com/davep/rogallo/pull/436)
