@@ -28,6 +28,15 @@ class OpenURI(Message):
 
 ##############################################################################
 @dataclass
+class DownloadURI(Message):
+    """Download a given URI to the local filesystem."""
+
+    uri: str
+    """The URI to download."""
+
+
+##############################################################################
+@dataclass
 class OpenLocation(Message):
     """Open a given location for viewing."""
 

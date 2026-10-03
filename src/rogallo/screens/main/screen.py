@@ -104,6 +104,7 @@ from ...messages import (
     BookmarksModified,
     ClientCertificatesModified,
     CopyToClipboard,
+    DownloadURI,
     HistoryModified,
     OpenFromFileSystem,
     OpenLocation,
@@ -578,6 +579,17 @@ class Main(EnhancedScreen[None]):
             self._navigation_history.add_or_replace(position)
             self._navigation_changed()
         self.post_message(uri_resolver(message))
+
+    @on(DownloadURI)
+    def download_uri(self, message: DownloadURI) -> None:
+        """Download a URI to the filesystem.
+
+        Args:
+            message: The message containing the URI to download.
+        """
+        self.notify(
+            f"TODO: Downloading {message.uri} to the filesystem...", title="Download"
+        )
 
     @on(OpenUnsupportedURI)
     @work

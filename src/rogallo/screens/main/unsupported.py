@@ -22,6 +22,7 @@ from ...data import (
     save_trusted_mime_types,
     save_trusted_schemes,
 )
+from ...messages import DownloadURI
 from ..confirm_unsupported import ConfirmUnsupportedURI
 from .local_messages import OpenUnsupportedMIMEType, OpenUnsupportedURI
 
@@ -102,6 +103,7 @@ async def maybe_open_unsupported_mime_type(
                 str(message.location),
                 f"The MIME type '{message.mime_type}' is not supported by Rogallo. "
                 "Do you want to open the location in your external browser?",
+                allow_download=not isinstance(message.location, Path),
             )
         ):
             case "once":
@@ -110,6 +112,9 @@ async def maybe_open_unsupported_mime_type(
                 open_uri = True
                 trusted_mime_types.add(message.mime_type)
                 save_trusted_mime_types(trusted_mime_types)
+            case "download":
+                open_uri = False
+                owner.post_message(DownloadURI(str(message.location)))
 
     # At this point, if the user has consented to opening the location
     # based on the MIME type, let's do it.
