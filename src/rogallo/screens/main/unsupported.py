@@ -50,7 +50,7 @@ async def maybe_open_unsupported_uri(
         return
 
     # If the scheme isn't trusted, let's see what the user wants to do about it.
-    if not (open_uri := scheme in (trusted_schemes := load_trusted_schemes())):
+    if not (open_uri := (scheme in (trusted_schemes := load_trusted_schemes()))):
         match await owner.app.push_screen_wait(
             ConfirmUnsupportedURI(
                 message.uri,
@@ -93,8 +93,9 @@ async def maybe_open_unsupported_mime_type(
     # If the MIME type isn't trusted, let's see what the user wants to
     # do about it.
     if not (
-        open_uri := message.mime_type
-        in (trusted_mime_types := load_trusted_mime_types())
+        open_uri := (
+            message.mime_type in (trusted_mime_types := load_trusted_mime_types())
+        )
     ):
         match await owner.app.push_screen_wait(
             ConfirmUnsupportedURI(
