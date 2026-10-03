@@ -122,6 +122,7 @@ from ...widgets import (
 from ..about_page import AboutPage
 from ..client_certificate import ClientCertificateViewer
 from ..trusted_hosts import TrustedHostsBrowser
+from .downloader import download
 from .handlers import handle_filesystem_request
 from .local_messages import (
     OpenDocument,
@@ -581,15 +582,14 @@ class Main(EnhancedScreen[None]):
         self.post_message(uri_resolver(message))
 
     @on(DownloadURI)
-    def download_uri(self, message: DownloadURI) -> None:
+    @work
+    async def download_uri(self, message: DownloadURI) -> None:
         """Download a URI to the filesystem.
 
         Args:
             message: The message containing the URI to download.
         """
-        self.notify(
-            f"TODO: Downloading {message.uri} to the filesystem...", title="Download"
-        )
+        await download(message.uri, self._clients, self)
 
     @on(OpenUnsupportedURI)
     @work
