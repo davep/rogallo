@@ -13,9 +13,48 @@ from textual.widget import Widget
 from textual_fspicker import FileSave
 
 ##############################################################################
+# Wasat imports.
+from wasat import GeminiURI, SecurityError, URIError
+
+##############################################################################
 # Local imports.
 from ...clients import Clients
 from .uri_resolver import class_from_uri
+
+
+##############################################################################
+async def _download_gemini(
+    location: GeminiURI, target: Path, clients: Clients, owner: Widget
+) -> None:
+    """Download a Gemini URI to a target file.
+
+    Args:
+        location: The Gemini URI to download.
+        target: The target file to download to.
+        clients: The clients to use for downloading.
+        owner: The widget that owns the request.
+    """
+    try:
+        response = await clients.gemini.request(location)
+    except (ConnectionError, SecurityError, URIError) as error:
+        owner.notify(f"Unable to download {location}: {error}", severity="error")
+        return
+
+    if not response.status.is_success:
+        owner.notify(
+            f"Unable to download {location}: {response.status} {response.meta}",
+            severity="error",
+        )
+        return
+
+    # Write the content to the target file.
+    try:
+        target.write_bytes(await response.read())
+    except OSError as error:
+        owner.notify(f"Unable to write to {target}: {error}", severity="error")
+        return
+
+    owner.notify(f"Downloaded {location} to {target}")
 
 
 ##############################################################################
@@ -44,7 +83,13 @@ async def download(uri: str, clients: Clients, owner: Widget) -> None:
         owner.notify("Download cancelled.")
         return
 
-    owner.notify(f"TODO: Downloading {location} to {target_file}")
+    if isinstance(location, GeminiURI):
+        await _download_gemini(location, target_file, clients, owner)
+    else:
+        owner.notify(
+            f"Downloading for {location.scheme} URIs is not yet implemented",
+            severity="warning",
+        )
 
 
 ### downloader.py ends here
