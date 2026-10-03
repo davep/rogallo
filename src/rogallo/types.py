@@ -26,9 +26,13 @@ from sybaritic import SpartanURI
 from wasat import GeminiURI, TitanURI
 
 ##############################################################################
-type RogalloLocation = (
-    Path | GeminiURI | TitanURI | FingerURI | GopherURI | SpartanURI | NexURI
+type RemoteRogalloLocation = (
+    GeminiURI | TitanURI | FingerURI | GopherURI | SpartanURI | NexURI
 )
+"""The type of a remote location handled by Rogallo."""
+
+##############################################################################
+type RogalloLocation = Path | RemoteRogalloLocation
 """The type of a location handled by Rogallo."""
 
 ##############################################################################

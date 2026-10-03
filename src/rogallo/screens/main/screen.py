@@ -5,6 +5,7 @@
 from argparse import Namespace
 from collections.abc import Awaitable
 from functools import partial
+from pathlib import Path
 from subprocess import CalledProcessError, run
 from typing import Final
 from webbrowser import open as open_in_browser
@@ -104,6 +105,8 @@ from ...messages import (
     BookmarksModified,
     ClientCertificatesModified,
     CopyToClipboard,
+    DownloadLocation,
+    DownloadURI,
     HistoryModified,
     OpenFromFileSystem,
     OpenLocation,
@@ -129,7 +132,7 @@ from .local_messages import (
 )
 from .request_builder import build_request
 from .unsupported import maybe_open_unsupported_mime_type, maybe_open_unsupported_uri
-from .uri_resolver import uri_resolver
+from .uri_resolver import class_from_uri, uri_resolver
 
 
 ##############################################################################
@@ -578,6 +581,47 @@ class Main(EnhancedScreen[None]):
             self._navigation_history.add_or_replace(position)
             self._navigation_changed()
         self.post_message(uri_resolver(message))
+
+    @on(DownloadURI)
+    @work
+    async def download_uri(self, message: DownloadURI) -> None:
+        """Download a URI to the filesystem.
+
+        Args:
+            message: The message containing the URI to download.
+        """
+
+        # Turn the URI into a URI class so we know what we're working with.
+        if (uri_class := class_from_uri(message.uri)) is None:
+            self.notify(
+                f"Unable to download {message.uri}: unsupported scheme",
+                severity="error",
+            )
+            return
+        location = uri_class(message.uri)
+
+        # Prompt the user for the download location.
+        if not (
+            target_file := await self.app.push_screen_wait(
+                FileSave(
+                    title=f"Download {location}", default_file=Path(location.path).name
+                )
+            )
+        ):
+            self.notify("Download cancelled.")
+            return
+
+        self.post_message(DownloadLocation(location, target_file))
+
+    @on(DownloadLocation)
+    @work
+    async def download_location(self, message: DownloadLocation) -> None:
+        """Download a location to the filesystem.
+
+        Args:
+            message: The message containing the location to download.
+        """
+        self.notify(f"TODO: Downloading {message.location} to {message.target}")
 
     @on(OpenUnsupportedURI)
     @work

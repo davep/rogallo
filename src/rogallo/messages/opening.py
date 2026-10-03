@@ -12,7 +12,7 @@ from textual.message import Message
 ##############################################################################
 # Local imports.
 from ..input_content import InputContent
-from ..types import RogalloLocation
+from ..types import RemoteRogalloLocation, RogalloLocation
 
 
 ##############################################################################
@@ -24,6 +24,15 @@ class OpenURI(Message):
     """The URI to open."""
     allow_cached: bool = True
     """Whether to allow opening the URI from cache."""
+
+
+##############################################################################
+@dataclass
+class DownloadURI(Message):
+    """Download a given URI to the local filesystem."""
+
+    uri: str
+    """The URI to download."""
 
 
 ##############################################################################
@@ -41,6 +50,17 @@ class OpenLocation(Message):
     """Whether to allow opening the location from cache."""
     associated_input: InputContent | None = None
     """The input content associated with this location, if any."""
+
+
+##############################################################################
+@dataclass
+class DownloadLocation(Message):
+    """Download a given location to the local filesystem."""
+
+    location: RemoteRogalloLocation
+    """The location to download."""
+    target: Path
+    """The target file to download to."""
 
 
 ##############################################################################
