@@ -35,13 +35,14 @@ from ...preflight import (
     local_index_from_uri,
     path_from_uri,
 )
+from ...types import RemoteRogalloLocation
 from .local_messages import OpenUnsupportedURI
 
 
 ##############################################################################
 def class_from_uri(
     uri: str,
-) -> type[GeminiURI | TitanURI | FingerURI | GopherURI | SpartanURI | NexURI] | None:
+) -> type[RemoteRogalloLocation] | None:
     """Return the URI class for a given URI string.
 
     Args:
