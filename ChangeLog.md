@@ -1,5 +1,14 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added a download command to in-document links; bound to <kbd>d</kbd> by
+  default. ([#488](https://github.com/davep/rogallo/pull/488))
+- Added the option to download an unsupported mime type document.
+  ([#488](https://github.com/davep/rogallo/pull/488))
+
 ## v3.0.0
 
 **Released: 2026-10-02**
