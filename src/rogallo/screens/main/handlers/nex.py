@@ -15,6 +15,7 @@ from ....document import Document
 from ....messages import AcquireLocation, DownloadLocation, OpenLocation
 from ....mime_checks import is_displayable_mime_type
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
+from ._download import save_download
 
 
 ##############################################################################
@@ -69,8 +70,7 @@ async def handle_nex_request(
 
     # If it's a download request, write the raw bytes to the target file.
     if isinstance(request, DownloadLocation):
-        request.target.write_bytes(response.raw_bytes)
-        owner.notify(f"Downloaded {uri} to {request.target}", title="Download Complete")
+        save_download(request, response.raw_bytes, owner)
         return
 
     # Try and show it.

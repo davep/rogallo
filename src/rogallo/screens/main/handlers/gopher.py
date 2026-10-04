@@ -20,13 +20,14 @@ from textual_enhanced.dialogs import ModalInput
 # Local imports.
 from ....cache import ContentCache
 from ....document import Document
-from ....messages import AcquireLocation, DownloadLocation, OpenLocation
+from ....messages import AcquireLocation, OpenLocation
 from ....mime_checks import is_displayable_mime_type
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
+from ._download import save_download
 
 
 ##############################################################################
-async def __open_document(
+async def _open_document(
     uri: GopherURI,
     request: OpenLocation,
     client: Client,
@@ -56,22 +57,6 @@ async def __open_document(
             from_history=request.from_history,
         )
     )
-
-
-##############################################################################
-async def _download_document(
-    uri: GopherURI, request: DownloadLocation, client: Client, owner: Widget
-) -> None:
-    """Download a document from a gopher request.
-
-    Args:
-        uri: The URI to download.
-        request: The download location request.
-        client: The client to use for the request.
-        owner: The widget that owns the request.
-    """
-    request.target.write_bytes((await client.request(uri)).raw_bytes)
-    owner.notify(f"Downloaded {uri} to {request.target}", title="Download Complete")
 
 
 ##############################################################################
@@ -130,9 +115,9 @@ async def handle_gopher_request(
 
     try:
         if isinstance(request, OpenLocation):
-            await __open_document(uri, request, client, cache, owner)
+            await _open_document(uri, request, client, cache, owner)
         else:
-            await _download_document(uri, request, client, owner)
+            save_download(request, (await client.request(uri)).raw_bytes, owner)
     except Port70Error as error:
         owner.notify(
             f"Error loading {uri}:\n\n{error}",

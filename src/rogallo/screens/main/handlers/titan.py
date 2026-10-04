@@ -26,6 +26,7 @@ from ....mime_checks import is_displayable_mime_type
 from ....text_decoder import decode_text
 from ...user_upload import UserUpload
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
+from ._download import save_download
 from ._glv import (
     LastInputGetter,
     LastInputSetter,
@@ -80,8 +81,7 @@ async def _handle_response(
 
     # If it's a download request, perform the download.
     if isinstance(request, DownloadLocation):
-        request.target.write_bytes(await response.read())
-        owner.notify(f"Downloaded {uri} to {request.target}", title="Download Complete")
+        save_download(request, await response.read(), owner)
         return
 
     # Handle a successful response.

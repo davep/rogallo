@@ -22,6 +22,7 @@ from ....text_decoder import decode_text
 from ....types import SpartanURINeedingData
 from ...user_input import UserInput
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
+from ._download import save_download
 
 
 ##############################################################################
@@ -61,8 +62,7 @@ async def _handle_response(
     # It's a download request, so let's write the raw bytes to the target
     # file.
     if isinstance(request, DownloadLocation):
-        request.target.write_bytes(await response.read())
-        owner.notify(f"Downloaded {uri} to {request.target}", title="Download Complete")
+        save_download(request, await response.read(), owner)
         return
 
     # Handle a successful response.
