@@ -12,14 +12,15 @@ from textual.widget import Widget
 # Local imports.
 from ....cache import ContentCache
 from ....document import Document
-from ....messages import OpenLocation
+from ....messages import AcquireLocation, DownloadLocation, OpenLocation
 from ....mime_checks import is_displayable_mime_type
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
+from ._download import save_download
 
 
 ##############################################################################
 async def handle_nex_request(
-    request: OpenLocation, client: Client, owner: Widget, cache: ContentCache
+    request: AcquireLocation, client: Client, owner: Widget, cache: ContentCache
 ) -> None:
     """Handle a Nex request.
 
@@ -33,8 +34,14 @@ async def handle_nex_request(
     assert isinstance(uri, NexURI)
 
     # Check the cache first.
-    if request.allow_cached and (
-        cached_document := cache.get_document(uri, avoid_history=request.avoid_history)
+    if (
+        isinstance(request, OpenLocation)
+        and request.allow_cached
+        and (
+            cached_document := cache.get_document(
+                uri, avoid_history=request.avoid_history
+            )
+        )
     ):
         owner.post_message(
             OpenDocument(cached_document, from_history=request.from_history)
@@ -59,6 +66,11 @@ async def handle_nex_request(
             severity="warning",
             title="Nex Warning",
         )
+        return
+
+    # If it's a download request, write the raw bytes to the target file.
+    if isinstance(request, DownloadLocation):
+        save_download(request, response.raw_bytes, owner)
         return
 
     # Try and show it.

@@ -17,7 +17,7 @@ from textual.widgets import Button, Label
 from textual_enhanced.tools import add_key
 
 ##############################################################################
-type Confirmation = Literal["once", "always"] | None
+type Confirmation = Literal["once", "always", "download"] | None
 """Type of the data returned from the confirmation dialog."""
 
 
@@ -56,23 +56,29 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
     BINDINGS = [
         ("o", "open_once"),
         ("a", "open_always"),
+        ("d", "download"),
         ("escape", "cancel"),
         ("left, up", "app.focus_previous"),
         ("right, down", "app.focus_next"),
     ]
 
-    def __init__(self, uri: str, description: str) -> None:
+    def __init__(
+        self, uri: str, description: str, allow_download: bool = False
+    ) -> None:
         """Initialise the screen.
 
         Args:
             uri: The URI to confirm.
             description: A description for the confirmation.
+            allow_download: Whether to allow downloading the URI. Defaults to False.
         """
         super().__init__()
         self._uri = uri
         """The URI to confirm."""
         self._description = description
         """The description for the configuration dialog."""
+        self._allow_download = allow_download
+        """Whether to allow downloading the URI."""
 
     def compose(self) -> ComposeResult:
         """Compose the screen.
@@ -86,6 +92,8 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
             with HorizontalGroup(id="buttons"):
                 yield Button(add_key("Once", "o"), id="once", variant="success")
                 yield Button(add_key("Always", "a"), id="always", variant="success")
+                if self._allow_download:
+                    yield Button(add_key("Download", "d"), id="download")
                 yield Button(add_key("Cancel", "Esc"), id="cancel", variant="error")
 
     @on(Button.Pressed, "#once")
@@ -97,6 +105,11 @@ class ConfirmUnsupportedURI(ModalScreen[Confirmation]):
     def action_open_always(self) -> None:
         """Allow always opening."""
         self.dismiss("always")
+
+    @on(Button.Pressed, "#download")
+    def action_download(self) -> None:
+        """Allow downloading the URI."""
+        self.dismiss("download")
 
     @on(Button.Pressed, "#cancel")
     def action_cancel(self) -> None:

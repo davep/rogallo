@@ -5,6 +5,7 @@
 from argparse import Namespace
 from collections.abc import Awaitable
 from functools import partial
+from pathlib import Path
 from subprocess import CalledProcessError, run
 from typing import Final
 from webbrowser import open as open_in_browser
@@ -101,9 +102,12 @@ from ...data import (
 )
 from ...input_content import InputContent
 from ...messages import (
+    AcquireLocation,
     BookmarksModified,
     ClientCertificatesModified,
     CopyToClipboard,
+    DownloadLocation,
+    DownloadURI,
     HistoryModified,
     OpenFromFileSystem,
     OpenLocation,
@@ -129,7 +133,7 @@ from .local_messages import (
 )
 from .request_builder import build_request
 from .unsupported import maybe_open_unsupported_mime_type, maybe_open_unsupported_uri
-from .uri_resolver import uri_resolver
+from .uri_resolver import class_from_uri, uri_resolver
 
 
 ##############################################################################
@@ -537,11 +541,18 @@ class Main(EnhancedScreen[None]):
         handle_filesystem_request(request, self)
 
     @on(OpenLocation)
-    def open_location(self, message: OpenLocation) -> None:
-        """Open a location in the viewer.
+    @on(DownloadLocation)
+    def acquire_location(self, message: AcquireLocation) -> None:
+        """Acquire the content of a location.
 
         Args:
-            message: The message the location open request.
+            message: The message the location acquisition request.
+
+        Note:
+            The request can either be a request to open a location for viewing,
+            or a request to download a location to the filesystem. The handling
+            of the request is delegated to the appropriate handler based on the
+            type of the request.
         """
         if (
             request := build_request(
@@ -578,6 +589,39 @@ class Main(EnhancedScreen[None]):
             self._navigation_history.add_or_replace(position)
             self._navigation_changed()
         self.post_message(uri_resolver(message))
+
+    @on(DownloadURI)
+    @work
+    async def download_uri(self, message: DownloadURI) -> None:
+        """Download a URI to the filesystem.
+
+        Args:
+            message: The message containing the URI to download.
+        """
+
+        # Turn the URI into a URI class so we know what we're working with.
+        if (uri_class := class_from_uri(message.uri)) is None:
+            self.notify(
+                f"Unable to download {message.uri}: unsupported scheme",
+                severity="error",
+            )
+            return
+        location = uri_class(message.uri)
+
+        # Prompt the user for the download location.
+        if not (
+            target_file := await self.app.push_screen_wait(
+                FileSave(
+                    title=f"Download {location}",
+                    default_file=Path(location.path).name,
+                    save_button="Download",
+                )
+            )
+        ):
+            self.notify("Download cancelled.", severity="warning")
+            return
+
+        self.post_message(DownloadLocation(location, target_file))
 
     @on(OpenUnsupportedURI)
     @work
