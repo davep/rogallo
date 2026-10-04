@@ -616,7 +616,7 @@ class Main(EnhancedScreen[None]):
                 )
             )
         ):
-            self.notify("Download cancelled.")
+            self.notify("Download cancelled.", severity="warning")
             return
 
         self.post_message(DownloadLocation(location, target_file))
