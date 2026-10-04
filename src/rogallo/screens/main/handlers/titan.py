@@ -21,7 +21,7 @@ from wasat import (
 ##############################################################################
 # Local imports.
 from ....input_content import InputContent
-from ....messages import OpenLocation
+from ....messages import AcquireLocation, DownloadLocation
 from ....mime_checks import is_displayable_mime_type
 from ....text_decoder import decode_text
 from ...user_upload import UserUpload
@@ -38,7 +38,7 @@ from ._glv import (
 ##############################################################################
 async def _handle_response(
     response: Response,
-    request: OpenLocation,
+    request: AcquireLocation,
     client: Client,
     owner: Widget,
     set_last_input: LastInputSetter,
@@ -77,6 +77,12 @@ async def _handle_response(
 
     # Clear out any saved input.
     set_last_input(None)
+
+    # If it's a download request, perform the download.
+    if isinstance(request, DownloadLocation):
+        request.target.write_bytes(await response.read())
+        owner.notify(f"Downloaded {uri} to {request.target}", title="Download Complete")
+        return
 
     # Handle a successful response.
     if is_displayable_mime_type(response.mime_type):
@@ -135,7 +141,7 @@ async def _get_raw_content_to_edit(
 
 ##############################################################################
 async def handle_titan_request(
-    request: OpenLocation,
+    request: AcquireLocation,
     owner: Widget,
     client: Client,
     set_last_input: LastInputSetter,

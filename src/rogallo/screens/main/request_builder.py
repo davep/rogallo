@@ -33,7 +33,7 @@ from wasat import GeminiURI, TitanURI
 from ...cache import ContentCache
 from ...clients import Clients
 from ...document import Document
-from ...messages import OpenLocation
+from ...messages import AcquireLocation
 from .handlers import (
     LastInputGetter,
     LastInputSetter,
@@ -49,7 +49,7 @@ from .handlers import (
 ##############################################################################
 def build_request(
     clients: Clients,
-    message: OpenLocation,
+    message: AcquireLocation,
     cache: ContentCache,
     owner: Widget,
     current_document: Document,

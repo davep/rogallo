@@ -1,6 +1,10 @@
 """Provides code for handling a Gemini request."""
 
 ##############################################################################
+# Python imports.
+from pathlib import Path
+
+##############################################################################
 # Textual imports.
 from textual.widget import Widget
 
@@ -20,7 +24,7 @@ from wasat import (
 # Local imports.
 from ....cache import ContentCache
 from ....input_content import InputContent
-from ....messages import OpenLocation
+from ....messages import AcquireLocation, DownloadLocation, OpenLocation
 from ....mime_checks import is_displayable_mime_type
 from ...user_input import UserInput
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
@@ -82,7 +86,7 @@ async def _handle_input_request(
 ##############################################################################
 async def _handle_response(
     response: Response,
-    request: OpenLocation,
+    request: AcquireLocation,
     client: Client,
     owner: Widget,
     cache: ContentCache,
@@ -105,10 +109,13 @@ async def _handle_response(
     # If we ended up with a response URI that is a different protocol,
     # bounce to its handler.
     if not isinstance(uri, GeminiURI):
+        assert not isinstance(uri, Path)
         owner.post_message(
             OpenLocation(
                 location=uri, allow_cached=False, avoid_history=request.avoid_history
             )
+            if isinstance(request, OpenLocation)
+            else DownloadLocation(location=uri, target=request.target)
         )
         return
 
@@ -132,7 +139,8 @@ async def _handle_response(
 
     # Handle any other non-successful response.
     if not response.status.is_success:
-        set_last_input(request.associated_input)
+        if isinstance(request, OpenLocation):
+            set_last_input(request.associated_input)
         owner.notify(
             f"Error loading {uri}:\n\n{response.status.value} {response.status.name}\n{response.meta}",
             severity="error",
@@ -142,6 +150,12 @@ async def _handle_response(
 
     # Clear out any saved input.
     set_last_input(None)
+
+    # If it's a download request, perform the download.
+    if isinstance(request, DownloadLocation):
+        request.target.write_bytes(await response.read())
+        owner.notify(f"Downloaded {uri} to {request.target}", title="Download Complete")
+        return
 
     # Handle a successful response.
     if is_displayable_mime_type(response.mime_type):
@@ -157,7 +171,7 @@ async def _handle_response(
 
 ##############################################################################
 async def handle_gemini_request(
-    request: OpenLocation,
+    request: AcquireLocation,
     owner: Widget,
     client: Client,
     cache: ContentCache,
@@ -181,7 +195,8 @@ async def handle_gemini_request(
     # If a cached copy of the document exists and the request allows it,
     # use that instead of making a network request.
     if (
-        request.allow_cached
+        isinstance(request, OpenLocation)
+        and request.allow_cached
         and (
             cached_document := cache.get_document(
                 uri, avoid_history=request.avoid_history
@@ -201,7 +216,8 @@ async def handle_gemini_request(
                 response, request, client, owner, cache, set_last_input, get_last_input
             )
     except ConnectionError as error:
-        set_last_input(request.associated_input)
+        if isinstance(request, OpenLocation):
+            set_last_input(request.associated_input)
         owner.notify(
             f"Error loading {uri}:\n\n{error}",
             severity="error",

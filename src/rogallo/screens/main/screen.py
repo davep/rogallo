@@ -102,6 +102,7 @@ from ...data import (
 )
 from ...input_content import InputContent
 from ...messages import (
+    AcquireLocation,
     BookmarksModified,
     ClientCertificatesModified,
     CopyToClipboard,
@@ -540,11 +541,18 @@ class Main(EnhancedScreen[None]):
         handle_filesystem_request(request, self)
 
     @on(OpenLocation)
-    def open_location(self, message: OpenLocation) -> None:
-        """Open a location in the viewer.
+    @on(DownloadLocation)
+    def acquire_location(self, message: AcquireLocation) -> None:
+        """Acquire the content of a location.
 
         Args:
-            message: The message the location open request.
+            message: The message the location acquisition request.
+
+        Note:
+            The request can either be a request to open a location for viewing,
+            or a request to download a location to the filesystem. The handling
+            of the request is delegated to the appropriate handler based on the
+            type of the request.
         """
         if (
             request := build_request(
@@ -612,16 +620,6 @@ class Main(EnhancedScreen[None]):
             return
 
         self.post_message(DownloadLocation(location, target_file))
-
-    @on(DownloadLocation)
-    @work
-    async def download_location(self, message: DownloadLocation) -> None:
-        """Download a location to the filesystem.
-
-        Args:
-            message: The message containing the location to download.
-        """
-        self.notify(f"TODO: Downloading {message.location} to {message.target}")
 
     @on(OpenUnsupportedURI)
     @work
