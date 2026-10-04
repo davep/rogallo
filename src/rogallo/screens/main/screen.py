@@ -612,7 +612,9 @@ class Main(EnhancedScreen[None]):
         if not (
             target_file := await self.app.push_screen_wait(
                 FileSave(
-                    title=f"Download {location}", default_file=Path(location.path).name
+                    title=f"Download {location}",
+                    default_file=Path(location.path).name,
+                    save_button="Download",
                 )
             )
         ):
