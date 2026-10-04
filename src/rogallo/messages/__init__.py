@@ -9,6 +9,7 @@ from .data_modification import (
     HistoryModified,
 )
 from .opening import (
+    AcquireLocation,
     DownloadLocation,
     DownloadURI,
     OpenFromFileSystem,
@@ -19,6 +20,7 @@ from .opening import (
 ##############################################################################
 # Exports.
 __all__ = [
+    "AcquireLocation",
     "BookmarksModified",
     "CopyToClipboard",
     "ClientCertificatesModified",

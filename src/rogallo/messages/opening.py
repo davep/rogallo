@@ -64,6 +64,11 @@ class DownloadLocation(Message):
 
 
 ##############################################################################
+type AcquireLocation = OpenLocation | DownloadLocation
+"""Type for messages that acquire a location, either for opening or downloading."""
+
+
+##############################################################################
 @dataclass
 class OpenFromFileSystem(Message):
     """Browse for a file to view, from the local filesystem."""
