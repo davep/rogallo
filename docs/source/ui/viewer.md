@@ -79,7 +79,7 @@ goes with which link, some people might prefer the labels to really cosy up
 with the links. The position can be toggled with
 <kbd>Ctrl</kbd>+<kbd>j</kbd>.
 
-```{.textual path="docs/screenshots/stripes_screenshot.py" title="Cosy link number labels" lines=30 columns=70 press="super+f8"}
+```{.textual path="docs/screenshots/stripes_screenshot.py" title="Cosy link number labels" lines=30 columns=70 press="ctrl+j"}
 ```
 
 ## Emoji removal
