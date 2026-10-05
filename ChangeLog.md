@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v3.1.0
 
-**Released: WiP**
+**Released: 2026-10-05**
 
 - Added a download command to in-document links; bound to <kbd>d</kbd> by
   default. ([#488](https://github.com/davep/rogallo/pull/488))
