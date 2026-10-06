@@ -110,6 +110,13 @@ class GemtextLink(Widget, can_focus=True):
             id="gemtext_link.copy_link",
         ),
         HelpfulBinding(
+            "C",
+            "copy_link_as_gemtext",
+            "Copy link to clipboard as Gemtext",
+            show=False,
+            id="gemtext_link.copy_link_as_gemtext",
+        ),
+        HelpfulBinding(
             "d",
             "download_link",
             "Download the content of the link",
@@ -296,6 +303,19 @@ class GemtextLink(Widget, can_focus=True):
         """Copy the link to the clipboard."""
         self.post_message(
             CopyToClipboard(self._normalised_uri, description="selected link")
+        )
+
+    def _action_copy_link_as_gemtext(self) -> None:
+        """Copy the link to the clipboard as Gemtext."""
+        self.post_message(
+            CopyToClipboard(
+                (
+                    f"=> {self._normalised_uri} {self._link}"
+                    if self._normalised_uri != str(self._link)
+                    else f"=> {self._normalised_uri}"
+                ),
+                description="selected link as Gemtext",
+            )
         )
 
     def _action_download_link(self) -> None:
