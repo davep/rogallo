@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Python imports.
+from functools import partial
 from itertools import chain
 from typing import Final
 
@@ -16,6 +17,7 @@ from textual.widgets.option_list import Option
 # Textual enhanced imports.
 from textual_enhanced.binding import HelpfulBinding
 from textual_enhanced.dialogs import Confirm, ModalInput
+from textual_enhanced.tools import add_key
 from textual_enhanced.widgets import EnhancedOptionList
 
 ##############################################################################
@@ -403,6 +405,7 @@ class ClientCertificateManager(EnhancedOptionList):
                         else "certificate.pem",
                         filters=_FILE_FILTERS,
                         save_button="Export",
+                        cancel_button=partial(add_key, key="Esc", context=self),
                     )
                 )
             )
@@ -428,6 +431,7 @@ class ClientCertificateManager(EnhancedOptionList):
                 filters=_FILE_FILTERS,
                 open_button="Import",
                 title="Import Certificate",
+                cancel_button=partial(add_key, key="Esc", context=self),
             )
         ):
             try:
