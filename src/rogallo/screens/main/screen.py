@@ -615,6 +615,7 @@ class Main(EnhancedScreen[None]):
                     title=f"Download {location}",
                     default_file=Path(location.path).name,
                     save_button="Download",
+                    cancel_button=partial(add_key, key="Esc", context=self),
                 )
             )
         ):
