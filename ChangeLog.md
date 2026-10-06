@@ -1,5 +1,13 @@
 # Rogallo ChangeLog
 
+## Unreleased
+
+**Released: WiP**
+
+- Added the ability to copy a link, as Gemtext, to the clipboard
+  (`gemtext_link.copy_link_as_gemtext`).
+  ([#492](https://github.com/davep/rogallo/pull/492))
+
 ## v3.1.0
 
 **Released: 2026-10-05**
