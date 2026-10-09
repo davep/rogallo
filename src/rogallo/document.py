@@ -83,6 +83,7 @@ class Document:
         """Return `True` if there is a location, `False` if not."""
         return self.location is not None
 
+    @property
     def mime_type_sans_parameters(self) -> str | None:
         """The MIME type cleaned of any parameters.."""
         return clean_mime_type(self.mime_type)
