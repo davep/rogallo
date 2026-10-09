@@ -48,6 +48,23 @@ def is_gopher_mime_type(mime_type: str | None) -> bool:
 
 
 ##############################################################################
+def clean_mime_type(mime_type: str | None) -> str | None:
+    """The MIME type cleaned of any parameters.
+
+    Args:
+        mime_type: The MIME type to clean.
+
+    Returns:
+        The MIME type cleaned of any parameters, or `None` if the input was
+            `None`.
+    """
+    if mime_type is None:
+        return None
+    mime_type, _, _ = mime_type.partition(";")
+    return mime_type.strip().lower()
+
+
+##############################################################################
 @cache
 def is_displayable_mime_type(mime_type: str | None) -> bool:
     """Check if a MIME type is displayable in Rogallo.
@@ -58,9 +75,8 @@ def is_displayable_mime_type(mime_type: str | None) -> bool:
     Returns:
         `True` if the MIME type is displayable, `False` otherwise.
     """
-    if mime_type is None:
+    if (mime_type := clean_mime_type(mime_type)) is None:
         return False
-    mime_type, _, _ = mime_type.partition(";")
     return mime_type.startswith("text/") or mime_type in {
         ItemType.MENU.mime_type,
         ItemType.INDEX_SEARCH.mime_type,
