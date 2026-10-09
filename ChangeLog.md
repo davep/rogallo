@@ -7,6 +7,8 @@
 - Added the ability to copy a link, as Gemtext, to the clipboard
   (`gemtext_link.copy_link_as_gemtext`).
   ([#492](https://github.com/davep/rogallo/pull/492))
+- Fixed MIME type checks to ensure parameters are ignored when performing
+  the check. ([#495](https://github.com/davep/rogallo/pull/495))
 
 ## v3.1.0
 
