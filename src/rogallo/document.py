@@ -28,7 +28,7 @@ from wasat import ClientCertificate, ServerCertificate, VerificationMethod
 
 ##############################################################################
 # Local imports.
-from .mime_checks import is_gemini_mime_type, is_gopher_mime_type
+from .mime_checks import clean_mime_type, is_gemini_mime_type, is_gopher_mime_type
 from .types import RogalloLocation
 
 
@@ -83,13 +83,9 @@ class Document:
         """Return `True` if there is a location, `False` if not."""
         return self.location is not None
 
-    @cached_property
     def mime_type_sans_parameters(self) -> str | None:
         """The MIME type cleaned of any parameters.."""
-        if self.mime_type is None:
-            return None
-        mime_type, _, _ = self.mime_type.partition(";")
-        return mime_type.strip().lower()
+        return clean_mime_type(self.mime_type)
 
     @property
     def is_gemtext(self) -> bool:
