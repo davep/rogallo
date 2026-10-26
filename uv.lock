@@ -2068,7 +2068,7 @@ requires-dist = [
     { name = "types-pygments", specifier = ">=2.20.0.20260518" },
     { name = "types-pyperclip", specifier = ">=1.11.0.20260508" },
     { name = "types-pyyaml", specifier = ">=6.0.12.20260906" },
-    { name = "wasat", specifier = ">=1.10.0" },
+    { name = "wasat", specifier = ">=1.11.0" },
     { name = "xdg-base-dirs", specifier = ">=6.0.2" },
 ]
 
@@ -2290,14 +2290,14 @@ wheels = [
 
 [[package]]
 name = "wasat"
-version = "1.10.0"
+version = "1.11.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cryptography" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/11/6e/92a61aec85820c4ebc3c3035f87867ffafeff629e8dba1557b74442cf5bc/wasat-1.10.0.tar.gz", hash = "sha256:64effb775e7efd13cb4c81fafa92615624f68cf754e04c33ea71ffd8a00db02c", size = 41892, upload-time = "2026-10-26T09:09:35.771Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ee/25/b7b1d1931b01e40a5f846b204b621dcdf827f05efef845d46bbba9df98b3/wasat-1.11.0.tar.gz", hash = "sha256:b4ad60d8aad65d118bde06425f8d267fec6a83d39f40643e8525d439d7544554", size = 44582, upload-time = "2026-10-26T14:06:03.608Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/25/71/014ffded36cefa9db33f132d0f963317dbd39210047ad02fc6c03fd56d48/wasat-1.10.0-py3-none-any.whl", hash = "sha256:e225b9c6ff5b8d0c7d5e2cef8b6aa8c9883aa720ce1b53d667e795e366bcaf49", size = 45081, upload-time = "2026-10-26T09:09:34.283Z" },
+    { url = "https://files.pythonhosted.org/packages/fb/65/8eed23b5381f335415e5fc99706f563da5c1fc3c860e950c147cee1cfb7e/wasat-1.11.0-py3-none-any.whl", hash = "sha256:d512a6a531d0fdadfc2ab8c24e743e02b4f05a13dd0aa4404582072db641ba77", size = 47752, upload-time = "2026-10-26T14:06:02.16Z" },
 ]
 
 [[package]]
