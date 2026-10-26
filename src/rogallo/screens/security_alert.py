@@ -37,6 +37,10 @@ class SecurityAlert(ModalScreen[bool]):
             height: auto;
         }
 
+        #message {
+            width: 100%;
+        }
+
         Button {
             margin-right: 1;
         }
@@ -78,7 +82,7 @@ class SecurityAlert(ModalScreen[bool]):
         with VerticalGroup() as dialog:
             dialog.border_title = "Security error!"
             yield Label(f"Security alert for {self._uri}", shrink=True, markup=False)
-            yield Label(self._message, shrink=True, variant="error")
+            yield Label(self._message, shrink=True, variant="error", id="message")
             yield Label(
                 "You can choose to forget the certificate and try again, or cancel the connection. "
                 "NOTE: There are a number of reasons why you might be seeing this error. "
