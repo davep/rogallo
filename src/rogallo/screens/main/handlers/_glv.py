@@ -10,7 +10,14 @@ from textual.widget import Widget
 
 ##############################################################################
 # Wasat imports.
-from wasat import AnyURI, Client, ClientCertificate, Response, SecurityError
+from wasat import (
+    AnyURI,
+    Client,
+    ClientCertificate,
+    IgnorableSecurityError,
+    Response,
+    SecurityError,
+)
 
 ##############################################################################
 # Local imports.
@@ -141,15 +148,27 @@ async def handle_security_error(
         uri: The URI that caused the security error.
         owner: The widget that owns the request.
     """
-    if await owner.app.push_screen_wait(SecurityAlert(uri, str(error))):
-        assert client.trust_store is not None
-        await client.trust_store.forget(uri.host, uri.port)
-        owner.post_message(OpenLocation(uri, allow_cached=False))
-        owner.notify(
-            f"Reset the trust status for {uri.host}:{uri.port}",
-            title="Security Alert",
-            severity="warning",
-        )
+    match await owner.app.push_screen_wait(
+        SecurityAlert(uri, str(error), isinstance(error, IgnorableSecurityError))
+    ):
+        case "forget":
+            assert client.trust_store is not None
+            await client.trust_store.forget(uri.host, uri.port)
+            owner.post_message(OpenLocation(uri, allow_cached=False))
+            owner.notify(
+                f"Reset the trust status for {uri.host}:{uri.port}",
+                title="Security Alert",
+                severity="warning",
+            )
+        case "ignore":
+            assert isinstance(error, IgnorableSecurityError)
+            client.ignore_security_error(uri, error)
+            owner.post_message(OpenLocation(uri, allow_cached=False))
+            owner.notify(
+                f"Ignoring security error for {uri.host}:{uri.port}",
+                title="Security Alert",
+                severity="warning",
+            )
 
 
 ### _glv.py ends here
