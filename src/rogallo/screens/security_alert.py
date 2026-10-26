@@ -91,17 +91,14 @@ class SecurityAlert(ModalScreen[SecurityAlertResult]):
         Yields:
             The widgets for the screen.
         """
-        preamble = (
-            "You can choose to forget the certificate and try again, ignore the security alert and continue, or cancel the connection."
-            if self._can_ignore
-            else "You can choose to forget the certificate and try again, or cancel the connection."
-        )
+        ignore = "ignore the security alert and continue, " if self._can_ignore else ""
         with VerticalGroup() as dialog:
             dialog.border_title = "Security error!"
             yield Label(f"Security alert for {self._uri}", shrink=True, markup=False)
             yield Label(self._message, shrink=True, variant="error", id="message")
             yield Label(
-                f"{preamble} NOTE: There are a number of reasons why you might be seeing this error. "
+                f"You can choose to forget the certificate and try again, {ignore}or cancel the connection. "
+                "NOTE: There are a number of reasons why you might be seeing this error. "
                 "If you are unsure, it is recommended to cancel the connection and investigate further.",
                 shrink=True,
             )
