@@ -6,6 +6,8 @@
 
 - Added the ability to temporarily ignore some security/certificate errors.
   ([#499](https://github.com/davep/rogallo/pull/499))
+- Ignored errors are now shown in the information about the current
+  document. ([#499](https://github.com/davep/rogallo/pull/499))
 
 ## v3.2.0
 
