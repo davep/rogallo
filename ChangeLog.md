@@ -1,8 +1,8 @@
 # Rogallo ChangeLog
 
-## Unreleased
+## v3.3.0
 
-**Released: WiP**
+**Released: 2026-10-27**
 
 - Added the ability to temporarily ignore some security/certificate errors.
   ([#499](https://github.com/davep/rogallo/pull/499))
