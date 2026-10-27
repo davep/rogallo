@@ -63,6 +63,7 @@ async def document(uri: AnyURI, request: OpenLocation, response: Response) -> Do
         server_certificate=response.server_cert,
         avoid_cache=response.client_cert_used,
         avoid_history=request.avoid_history,
+        errors_were_ignored=response.has_ignored_security_errors,
     )
 
 
