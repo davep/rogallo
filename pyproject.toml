@@ -39,7 +39,7 @@ dependencies = [
     "types-pygments>=2.20.0.20260518",
     "types-pyperclip>=1.11.0.20260508",
     "types-pyyaml>=6.0.12.20260906",
-    "wasat>=1.9.1",
+    "wasat>=1.11.0",
     "xdg-base-dirs>=6.0.2",
 ]
 classifiers = [

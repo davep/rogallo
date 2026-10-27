@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Python imports.
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import cached_property
 from pathlib import Path
 
@@ -78,6 +78,12 @@ class Document:
 
     server_certificate: ServerCertificate | None = None
     """The server's certificate, if any."""
+
+    errors_were_ignored: bool = False
+    """Whether any errors were ignored when accessing the document."""
+
+    ignored_security_errors: list[str] = field(default_factory=list)
+    """A list of any security errors that were ignored when accessing the document."""
 
     def __bool__(self) -> bool:
         """Return `True` if there is a location, `False` if not."""
