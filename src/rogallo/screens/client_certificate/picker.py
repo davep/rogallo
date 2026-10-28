@@ -25,6 +25,7 @@ from wasat import AnyURI, ClientCertificate
 
 ##############################################################################
 type ClientCertificatePickerResult = ClientCertificate | Literal["create"] | None
+"""Type that represents the result of the client certificate picker dialog."""
 
 
 ##############################################################################
