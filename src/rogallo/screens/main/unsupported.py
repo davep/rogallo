@@ -114,7 +114,6 @@ async def maybe_open_unsupported_mime_type(
                 trusted_mime_types.add(mime_type)
                 save_trusted_mime_types(trusted_mime_types)
             case "download":
-                open_uri = False
                 owner.post_message(DownloadURI(str(message.location)))
 
     # At this point, if the user has consented to opening the location
