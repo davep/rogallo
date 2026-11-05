@@ -50,6 +50,9 @@ class ViewerTitle(Horizontal):
             &.--verified-none {
                 color: $text-muted;
             }
+            &.--has-errors {
+                background: $error;
+            }
         }
 
         #lock-icon.--needed-certificate {
@@ -70,6 +73,8 @@ class ViewerTitle(Horizontal):
     """The verification method used for the connection."""
     needed_certificate: var[bool] = var(False)
     """Whether the location needed a certificate."""
+    has_errors: var[bool] = var(False)
+    """Whether the location had errors."""
 
     _verification_method_icon = query_one("#verification-method", Label)
     """The label for the verification method."""
@@ -129,6 +134,10 @@ class ViewerTitle(Horizontal):
             case _:
                 self._verification_method_icon.update(load_icons()["unverified"])
                 self._verification_method_icon.tooltip = "About this page"
+
+    def _watch_has_errors(self) -> None:
+        """React to has_errors changing."""
+        self._verification_method_icon.set_class(self.has_errors, "--has-errors")
 
     def on_resize(self) -> None:
         """Handle the widget being resized."""

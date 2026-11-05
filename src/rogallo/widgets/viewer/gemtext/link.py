@@ -35,7 +35,7 @@ from textual_enhanced.binding import HelpfulBinding
 ##############################################################################
 # Local imports.
 from ....data import load_general, load_icons
-from ....messages import CopyToClipboard, OpenLocation, OpenURI
+from ....messages import CopyToClipboard, DownloadURI, OpenLocation, OpenURI
 from ....preflight import (
     has_navigable_path,
     is_finger_uri,
@@ -108,6 +108,20 @@ class GemtextLink(Widget, can_focus=True):
             "Copy link to clipboard",
             show=False,
             id="gemtext_link.copy_link",
+        ),
+        HelpfulBinding(
+            "C",
+            "copy_link_as_gemtext",
+            "Copy link to clipboard as Gemtext",
+            show=False,
+            id="gemtext_link.copy_link_as_gemtext",
+        ),
+        HelpfulBinding(
+            "d",
+            "download_link",
+            "Download the content of the link",
+            show=False,
+            id="gemtext_link.download_link",
         ),
         HelpfulBinding(
             "o",
@@ -290,6 +304,23 @@ class GemtextLink(Widget, can_focus=True):
         self.post_message(
             CopyToClipboard(self._normalised_uri, description="selected link")
         )
+
+    def _action_copy_link_as_gemtext(self) -> None:
+        """Copy the link to the clipboard as Gemtext."""
+        self.post_message(
+            CopyToClipboard(
+                (
+                    f"=> {self._normalised_uri} {self._link}"
+                    if self._normalised_uri != str(self._link)
+                    else f"=> {self._normalised_uri}"
+                ),
+                description="selected link as Gemtext",
+            )
+        )
+
+    def _action_download_link(self) -> None:
+        """Download the content of the link."""
+        self.post_message(DownloadURI(self._normalised_uri))
 
     def _action_open_link_externally(self) -> None:
         """Open the link in the external browser."""

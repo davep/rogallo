@@ -1,6 +1,10 @@
 """Provides code for handling a Spartan request."""
 
 ##############################################################################
+# Python imports.
+from pathlib import Path
+
+##############################################################################
 # Sybaritic imports.
 from sybaritic import Client, Response, SpartanURI, SybariticError
 
@@ -12,17 +16,18 @@ from textual.widget import Widget
 # Local imports.
 from ....cache import ContentCache
 from ....document import Document
-from ....messages import OpenLocation
+from ....messages import AcquireLocation, DownloadLocation, OpenLocation
 from ....mime_checks import is_displayable_mime_type
 from ....text_decoder import decode_text
 from ....types import SpartanURINeedingData
 from ...user_input import UserInput
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
+from ._download import save_download
 
 
 ##############################################################################
 async def _handle_response(
-    response: Response, request: OpenLocation, owner: Widget, cache: ContentCache
+    response: Response, request: AcquireLocation, owner: Widget, cache: ContentCache
 ) -> None:
     """Handle a response from a Spartan request.
 
@@ -35,10 +40,13 @@ async def _handle_response(
     uri = response.uri or response.requested_uri or request.location
 
     if not isinstance(uri, SpartanURI):
+        assert not isinstance(uri, Path)
         owner.post_message(
             OpenLocation(
                 location=uri, allow_cached=False, avoid_history=request.avoid_history
             )
+            if isinstance(request, OpenLocation)
+            else DownloadLocation(location=uri, target=request.target)
         )
         return
 
@@ -49,6 +57,12 @@ async def _handle_response(
             severity="error",
             title="Request Error",
         )
+        return
+
+    # It's a download request, so let's write the raw bytes to the target
+    # file.
+    if isinstance(request, DownloadLocation):
+        save_download(request, await response.read(), owner)
         return
 
     # Handle a successful response.
@@ -74,7 +88,7 @@ async def _handle_response(
 
 ##############################################################################
 async def handle_spartan_request(
-    request: OpenLocation, client: Client, owner: Widget, cache: ContentCache
+    request: AcquireLocation, client: Client, owner: Widget, cache: ContentCache
 ) -> None:
     """Handle a Spartan request.
 
@@ -91,7 +105,8 @@ async def handle_spartan_request(
     # If a cached copy of the document exists and the request allows it,
     # use that instead of making a network request.
     if (
-        not isinstance(uri, SpartanURINeedingData)
+        isinstance(request, OpenLocation)
+        and not isinstance(uri, SpartanURINeedingData)
         and request.allow_cached
         and (
             cached_document := cache.get_document(

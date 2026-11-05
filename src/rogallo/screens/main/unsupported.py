@@ -22,6 +22,8 @@ from ...data import (
     save_trusted_mime_types,
     save_trusted_schemes,
 )
+from ...messages import DownloadURI
+from ...mime_checks import clean_mime_type
 from ..confirm_unsupported import ConfirmUnsupportedURI
 from .local_messages import OpenUnsupportedMIMEType, OpenUnsupportedURI
 
@@ -50,7 +52,7 @@ async def maybe_open_unsupported_uri(
         return
 
     # If the scheme isn't trusted, let's see what the user wants to do about it.
-    if not (open_uri := scheme in (trusted_schemes := load_trusted_schemes())):
+    if not (open_uri := (scheme in (trusted_schemes := load_trusted_schemes()))):
         match await owner.app.push_screen_wait(
             ConfirmUnsupportedURI(
                 message.uri,
@@ -90,25 +92,29 @@ async def maybe_open_unsupported_mime_type(
         )
         return
 
+    mime_type = clean_mime_type(message.mime_type) or "application/octet-stream"
+
     # If the MIME type isn't trusted, let's see what the user wants to
     # do about it.
     if not (
-        open_uri := message.mime_type
-        in (trusted_mime_types := load_trusted_mime_types())
+        open_uri := (mime_type in (trusted_mime_types := load_trusted_mime_types()))
     ):
         match await owner.app.push_screen_wait(
             ConfirmUnsupportedURI(
                 str(message.location),
-                f"The MIME type '{message.mime_type}' is not supported by Rogallo. "
+                f"The MIME type '{mime_type}' is not supported by Rogallo. "
                 "Do you want to open the location in your external browser?",
+                allow_download=not isinstance(message.location, Path),
             )
         ):
             case "once":
                 open_uri = True
             case "always":
                 open_uri = True
-                trusted_mime_types.add(message.mime_type)
+                trusted_mime_types.add(mime_type)
                 save_trusted_mime_types(trusted_mime_types)
+            case "download":
+                owner.post_message(DownloadURI(str(message.location)))
 
     # At this point, if the user has consented to opening the location
     # based on the MIME type, let's do it.

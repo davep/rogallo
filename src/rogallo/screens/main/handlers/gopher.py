@@ -20,14 +20,48 @@ from textual_enhanced.dialogs import ModalInput
 # Local imports.
 from ....cache import ContentCache
 from ....document import Document
-from ....messages import OpenLocation
+from ....messages import AcquireLocation, OpenLocation
 from ....mime_checks import is_displayable_mime_type
 from ..local_messages import OpenDocument, OpenUnsupportedMIMEType
+from ._download import save_download
+
+
+##############################################################################
+async def _open_document(
+    uri: GopherURI,
+    request: OpenLocation,
+    client: Client,
+    cache: ContentCache,
+    owner: Widget,
+) -> None:
+    # While Gopher doesn't deal with MIME types, Rogallo does for the
+    # most part, so let's figure out the effective MIME type for what
+    # we're doing here.
+    mime_type = ItemType(uri.item_type).mime_type
+    if not is_displayable_mime_type(mime_type):
+        owner.post_message(OpenUnsupportedMIMEType(uri, mime_type))
+        return
+
+    owner.post_message(
+        OpenDocument(
+            cache.add_document(
+                Document(
+                    location=uri,
+                    original_location=uri,
+                    content=(await client.request(uri)).text,
+                    mime_type=mime_type,
+                    avoid_cache=ItemType(uri.item_type) is ItemType.INDEX_SEARCH,
+                    avoid_history=request.avoid_history,
+                )
+            ),
+            from_history=request.from_history,
+        )
+    )
 
 
 ##############################################################################
 async def handle_gopher_request(
-    request: OpenLocation,
+    request: AcquireLocation,
     current_document: Document,
     client: Client,
     owner: Widget,
@@ -65,7 +99,8 @@ async def handle_gopher_request(
     # If a cached copy of the document exists and the request allows it,
     # use that instead of making a network request.
     if (
-        ItemType(uri.item_type) is not ItemType.INDEX_SEARCH
+        isinstance(request, OpenLocation)
+        and ItemType(uri.item_type) is not ItemType.INDEX_SEARCH
         and request.allow_cached
         and (
             cached_document := cache.get_document(
@@ -78,30 +113,11 @@ async def handle_gopher_request(
         )
         return
 
-    # While Gopher doesn't deal with MIME types, Rogallo does for the
-    # most part, so let's figure out the effective MIME type for what
-    # we're doing here.
-    mime_type = ItemType(uri.item_type).mime_type
-    if not is_displayable_mime_type(mime_type):
-        owner.post_message(OpenUnsupportedMIMEType(uri, mime_type))
-        return
-
     try:
-        owner.post_message(
-            OpenDocument(
-                cache.add_document(
-                    Document(
-                        location=uri,
-                        original_location=uri,
-                        content=(await client.request(uri)).text,
-                        mime_type=mime_type,
-                        avoid_cache=ItemType(uri.item_type) is ItemType.INDEX_SEARCH,
-                        avoid_history=request.avoid_history,
-                    )
-                ),
-                from_history=request.from_history,
-            )
-        )
+        if isinstance(request, OpenLocation):
+            await _open_document(uri, request, client, cache, owner)
+        else:
+            save_download(request, (await client.request(uri)).raw_bytes, owner)
     except Port70Error as error:
         owner.notify(
             f"Error loading {uri}:\n\n{error}",

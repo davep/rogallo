@@ -79,7 +79,7 @@ goes with which link, some people might prefer the labels to really cosy up
 with the links. The position can be toggled with
 <kbd>Ctrl</kbd>+<kbd>j</kbd>.
 
-```{.textual path="docs/screenshots/stripes_screenshot.py" title="Cosy link number labels" lines=30 columns=70 press="super+f8"}
+```{.textual path="docs/screenshots/stripes_screenshot.py" title="Cosy link number labels" lines=30 columns=70 press="ctrl+j"}
 ```
 
 ## Emoji removal
@@ -271,6 +271,8 @@ show_link_tooltips: true
 The following actions can [have their bindings overridden](../configuration/bindings.md):
 
 - `gemtext_link.copy_link` - Copy the current link's URI to clipboard
+- `gemtext_link.copy_link_as_gemtext` - Copy the current link to clipboard as Gemtext
+- `gemtext_link.download_link` - Download the content of the link
 - `gemtext_link.open_link_externally` - Hand the current link off to the operating system for opening
 - `viewer.cancel_search` - Cancel the current search in the document
 - `viewer.next_link` - Move forward through each of the links

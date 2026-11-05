@@ -38,10 +38,11 @@ class AboutPage(ModalScreen[None]):
             background: $surface;
         }
 
-        #heading {
+        .heading {
             text-style: bold underline;
             text-align: center;
             padding-top: 1;
+            margin-bottom: 1;
             width: 100%;
         }
 
@@ -84,8 +85,12 @@ class AboutPage(ModalScreen[None]):
                 yield Data(
                     "Verification method", str(self._document.verification_method)
                 )
+                if self._document.errors_were_ignored:
+                    yield Label("Ignored errors", classes="heading")
+                    for error in self._document.ignored_security_errors:
+                        yield Data("Error", error)
                 if self._document.server_certificate is not None:
-                    yield Label("Server certificate", id="heading")
+                    yield Label("Server certificate", classes="heading")
                     yield Data("Issuer", self._document.server_certificate.issuer)
                     yield Data("Subject", self._document.server_certificate.subject)
                     for (

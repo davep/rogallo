@@ -35,7 +35,34 @@ from ...preflight import (
     local_index_from_uri,
     path_from_uri,
 )
+from ...types import RemoteRogalloLocation
 from .local_messages import OpenUnsupportedURI
+
+
+##############################################################################
+def class_from_uri(uri: str) -> type[RemoteRogalloLocation] | None:
+    """Return the URI class for a given URI string.
+
+    Args:
+        uri: The URI string to check.
+
+    Returns:
+        The URI class for the given URI string, or None if the URI is not supported.
+    """
+    for uri_type, uri_error in (
+        (GeminiURI, GeminiURIError),
+        (TitanURI, GeminiURIError),
+        (FingerURI, FingerURIError),
+        (GopherURI, GopherURIError),
+        (SpartanURI, SpartanURIError),
+        (NexURI, NexURIError),
+    ):
+        try:
+            _ = uri_type(uri)
+            return uri_type
+        except uri_error:
+            pass
+    return None
 
 
 ##############################################################################
@@ -51,21 +78,9 @@ def uri_resolver(
         A message for opening the location.
     """
 
-    # Work through the supported URI types.
-    for uri_type, uri_error in (
-        (GeminiURI, GeminiURIError),
-        (TitanURI, GeminiURIError),
-        (FingerURI, FingerURIError),
-        (GopherURI, GopherURIError),
-        (SpartanURI, SpartanURIError),
-        (NexURI, NexURIError),
-    ):
-        try:
-            return OpenLocation(
-                uri_type(request.uri), allow_cached=request.allow_cached
-            )
-        except uri_error:
-            pass
+    # Obviously a supported URI type?
+    if uri_type := class_from_uri(request.uri):
+        return OpenLocation(uri_type(request.uri), allow_cached=request.allow_cached)
 
     # Perhaps it's a local text file?
     if is_local_text_file(request.uri):

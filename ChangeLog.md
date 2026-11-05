@@ -1,5 +1,33 @@
 # Rogallo ChangeLog
 
+## v3.3.0
+
+**Released: 2026-10-27**
+
+- Added the ability to temporarily ignore some security/certificate errors.
+  ([#499](https://github.com/davep/rogallo/pull/499))
+- Ignored errors are now shown in the information about the current
+  document. ([#499](https://github.com/davep/rogallo/pull/499))
+
+## v3.2.0
+
+**Released: 2026-10-14**
+
+- Added the ability to copy a link, as Gemtext, to the clipboard
+  (`gemtext_link.copy_link_as_gemtext`).
+  ([#492](https://github.com/davep/rogallo/pull/492))
+- Fixed MIME type checks to ensure parameters are ignored when performing
+  the check. ([#495](https://github.com/davep/rogallo/pull/495))
+
+## v3.1.0
+
+**Released: 2026-10-05**
+
+- Added a download command to in-document links; bound to <kbd>d</kbd> by
+  default. ([#488](https://github.com/davep/rogallo/pull/488))
+- Added the option to download an unsupported mime type document.
+  ([#488](https://github.com/davep/rogallo/pull/488))
+
 ## v3.0.0
 
 **Released: 2026-10-02**
