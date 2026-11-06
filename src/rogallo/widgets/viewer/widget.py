@@ -527,18 +527,11 @@ class Viewer(Vertical, can_focus=False):
                     self._jump_map[link.jump_number] = link
             await self._view.remove_children()
             await self._view.mount_all(content)
+            self._view.scroll_home(animate=False, immediate=True)
         self._searchable = [
             widget for widget in content if isinstance(widget, Searchable)
         ]
         self._rebuild_haystack()
-        # This next bit of nonsense is because Textual fails to sort its
-        # scrollbars out upon clearing down and remounting a new set of
-        # children. So we have to force it to refresh and then scroll to the
-        # end and home to get it to sort itself out. I have this feeling
-        # I've reported this before, although I can't find the issue back
-        # now. Not that it matters, issues seem to be ignored these days.
-        self.call_after_refresh(self._view.scroll_end, animate=False, immediate=True)
-        self.call_after_refresh(self._view.scroll_home, animate=False, immediate=True)
         self.post_message(self.DocumentLoaded(self))
 
     def _watch_view_source(self) -> None:
