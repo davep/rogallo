@@ -17,7 +17,7 @@ mypy         := $(run) mypy
 spell        := $(run) codespell
 smol         := $(run) smolserve --config $(docs)server/smolserve.toml
 smolexec     := $(smol) exec --
-mkdocs       := $(smolexec) zensical
+zensical     := $(smolexec) zensical
 publish-docs := $(run) ghp-import --no-jekyll --push
 
 ##############################################################################
@@ -107,11 +107,11 @@ checkall: spellcheck codestyle lint stricttypecheck test # Check all the things
 # Documentation.
 .PHONY: docs
 docs:                           # Generate the system documentation
-	$(mkdocs) build
+	$(zensical) build
 
 .PHONY: rtfm
 rtfm:                           # Locally read the library documentation
-	$(mkdocs) serve
+	$(zensical) serve
 
 .PHONY: publishdocs
 publishdocs: clean-docs docs	# Publish the docs to GitHub pages
