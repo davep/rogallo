@@ -17,7 +17,7 @@ mypy     := $(run) mypy
 spell    := $(run) codespell
 smol     := $(run) smolserve --config $(docs)server/smolserve.toml
 smolexec := $(smol) exec --
-mkdocs   := $(smolexec) mkdocs
+mkdocs   := $(smolexec) zensical
 
 ##############################################################################
 # Local "interactive testing" of the code.
@@ -110,7 +110,7 @@ docs:                           # Generate the system documentation
 
 .PHONY: rtfm
 rtfm:                           # Locally read the library documentation
-	$(mkdocs) serve --livereload
+	$(mkdocs) serve
 
 .PHONY: publishdocs
 publishdocs: clean-docs	# Set up the docs for publishing
