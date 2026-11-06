@@ -67,10 +67,10 @@ from textual.widgets import Markdown
 ##############################################################################
 # Textual enhanced imports.
 from textual_enhanced.binding import HelpfulBinding
+from textual_enhanced.dialogs import ModalInput
 
 ##############################################################################
 # Wasat imports.
-from textual_enhanced.dialogs import ModalInput
 from wasat import GeminiURI
 
 ##############################################################################
