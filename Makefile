@@ -158,7 +158,7 @@ clean-packaging:		# Clean the package building files
 
 .PHONY: clean-docs
 clean-docs:			# Clean up the documentation building files
-	rm -rf site .cache
+	rm -rf site .cache .screenshot_cache
 
 .PHONY: clean
 clean: clean-packaging clean-docs # Clean the build directories
