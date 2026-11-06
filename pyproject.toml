@@ -113,9 +113,8 @@ max-line-length = 120
 dev = [
     "codespell>=2.4.2",
     "coverage>=7.14.1",
+    "ghp-import>=2.1.0",
     "markdown-exec>=1.12.3",
-    "mkdocs>=1.6.1",
-    "mkdocs-material>=9.7.6",
     "mypy>=2.1.0",
     "pre-commit>=4.6.0",
     "pyinstrument>=5.1.3",
@@ -124,6 +123,7 @@ dev = [
     "ruff>=0.15.17",
     "smolserve>=1.1.0",
     "textual-dev>=1.8.0",
+    "zensical>=0.1.0",
 ]
 
 [tool.coverage.run]

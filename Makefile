@@ -1,23 +1,24 @@
-app      := rogallo
-src      := src/
-tests    := tests/
-docs     := docs/
-run      := uv run
-sync     := uv sync
-build    := uv build
-publish  := uv publish --username=__token__ --keyring-provider=subprocess
-reports  := .reports
-test     := $(run) pytest --verbose --cov
-coverage := $(test) --cov-report html:$(reports)
-python   := $(run) python
-ruff     := $(run) ruff
-lint     := $(ruff) check
-fmt      := $(ruff) format
-mypy     := $(run) mypy
-spell    := $(run) codespell
-smol     := $(run) smolserve --config $(docs)server/smolserve.toml
-smolexec := $(smol) exec --
-mkdocs   := $(smolexec) mkdocs
+app          := rogallo
+src          := src/
+tests        := tests/
+docs         := docs/
+run          := uv run
+sync         := uv sync
+build        := uv build
+publish      := uv publish --username=__token__ --keyring-provider=subprocess
+reports      := .reports
+test         := $(run) pytest --verbose --cov
+coverage     := $(test) --cov-report html:$(reports)
+python       := $(run) python
+ruff         := $(run) ruff
+lint         := $(ruff) check
+fmt          := $(ruff) format
+mypy         := $(run) mypy
+spell        := $(run) codespell
+smol         := $(run) smolserve --config $(docs)server/smolserve.toml
+smolexec     := $(smol) exec --
+zensical     := $(smolexec) zensical
+publish-docs := $(run) ghp-import --no-jekyll --push
 
 ##############################################################################
 # Local "interactive testing" of the code.
@@ -106,15 +107,15 @@ checkall: spellcheck codestyle lint stricttypecheck test # Check all the things
 # Documentation.
 .PHONY: docs
 docs:                           # Generate the system documentation
-	$(mkdocs) build
+	$(zensical) build
 
 .PHONY: rtfm
 rtfm:                           # Locally read the library documentation
-	$(mkdocs) serve --livereload
+	$(zensical) serve
 
 .PHONY: publishdocs
-publishdocs: clean-docs	# Set up the docs for publishing
-	$(mkdocs) gh-deploy
+publishdocs: clean-docs docs	# Publish the docs to GitHub pages
+	$(publish-docs) site/
 
 ##############################################################################
 # Package/publish.
@@ -157,7 +158,7 @@ clean-packaging:		# Clean the package building files
 
 .PHONY: clean-docs
 clean-docs:			# Clean up the documentation building files
-	rm -rf site .screenshot_cache
+	rm -rf site .cache .screenshot_cache
 
 .PHONY: clean
 clean: clean-packaging clean-docs # Clean the build directories
