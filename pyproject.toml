@@ -113,6 +113,7 @@ max-line-length = 120
 dev = [
     "codespell>=2.4.2",
     "coverage>=7.14.1",
+    "ghp-import>=2.1.0",
     "markdown-exec>=1.12.3",
     "mypy>=2.1.0",
     "pre-commit>=4.6.0",
