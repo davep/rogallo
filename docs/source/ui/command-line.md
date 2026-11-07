@@ -16,10 +16,13 @@ If you wish to type in a location to visit, the command line is where you do
 this. What you type will depend on the [protocol](../protocols/index.md) you're
 working with. Generally they will be:
 
+- **Files**: `file:///path/to/file.txt`
+- **Finger**: `finger://example.com/davep`
 - **Gemini**: `gemini://example.com/`
 - **Gopher**: `gopher://example.com/`
-- **Finger**: `finger://example.com/davep`
-- **Files**: `file:///path/to/file.txt`
+- **Nex**: `nex://example.com/`
+- **Spartan**: `spartan://example.com/`
+- **Titan**: `titan://example.com/`
 
 If an entered value isn't obviously a URI, and isn't a known command or
 [alias](#aliases), it is treated as follows:
