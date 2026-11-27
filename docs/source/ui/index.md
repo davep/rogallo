@@ -20,7 +20,7 @@ rogallo themes | grep -v "\(terminal\|micro\)-" | sed 's/^/- /'
 
 !!! tip
 
-    You can also [set the theme via the [command line](../index.md#-t-theme). This can
+    You can also set the theme via the [command line](../index.md#-t-theme). This can
     be useful if you want to ensure that Rogallo runs up with a specific theme.
     Note that this *also* configures the theme for future runs of Rogallo.
 
