@@ -14,7 +14,7 @@ Rogallo is a terminal-based client for browsing Geminispace, Spartanspace, Gophe
 * Command palette for quick command discovery and execution
 * Automatic handoff of unknown MIME types to the operating system
 * Optional rendering (on by default) of ANSI escape sequences in pages
-* Local [Gemtext](https://geminiprotocol.net/docs/gemtext-specification.gmi) file viewing
+* Local Gemtext file viewing
 * Built-in theme selection, plus support for user-supplied custom UI themes
 * Persistent configuration across sessions
 * Fully responsive layout that adjusts dynamically to terminal resizing
